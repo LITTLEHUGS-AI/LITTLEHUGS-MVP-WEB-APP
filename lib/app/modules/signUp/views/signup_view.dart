@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_images.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
 import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
+import 'package:webapplittlehugsmvp/app/widgets/custom_dropdown.dart';
 import '../../../constants/app_colors.dart';
 import '../controllers/auth_controller.dart';
 
@@ -12,402 +13,407 @@ class SignUpView extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return Scaffold(
       backgroundColor: AppColors.lightOrangeColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.lightOrangeColor,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(children: [SvgPicture.asset(AppImages.logo, height: 40)]),
-      ),
+      appBar: _buildAppBar(),
       body: GetBuilder(
         assignId: true,
         init: AuthController(),
-        builder: (controller) {
-          return Stack(
-            children: [
-              Positioned(left: -150, top: -150, child: Container(width: 350, height: 350, decoration: BoxDecoration(color: AppColors.secondaryOrange, shape: BoxShape.circle))),
-              Row(
-                children: [
-                  // Left side with image and text (hidden on small screens)
-                  if (Get.width > 800)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(48.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Spacer(),
-                            AppText(AppStrings.aHugAheadOfTime, fontSize: 48, fontWeight: FontWeight.w500, color: AppColors.colorHintTextField),
-                            const Spacer(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  // Right side with sign up form
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(right: Get.width > 800 ? 50.0 : 0.0, bottom: 20),
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), width: 1),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: Get.width > 800 ? 40.0 : 24.0, vertical: 20.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              AppText(AppStrings.signUP, fontSize: 48, fontWeight: FontWeight.w500, color: AppColors.colorHintTextField, textAlign: TextAlign.center),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  AppText(AppStrings.alreadyHaveAnAccount, fontSize: 20, fontWeight: FontWeight.w500, color: AppColors.black, textAlign: TextAlign.center),
-                                  TextButton(
-                                    onPressed: () => controller.goToSignIn(),
-                                    child: AppText(
-                                      AppStrings.signIn,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.colorCheckBox,
-                                      textAlign: TextAlign.center,
-                                      textDecoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 32),
-
-                              // Form fields
-                              TextField(
-                                controller: controller.nameController,
-                                cursorColor: AppColors.black,
-                                style: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                onChanged: (value) {
-                                  // Validate name on every change
-                                  controller.validateName(value);
-                                },
-                                decoration: InputDecoration(
-                                  hintText: '* Name',
-                                  hintStyle: TextStyle(
-                                      color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                  // Error text that appears below the text field
-                                  errorText: controller.nameError.value.isEmpty ? null : controller.nameError.value,
-                                  errorStyle: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                  ),
-                                  // Border styling
-                                  disabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: controller.nameError.value.isEmpty
-                                          ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)
-                                          : Colors.red,
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                      color: controller.nameError.value.isEmpty
-                                          ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)
-                                          : Colors.red,
-                                    ),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: Colors.red),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: Colors.red, width: 1),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: controller.emailController,
-                                cursorColor: AppColors.black,
-                                keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                onChanged: (value) {
-                                  // Validate email on every change
-                                  controller.validateEmail(value);
-                                },
-                                decoration: InputDecoration(
-                                  hintText: '* Email',
-                                  hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                  // Error text that appears below the text field
-                                  errorText: controller.emailError.value.isEmpty ? null : controller.emailError.value,
-                                  errorStyle: TextStyle(color: Colors.red, fontSize: 12),
-                                  // Border styling
-                                  disabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: controller.emailError.value.isEmpty ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25) : Colors.red),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: controller.emailError.value.isEmpty ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25) : Colors.red),
-                                  ),
-                                  errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.red)),
-                                  focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.red, width: 1)),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Obx(
-                                () => TextField(
-                                  controller: controller.passwordController,
-                                  cursorColor: AppColors.black,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  obscureText: !controller.isPasswordVisible.value,
-                                  style: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                  onChanged: (value) {
-                                    // Validate password on every change
-                                    controller.validatePassword(value);
-                                  },
-                                  decoration: InputDecoration(
-                                    suffixIcon: IconButton(icon: SvgPicture.asset(AppImages.solarEye, height: 24, width: 24), onPressed: controller.togglePasswordVisibility),
-                                    hintText: '* Password',
-                                    hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                    // Error text that appears below the text field
-                                    errorText: controller.passwordError.value.isEmpty ? null : controller.passwordError.value,
-                                    errorStyle: TextStyle(color: Colors.red, fontSize: 12),
-                                    // Border styling
-                                    disabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(
-                                        color: controller.passwordError.value.isEmpty ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25) : Colors.red,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(
-                                        color: controller.passwordError.value.isEmpty ? AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25) : Colors.red,
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.red)),
-                                    focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.red, width: 1)),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Dropdown fields in row
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: DropdownButtonFormField<String>(
-                                      decoration: InputDecoration(
-                                        hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                        hintText: '* Country',
-                                        disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                      ),
-                                      items:
-                                          controller.countries.map((country) {
-                                            return DropdownMenuItem(value: country, child: Text(country));
-                                          }).toList(),
-                                      onChanged: (value) => controller.selectedCountry.value = value!,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: DropdownButtonFormField<String>(
-                                      decoration: InputDecoration(
-                                        hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
-                                        hintText: '* I am here for',
-                                        disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25)),
-                                        ),
-                                      ),
-                                      items:
-                                          controller.purposes.map((purpose) {
-                                            return DropdownMenuItem(value: purpose, child: Text(purpose));
-                                          }).toList(),
-                                      onChanged: (value) => controller.selectedPurpose.value = value!,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 30),
-
-                              // Terms checkbox
-                              Row(
-                                children: [
-                                  Obx(() => Checkbox(value: controller.agreedToTerms.value, onChanged: (value) => controller.agreedToTerms.value = value!)),
-                                  Expanded(
-                                    child: RichText(
-                                      text: TextSpan(
-                                        style: const TextStyle(color: Colors.grey),
-                                        children: [
-                                          TextSpan(
-                                            text: "I agree to LittleHugs's ",
-                                            style: TextStyle(color: AppColors.takeQuickAssessmentColor, fontWeight: FontWeight.w500, fontSize: 16),
-                                          ),
-                                          TextSpan(
-                                            text: 'Terms & Conditions',
-                                            style: TextStyle(
-                                              color: AppColors.takeQuickAssessmentColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              decoration: TextDecoration.underline,
-                                            ),
-                                            recognizer: controller.termsGestureRecognizer,
-                                          ),
-                                          TextSpan(
-                                            text: ' and acknowledge \nthe ',
-                                            style: TextStyle(color: AppColors.takeQuickAssessmentColor, fontWeight: FontWeight.w500, fontSize: 16),
-                                          ),
-                                          TextSpan(
-                                            text: 'Privacy Policy',
-                                            style: TextStyle(
-                                              color: AppColors.takeQuickAssessmentColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                              decoration: TextDecoration.underline,
-                                            ),
-                                            recognizer: controller.privacyGestureRecognizer,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 30),
-                              // Create Account button
-                              ElevatedButton(
-                                onPressed: controller.createAccount,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.colorCheckBox,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                                ),
-                                child: AppText('Create Account', fontSize: 20, color: AppColors.white, fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(height: 20),
-                              // Social login buttons
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: controller.signInWithGoogle,
-                                      style: OutlinedButton.styleFrom(
-                                        backgroundColor: AppColors.lightOrangeColor,
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                      ),
-                                      child: SvgPicture.asset(AppImages.googleIc, height: 32, width: 32),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: controller.signInWithApple,
-                                      style: OutlinedButton.styleFrom(
-                                        backgroundColor: AppColors.black,
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                                      ),
-                                      child: SvgPicture.asset(AppImages.appleIc, height: 32, width: 32),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
+        builder: (controller) => _buildBody(controller),
       ),
     );
   }
-}
 
-// Add this custom painter class at the top of the file
-class BackgroundPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Sun/Circle in top left
-    final Paint circlePaint =
-        Paint()
-          ..color = const Color(0xFFFFB74D)
-          ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(size.width * 0.2, size.height * 0.2), size.width * 0.15, circlePaint);
-
-    // Wavy bottom decoration
-    final Paint wavePaint =
-        Paint()
-          ..color = const Color(0xFF80CBC4)
-          ..style = PaintingStyle.fill;
-
-    final path = Path();
-    path.moveTo(0, size.height);
-    path.lineTo(0, size.height * 0.7);
-
-    // Create wave effect
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.75, size.width * 0.5, size.height * 0.7);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.65, size.width, size.height * 0.7);
-    path.lineTo(size.width, size.height);
-    path.close();
-
-    canvas.drawPath(path, wavePaint);
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: AppColors.lightOrangeColor,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      title: Row(
+          children: [
+            SvgPicture.asset(AppImages.logo, height: 40)
+          ]
+      ),
+    );
   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  Widget _buildBody(AuthController controller) {
+    return Stack(
+      children: [
+        _buildBackgroundCircle(),
+        Row(
+          children: [
+            // Left side with image and text (hidden on small screens)
+            if (Get.width > 800) _buildLeftPanel(),
+            // Right side with sign up form
+            _buildSignUpForm(controller),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBackgroundCircle() {
+    return Positioned(
+        left: -150,
+        top: -150,
+        child: Container(
+            width: 350,
+            height: 350,
+            decoration: BoxDecoration(
+                color: AppColors.secondaryOrange,
+                shape: BoxShape.circle
+            )
+        )
+    );
+  }
+
+  Widget _buildLeftPanel() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(48.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Spacer(),
+            AppText(
+                AppStrings.aHugAheadOfTime,
+                fontSize: 48,
+                fontWeight: FontWeight.w500,
+                color: AppColors.colorHintTextField
+            ),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignUpForm(AuthController controller) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.only(
+            right: Get.width > 800 ? 50.0 : 0.0,
+            bottom: 20
+        ),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 600),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+                color: AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+                width: 1
+            ),
+          ),
+          padding: EdgeInsets.symmetric(
+              horizontal: Get.width > 800 ? 40.0 : 24.0,
+              vertical: 20.0
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildFormHeader(controller),
+                const SizedBox(height: 32),
+                _buildNameField(controller),
+                const SizedBox(height: 16),
+                _buildEmailField(controller),
+                const SizedBox(height: 16),
+                _buildPasswordField(controller),
+                const SizedBox(height: 16),
+                _buildDropdownSelections(),
+                const SizedBox(height: 30),
+                _buildTermsCheckbox(controller),
+                const SizedBox(height: 30),
+                _buildCreateAccountButton(controller),
+                const SizedBox(height: 20),
+                _buildSocialLoginButtons(controller),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormHeader(AuthController controller) {
+    return Column(
+      children: [
+        AppText(
+            AppStrings.signUp,
+            fontSize: 45,
+            fontWeight: FontWeight.w500,
+            color: AppColors.colorHintTextField,
+            textAlign: TextAlign.center
+        ),
+        const SizedBox(height: 5),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppText(
+                AppStrings.alreadyHaveAnAccount,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.black,
+                textAlign: TextAlign.center
+            ),
+            TextButton(
+              onPressed: () => controller.goToSignIn(),
+              child: AppText(
+                AppStrings.signIn,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.colorCheckBox,
+                textAlign: TextAlign.center,
+                textDecoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNameField(AuthController controller) {
+    return TextField(
+      controller: controller.nameController,
+      cursorColor: AppColors.black,
+      style: TextStyle(
+          color: AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+          fontSize: 16,
+          fontWeight: FontWeight.w500
+      ),
+      onChanged: controller.validateName,
+      decoration: _buildInputDecoration(
+        hintText: AppStrings.nameHint,
+        errorText: controller.nameError.value,
+        hasError: controller.nameError.value.isNotEmpty,
+      ),
+    );
+  }
+
+  Widget _buildEmailField(AuthController controller) {
+    return Obx(() => TextField(
+      controller: controller.emailController,
+      cursorColor: AppColors.black,
+      keyboardType: TextInputType.emailAddress,
+      style: TextStyle(
+          color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25),
+          fontSize: 16,
+          fontWeight: FontWeight.w500
+      ),
+      onChanged: controller.validateEmail,
+      decoration: _buildInputDecoration(
+        hintText: AppStrings.email,
+        errorText: controller.emailError.value,
+        hasError: controller.emailError.value.isNotEmpty,
+      ),
+    ));
+  }
+
+  Widget _buildPasswordField(AuthController controller) {
+    return Obx(
+          () => TextField(
+        controller: controller.passwordController,
+        cursorColor: AppColors.black,
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: !controller.isPasswordVisible.value,
+        style: TextStyle(
+            color: AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+            fontSize: 16,
+            fontWeight: FontWeight.w500
+        ),
+        onChanged: controller.validatePassword,
+        decoration: _buildInputDecoration(
+          hintText: AppStrings.passwordHint,
+          errorText: controller.passwordError.value,
+          hasError: controller.passwordError.value.isNotEmpty,
+          suffixIcon: IconButton(
+            icon: SvgPicture.asset(AppImages.solarEye, height: 24, width: 24),
+            onPressed: controller.togglePasswordVisibility,
+          ),
+        ),
+      ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration({
+    required String hintText,
+    String? errorText,
+    bool hasError = false,
+    Widget? suffixIcon,
+  }) {
+    return InputDecoration(
+      suffixIcon: suffixIcon,
+      hintText: hintText,
+      hintStyle: TextStyle(
+          color: AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+          fontSize: 16,
+          fontWeight: FontWeight.w500
+      ),
+      errorText: errorText?.isEmpty ?? true ? null : errorText,
+      errorStyle: const TextStyle(
+        color: Colors.red,
+        fontSize: 12,
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+            color: AppColors.takeQuickAssessmentColor.withOpacity(0.25)
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: hasError
+              ? Colors.red
+              : AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: hasError
+              ? Colors.red
+              : AppColors.takeQuickAssessmentColor.withOpacity(0.25),
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.red, width: 1),
+      ),
+    );
+  }
+
+  Widget _buildDropdownSelections() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: CountrySelectionDropdown(),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+            child: CustomRoleSelectionDropdown()
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTermsCheckbox(AuthController controller) {
+    return Row(
+      children: [
+        Obx(() => Checkbox(
+            value: controller.agreedToTerms.value,
+            onChanged: (value) => controller.agreedToTerms.value = value!
+        )),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(color: Colors.grey),
+              children: [
+                TextSpan(
+                  text: AppStrings.iAgreeTo,
+                  style: TextStyle(
+                      color: AppColors.takeQuickAssessmentColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
+                  ),
+                ),
+                TextSpan(
+                  text: AppStrings.termsAndConditions,
+                  style: TextStyle(
+                    color: AppColors.takeQuickAssessmentColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: controller.termsGestureRecognizer,
+                ),
+                TextSpan(
+                  text: AppStrings.andAcknowledge,
+                  style: TextStyle(
+                      color: AppColors.takeQuickAssessmentColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
+                  ),
+                ),
+                TextSpan(
+                  text: AppStrings.privacyPolicy,
+                  style: TextStyle(
+                    color: AppColors.takeQuickAssessmentColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: controller.privacyGestureRecognizer,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCreateAccountButton(AuthController controller) {
+    return ElevatedButton(
+      onPressed: controller.createAccount,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.colorCheckBox,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25)
+        ),
+      ),
+      child: AppText(
+          AppStrings.createAccount,
+          fontSize: 20,
+          color: AppColors.white,
+          fontWeight: FontWeight.w500
+      ),
+    );
+  }
+
+  Widget _buildSocialLoginButtons(AuthController controller) {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: controller.signInWithGoogle,
+            style: OutlinedButton.styleFrom(
+              side: BorderSide.none,
+              backgroundColor: AppColors.lightOrangeColor,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)
+              ),
+            ),
+            child: SvgPicture.asset(AppImages.googleIc, height: 32, width: 32),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: OutlinedButton(
+            onPressed: controller.signInWithApple,
+            style: OutlinedButton.styleFrom(
+              backgroundColor: AppColors.black,
+              side: BorderSide.none,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)
+              ),
+            ),
+            child: SvgPicture.asset(AppImages.appleIc, height: 32, width: 32),
+          ),
+        ),
+      ],
+    );
+  }
 }

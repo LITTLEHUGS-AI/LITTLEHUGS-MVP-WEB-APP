@@ -8,6 +8,8 @@ class AppStrings {
   static const String aHugForEveryStageOfLife = "A hug for every stage of life";
   static const String aHugAheadOfTime = "A Hug Ahead of Time";
   static const String aHugForEveryStageOfLifeDesc = "Whether you're a mother, caregiver, or growing child—LittleHugs brings AI-powered wellness,\nsmart screening, and daily care routines to your fingertips";
+  static const String forYou = "For You";
+  static const String forPartners = "For Partners";
   static const String pricing = "Pricing";
   static const String aboutUs = "About Us";
   static const String contactUs = "Contact Us";
@@ -37,4 +39,32 @@ class AppStrings {
   static const String enterFiveDigitOTP = "Enter 5 digit OTP";
   static const String resend = "Resend";
   static const String enterValidNumber = "Enter a valid number";
+
+// auth
+  static const String forgotPassword = 'Forgot Password';
+  static const String email = '* Email';
+  static const String password = '* Password';
+  static const String createAccount = 'Create Account';
+
+  // Terms and Privacy
+  static const String termsAgreement = "I agree to LittleHugs's ";
+  static const String termsAndConditions = 'Terms & Conditions';
+  static const String andAcknowledge = ' and acknowledge \nthe ';
+  static const String privacyPolicy = 'Privacy Policy';
+
+  // Validation Messages
+  static const String emailRequired = 'Email is required';
+  static const String invalidEmailFormat = 'Invalid email format';
+  static const String passwordRequired = 'Password is required';
+  static const String passwordMinLength = 'Password must be at least 8 characters';
+  static const String termsRequired = 'You must agree to the terms and conditions';
+
+
+
+  // Sign Up View
+  static const String signUp = 'Sign Up';
+  static const String nameHint = '* Name';
+  static const String emailHint = '* Email';
+  static const String passwordHint = '* Password';
+  static const String iAgreeTo = "I agree to LittleHugs's ";
 }

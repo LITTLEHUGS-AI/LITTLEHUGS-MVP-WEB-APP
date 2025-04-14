@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_images.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
-import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
 import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
+import 'package:webapplittlehugsmvp/app/widgets/appbar_widget.dart';
 import '../controllers/welcome_controller.dart';
 
 class WelcomeView extends GetView<WelcomeController> {
@@ -19,58 +19,7 @@ class WelcomeView extends GetView<WelcomeController> {
     final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(children: [SvgPicture.asset(AppImages.logo, height: 40),],),
-        actions:
-        isMobile
-            ? [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
-            onPressed: () {
-              // Show drawer or menu
-              Scaffold.of(context).openEndDrawer();
-            },
-          ),
-        ]
-            : [
-              // Spacer(),
-          TextButton(
-            onPressed: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppText(AppStrings.assessments, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                SvgPicture.asset(AppImages.downArrow, height: 24, width: 24),
-              ],
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: AppText(AppStrings.pricing, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: AppText(AppStrings.aboutUs, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: AppText(AppStrings.contactUs, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-          ),
-          // Spacer(),
-          ElevatedButton(
-            style: ButtonStyle(backgroundColor: WidgetStateProperty.all(AppColors.colorCheckBox), elevation: WidgetStateProperty.all(0.0)),
-            onPressed: () {
-              Get.toNamed(Routes.AUTH);
-            },
-            child: AppText(AppStrings.signUpSignIn, color: AppColors.white, fontSize: 16, textAlign: TextAlign.center, fontWeight: FontWeight.w400),
-          ),
-          SizedBox(width: 16),
-        ],
-      ),
+      appBar: buildAppBar(isMobile, context),
       endDrawer:
       isMobile
           ? Drawer(
@@ -187,6 +136,7 @@ class WelcomeView extends GetView<WelcomeController> {
       ),
     );
   }
+
 
   Widget _buildOptionCard(String title, String description, icon, BoxConstraints constraints, hover, onTap) {
     final cardWidth =

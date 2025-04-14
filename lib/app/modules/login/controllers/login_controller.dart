@@ -1,14 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
 import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  final isPasswordVisible = false.obs;
-  final agreedToTerms = false.obs;
+  final RxString emailError = ''.obs;
+  final RxString passwordError = ''.obs;
+  final RxBool isPasswordVisible = false.obs;
+  final RxBool agreedToTerms = false.obs;
 
   late final TapGestureRecognizer termsGestureRecognizer;
   late final TapGestureRecognizer privacyGestureRecognizer;
@@ -16,8 +19,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    termsGestureRecognizer = TapGestureRecognizer()..onTap = openTerms;
-    privacyGestureRecognizer = TapGestureRecognizer()..onTap = openPrivacyPolicy;
+    _initializeGestureRecognizers();
   }
 
   @override
@@ -29,82 +31,77 @@ class LoginController extends GetxController {
     super.onClose();
   }
 
+  void _initializeGestureRecognizers() {
+    termsGestureRecognizer = TapGestureRecognizer()..onTap = _openTermsAndConditions;
+    privacyGestureRecognizer = TapGestureRecognizer()..onTap = _openPrivacyPolicy;
+  }
+
+  void validateEmail(String value) {
+    if (value.isEmpty) {
+      emailError.value = AppStrings.emailRequired;
+    } else if (!_isValidEmail(value)) {
+      emailError.value = AppStrings.invalidEmailFormat;
+    } else {
+      emailError.value = '';
+    }
+  }
+
+  void validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordError.value = AppStrings.passwordRequired;
+    } else if (value.length < 8) {
+      passwordError.value = AppStrings.passwordMinLength;
+    } else {
+      passwordError.value = '';
+    }
+  }
+
+  bool _isValidEmail(String email) {
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+    return emailRegExp.hasMatch(email);
+  }
+
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
-  void goToSignUp() {
-    Get.toNamed(Routes.AUTH);
-    // Implement navigation to sign in page
+  void createAccount() {
+    // Validate inputs first
+    validateEmail(emailController.text);
+    validatePassword(passwordController.text);
+
+    if (!agreedToTerms.value) {
+      Get.snackbar('Error', AppStrings.termsRequired);
+      return;
+    }
+
+    if (emailError.value.isEmpty && passwordError.value.isEmpty) {
+      // Implement sign-in logic
+      print('Attempting sign in with: ${emailController.text}');
+    }
   }
 
-  void createAccount() {
-    // Implement account creation logic
+  void goToSignUp() {
+    Get.toNamed(Routes.AUTH);
+  }
+
+  void _openTermsAndConditions() {
+    // Implement navigation to terms and conditions
+    print('Opening Terms & Conditions');
+  }
+
+  void _openPrivacyPolicy() {
+    // Implement navigation to privacy policy
+    print('Opening Privacy Policy');
   }
 
   void signInWithGoogle() {
-    // Implement Google sign in
+    // Implement Google sign-in
+    print('Google sign-in initiated');
   }
 
   void signInWithApple() {
-    // Implement Apple sign in
-  }
-
-  void openTerms() {
-    // Open terms and conditions
-  }
-
-  void openPrivacyPolicy() {
-    // Open privacy policy
-  }
-
-  // Add these to your controller class
-  final RxString passwordError = ''.obs;
-
-  void validatePassword(String password) {
-    if (password.isEmpty) {
-      passwordError.value = "Password cannot be empty";
-    } else if (password.length < 8) {
-      passwordError.value = "Password must be at least 8 characters long";
-    } else if (!password.contains(RegExp(r'[A-Z]'))) {
-      passwordError.value = "Password must contain at least one uppercase letter";
-    } else if (!password.contains(RegExp(r'[a-z]'))) {
-      passwordError.value = "Password must contain at least one lowercase letter";
-    } else if (!password.contains(RegExp(r'[0-9]'))) {
-      passwordError.value = "Password must contain at least one number";
-    } else if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      passwordError.value = "Password must contain at least one special character";
-    } else {
-      passwordError.value = "";
-    }
-  }
-
-// You can also check on form submission
-  bool isPasswordValid() {
-    validatePassword(passwordController.text);
-    return passwordError.value.isEmpty;
-  }
-
-
-  // Add these to your controller class
-  final RxString emailError = ''.obs;
-
-  void validateEmail(String email) {
-    // Regular expression for email validation
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-
-    if (email.isEmpty) {
-      emailError.value = "Email cannot be empty";
-    } else if (!emailRegex.hasMatch(email)) {
-      emailError.value = "Please enter a valid email address";
-    } else {
-      emailError.value = "";
-    }
-  }
-
-// You can also check on form submission
-  bool isEmailValid() {
-    validateEmail(emailController.text);
-    return emailError.value.isEmpty;
+    // Implement Apple sign-in
+    print('Apple sign-in initiated');
   }
 }

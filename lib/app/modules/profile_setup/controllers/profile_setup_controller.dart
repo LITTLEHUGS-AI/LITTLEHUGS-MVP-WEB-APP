@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/flutter_percent_indicator.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
 import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/profile_setup_dropdown.dart';
+import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
 import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
 
 class ProfileSetupController extends GetxController {
@@ -36,7 +38,6 @@ class ProfileSetupController extends GetxController {
     Future.delayed(Duration(seconds: 0)).then((_) {
       showDialog(
         context: Get.context!,
-        useSafeArea: false,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return womenAndChildProfileBuilder();
@@ -50,8 +51,9 @@ class ProfileSetupController extends GetxController {
   StatefulBuilder womenAndChildProfileBuilder() {
     return StatefulBuilder(
       builder: (context, setState) {
-        return Material(
-          child: Center(
+        return Center(
+          child: Material(
+            color: Colors.transparent,
             child: Container(
               height: Get.height,
               width: isDesktop(context) ? Get.width / 1.8 : Get.width - 40,
@@ -63,21 +65,32 @@ class ProfileSetupController extends GetxController {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 100),
-
-                    // First row/column of fields - Date picker and first dropdown
-                    !isDesktop(context) ? buildMobileFields(context) : buildDesktopFields(context),
-
-                    SizedBox(height: 30),
-                    Spacer(),
-                    // Button
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 100),
+                            CircularPercentIndicator(
+                              // arcBackgroundColor: AppColors.colorHintTextField,
+                              radius: 60.0,
+                              lineWidth: 10.0,
+                              percent: 0.2,
+                              center: Icon(Icons.person, size: 50),
+                              progressColor: Colors.green,
+                            ),
+                            SizedBox(height: 100),
+                            !isDesktop(context) ? buildMobileFields(context) : buildDesktopFields(context),
+                            SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                    ),
                     Center(
                       child: SizedBox(
                         width: isDesktop(context) ? 400 : 250,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.back();
-                            Get.back();
+                            Get.offAllNamed(Routes.HOME);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.colorCheckBox,

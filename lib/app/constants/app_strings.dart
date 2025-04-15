@@ -6,8 +6,20 @@ class AppStrings {
   static const String youDoNotHaveAnAccount = "You Don't have an account?";
   static const String assessments = "Assessments";
   static const String aHugForEveryStageOfLife = "A hug for every stage of life";
+
+  // main landing
+  static const String whatIsLittleHugs = "What is LittleHugs?";
+  static const String gentleGuidanceForGrowingMindsAndHealingHearts = "Gentle Guidance for Growing\nMinds and Healing Hearts";
+  static const String gentleGuidanceForGrowingMindsAndHealingHeartsDesc = "LittleHugs helps you check in, not check out. Discover\npersonalized, non-clinical care insights—at home, in school,\nor on the go";
+  static const String tryForFree = "Try for free";
+
+
+
+
+
+
   static const String aHugAheadOfTime = "A Hug Ahead of Time";
-  static const String aHugForEveryStageOfLifeDesc = "Whether you're a mother, caregiver, or growing child—LittleHugs brings AI-powered wellness,\nsmart screening, and daily care routines to your fingertips";
+  static const String aHugForEveryStageOfLifeDesc = "Whether you're a mother, caregiver, or growing\nchild—LittleHugs brings AI-powered wellness, smart\nscreening, and daily care routines to your\nfingertips";
   static const String forYou = "For You";
   static const String forPartners = "For Partners";
   static const String pricing = "Pricing";
@@ -67,4 +79,5 @@ class AppStrings {
   static const String emailHint = '* Email';
   static const String passwordHint = '* Password';
   static const String iAgreeTo = "I agree to LittleHugs's ";
+  static const String goToTheDashboard = "Go to the Dashboard";
 }

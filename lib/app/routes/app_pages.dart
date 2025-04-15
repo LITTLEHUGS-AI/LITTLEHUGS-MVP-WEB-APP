@@ -6,8 +6,12 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/partner_landing/bindings/partner_landing_binding.dart';
+import '../modules/partner_landing/views/partner_landing_view.dart';
 import '../modules/personal_landing/bindings/personal_landing_binding.dart';
 import '../modules/personal_landing/views/personal_landing_view.dart';
+import '../modules/profile_setup/bindings/profile_setup_binding.dart';
+import '../modules/profile_setup/views/profile_setup_view.dart';
 import '../modules/signUp/bindings/auth_binding.dart';
 import '../modules/signUp/views/signup_view.dart';
 import '../modules/welcome/bindings/welcome_binding.dart';
@@ -55,6 +59,18 @@ class AppPages {
       name: _Paths.PERSONAL_LANDING,
       page: () => const PersonalLandingView(),
       binding: PersonalLandingBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.PARTNER_LANDING,
+      page: () => const PartnerLandingView(),
+      binding: PartnerLandingBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: _Paths.PROFILE_SETUP,
+      page: () => const ProfileSetupView(),
+      binding: ProfileSetupBinding(),
       transition: Transition.fadeIn,
     ),
   ];

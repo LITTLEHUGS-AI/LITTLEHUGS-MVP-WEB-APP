@@ -41,7 +41,7 @@ class CountrySelectionDropdown extends StatelessWidget {
                                   controller: controller.countrySearchController,
                                   onChanged: controller.filterCountries,
                                   decoration: InputDecoration(
-                                    hintText: 'Search country...',
+                                    hintText: '* country',
                                     hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
                                     border: InputBorder.none,
                                     isDense: true,
@@ -50,7 +50,7 @@ class CountrySelectionDropdown extends StatelessWidget {
                                   style: TextStyle(color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25), fontSize: 16, fontWeight: FontWeight.w500),
                                 )
                                 : AppText(
-                                  controller.selectedCountry.value.isEmpty ? 'Select Country' : controller.selectedCountry.value,
+                                  controller.selectedCountry.value.isEmpty ? '* country' : controller.selectedCountry.value,
                                   color: AppColors.takeQuickAssessmentColor.withValues(alpha: 0.25),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,

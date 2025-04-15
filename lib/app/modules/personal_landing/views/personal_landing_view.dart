@@ -1,54 +1,25 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_images.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
+import 'package:webapplittlehugsmvp/app/modules/personal_landing/controllers/personal_landing_controller.dart';
 import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
 import 'package:webapplittlehugsmvp/app/widgets/appbar_widget.dart';
-import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
+class PersonalLandingView extends GetView<PersonalLandingController> {
+  const PersonalLandingView({super.key});
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
+    PersonalLandingController controller = Get.put(PersonalLandingController());
     final bool isMobile = controller.isMobile(context);
     final bool isTablet = controller.isTablet(context);
     final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: buildAppBar(isMobile, context, screen: 'home'),
-      endDrawer:
-          isMobile
-              ? Drawer(
-                child: ListView(
-                  children: [
-                    DrawerHeader(decoration: BoxDecoration(color: Theme.of(context).primaryColor), child: Text('LittleHugs Menu')),
-                    ListTile(
-                      title: AppText(AppStrings.assessments, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      title: AppText(AppStrings.pricing, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      title: AppText(AppStrings.aboutUs, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      title: AppText(AppStrings.contactUs, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                      onTap: () {},
-                    ),
-                    ListTile(
-                      title: AppText(AppStrings.signUpSignIn, color: AppColors.colorHintTextField, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              )
-              : null,
+      appBar: buildAppBar(isMobile, context,screen: 'personal'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,11 +27,11 @@ class HomeView extends GetView<HomeController> {
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal:
-                    isMobile
-                        ? 16
-                        : isTablet
-                        ? 32
-                        : 64,
+                isMobile
+                    ? 16
+                    : isTablet
+                    ? 32
+                    : 64,
                 vertical: 32,
               ),
               width: Get.width,
@@ -72,21 +43,9 @@ class HomeView extends GetView<HomeController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppText(
-                          AppStrings.gentleGuidanceForGrowingMindsAndHealingHearts,
-                          color: AppColors.colorHintTextField,
-                          fontSize: 45,
-                          textAlign: TextAlign.start,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        AppText(AppStrings.aHugForEveryStageOfLife, color: AppColors.colorHintTextField, fontSize: 48, textAlign: TextAlign.start, fontWeight: FontWeight.w500),
                         SizedBox(height: 20),
-                        AppText(
-                          AppStrings.gentleGuidanceForGrowingMindsAndHealingHeartsDesc,
-                          color: AppColors.colorHintTextField,
-                          fontSize: 14,
-                          textAlign: TextAlign.start,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        AppText(AppStrings.aHugForEveryStageOfLifeDesc, color: AppColors.colorHintTextField, fontSize: 14, textAlign: TextAlign.start, fontWeight: FontWeight.w400),
                         SizedBox(height: 20),
                         SizedBox(
                           height: 52,
@@ -115,23 +74,155 @@ class HomeView extends GetView<HomeController> {
             // Category Selection
             Center(
               child: Padding(
-                padding: EdgeInsets.all(isMobile ? 16 : 0),
+                padding: EdgeInsets.all(isMobile ? 16 : 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 100),
-                    AppText(AppStrings.whatIsLittleHugs, color: AppColors.colorHintTextField, fontSize: 32, textAlign: TextAlign.center, fontWeight: FontWeight.w600),
-                    SizedBox(height: 50),
-                    Wrap(spacing: 16, runSpacing: 16, alignment: WrapAlignment.center, children: []),
+                    SizedBox(height: 30),
+                    AppText(AppStrings.whatHugDoYouNeedToday, color: AppColors.colorHintTextField, fontSize: 32, textAlign: TextAlign.center, fontWeight: FontWeight.w600),
+                    SizedBox(height: 24),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        CategoryDropdown(title: AppStrings.womenHealthWellness, isSelected: true, onTap: () => controller.updateCategory("Women's Health & Wellness")),
+                        CategoryDropdown(title: AppStrings.childDevelopmentGrowth, isSelected: false, onTap: () => controller.updateCategory("Child's Development & Growth")),
+                      ],
+                    ),
                     SizedBox(height: 20),
+                    // Illustration Section
+                    Wrap(
+                      spacing: 32,
+                      runSpacing: 32,
+                      alignment: WrapAlignment.center,
+                      children: [Image.asset(AppImages.womenImage, height: 480), Image.asset(AppImages.childImage, height: 480)],
+                    ),
                   ],
                 ),
+              ),
+            ),
+
+            // Features Section
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(isMobile ? 16 : 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AppText(AppStrings.howOurWarmHugWillHelpYou, color: AppColors.colorHintTextField, fontSize: 30, textAlign: TextAlign.center, fontWeight: FontWeight.w700),
+                    SizedBox(height: 30),
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        FeatureCard(title: AppStrings.personalizedProfile, onTap: () {}),
+                        FeatureCard(title: AppStrings.smartPreScreening, onTap: () {}),
+                        FeatureCard(title: AppStrings.instantInsights, onTap: () {}),
+                        FeatureCard(title: AppStrings.dailySupport, onTap: () {}),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Assessment Categories
+            Container(
+              padding: EdgeInsets.all(isMobile ? 16 : 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AppText(
+                        'Empowering Every Woman—With or Without a Child',
+                        color: AppColors.colorHintTextField,
+                        fontSize: 30,
+                        textAlign: TextAlign.center,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      SizedBox(width: 20),
+                      Switch(value: true, onChanged: (val) {}, activeColor: Theme.of(context).primaryColor),
+                    ],
+                  ),
+                  SizedBox(height: 24),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                      isMobile
+                          ? 2
+                          : isTablet
+                          ? 3
+                          : 5,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.5,
+                    ),
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      List<Map<String, String>> assessments = [
+                        {'title': 'AI 360 Wellness Assessment', 'action': 'Explore more'},
+                        {'title': 'Self-care rituals', 'action': 'Explore more'},
+                        {'title': 'PPD / PPA / Hormonal Risk Screening', 'action': 'Explore more'},
+                        {'title': 'Nutrition, sleep, body sync', 'action': 'Explore more'},
+                      ];
+
+                      return AssessmentCard(title: assessments[index]['title'] ?? '', actionText: assessments[index]['action'] ?? '');
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            // Gamification Section
+            Image.asset(AppImages.offerImage, width: Get.width, height: 344, fit: BoxFit.fitWidth),
+
+            // Testimonials
+            Container(
+              padding: EdgeInsets.all(isMobile ? 16 : 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AppText(
+                    'Users are enjoying happier and healthier lives',
+                    color: AppColors.colorHintTextField,
+                    fontSize: 30,
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(height: 32),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                      isMobile
+                          ? 1
+                          : isTablet
+                          ? 2
+                          : 3,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return TestimonialCard(testimonial: 'LittleHugs has transformed my health journey!');
+                    },
+                  ),
+                ],
               ),
             ),
 
             // Footer
             Container(
               padding: EdgeInsets.all(isMobile ? 16 : 32),
+              color: Colors.grey[100],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,6 +233,9 @@ class HomeView extends GetView<HomeController> {
                     children: [_buildContactItem('• Account & Setup'), _buildContactItem('• Privacy'), _buildContactItem('• Assessments'), _buildContactItem('• Partner Tools')],
                   ),
                   SizedBox(height: 32),
+                  Divider(),
+                  SizedBox(height: 16),
+                  Text('Footeeer', style: TextStyle(color: Colors.grey)),
                 ],
               ),
             ),
@@ -151,13 +245,6 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _buildRewardCard(BuildContext context, String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.3), borderRadius: BorderRadius.circular(16)),
-      child: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
-    );
-  }
 
   Widget _buildContactItem(String text) {
     return Padding(padding: const EdgeInsets.symmetric(vertical: 4.0), child: Text(text));

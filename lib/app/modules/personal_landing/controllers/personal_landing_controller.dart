@@ -1,10 +1,19 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:webapplittlehugsmvp/app/modules/home/views/home_view.dart';
-import 'package:webapplittlehugsmvp/app/modules/personal_landing/views/personal_landing_view.dart';
 
-class DashBoardController extends GetxController {
-  //TODO: Implement DashBoardController
+class PersonalLandingController extends GetxController {
+  //TODO: Implement HomeController
+
+  final count = 0.obs;
+  @override
+  void onInit() {
+    print('alkdsdalskdjjdklasjdklasdjklasdklkl');
+    super.onInit();
+  }
+  var selectedCategory = "Women's Health & Wellness".obs;
+  var isLoggedIn = false.obs;
+
   // Method to check if device is mobile
   bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 768;
 
@@ -15,12 +24,9 @@ class DashBoardController extends GetxController {
   bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1200;
 
   // Method to update selected category
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void updateCategory(String category) {
+    selectedCategory.value = category;
   }
-
   @override
   void onReady() {
     super.onReady();
@@ -32,22 +38,4 @@ class DashBoardController extends GetxController {
   }
 
   void increment() => count.value++;
-
-
-  int selectedIndex = 0;
-
-  void onItemTapped(int index) {
-      selectedIndex = index;
-      update();
-  }
-
-  final List<Widget> pages = [
-    Container(),
-    HomeView(),
-    PersonalLandingView(),
-    Container(),
-    Container(),
-    Container(),
-    Container(),
-  ];
 }

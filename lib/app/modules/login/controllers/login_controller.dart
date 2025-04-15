@@ -5,6 +5,16 @@ import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
 import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
+
+  // Method to check if device is mobile
+  bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 768;
+
+  // Method to check if device is tablet
+  bool isTablet(BuildContext context) => MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
+
+  // Method to check if device is desktop
+  bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1200;
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 

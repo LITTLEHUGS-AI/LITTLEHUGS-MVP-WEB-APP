@@ -11,6 +11,7 @@ class AppColors {
   static Color colorHintTextField = Color(0xff4A4B4F);
   static Color colorCheckBox = Color(0xff4F7DDD);
   static Color lightOrangeColor = Color(0xffFAF3ED);
+  static Color dialogBgColor = Color(0xffFFFAE2);
   static Color darkOrangeColor = Color(0xffF9BD87);
   static Color secondaryOrange = Color(0xffFFC655);
   static Color takeQuickAssessmentColor = Color(0xff263238);

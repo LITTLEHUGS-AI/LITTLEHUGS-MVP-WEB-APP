@@ -19,7 +19,7 @@ class WelcomeView extends GetView<WelcomeController> {
     final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: buildAppBar(isMobile, context),
+      appBar: buildAppBar(isMobile, context,screen: 'welcome'),
       endDrawer:
       isMobile
           ? Drawer(

@@ -12,11 +12,11 @@
 //     ResponsiveBuilder(
 //       builder: (context, sizingInformation) {
 //         if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
-//           return screenUtilInit(sizingInformation.screenSize.height,sizingInformation.screenSize.width);
+//           return screenUtilInit(sizingInformation.screenSize.height, sizingInformation.screenSize.width);
 //         }
 //
 //         if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
-//           return screenUtilInit(sizingInformation.screenSize.height,sizingInformation.screenSize.width);
+//           return screenUtilInit(sizingInformation.screenSize.height, sizingInformation.screenSize.width);
 //         }
 //         return ScreenUtilInit(
 //           designSize: const Size(360, 800),
@@ -31,23 +31,32 @@
 //   );
 // }
 //
-// ScreenUtilInit screenUtilInit(h,w) {
+// ScreenUtilInit screenUtilInit(h, w) {
 //   return ScreenUtilInit(
-//     designSize:  Size(w, h),
+//     designSize: Size(w, h),
 //     minTextAdapt: true,
 //     splitScreenMode: true,
+//     enableScaleWH: (){
+//       return false;
+//     },
+//     // ensureScreenSize: true,
+//     enableScaleText: (){
+//       return false;
+//     },
 //     builder: (_, child) {
 //       return getMaterialApp(child);
 //     },
 //   );
 // }
 //
-// GetMaterialApp getMaterialApp(Widget? child) =>
-//     GetMaterialApp(title: "WEB LITTLEHUGS MVP", initialRoute: AppPages.INITIAL, getPages: AppPages.routes, home: child, debugShowCheckedModeBanner: false);
-
-
-
-
+// GetMaterialApp getMaterialApp(Widget? child) => GetMaterialApp(
+//   title: "LittleHugs WebApp",
+//   initialRoute: AppPages.INITIAL,
+//   getPages: AppPages.routes,
+//   home: child,
+//   debugShowCheckedModeBanner: false,
+//   // theme: ThemeData(useMaterial3: false),
+// );
 
 // lib/main.dart
 import 'package:flutter/material.dart';
@@ -70,4 +79,3 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(title: 'LittleHugs WebApp', initialRoute: AppPages.INITIAL, getPages: AppPages.routes, home: HomeView(), debugShowCheckedModeBanner: false);
   }
 }
-

@@ -1,9 +1,20 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
 import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
+import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
 
 class AuthController extends GetxController {
+  // Method to check if device is mobile
+  bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 768;
+
+  // Method to check if device is tablet
+  bool isTablet(BuildContext context) => MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
+
+  // Method to check if device is desktop
+  bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1200;
+
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -54,6 +65,7 @@ class AuthController extends GetxController {
   }
 
   void createAccount() {
+    proceedWithSelection();
     // Implement account creation logic
   }
 
@@ -144,10 +156,10 @@ class AuthController extends GetxController {
     return emailError.value.isEmpty;
   }
 
-  final selectedOptionForRole = "I am here for".obs;
+  final selectedOptionForRole = "* I am here for".obs;
   final isDropdownOpenForRole = false.obs;
 
-  final optionsForRole = ["I am here for", "Personal Plan", "Professional Plan"];
+  final optionsForRole = ["","Personal Plan", "Professional Plan"];
 
   void toggleDropdown() {
     isDropdownOpenForRole.value = !isDropdownOpenForRole.value;
@@ -239,5 +251,61 @@ class AuthController extends GetxController {
 
 
 
+  final isWomen = false.obs;
+  final isChild = false.obs;
 
+  void proceedWithSelection() {
+    // Process the selection
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.dialogBgColor,
+        actionsPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        content: SizedBox(
+          height: 240,
+          width: 300,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 27),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText('I need LittleHugs for',fontWeight: FontWeight.w500,fontSize: 20,color: AppColors.colorHintTextField),
+                    SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Obx(() => Checkbox(value: isWomen.value, onChanged: (value) {
+                          isChild.value = false;
+                          isWomen.value = value!;
+                          Get.back();
+                          Get.toNamed(Routes.PROFILE_SETUP);
+                        })),
+                        Expanded(child: AppText('Women\'s Wellness',fontWeight: FontWeight.w500,fontSize: 14,color: AppColors.colorHintTextField)),
+                      ],
+                    ),
+                    SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Obx(() => Checkbox(value: isChild.value, onChanged: (value) {
+                          isWomen.value = false;
+                          isChild.value = value!;
+                          Get.back();
+                          Get.toNamed(Routes.PROFILE_SETUP);
+                        })),
+                        Expanded(child: AppText('Child\'s Development & Growth',fontWeight: FontWeight.w500,fontSize: 14,color: AppColors.colorHintTextField)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(left: -19, bottom: -40, child: Container(width: 82, height: 82, decoration: BoxDecoration(color: AppColors.secondaryOrange, shape: BoxShape.circle)))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

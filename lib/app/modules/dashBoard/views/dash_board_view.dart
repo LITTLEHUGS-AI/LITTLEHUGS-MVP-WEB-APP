@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
+import 'package:webapplittlehugsmvp/app/modules/home/views/home_view.dart';
+import 'package:webapplittlehugsmvp/app/modules/login/views/login_view.dart';
+import 'package:webapplittlehugsmvp/app/modules/personal_landing/views/personal_landing_view.dart';
+import 'package:webapplittlehugsmvp/app/modules/signUp/views/signup_view.dart';
+import 'package:webapplittlehugsmvp/app/modules/welcome/views/welcome_view.dart';
+import 'package:webapplittlehugsmvp/app/widgets/appbar_widget.dart';
 import '../../../constants/app_strings.dart';
 import '../controllers/dash_board_controller.dart';
 
@@ -8,43 +14,44 @@ class DashBoardView extends GetView<DashBoardController> {
   const DashBoardView({super.key});
   @override
   Widget build(BuildContext context) {
+    DashBoardController controller = Get.put(DashBoardController());
+    final bool isMobile = controller.isMobile(context);
+    final bool isTablet = controller.isTablet(context);
+    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return GetBuilder(
-        assignId: true,
-        init: DashBoardController(),
-        builder: (controller) {
-          return Scaffold(
-            backgroundColor: AppColors.white,
-            appBar: AppBar(
-              toolbarHeight: 5.0,
-              backgroundColor: AppColors.white, // Or any color you prefer for the AppBar
-              automaticallyImplyLeading: false, // To remove the back button if any
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight), // Match the height of BottomNavigationBar
-                child: BottomNavigationBar(
-                  currentIndex: controller.selectedIndex,
-                  onTap: controller.onItemTapped,
-                  elevation: 0.0,
-                  backgroundColor: AppColors.white,
-                  selectedItemColor: AppColors.colorCheckBox,
-                  unselectedItemColor: AppColors.colorHintTextField,
-                  type: BottomNavigationBarType.fixed,
-                  items: const [
-                    BottomNavigationBarItem(icon: Icon(Icons.home), label: AppStrings.forYou),
-                    BottomNavigationBarItem(icon: Icon(Icons.group), label: AppStrings.forPartners),
-                    BottomNavigationBarItem(icon: Icon(Icons.assignment), label: AppStrings.assessments),
-                    BottomNavigationBarItem(icon: Icon(Icons.price_change), label: AppStrings.pricing),
-                    BottomNavigationBarItem(icon: Icon(Icons.info), label: AppStrings.aboutUs),
-                    BottomNavigationBarItem(icon: Icon(Icons.contact_page), label: AppStrings.contactUs),
-                  ],
-                ),
-              ),
-            ),
-            body: IndexedStack(
-              index: controller.selectedIndex,
-              children: controller.pages,
-            ),
-          );
-        }
+      assignId: true,
+      init: DashBoardController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: AppColors.white,
+          appBar: buildAppBar(isMobile, context,screen: 'dashboard'),
+          body: Navigator(
+            initialRoute: '/personal-landing',
+            onGenerateRoute: (settings) {
+              Widget page;
+              switch (settings.name) {
+                case '/home':
+                  page = HomeView();
+                  break;
+                case '/personal-landing':
+                  page = PersonalLandingView();
+                  break;
+                case '/welcome':
+                  page = WelcomeView();
+                  break;
+                case '/login':
+                  page = LoginView();
+                  break; case '/sign-up':
+                  page = SignUpView();
+                  break;
+                default:
+                  page = PersonalLandingView();
+              }
+              return MaterialPageRoute(builder: (_) => page);
+            },
+          ),
+        );
+      },
     );
   }
 }

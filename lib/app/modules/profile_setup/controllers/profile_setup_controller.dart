@@ -1,11 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/child_profile.dart';
 import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/women_profile.dart';
+import 'dart:html' as html;
 
 class ProfileSetupController extends GetxController {
-
-
   // for women
   final RxString selectedOptionForRole = ''.obs;
   final RxBool isDropdownOpenForRole = false.obs;
@@ -59,8 +61,6 @@ class ProfileSetupController extends GetxController {
     isDropdownOpenForGrade.value = false;
   }
 
-
-
   // for child
   final RxString selectedOptionForAge = ''.obs;
   final RxBool isDropdownOpenForAge = false.obs;
@@ -69,7 +69,12 @@ class ProfileSetupController extends GetxController {
   // For second dropdown (Subject)
   final RxString selectedOptionForGoal = ''.obs;
   final RxBool isDropdownOpenForGoal = false.obs;
-  final List<String> optionsForGoal = ['Developmental Milestones', 'Attention, social, or learning differences', 'Emotional Wellbeing & Mental Health', 'Growth, Nutrition & Physical Health'];
+  final List<String> optionsForGoal = [
+    'Developmental Milestones',
+    'Attention, social, or learning differences',
+    'Emotional Wellbeing & Mental Health',
+    'Growth, Nutrition & Physical Health',
+  ];
   // Toggle functions for each dropdown
   void toggleDropdownForAge() {
     isDropdownOpenForAge.value = !isDropdownOpenForAge.value;
@@ -82,7 +87,8 @@ class ProfileSetupController extends GetxController {
     // Close other dropdowns
     isDropdownOpenForAge.value = false;
   }
-// Selection functions for each dropdown
+
+  // Selection functions for each dropdown
   void selectOptionForAge(String option) {
     selectedOptionForAge.value = option;
     isDropdownOpenForAge.value = false;
@@ -106,7 +112,7 @@ class ProfileSetupController extends GetxController {
             },
           ).then((value) {});
         });
-      }else if(Get.arguments['page'] == 'Child'){
+      } else if (Get.arguments['page'] == 'Child') {
         Future.delayed(Duration(seconds: 0)).then((_) {
           showDialog(
             context: Get.context!,
@@ -117,7 +123,7 @@ class ProfileSetupController extends GetxController {
           ).then((value) {});
         });
       }
-    }else {
+    } else {
       Future.delayed(Duration(seconds: 0)).then((_) {
         showDialog(
           context: Get.context!,
@@ -131,4 +137,34 @@ class ProfileSetupController extends GetxController {
     // TODO: implement onInit
     super.onInit();
   }
+
+  // Store the selected image
+  XFile? selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  String? webImageUrl;
+
+  // Method to pick image from gallery
+  Future<void> pickImageFromGallery() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        selectedImage = pickedFile;
+        _createWebImageUrl(pickedFile);
+        update();
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+    }
+  }
+// Create a proper URL for web images
+  Future<void> _createWebImageUrl(XFile pickedFile) async {
+      // Read the file as bytes
+      final bytes = await pickedFile.readAsBytes();
+
+      // Create a blob URL for the image data
+      final blob = html.Blob([bytes]);
+      webImageUrl = html.Url.createObjectUrlFromBlob(blob);
+      update();
+    }
 }

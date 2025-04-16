@@ -60,7 +60,7 @@ class LoginView extends GetView<LoginController> {
           // Main content
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: !isMobile ? responsive.width(175.0) : responsive.width(24.0)),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? responsive.width(24.0): isTablet?responsive.width(150.0) : responsive.width(200.0)),
               child: _buildLoginForm(controller, tabBarTheme, responsive),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,17 +22,16 @@ womenProfileBuilder() {
           // Get device screen dimensions
           final screenHeight = MediaQuery.of(context).size.height;
           final screenWidth = MediaQuery.of(context).size.width;
-
           // Determine if device is in landscape mode
           final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
           // Calculate responsive values
           final double dialogHeight = isLandscape ? screenHeight * 0.9 : screenHeight * 0.8;
-          final double dialogWidth = isDesktop(context)
-              ? screenWidth / 1.8
-              : isTablet(context)
-              ? screenWidth * 0.8
-              : screenWidth * 0.9;
+          final double dialogWidth =
+              isDesktop(context)
+                  ? screenWidth / 1.8
+                  : isTablet(context)
+                  ? screenWidth * 0.8
+                  : screenWidth * 0.9;
 
           return Center(
             child: Material(
@@ -39,14 +39,8 @@ womenProfileBuilder() {
               child: Container(
                 height: dialogHeight,
                 width: dialogWidth,
-                margin: EdgeInsets.symmetric(
-                  vertical: adaptiveSize(context, 20, 30, 40),
-                  horizontal: adaptiveSize(context, 10, 20, 30),
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(adaptiveSize(context, 10, 12, 15)),
-                  color: AppColors.white,
-                ),
+                margin: EdgeInsets.symmetric(vertical: adaptiveSize(context, 20, 30, 40), horizontal: adaptiveSize(context, 10, 20, 30)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(adaptiveSize(context, 10, 12, 15)), color: AppColors.white),
                 child: Padding(
                   padding: EdgeInsets.all(adaptiveSize(context, 16, 24, 32)),
                   child: Column(
@@ -59,16 +53,40 @@ womenProfileBuilder() {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              CircularPercentIndicator(
-                                radius: adaptiveSize(context, 40, 50, 60),
-                                lineWidth: adaptiveSize(context, 6, 8, 10),
-                                percent: 0.2,
-                                center: Icon(
-                                  Icons.person,
-                                  size: adaptiveSize(context, 30, 40, 50),
+                              InkWell(
+                                onTap: () {
+                                  controller.pickImageFromGallery();
+                                },
+                                child: CircularPercentIndicator(
+                                  radius: adaptiveSize(context, 40, 50, 60),
+                                  lineWidth: adaptiveSize(context, 6, 8, 10),
+                                  percent: 23 / 100,
+                                  progressBorderColor: AppColors.borderColor,
+                                  center: CircleAvatar(
+                                    radius: adaptiveSize(context, 30, 40, 50),
+                                    backgroundColor: AppColors.colorHintTextField,
+                                    child:
+                                        controller.webImageUrl != null
+                                            ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(100),
+                                              child: CircleAvatar(
+                                                radius: adaptiveSize(context, 20, 30, 40),
+                                                backgroundColor: AppColors.colorHintTextField,
+                                                child: Image.network(controller.webImageUrl!, fit: BoxFit.cover),
+                                              ),
+                                            )
+                                            : CircleAvatar(
+                                              radius: adaptiveSize(context, 20, 30, 40),
+                                              backgroundColor: AppColors.colorHintTextField,
+                                              child: Icon(Icons.person, size: adaptiveSize(context, 20, 30, 40), color: AppColors.white),
+                                            ),
+                                  ),
+
+                                  progressColor: AppColors.secondaryOrange,
                                 ),
-                                progressColor: Colors.green,
                               ),
+                              SizedBox(height: 4),
+                              AppText('23% Completed', fontSize: 14, color: AppColors.colorHintTextField, fontWeight: FontWeight.w600),
                               SizedBox(height: adaptiveSize(context, 50, 75, 100)),
                               buildResponsiveFields(context, controller),
                               SizedBox(height: adaptiveSize(context, 15, 20, 30)),
@@ -79,31 +97,22 @@ womenProfileBuilder() {
                       Spacer(flex: 1),
                       Center(
                         child: SizedBox(
-                          width: isDesktop(context)
-                              ? 400
-                              : isTablet(context)
-                              ? 300
-                              : 250,
+                          width:
+                              isDesktop(context)
+                                  ? 400
+                                  : isTablet(context)
+                                  ? 300
+                                  : 250,
                           child: ElevatedButton(
                             onPressed: () {
                               Get.offAllNamed(Routes.HOME);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.colorCheckBox,
-                              padding: EdgeInsets.symmetric(
-                                vertical: adaptiveSize(context, 12, 14, 16),
-                                horizontal: adaptiveSize(context, 15, 20, 25),
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
+                              padding: EdgeInsets.symmetric(vertical: adaptiveSize(context, 12, 14, 16), horizontal: adaptiveSize(context, 15, 20, 25)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                             ),
-                            child: AppText(
-                              AppStrings.goToTheDashboard,
-                              fontSize: adaptiveFontSize(context, 16, 18, 20),
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            child: AppText(AppStrings.goToTheDashboard, fontSize: adaptiveFontSize(context, 16, 18, 20), color: AppColors.white, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
@@ -116,18 +125,20 @@ womenProfileBuilder() {
           );
         },
       );
-    }
+    },
   );
 }
-Widget buildResponsiveFields(BuildContext context,ProfileSetupController controller) {
+
+Widget buildResponsiveFields(BuildContext context, ProfileSetupController controller) {
   if (isDesktop(context)) {
     return buildDesktopFields(context, controller);
   } else {
-    return buildMobileFields(context,controller);
+    return buildMobileFields(context, controller);
   }
 }
+
 // Helper method to build mobile layout (Column)
-Widget buildMobileFields(BuildContext context,ProfileSetupController controller) {
+Widget buildMobileFields(BuildContext context, ProfileSetupController controller) {
   return Column(
     children: [
       // Date of Birth field
@@ -136,65 +147,78 @@ Widget buildMobileFields(BuildContext context,ProfileSetupController controller)
       SizedBox(height: 16),
 
       // First dropdown
-      Obx(() => CustomDropdown(
-        options: controller.optionsForRole,
-        selectedOption: controller.selectedOptionForRole.value,
-        isDropdownOpen: controller.isDropdownOpenForRole.value,
-        toggleDropdown: controller.toggleDropdownForRole,
-        onOptionSelected: controller.selectOptionForRole,
-        hintText: '* I would describe my current life stage as',
-      )),
-
-      SizedBox(height: 16),
-
-      // Second dropdown
-
-      // First dropdown
-      Obx(() => CustomDropdown(
-        options: controller.optionsForSubject,
-        selectedOption: controller.selectedOptionForSubject.value,
-        isDropdownOpen: controller.isDropdownOpenForSubject.value,
-        toggleDropdown: controller.toggleDropdownForSubject,
-        onOptionSelected: controller.selectOptionForSubject,
-        hintText: '* My intent is to work on my',
-      )),
-
-      SizedBox(height: 16),
-
-      // Third dropdown
-
-      // First dropdown
-      Obx(() => CustomDropdown(
-        options: controller.optionsForGrade,
-        selectedOption: controller.selectedOptionForGrade.value,
-        isDropdownOpen: controller.isDropdownOpenForGrade.value,
-        toggleDropdown: controller.toggleDropdownForGrade,
-        onOptionSelected: controller.selectOptionForGrade,
-        hintText: '* Tone Preference',
-      )),
-    ],
-  );
-}
-
-// Helper method to build desktop/tablet layout (Rows)
-Widget buildDesktopFields(BuildContext context,ProfileSetupController controller) {
-  return Column(
-    children: [
-      // First row
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Expanded(child: buildTextFieldObx()), SizedBox(width: 16), Expanded(child:
-        // First dropdown
-        Obx(() => CustomDropdown(
+      Obx(
+        () => CustomDropdown(
           options: controller.optionsForRole,
           selectedOption: controller.selectedOptionForRole.value,
           isDropdownOpen: controller.isDropdownOpenForRole.value,
           toggleDropdown: controller.toggleDropdownForRole,
           onOptionSelected: controller.selectOptionForRole,
           hintText: '* I would describe my current life stage as',
-        )),
-        )],
+        ),
+      ),
+
+      SizedBox(height: 16),
+
+      // Second dropdown
+
+      // First dropdown
+      Obx(
+        () => CustomDropdown(
+          options: controller.optionsForSubject,
+          selectedOption: controller.selectedOptionForSubject.value,
+          isDropdownOpen: controller.isDropdownOpenForSubject.value,
+          toggleDropdown: controller.toggleDropdownForSubject,
+          onOptionSelected: controller.selectOptionForSubject,
+          hintText: '* My intent is to work on my',
+        ),
+      ),
+
+      SizedBox(height: 16),
+
+      // Third dropdown
+
+      // First dropdown
+      Obx(
+        () => CustomDropdown(
+          options: controller.optionsForGrade,
+          selectedOption: controller.selectedOptionForGrade.value,
+          isDropdownOpen: controller.isDropdownOpenForGrade.value,
+          toggleDropdown: controller.toggleDropdownForGrade,
+          onOptionSelected: controller.selectOptionForGrade,
+          hintText: '* Tone Preference',
+        ),
+      ),
+    ],
+  );
+}
+
+// Helper method to build desktop/tablet layout (Rows)
+Widget buildDesktopFields(BuildContext context, ProfileSetupController controller) {
+  return Column(
+    children: [
+      // First row
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: buildTextFieldObx()),
+          SizedBox(width: 16),
+          Expanded(
+            child:
+            // First dropdown
+            Obx(
+              () => CustomDropdown(
+                options: controller.optionsForRole,
+                selectedOption: controller.selectedOptionForRole.value,
+                isDropdownOpen: controller.isDropdownOpenForRole.value,
+                toggleDropdown: controller.toggleDropdownForRole,
+                onOptionSelected: controller.selectOptionForRole,
+                hintText: '* I would describe my current life stage as',
+              ),
+            ),
+          ),
+        ],
       ),
 
       SizedBox(height: 22),
@@ -203,26 +227,37 @@ Widget buildDesktopFields(BuildContext context,ProfileSetupController controller
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [Expanded(child:
-        // First dropdown
-        Obx(() => CustomDropdown(
-          options: controller.optionsForSubject,
-          selectedOption: controller.selectedOptionForSubject.value,
-          isDropdownOpen: controller.isDropdownOpenForSubject.value,
-          toggleDropdown: controller.toggleDropdownForSubject,
-          onOptionSelected: controller.selectOptionForSubject,
-          hintText: '* My intent is to work on my',
-        )),
-        ), SizedBox(width: 16), Expanded(child:
-        // First dropdown
-        Obx(() => CustomDropdown(
-          options: controller.optionsForGrade,
-          selectedOption: controller.selectedOptionForGrade.value,
-          isDropdownOpen: controller.isDropdownOpenForGrade.value,
-          toggleDropdown: controller.toggleDropdownForGrade,
-          onOptionSelected: controller.selectOptionForGrade,
-          hintText: '* Tone Preference',
-        )),)],
+        children: [
+          Expanded(
+            child:
+            // First dropdown
+            Obx(
+              () => CustomDropdown(
+                options: controller.optionsForSubject,
+                selectedOption: controller.selectedOptionForSubject.value,
+                isDropdownOpen: controller.isDropdownOpenForSubject.value,
+                toggleDropdown: controller.toggleDropdownForSubject,
+                onOptionSelected: controller.selectOptionForSubject,
+                hintText: '* My intent is to work on my',
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child:
+            // First dropdown
+            Obx(
+              () => CustomDropdown(
+                options: controller.optionsForGrade,
+                selectedOption: controller.selectedOptionForGrade.value,
+                isDropdownOpen: controller.isDropdownOpenForGrade.value,
+                toggleDropdown: controller.toggleDropdownForGrade,
+                onOptionSelected: controller.selectOptionForGrade,
+                hintText: '* Tone Preference',
+              ),
+            ),
+          ),
+        ],
       ),
     ],
   );
@@ -230,7 +265,7 @@ Widget buildDesktopFields(BuildContext context,ProfileSetupController controller
 
 Obx buildTextFieldObx() {
   return Obx(
-        () => TextField(
+    () => TextField(
       cursorColor: AppColors.black,
       readOnly: true,
       keyboardType: TextInputType.visiblePassword,

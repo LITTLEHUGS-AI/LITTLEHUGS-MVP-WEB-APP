@@ -53,13 +53,40 @@ childProfileBuilder() {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              CircularPercentIndicator(
-                                radius: adaptiveSize(context, 40, 50, 60),
-                                lineWidth: adaptiveSize(context, 6, 8, 10),
-                                percent: 0.2,
-                                center: Icon(Icons.person, size: adaptiveSize(context, 30, 40, 50)),
-                                progressColor: Colors.green,
+                              InkWell(
+                                onTap: () {
+                                  controller.pickImageFromGallery();
+                                },
+                                child: CircularPercentIndicator(
+                                  radius: adaptiveSize(context, 40, 50, 60),
+                                  lineWidth: adaptiveSize(context, 6, 8, 10),
+                                  percent: 23 / 100,
+                                  progressBorderColor: AppColors.borderColor,
+                                  center: CircleAvatar(
+                                    radius: adaptiveSize(context, 30, 40, 50),
+                                    backgroundColor: AppColors.colorHintTextField,
+                                    child:
+                                    controller.webImageUrl != null
+                                        ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: CircleAvatar(
+                                        radius: adaptiveSize(context, 20, 30, 40),
+                                        backgroundColor: AppColors.colorHintTextField,
+                                        child: Image.network(controller.webImageUrl!, fit: BoxFit.cover),
+                                      ),
+                                    )
+                                        : CircleAvatar(
+                                      radius: adaptiveSize(context, 20, 30, 40),
+                                      backgroundColor: AppColors.colorHintTextField,
+                                      child: Icon(Icons.person, size: adaptiveSize(context, 20, 30, 40), color: AppColors.white),
+                                    ),
+                                  ),
+
+                                  progressColor: AppColors.secondaryOrange,
+                                ),
                               ),
+                              SizedBox(height: 4),
+                              AppText('23% Completed', fontSize: 14, color: AppColors.colorHintTextField, fontWeight: FontWeight.w600),
                               SizedBox(height: adaptiveSize(context, 50, 75, 100)),
                               buildResponsiveFields(context, controller),
                               SizedBox(height: adaptiveSize(context, 15, 20, 30)),

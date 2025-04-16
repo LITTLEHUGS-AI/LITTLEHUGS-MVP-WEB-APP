@@ -6,6 +6,7 @@ class AppColors {
   static Color black = Colors.black;
   static Color backgroundColor = Color(0xffE7E1F9);
   static Color fieldBgColor = Color(0xffD9E4FC);
+  static Color borderColor = Color(0xffdbdbdc);
   static Color colorBlack = Color(0xff1F1F1F);
   static Color colorWhite = Color(0xffFFFFFF);
   static Color colorHintTextField = Color(0xff4A4B4F);

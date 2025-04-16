@@ -317,7 +317,6 @@ class SignUpView extends GetView<AuthController> {
   Widget _buildBody(AuthController controller, ResponsiveSize responsive) {
     final bool isMobile = responsive.screenWidth < 600;
     final bool isTablet = responsive.screenWidth >= 600 && responsive.screenWidth < 1200;
-
     return Stack(
       children: [
         // SVG Background for tablet and desktop
@@ -350,12 +349,15 @@ class SignUpView extends GetView<AuthController> {
   Widget _buildLeftPanel(ResponsiveSize responsive) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.only(bottom: responsive.height(50)),
+        padding: EdgeInsets.only(bottom: responsive.height(70)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             const Spacer(),
-            AppText(AppStrings.aHugAheadOfTime, fontSize: responsive.fontSize(48), fontWeight: FontWeight.w500, color: AppColors.colorHintTextField),
+            Padding(
+              padding:  EdgeInsets.only(right: responsive.width(95)),
+              child: AppText(AppStrings.aHugAheadOfTime, fontSize: responsive.fontSize(48), fontWeight: FontWeight.w500, color: AppColors.colorHintTextField,textAlign: TextAlign.center,),
+            ),
             const Spacer(),
           ],
         ),
@@ -378,8 +380,7 @@ class SignUpView extends GetView<AuthController> {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(
-          right: isMobile ? responsive.width(0) : responsive.width(50),
-          left: isMobile ? responsive.width(10) : responsive.width(0),
+          right: isMobile ? responsive.width(0) : responsive.width(40),
           bottom: responsive.height(20),
         ),
         child: Center(

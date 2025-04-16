@@ -12,10 +12,6 @@ class ProfileSetupView extends GetView<ProfileSetupController> {
   const ProfileSetupView({super.key});
   @override
   Widget build(BuildContext context) {
-    ProfileSetupController controller = Get.put(ProfileSetupController());
-    final bool isMobile = controller.isMobile(context);
-    final bool isTablet = controller.isTablet(context);
-    final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
     return Scaffold(
       backgroundColor: AppColors.lightOrangeColor,
       appBar: _buildAppBar(),
@@ -31,7 +27,7 @@ class ProfileSetupView extends GetView<ProfileSetupController> {
     return Stack(
       children: [
         // SVG Background
-        if (!controller.isMobile(Get.context!)) Positioned.fill(child: SvgPicture.asset(AppImages.signUpBGImage, width: Get.width, height: Get.height, fit: BoxFit.fill)),
+        if (isMobile(Get.context!)) Positioned.fill(child: SvgPicture.asset(AppImages.signUpBGImage, width: Get.width, height: Get.height, fit: BoxFit.fill)),
         _buildBackgroundCircle(),
         // controller.womenAndChildProfileBuilder(),
       ],

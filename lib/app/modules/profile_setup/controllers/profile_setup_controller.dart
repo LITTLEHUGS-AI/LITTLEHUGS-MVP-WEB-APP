@@ -1,222 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:percent_indicator/flutter_percent_indicator.dart';
-import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
-import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
-import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/profile_setup_dropdown.dart';
-import 'package:webapplittlehugsmvp/app/routes/app_pages.dart';
-import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
+import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/child_profile.dart';
+import 'package:webapplittlehugsmvp/app/modules/profile_setup/views/women_profile.dart';
 
 class ProfileSetupController extends GetxController {
-  //TODO: Implement ProfileSetupController
-  // Method to check if device is mobile
-  bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 768;
 
-  // Method to check if device is tablet
-  bool isTablet(BuildContext context) => MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
 
-  // Method to check if device is desktop
-  bool isDesktop(BuildContext context) => MediaQuery.of(context).size.width >= 1200;
+  // for women
+  final RxString selectedOptionForRole = ''.obs;
+  final RxBool isDropdownOpenForRole = false.obs;
+  final List<String> optionsForRole = ["I am Trying to Conceive", "I am Pregnant", "I have Post Partum Health Issues", "I hit menopause", "Prefer not to say"];
 
-  final selectedOptionForRole = "* I would describe my current life stage as".obs;
-  final isDropdownOpenForRole = false.obs;
+  // For second dropdown (Subject)
+  final RxString selectedOptionForSubject = ''.obs;
+  final RxBool isDropdownOpenForSubject = false.obs;
+  final List<String> optionsForSubject = ['Sleep', 'Hormones', 'Fatigue', 'Self Care', 'Anxiety'];
 
-  final optionsForRole = ["", "I am Trying to Conceive", "I am Pregnant", "I have Post Partum Health Issues", "I hit menopause", "Prefer not to say"];
+  // For third dropdown (Grade)
+  final RxString selectedOptionForGrade = ''.obs;
+  final RxBool isDropdownOpenForGrade = false.obs;
+  final List<String> optionsForGrade = ['Reassuring', 'Motivational', 'Calming', 'Neutral'];
 
-  void toggleDropdown() {
+  // Toggle functions for each dropdown
+  void toggleDropdownForRole() {
     isDropdownOpenForRole.value = !isDropdownOpenForRole.value;
+    // Close other dropdowns
+    isDropdownOpenForSubject.value = false;
+    isDropdownOpenForGrade.value = false;
   }
 
-  void selectOption(String option) {
+  void toggleDropdownForSubject() {
+    isDropdownOpenForSubject.value = !isDropdownOpenForSubject.value;
+    // Close other dropdowns
+    isDropdownOpenForRole.value = false;
+    isDropdownOpenForGrade.value = false;
+  }
+
+  void toggleDropdownForGrade() {
+    isDropdownOpenForGrade.value = !isDropdownOpenForGrade.value;
+    // Close other dropdowns
+    isDropdownOpenForRole.value = false;
+    isDropdownOpenForSubject.value = false;
+  }
+
+  // Selection functions for each dropdown
+  void selectOptionForRole(String option) {
     selectedOptionForRole.value = option;
     isDropdownOpenForRole.value = false;
   }
 
+  void selectOptionForSubject(String option) {
+    selectedOptionForSubject.value = option;
+    isDropdownOpenForSubject.value = false;
+  }
+
+  void selectOptionForGrade(String option) {
+    selectedOptionForGrade.value = option;
+    isDropdownOpenForGrade.value = false;
+  }
+
+
+
+  // for child
+  final RxString selectedOptionForAge = ''.obs;
+  final RxBool isDropdownOpenForAge = false.obs;
+  final List<String> optionsForAge = ["0 - 12 months", "1 - 3 years", "3 - 6 years", "6 - 12 years", "13 - 16 years"];
+
+  // For second dropdown (Subject)
+  final RxString selectedOptionForGoal = ''.obs;
+  final RxBool isDropdownOpenForGoal = false.obs;
+  final List<String> optionsForGoal = ['Developmental Milestones', 'Attention, social, or learning differences', 'Emotional Wellbeing & Mental Health', 'Growth, Nutrition & Physical Health'];
+  // Toggle functions for each dropdown
+  void toggleDropdownForAge() {
+    isDropdownOpenForAge.value = !isDropdownOpenForAge.value;
+    // Close other dropdowns
+    isDropdownOpenForGoal.value = false;
+  }
+
+  void toggleDropdownForGoal() {
+    isDropdownOpenForGoal.value = !isDropdownOpenForGoal.value;
+    // Close other dropdowns
+    isDropdownOpenForAge.value = false;
+  }
+// Selection functions for each dropdown
+  void selectOptionForAge(String option) {
+    selectedOptionForAge.value = option;
+    isDropdownOpenForAge.value = false;
+  }
+
+  void selectOptionForGoal(String option) {
+    selectedOptionForGoal.value = option;
+    isDropdownOpenForGoal.value = false;
+  }
+
   @override
   void onInit() {
-    Future.delayed(Duration(seconds: 0)).then((_) {
-      showDialog(
-        context: Get.context!,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return womenAndChildProfileBuilder();
-        },
-      ).then((value) {});
-    });
+    if (Get.arguments != null) {
+      if (Get.arguments['page'] == 'Women') {
+        Future.delayed(Duration(seconds: 0)).then((_) {
+          showDialog(
+            context: Get.context!,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return womenProfileBuilder();
+            },
+          ).then((value) {});
+        });
+      }else if(Get.arguments['page'] == 'Child'){
+        Future.delayed(Duration(seconds: 0)).then((_) {
+          showDialog(
+            context: Get.context!,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return childProfileBuilder();
+            },
+          ).then((value) {});
+        });
+      }
+    }else {
+      Future.delayed(Duration(seconds: 0)).then((_) {
+        showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return womenProfileBuilder();
+          },
+        ).then((value) {});
+      });
+    }
     // TODO: implement onInit
     super.onInit();
-  }
-
-  StatefulBuilder womenAndChildProfileBuilder() {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Center(
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              height: Get.height,
-              width: isDesktop(context) ? Get.width / 1.8 : Get.width - 40,
-              margin: EdgeInsets.only(bottom: 50, top: 60),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.white),
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 100),
-                            CircularPercentIndicator(
-                              // arcBackgroundColor: AppColors.colorHintTextField,
-                              radius: 60.0,
-                              lineWidth: 10.0,
-                              percent: 0.2,
-                              center: Icon(Icons.person, size: 50),
-                              progressColor: Colors.green,
-                            ),
-                            SizedBox(height: 100),
-                            !isDesktop(context) ? buildMobileFields(context) : buildDesktopFields(context),
-                            SizedBox(height: 30),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: SizedBox(
-                        width: isDesktop(context) ? 400 : 250,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.offAllNamed(Routes.HOME);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.colorCheckBox,
-                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 25),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                          ),
-                          child: AppText(AppStrings.goToTheDashboard, fontSize: 20, color: AppColors.white, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 100),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // Helper method to build mobile layout (Column)
-  Widget buildMobileFields(BuildContext context) {
-    return Column(
-      children: [
-        // Date of Birth field
-        buildTextFieldObx(),
-
-        SizedBox(height: 16),
-
-        // First dropdown
-        CustomDropdown(),
-
-        SizedBox(height: 16),
-
-        // Second dropdown
-        CustomDropdown(),
-
-        SizedBox(height: 16),
-
-        // Third dropdown
-        CustomDropdown(),
-      ],
-    );
-  }
-
-  // Helper method to build desktop/tablet layout (Rows)
-  Widget buildDesktopFields(BuildContext context) {
-    return Column(
-      children: [
-        // First row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Expanded(child: buildTextFieldObx()), SizedBox(width: 16), Expanded(child: CustomDropdown())],
-        ),
-
-        SizedBox(height: 22),
-
-        // Second row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Expanded(child: CustomDropdown()), SizedBox(width: 16), Expanded(child: CustomDropdown())],
-        ),
-      ],
-    );
-  }
-
-  Obx buildTextFieldObx() {
-    return Obx(
-      () => TextField(
-        cursorColor: AppColors.black,
-        readOnly: true,
-        keyboardType: TextInputType.visiblePassword,
-        style: TextStyle(color: AppColors.takeQuickAssessmentColor.withOpacity(0.40), fontSize: 16, fontWeight: FontWeight.w500),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          suffixIcon: IconButton(
-            onPressed: () {
-              chooseDate();
-            },
-            icon: Icon(Icons.date_range),
-          ),
-          hintText: selectedDate.value == null ? '* Date Of Birth' : formattedDate,
-          hintStyle: TextStyle(color: AppColors.takeQuickAssessmentColor.withOpacity(0.40), fontSize: 16, fontWeight: FontWeight.w500),
-          errorStyle: const TextStyle(color: Colors.red, fontSize: 12),
-          disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withOpacity(0.40))),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withOpacity(0.40))),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.takeQuickAssessmentColor.withOpacity(0.40))),
-          errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Colors.red)),
-          focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Colors.red, width: 1)),
-        ),
-      ),
-    );
-  }
-
-  Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
-  final dateFormat = DateFormat('yyyy-MM-dd');
-
-  String get formattedDate {
-    return selectedDate.value != null ? dateFormat.format(selectedDate.value!) : 'Select Birthdate';
-  }
-
-  void chooseDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: Get.context!,
-      initialDate: selectedDate.value ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      helpText: 'SELECT BIRTHDATE',
-      cancelText: 'CANCEL',
-      confirmText: 'SELECT',
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(primary: Colors.blue, onPrimary: Colors.white, surface: Colors.white, onSurface: Colors.black),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (pickedDate != null && pickedDate != selectedDate.value) {
-      selectedDate.value = pickedDate;
-    }
   }
 }

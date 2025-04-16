@@ -1,36 +1,95 @@
-import 'package:get/get.dart';
+// Create a new class to handle responsive sizing
+import 'package:flutter/material.dart';
 
-class ResponsiveUtils {
-  static double screenWidth = Get.width;
-  static double screenHeight = Get.height;
+class ResponsiveSize {
+  final BuildContext context;
+  final Size _screenSize;
+  final double _screenWidth;
+  final double _screenHeight;
 
-  // Width multipliers for different screen sizes
-  static double get width {
-    if (screenWidth > 1200) return 1.2;
-    if (screenWidth > 800) return 1.0;
-    if (screenWidth > 600) return 0.8;
-    return 0.6;
+  // Base design size (you can adjust these values based on your design)
+  final double _baseWidth = 1440.0;  // Design width for desktop
+  final double _baseHeight = 900.0;  // Design height for desktop
+
+  // Calculated multipliers
+  late final double _widthMultiplier;
+  late final double _heightMultiplier;
+
+  ResponsiveSize(this.context) :
+        _screenSize = MediaQuery.of(context).size,
+        _screenWidth = MediaQuery.of(context).size.width,
+        _screenHeight = MediaQuery.of(context).size.height {
+    // Calculate scaling factors
+    _widthMultiplier = _screenWidth / _baseWidth;
+    _heightMultiplier = _screenHeight / _baseHeight;
   }
 
-  // Height multipliers for different screen sizes
-  static double get height {
-    if (screenHeight > 800) return 1.2;
-    if (screenHeight > 600) return 1.0;
-    return 0.8;
+  // Getters for screen dimensions
+  double get screenWidth => _screenWidth;
+  double get screenHeight => _screenHeight;
+
+  // Methods to get responsive dimensions
+  double width(double value) {
+    // For very small screens, use a minimum scale factor
+    if (_screenWidth < 360) {
+      return value * 0.7;
+    }
+
+    // Return responsive width
+    if (_screenWidth < 600) {
+      // Mobile
+      return value * 0.85;
+    } else if (_screenWidth < 1200) {
+      // Tablet
+      return value * 0.9;
+    } else {
+      // Desktop
+      return value * _widthMultiplier;
+    }
   }
 
-  // Font size multipliers
-  static double get fontSize {
-    if (screenWidth > 1200) return 1.2;
-    if (screenWidth > 800) return 1.0;
-    if (screenWidth > 600) return 0.9;
-    return 0.8;
+  double height(double value) {
+    // For very small screens, use a minimum scale factor
+    if (_screenHeight < 640) {
+      return value * 0.7;
+    }
+
+    // Return responsive height
+    if (_screenWidth < 600) {
+      // Mobile
+      return value * 0.85;
+    } else if (_screenWidth < 1200) {
+      // Tablet
+      return value * 0.9;
+    } else {
+      // Desktop
+      return value * _heightMultiplier;
+    }
   }
 
-  // Padding multipliers
-  static double get padding {
-    if (screenWidth > 1200) return 1.2;
-    if (screenWidth > 800) return 1.0;
-    return 0.8;
+  // Method for responsive font sizes with min/max constraints
+  double fontSize(double value) {
+    // Calculate font size based on screen width
+    double size;
+
+    if (_screenWidth < 600) {
+      // Mobile
+      size = value * 0.85;
+    } else if (_screenWidth < 1200) {
+      // Tablet
+      size = value * 0.9;
+    } else {
+      // Desktop
+      size = value * _widthMultiplier;
+    }
+
+    // Apply min/max constraints
+    return size.clamp(value * 0.7, value * 1.2);
+  }
+
+  // Method for responsive border radius
+  double radius(double value) {
+    // Using width multiplier for radius
+    return width(value);
   }
 }

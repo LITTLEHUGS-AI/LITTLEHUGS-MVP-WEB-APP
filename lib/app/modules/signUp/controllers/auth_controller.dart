@@ -281,7 +281,7 @@ class AuthController extends GetxController {
                           isChild.value = false;
                           isWomen.value = value!;
                           Get.back();
-                          Get.toNamed(Routes.PROFILE_SETUP);
+                          Get.offAllNamed(Routes.PROFILE_SETUP,arguments: {'page':'Women'});
                         })),
                         Expanded(child: AppText('Women\'s Wellness',fontWeight: FontWeight.w500,fontSize: 14,color: AppColors.colorHintTextField)),
                       ],
@@ -293,7 +293,7 @@ class AuthController extends GetxController {
                           isWomen.value = false;
                           isChild.value = value!;
                           Get.back();
-                          Get.toNamed(Routes.PROFILE_SETUP);
+                          Get.offAllNamed(Routes.PROFILE_SETUP,arguments: {'page':'Child'});
                         })),
                         Expanded(child: AppText('Child\'s Development & Growth',fontWeight: FontWeight.w500,fontSize: 14,color: AppColors.colorHintTextField)),
                       ],

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_colors.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_images.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_strings.dart';
+import 'package:webapplittlehugsmvp/app/utils/responsive_utils.dart';
 import 'package:webapplittlehugsmvp/app/widgets/app_text.dart';
 import 'package:webapplittlehugsmvp/app/widgets/appbar_widget.dart';
 import '../controllers/home_controller.dart';
@@ -12,10 +13,10 @@ class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
-    final bool isMobile = controller.isMobile(context);
-    final bool isTablet = controller.isTablet(context);
     final TabBarThemeData tabBarTheme = TabBarTheme.of(context);
+    final ResponsiveSize responsive = ResponsiveSize(context);
+    final bool isMobile = responsive.screenWidth < 768;
+    final bool isTablet = responsive.screenWidth >= 768 && responsive.screenWidth < 1200;
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: buildAppBar(isMobile, context, screen: 'home'),
@@ -54,217 +55,121 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal:
-                    isMobile
-                        ? 16
-                        : isTablet
-                        ? 32
-                        : 64,
-                vertical: 32,
-              ),
-              width: Get.width,
+              height: responsive.height(640),
+              padding: EdgeInsets.symmetric(horizontal: responsive.width(80)),
+              width: responsive.screenWidth,
               color: AppColors.lightOrangeColor,
               child: Row(
                 children: [
                   Expanded(
                     flex: isMobile ? 1 : 1,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppText(
                           AppStrings.gentleGuidanceForGrowingMindsAndHealingHearts,
                           color: AppColors.colorHintTextField,
-                          fontSize: 45,
+                          fontSize: responsive.fontSize(48),
                           textAlign: TextAlign.start,
                           fontWeight: FontWeight.w500,
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: responsive.height(24)),
                         AppText(
                           AppStrings.gentleGuidanceForGrowingMindsAndHealingHeartsDesc,
                           color: AppColors.colorHintTextField,
-                          fontSize: 14,
+                          fontSize: responsive.fontSize(20),
                           textAlign: TextAlign.start,
                           fontWeight: FontWeight.w400,
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: responsive.height(24)),
                         SizedBox(
-                          height: 52,
-                          width: 150,
+                          height: responsive.height(52),
+                          width: responsive.width(157),
                           child: Card(
                             elevation: 0.0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(responsive.radius(30))),
                             color: AppColors.takeQuickAssessmentColor,
                             margin: EdgeInsets.zero,
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(responsive.radius(30)),
                               overlayColor: tabBarTheme.overlayColor,
                               splashFactory: tabBarTheme.splashFactory,
                               onTap: () {},
-                              child: Center(child: AppText(AppStrings.tryForFree, color: AppColors.white, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500)),
+                              child: Center(
+                                child: AppText(
+                                  AppStrings.tryForFree,
+                                  color: AppColors.white,
+                                  fontSize: responsive.fontSize(20),
+                                  textAlign: TextAlign.center,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  if (!isMobile) ...[SizedBox(width: 32), Expanded(flex: 1, child: SvgPicture.asset(AppImages.homeLifeImage, height: 300))],
+                  if (!isMobile) ...[
+                    SizedBox(width: responsive.width(32)),
+                    Expanded(flex: 1, child: SvgPicture.asset(AppImages.homeLifeImage, height: responsive.height(634), width: responsive.height(670))),
+                  ],
                 ],
               ),
             ),
-            // Category Selection
             Center(
-              child: Padding(
-                padding: EdgeInsets.all(isMobile ? 16 : 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 100),
-                    AppText(AppStrings.whatIsLittleHugs, color: AppColors.colorHintTextField, fontSize: 32, textAlign: TextAlign.center, fontWeight: FontWeight.w600),
-                    SizedBox(height: 50),
-                    Wrap(spacing: 16, runSpacing: 16, alignment: WrapAlignment.center, children: []),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-            ),
-
-            // Footer
-            Container(
-              padding: EdgeInsets.all(isMobile ? 16 : 32),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Contact Us', style: Theme.of(context).textTheme.headlineMedium),
-                  SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [_buildContactItem('• Account & Setup'), _buildContactItem('• Privacy'), _buildContactItem('• Assessments'), _buildContactItem('• Partner Tools')],
+                  SizedBox(height: responsive.height(120)),
+                  Center(
+                    child: AppText(
+                      AppStrings.whatIsLittleHugs,
+                      color: AppColors.colorHintTextField,
+                      fontSize: responsive.fontSize(32),
+                      textAlign: TextAlign.center,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  SizedBox(height: 32),
+                  SizedBox(height: responsive.height(64)),
+                  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: responsive.width(81)),
+                    child: Row(
+                      children: [
+                        SizedBox(width: responsive.width(548),height: responsive.height(366),child: Image.asset('assets/images/image.png',fit: BoxFit.cover,)),
+                        SizedBox(width: responsive.width(100)),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              AppText(
+                               '“We’re not a clinic. We’re your care companion.”',
+                                color: AppColors.colorHintTextField,
+                                fontSize: responsive.fontSize(48),
+                                textAlign: TextAlign.start,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(height: responsive.height(24)),
+                              AppText(
+                               "LittleHugs is a self-guided emotional and developmental wellness platform that offers AI-powered insights, micro-care routines, and early signals—without medical labels",
+                                color: AppColors.colorHintTextField,
+                                fontSize: responsive.fontSize(20),
+                                textAlign: TextAlign.start,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: responsive.height(64)),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildRewardCard(BuildContext context, String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.3), borderRadius: BorderRadius.circular(16)),
-      child: Text(text, style: TextStyle(fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildContactItem(String text) {
-    return Padding(padding: const EdgeInsets.symmetric(vertical: 4.0), child: Text(text));
-  }
-}
-
-class CategoryDropdown extends StatelessWidget {
-  final String title;
-  final bool isSelected;
-  final VoidCallback onTap;
-  const CategoryDropdown({Key? key, required this.title, required this.isSelected, required this.onTap}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 480,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(border: Border.all(color: AppColors.colorHintTextField, width: 1.5), borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AppText(title, fontWeight: FontWeight.w500, fontSize: 20, color: AppColors.colorHintTextField),
-            SizedBox(width: 8),
-            Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.colorHintTextField),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class FeatureCard extends StatelessWidget {
-  final String title;
-  final Function onTap;
-  const FeatureCard({super.key, required this.title, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 56,
-      decoration: BoxDecoration(border: Border.all(color: AppColors.colorHintTextField, width: 1.5), borderRadius: BorderRadius.circular(30)),
-      child: InkWell(
-        onTap: () => onTap,
-        borderRadius: BorderRadius.circular(30),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 17),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(decoration: BoxDecoration(shape: BoxShape.circle, color: AppColors.takeQuickAssessmentColor), height: 10, width: 10),
-              SizedBox(width: 8),
-              AppText(title, color: AppColors.takeQuickAssessmentColor, fontSize: 20, textAlign: TextAlign.center, fontWeight: FontWeight.w500),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AssessmentCard extends StatelessWidget {
-  final String title;
-  final String actionText;
-
-  const AssessmentCard({Key? key, required this.title, required this.actionText}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.black87, padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), minimumSize: Size(10, 36)),
-            child: Text(actionText),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TestimonialCard extends StatelessWidget {
-  final String testimonial;
-
-  const TestimonialCard({Key? key, required this.testimonial}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Testimonial', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          SizedBox(height: 16),
-          Text(testimonial, textAlign: TextAlign.center, style: TextStyle(fontStyle: FontStyle.italic)),
-        ],
       ),
     );
   }

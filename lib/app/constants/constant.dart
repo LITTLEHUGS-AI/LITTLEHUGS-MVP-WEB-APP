@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:webapplittlehugsmvp/app/constants/app_images.dart';
+import 'package:webapplittlehugsmvp/app/utils/responsive_utils.dart';
+final ResponsiveSize responsive = ResponsiveSize(Get.context!);
 
-appLogoWidget() => SvgPicture.asset(AppImages.logo, height: 40);
+appLogoWidget() => SvgPicture.asset(AppImages.logo, height: responsive.height(40));
 //TODO: Implement ProfileSetupController
 // Method to check if device is mobile
 bool isMobile(BuildContext context) => MediaQuery.of(context).size.width < 768;

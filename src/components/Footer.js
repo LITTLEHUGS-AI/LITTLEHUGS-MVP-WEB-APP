@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="w-[1222px] mx-auto py-8 font-quicksand">
+    <div className="w-full p-8 font-quicksand">
       {/* Top Section - Stay Updated */}
-      <div className="flex justify-between mb-10">
+      <div className="flex justify-between mb-55">
         {/* Left */}
         <div className="max-w-[600px]">
           <h2 className="text-2xl font-medium mb-2">Stay Updated</h2>
@@ -17,7 +17,7 @@ const Footer = () => {
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center ml-23 gap-6">
           <input
             type="email"
             placeholder="* Email"

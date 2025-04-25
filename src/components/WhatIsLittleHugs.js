@@ -17,7 +17,7 @@ const WhatIsLittleHugs = () => {
 
         {/* Right Text */}
         <div className="flex font-quicksand flex-col justify-center gap-10 max-w-[600px]">
-          <blockquote className="text-5xl font-medium leading-snug">
+          <blockquote className="text-4xl font-medium leading-snug">
             “We’re not a clinic. We’re your care companion.”
           </blockquote>
           <p className="text-xl font-normal text-gray-600">
@@ -37,8 +37,8 @@ const WhatIsLittleHugs = () => {
           "NGO/Clinical Support",
         ].map((item, index) => (
           <div key={index} className="flex flex-col items-center text-center w-[299px]">
-            <div className="w-[210px] h-[210px] gap-64 ml-2 rounded-tr-[30px] rounded-bl-[30px] bg-[#e9e1f8] mb-3"></div>
-            <span className="text-3xl font-normal">{item}</span>
+            <div className="w-[160px] h-[160px] gap-64 ml-2 rounded-tr-[30px] rounded-bl-[30px] bg-[#e9e1f8] mb-3"></div>
+            <span className="text-2xl font-normal">{item}</span>
           </div>
         ))}
       </div>

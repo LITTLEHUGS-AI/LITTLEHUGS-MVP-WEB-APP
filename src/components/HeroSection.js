@@ -29,7 +29,7 @@ const HeroSection = () => {
                   alt=""
                   
                 />
-        <h2 className="absolute flex justify-center  text-center top-[280px] left-[822px] font-quicksand font-medium text-[48px]">Animation</h2>
+        <h2 className="absolute flex justify-center  text-center top-[280px] left-[822px] font-quicksand font-medium text-[38px]">Animation</h2>
 
         {/* Blob Labels */}
         <span className="absolute top-[33%] left-[60%]  font-quicksand font-medium text-[20px]">Emotional Checking</span>

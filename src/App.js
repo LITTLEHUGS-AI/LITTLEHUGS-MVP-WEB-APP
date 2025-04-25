@@ -6,7 +6,7 @@ import WhatIsLittleHugs  from './components/WhatIsLittleHugs';
 import HowItWorks from './components/HowItWorks';
 import DeserveCare  from './components/DeserveCare';
 import EverydayCare   from './components/EverydayCare';
-import FAQSection    from './components/FAQSection';
+// import FAQSection    from './components/FAQSection';
 
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
       <HowItWorks />
       <DeserveCare />
       <EverydayCare />
-      <FAQSection />
+      {/* <FAQSection /> */}
       <Footer />
     </div>
   );

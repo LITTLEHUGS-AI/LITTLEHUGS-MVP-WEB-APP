@@ -21,8 +21,8 @@ const features = [
 
 const EverydayCare = () => {
   return (
-    <div className="w-full h-[444px] mx-auto font-quicksand flex flex-col items-center justify-center">
-      <h2 className="text-3xl font-medium mb-16 text-center">
+    <div className="w-full h-[444px] mx-auto mt-[68px] font-quicksand flex flex-col items-center justify-center">
+      <h2 className="text-4xl font-medium mb-16 text-center">
         Emotional intelligence meets everyday care
       </h2>
 

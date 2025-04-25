@@ -17,7 +17,7 @@ const HowItWorks = () => {
         ].map((step, index) => (
           <div key={index} className="flex flex-col items-center h-220 w-[330px]">
             <div className="w-[250px] h-[250px] bg-[#FFF8DC] rounded-full mb-4"></div>
-            <p className="text-2xl leading-snug">{index + 1}. {step}</p>
+            <p className="text-xl leading-snug">{index + 1}. {step}</p>
           </div>
         ))}
       </div>

@@ -7,7 +7,7 @@ const FAQSection = () => {
 
       {/* FAQ Section */}
       <div className="w-full h-[400px]  px-8 py-8">
-        <h2 className="text-center text-4xl font-medium font-quicksand mb-12">
+        <h2 className="text-center text-5xl font-medium font-quicksand mb-12">
           Frequently asked questions and answers
         </h2>
 

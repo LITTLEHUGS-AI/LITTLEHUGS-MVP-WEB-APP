@@ -12,7 +12,7 @@ const HeroSection = () => {
           Gentle Guidance for Growing <br />
           Minds and Healing Hearts
         </h1>
-        <p className="text-xm font-quicksand text-gray-600 mb-6">
+        <p className="text-xl font-quicksand text-gray-600 mb-6">
           LittleHugs helps you check in, not check out. Discover personalized,
           non-clinical care insights—at home, in school, or on the go.
         </p>

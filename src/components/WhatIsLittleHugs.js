@@ -20,7 +20,7 @@ const WhatIsLittleHugs = () => {
           <blockquote className="text-5xl font-medium leading-snug">
             “We’re not a clinic. We’re your care companion.”
           </blockquote>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl font-normal text-gray-600">
             LittleHugs is a self-guided emotional and developmental wellness platform that
             offers AI-powered insights, micro-care routines, and early signals—without
             medical labels

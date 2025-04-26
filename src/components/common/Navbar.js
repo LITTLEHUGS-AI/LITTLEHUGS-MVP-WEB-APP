@@ -24,7 +24,7 @@ const Navbar = () => {
           {/* Dropdown can be added here if needed */}
         </li>
         <li><Link to="/">Pricing</Link></li>
-        <li><Link to="/">About Us</Link></li>
+        <li><Link to="/about">About Us</Link></li>
         <li><Link to="/">Contact Us</Link></li>
       </ul>
 

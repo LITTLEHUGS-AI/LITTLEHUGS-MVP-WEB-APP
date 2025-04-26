@@ -2,45 +2,28 @@ import React from "react";
 
 const WhatIsLittleHugs = () => {
   return (
-    <section className="w-full h-[784px] mx-auto mt-[64px] font-quicksand text-gray-800">
-      <h2 className="text-center text-3xl font-semibold mb-10">What is LittleHugs?</h2>
+    <section className="w-full pt-4 font-quicksand">
+      <h2 className="text-center text-3xl font-semibold">What is LittleHugs?</h2>
 
-      <div className="flex font-quicksand gap-[64px]">
-        {/* Left Image */}
-        <div className="flex-shrink-0 w-[500px] h-auto">
+      <div className="flex gap-4 justify-between p-4">
+        <div className="flex w-full justify-center items-center">
           <img
-            src="/images/1.png" // Replace with your image path
+            src="/images/where_litlehug.svg"
             alt="Heart in Hands"
-            className="w-full h-auto object-cover rounded-md"
+            className=""
           />
         </div>
-
-        {/* Right Text */}
-        <div className="flex font-quicksand flex-col justify-center gap-10 max-w-[600px]">
-          <blockquote className="text-4xl font-medium leading-snug">
-            “We’re not a clinic. We’re your care companion.”
-          </blockquote>
-          <p className="text-xl font-normal text-gray-600">
-            LittleHugs is a self-guided emotional and developmental wellness platform that
-            offers AI-powered insights, micro-care routines, and early signals—without
-            medical labels
+        <div className="flex flex-col justify-center w-full">
+          <div className="text-[48px] font-medium leading-snug text-[#4A4B4F]">
+            “Early support for the people who care the most”
+          </div>
+          <p className="text-xl font-normal text-[#4A4B4F]">
+            LittleHugs is India’s first emotionally intelligent care platform for women and children. We help caregivers and professionals screen for early signs of burnout, anxiety, and developmental delays — and guide them through gentle, expert-informed routines that bring clarity, not overwhelm.
+          </p>
+          <p className="text-xl font-normal text-[#4A4B4F]">
+            Whether you're a mom navigating emotional exhaustion, or a therapist supporting dozens of children — LittleHugs was built to support you too.
           </p>
         </div>
-      </div>
-
-      {/* Bottom Cards */}
-      <div className="flex font-quicksand justify-between mt-[64px] px-4">
-        {[
-          "Post Partum Support",
-          "Emotional Check-ins",
-          "Milestone Nudges",
-          "NGO/Clinical Support",
-        ].map((item, index) => (
-          <div key={index} className="flex flex-col items-center text-center w-[299px]">
-            <div className="w-[160px] h-[160px] gap-64 ml-2 rounded-tr-[30px] rounded-bl-[30px] bg-[#e9e1f8] mb-3"></div>
-            <span className="text-2xl font-normal">{item}</span>
-          </div>
-        ))}
       </div>
     </section>
   );

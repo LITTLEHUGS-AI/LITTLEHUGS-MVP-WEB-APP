@@ -1,27 +1,27 @@
 import React from "react";
 
-const features = [
-  {
-    title: "Non Clinical Design",
-    text: "You’re not “a case”—you’re a human",
-  },
-  {
-    title: "AI-powered, but gentle",
-    text: "Nudges that feel natural, not robotic",
-  },
-  {
-    title: "Built for families + field workers",
-    text: "Empower care where it starts",
-  },
-  {
-    title: "Designed with empathy",
-    text: "Validating tone, safe check-ins",
-  },
-];
-
 const EverydayCare = () => {
+  const features = [
+    {
+      title: "Auto-generated personalised insights",
+      img: "/images/care_1.svg",
+    },
+    {
+      title: "Built on WHO, IAP & CDC-aligned tools",
+      img: "/images/care_2.svg",
+    },
+    {
+      title: "Used by moms, women, caregivers, schools, and clinics",
+      img: "/images/care_3.svg",
+    },
+    {
+      title: "Clear follow-up routines and easy-to-use dashboards",
+      img: "/images/care_4.svg",
+    },
+  ];
+
   return (
-    <div className="w-full h-[444px] mx-auto mt-[68px] font-quicksand flex flex-col items-center justify-center">
+    <div className="w-full px-5 mx-auto mt-[68px] font-quicksand flex flex-col items-center justify-center">
       <h2 className="text-3xl font-medium mb-16 mt-8 text-center">
         Emotional intelligence meets everyday care
       </h2>
@@ -30,11 +30,15 @@ const EverydayCare = () => {
         {features.map((item, index) => (
           <div
             key={index}
-            className=" h-[308px] flex flex-col items-center text-center gap-[28px]"
+            className="flex flex-col items-center text-center gap-[28px]"
           >
-            <h3 className="text-xl font-medium">{item.title}</h3>
-            <div className="w-[150px] h-[150px] rounded-[250px] bg-[#FFF9E5]" />
-            <p className="text-xl text-black">{item.text}</p>
+            <h3 className="text-xl font-normal">{item.title}</h3>
+            <img
+              src={`${item.img}`}
+              alt={`Care ${index + 1}`}
+              className="w-24 h-24 mb-4"
+            />
+            {/* <p className="text-xl text-black">{item.text}</p> */}
           </div>
         ))}
       </div>

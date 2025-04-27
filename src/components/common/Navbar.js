@@ -14,8 +14,8 @@ const Navbar = () => {
       </div>
 
       <ul className="text-[20px] flex items-center gap-8 text-[#4A4B4F] font-medium font-quicksand ">
-        <li><Link to="/">For You</Link></li>
-        <li><Link to="/">For Partners</Link></li>
+        <li><Link to="/personal-landing">For You</Link></li>
+        <li><Link to="/partener-landing">For Partners</Link></li>
         <li className="relative group">
           <div className="flex items-center gap-1">
             Assessments

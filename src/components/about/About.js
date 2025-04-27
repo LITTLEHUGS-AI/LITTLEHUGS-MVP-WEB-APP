@@ -1,13 +1,47 @@
 import React from 'react'
 import Navbar from '../common/Navbar'
-import Footer from '../common/Footer'
+import MainHeader from './MainHeader'
+import EverydayCare from '../EverydayCare'
+import WhyWeExist from './WhyWeExist'
+import OurPartner from './OurPartner'
+import JoinMovement from './JoinMovement'
 
 function About() {
+    const everyDayCareData = {
+        title: "We’re not just building a product.",
+        subtitle: "We’re reimagining what care should feel like.",
+        feature: [
+            {
+                title: "Empathy first",
+                img: "/images/heart.svg",
+            },
+            {
+                title: "Backed by science",
+                img: "/images/heart_1.svg",
+            },
+            {
+                title: "Early over urgent",
+                img: "/images/heart_2.svg",
+            },
+            {
+                title: "Inclusion by design",
+                img: "/images/heart_3.svg",
+            },
+        ]
+    };
+
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            
-            <Footer />
+            <MainHeader />
+            <EverydayCare
+                title={everyDayCareData.title}
+                subtitle={everyDayCareData.subtitle}
+                features={everyDayCareData.feature}
+            />
+            <WhyWeExist />
+            <OurPartner />
+            <JoinMovement />
         </div>
     )
 }

@@ -16,13 +16,7 @@ const Navbar = () => {
       <ul className="text-[20px] flex items-center gap-8 text-[#4A4B4F] font-medium font-quicksand ">
         <li><Link to="/personal-landing">For You</Link></li>
         <li><Link to="/partener-landing">For Partners</Link></li>
-        <li className="relative group">
-          <div className="flex items-center gap-1">
-            Assessments
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-          </div>
-          {/* Dropdown can be added here if needed */}
-        </li>
+        <li><Link to="/assesment-landing">Assessments</Link></li>
         <li><Link to="/">Pricing</Link></li>
         <li><Link to="/about">About Us</Link></li>
         <li><Link to="/">Contact Us</Link></li>

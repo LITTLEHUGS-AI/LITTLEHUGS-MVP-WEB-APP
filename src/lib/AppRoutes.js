@@ -5,6 +5,7 @@ import Home from "../components/home/Home";
 import About from "../components/about/About";
 import PersonalLandingPage from "../components/landingpage/PersonalLandingPage";
 import PartenerLandingPage from "../components/landingpage/PartenerLandingPage";
+import AssesmentLandingPage from "../components/landingpage/AssesmentLandingPage";
 
 function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ function AppRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/personal-landing" element={<PersonalLandingPage />} />
           <Route path="/partener-landing" element={<PartenerLandingPage />} />
+          <Route path="/assesment-landing" element={<AssesmentLandingPage />} />
           {/* <Route element={<DefaultLayout />}> */}
           {/* </Route> */}
         </Routes>

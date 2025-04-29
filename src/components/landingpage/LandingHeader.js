@@ -1,6 +1,6 @@
 import React from 'react'
 
-function LandingHeader({bg_color, title, description, sub_title, button_text}) {
+function LandingHeader({image, bg_color, title, description, sub_title, button_text}) {
     return (
         <div className={`w-full bg-[${bg_color}] font-quicksand flex items-center justify-between px-20 py-8`}>
             <div className="max-w-[630px] top-274 left-80px gap- 24px">
@@ -21,7 +21,7 @@ function LandingHeader({bg_color, title, description, sub_title, button_text}) {
             </div>
             <div className="flex justify-center items-center p-5">
                 <img
-                    src="/images/about_header.svg"
+                    src={image ? image : "/images/about_header.svg"}
                     alt="About Header"
                     className="w-[400px] h-[400px]"
                 />

@@ -2,13 +2,31 @@ import React from 'react'
 import Navbar from '../common/Navbar'
 import LandingHeader from './LandingHeader'
 import ForThis from './ForThis'
-import HugSelection from './HugSelection'
+// import HugSelection from './HugSelection'
 
 function PersonalLandingPage() {
+    const cards = [
+        {
+            title: "LittleHugs 360° Women’s Wellness Assessment",
+            description:
+                "A high-level mind-body-social scan that gives a complete picture of a woman’s mental health, emotional resilience, self-care capacity, and support system.",
+        },
+        {
+            title: "LittleHugs 360° Children’s Wellness Assessment",
+            description:
+                "A high-level mind-body-social scan that gives a complete picture of a woman’s mental health, emotional resilience, self-care capacity, and support system.",
+        },
+        {
+            title: "Universal SEL Assessment",
+            description:
+                "A high-level mind-body-social scan that gives a complete picture of a woman’s mental health, emotional resilience, self-care capacity, and support system.",
+        },
+    ];
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
             <LandingHeader
+                image='/images/for_1.svg'
                 bg_color="#FAF3ED"
                 title="A hug for every stage of life"
                 description="Whether you're a mother, caregiver, or growing child—LittleHugs brings AI-powered wellness, smart screening, and daily care routines to your fingertips"
@@ -16,15 +34,15 @@ function PersonalLandingPage() {
             <ForThis />
             <div className="w-full px-5 font-quicksand text-center text-gray-800 mt-5 flex flex-col items-center p-4">
                 <h2 className="text-4xl font-medium text-[#4A4B4F] mb-10">How our warm hug will help you?</h2>
-                <img src="/images/personal_box.png" alt="Landing Page" className="w-full" />
+                <img src="/images/for_3.svg" alt="Landing Page" className="w-full" />
             </div>
-            <HugSelection />
-            <div className="w-full font-quicksand text-center text-gray-800 mt-5 flex flex-col items-center">
+            {/* <HugSelection /> */}
+            {/* <div className="w-full font-quicksand text-center text-gray-800 mt-5 flex flex-col items-center">
                 <img src="/images/parsonal_landing_section2.png" alt="Landing Page" className="w-full" />
-            </div>
+            </div> */}
             <section className="w-full px-5 font-quicksand text-800 mt-[60px]">
-                <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">Users are enjoying happier and healthier lives</h2>
-                <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-8 mb-8 max-w-7xl mx-auto px-10">
+                <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">What hug do you need today?</h2>
+                {/* <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-8 mb-8 max-w-7xl mx-auto px-10">
                     <div className="rounded-lg p-6">
                         <img
                             src="/images/happier_health.svg"
@@ -46,6 +64,26 @@ function PersonalLandingPage() {
                             className="w-full h-64 object-cover rounded-lg mb-4"
                         />
                     </div>
+                </div> */}
+                <div className="bg-[#FFFFFF] py-16 px-[22px] relative overflow-hidden">
+
+
+                    {/* Cards */}
+                    <div className="flex flex-col md:flex-row justify-center items-center gap-8 z-10 relative">
+                        {cards.map((card, index) => (
+                            <div
+                                key={index}
+                                className="bg-[#FAF3ED] w-[350px] h-[400px] border border-gray-300 rounded-xl shadow-md p-6 max-w-sm flex flex-col items-center text-center"
+                            >
+                                <h3 className="text-2xl font-medium font-quicksand text-gray-800 mb-6">{card.title}</h3>
+                                <p className="text-[16px] font-normal font-quicksand text-gray-600 mb-6">{card.description}</p>
+                                <button className="bg-[#1E2C2B] text-white py-2 mt-10 px-6 mb-6 rounded-full hover:bg-[#111818] transition">
+                                    Learn more
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </section>
             <div className="w-full h-[480px] font-quicksand px-20 bg-[#FFFAE2] pt-4">

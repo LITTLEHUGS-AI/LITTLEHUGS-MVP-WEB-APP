@@ -11,9 +11,9 @@ function WhyWeExist() {
                 “How are you really doing?”
             </p>
             {/* Steps */}
-            <div className="flex font-quicksand justify-between items-center gap-[32px] mt-10 px-4">
-                <div className="w-[50%] flex flex-col gap-8 justify-center">
-                    <p className="text-xl font-medium text-[#4A4B4F]">
+            <div className="flex font-quicksand justify-between items-center  mt-10 px-4">
+                <div className="w-[40%] flex flex-col gap-2 mt-10 justify-center">
+                    <p className="text-xl pt-4 font-medium text-[#4A4B4F]">
                         But in today’s fast-moving world, most people don’t get the space to answer it, especially women, caregivers, and children who carry invisible burdens daily. We started LittleHugs because there was no gentle, guided space to reflect before things broke down. Everything felt either too clinical, too fragmented, or too late. So we built something different. Soft, stigma-free assessments. One backed by experts. One that catches signals early — and helps turn them into small, doable steps.
                     </p>
                     <p className="text-2xl font-semibold text-[#4A4B4F]">
@@ -21,9 +21,9 @@ function WhyWeExist() {
                     </p>
                 </div>
 
-                <div className="w-[50%] flex flex-col items-center justify-center">
+                <div className="w-[50%] mb-10 flex flex-col items-center justify-center">
                     <img
-                        src="/images/Rectangle 32.png"
+                        src="/images/about_2.svg"
                         alt="Step 1"
                         className="h-[600px]"
                     />
@@ -33,7 +33,7 @@ function WhyWeExist() {
             <div className="flex font-quicksand justify-between items-center gap-[32px] mt-10 px-4">
                 <div className="w-[50%] flex flex-col items-center justify-center">
                     <img
-                        src="/images/Rectangle 31.png"
+                        src="/images/about_3.svg"
                         alt="Step 1"
                         className="h-[450px]"
                     />

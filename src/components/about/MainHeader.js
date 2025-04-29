@@ -22,7 +22,7 @@ const MainHeader = () => {
             </div>
             <div className="flex justify-center items-center p-5">
                 <img
-                    src="/images/about_header.svg"
+                    src="/images/about_1.svg"
                     alt="About Header"
                     className="w-[400px] h-[400px]"
                 />

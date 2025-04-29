@@ -37,7 +37,7 @@ function ForThis() {
                 </div>
 
                 <div className="w-full md:w-1/3 flex justify-center">
-                    <img src="/images/new_thing.png" alt="For This" className="w-[302px] h-auto" />
+                    <img src="/images/for_2.svg" alt="For This" className="w-[302px] h-auto" />
                 </div>
 
                 <div className="w-full md:w-1/3 text-left md:pl-8">

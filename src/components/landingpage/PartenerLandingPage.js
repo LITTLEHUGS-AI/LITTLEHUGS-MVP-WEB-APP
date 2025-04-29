@@ -30,6 +30,7 @@ function PartenerLandingPage() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <LandingHeader
+        image='/images/partner_part_2.svg'
         bg_color="#FFC655"
         sub_title="LITTLEHUGS FOR PARTNERS"
         title="Screen Smarter. Support Sooner"
@@ -40,7 +41,7 @@ function PartenerLandingPage() {
       <div className="relative flex font-quicksand justify-between items-center gap-[45px] mt-10 px-4">
         <div className="w-[600px] flex flex-col items-center justify-center">
           <img
-            src="/images/little.svg"
+            src="/images/partner_part_3.svg"
             alt="Step 1"
             className="h-[600px] "
           />
@@ -79,7 +80,7 @@ function PartenerLandingPage() {
 
       <div className="flex flex-col mt-6 items-center justify-center min-h-screen p-8">
         {/* Heading */}
-        <h1 className="text-3xl md:text-3xl font-medium font-quicksand text-center mb-12 max-w-2xl">
+        <h1 className="text-3xl md:text-3xl font-medium font-quicksand text-center mb-12">
           Request a demo to learn more about how we can support your team
         </h1>
 
@@ -89,9 +90,9 @@ function PartenerLandingPage() {
           {/* Left Circle */}
           
           <img
-                            src="/images/Ellipse 26.svg"
-                            alt="Heart in Hands"
-                            className="w-[400px] h-[600px]"
+                            src="/images/partner_part_4.svg"
+                            alt=""
+                            className="w-[400px]"
                         />
          
 

@@ -7,7 +7,7 @@ function OurPartner() {
             <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-8 mb-8 max-w-7xl mx-auto px-10">
                 <div className="rounded-lg p-6 bg-[#FAF3ED]">
                     <img
-                        src="/images/image.svg"
+                        src="/images/about_4.svg"
                         alt="Haritha Vijay"
                         className="w-full h-64 object-cover rounded-lg mb-4"
                     />
@@ -23,7 +23,7 @@ function OurPartner() {
                 </div>
                 <div className="rounded-lg p-6 bg-[#FAF3ED]">
                     <img
-                        src="/images/image.svg"
+                        src="/images/about_5.svg"
                         alt="Haritha Vijay"
                         className="w-full h-64 object-cover rounded-lg mb-4"
                     />

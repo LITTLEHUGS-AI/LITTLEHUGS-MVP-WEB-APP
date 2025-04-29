@@ -6,6 +6,7 @@ const CareMessage = () => {
       <img
         src={`/gif/motion_1.gif`}
         alt={`Step`}
+        className="w-full"
       />
     </div>
   );

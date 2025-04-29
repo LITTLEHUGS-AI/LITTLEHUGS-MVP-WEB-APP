@@ -4,7 +4,7 @@ const CareMessage = () => {
   return (
     <div className="w-full mx-auto mt-[64px] font-quicksand bg-[#FAF3ED]">
       <img
-        src={`/images/section.png`}
+        src={`/gif/motion_1.gif`}
         alt={`Step`}
       />
     </div>

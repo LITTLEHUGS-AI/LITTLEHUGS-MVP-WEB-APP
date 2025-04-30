@@ -7,7 +7,7 @@ import DeserveCare from '../DeserveCare'
 import EverydayCare from '../EverydayCare'
 import Footer from '../common/Footer'
 import MakeUsDiff from '../MakeUsDiff'
-import NewCareSection from '../NewSection'
+// import NewCareSection from '../NewSection'
 
 function Home() {
     const everyDayCareData = {
@@ -44,7 +44,7 @@ function Home() {
                 features={everyDayCareData.feature}
             />
             <MakeUsDiff />
-            <NewCareSection />
+            {/* <NewCareSection /> */}
             <Footer />
         </div>
     )

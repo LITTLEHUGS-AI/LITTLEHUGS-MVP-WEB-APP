@@ -6,55 +6,55 @@ const Footer = () => {
 
   return (
     <>
-    <div className="h-[10px] mt-[120px]"></div>
-    <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
+      <div className="h-[10px] mt-[120px]"></div>
+      <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
-        <svg
-        className="w-full"
-        viewBox="0 0 1440 100"
-        preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill="#ffffff"
-          d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
-        ></path>
-      </svg>
+          <svg
+            className="w-full"
+            viewBox="0 0 1440 100"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#ffffff"
+              d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+            ></path>
+          </svg>
         </div>
 
         {/* Footer Content */}
         <div className="relative flex flex-col md:flex-row justify-around items-start md:items-center py-16 px-8">
-        <div className="flex flex-col gap-3 justify-normal">
-          <h1 className="text-[28px] leading-10 font-normal mb-4 text-[#4A4B4F]">
-            Whether you're a mom,a caregiver,<br /> a school, or a clinic — LittleHugs<br />
-            gives you a smarter way to care
-          </h1>
-          <div className="flex items-center gap-4 mb-6">
-            {/* <Link to="/pricingplans"> */}
-              <button className="bg-[#263238] text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                Take the free test
-              </button>
-            {/* </Link> */}
-            <Link to="/partener-landing">
-              <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
-                Partner with us
-              </button>
-            </Link>
+          <div className="flex flex-col gap-3 justify-normal">
+            <h1 className="text-[28px] leading-10 font-normal mb-4 text-[#4A4B4F]">
+              Whether you're a mom,a caregiver,<br /> a school, or a clinic — LittleHugs<br />
+              gives you a smarter way to care
+            </h1>
+            <div className="flex items-center gap-4 mb-6">
+              <Link to="/assesment-landing">
+                <button className="bg-[#263238] text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                  Take the free test
+                </button>
+              </Link>
+              <Link to="/partener-landing">
+                <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
+                  Partner with us
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="w-[50%] flex mb-20 gap-4 relative justify-center items-center">
-          <div className="w-[70%]">
-            <input disabled className="w-full border border-[#263238] rounded-[10px] h-[72px] px-4 py-2" type="text" placeholder="Enter your email" />
-          </div>
-          <div className="flex flex-col gap-3">
-            <button onClick={() => navigate("/contact")} className="w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-[72px]">
-              Subscribe
-            </button>
+          <div className="w-[50%] flex mb-20 gap-4 relative justify-center items-center">
+            <div className="w-[70%]">
+              <input disabled className="w-full border border-[#263238] rounded-[10px] h-[72px] px-4 py-2" type="text" placeholder="Enter your email" />
+            </div>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => navigate("/contact")} className="w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-[72px]">
+                Subscribe
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

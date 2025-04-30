@@ -14,11 +14,41 @@ function PartenerLandingPage() {
         "Auto-referral suggestions to therapists, pediatricians, or gynecologists",
       ],
     },
-    { title: "AI Engines", content: [] },
-    { title: "Report Generation & Summaries", content: [] },
-    { title: "Partner Dashboards & Analytics", content: [] },
-    { title: "White-Labeled Mobile Experiences", content: [] },
-    { title: "Integrated Telehealth", content: [] },
+    {
+      title: "AI Engines", content: [
+        "EarlyCare.AI: Pediatric milestone co-pilot for growth tracking & delay alerts",
+        "Materna.AI: Gynecologist tool for postpartum mood, nutrition, thyroid issues",
+        "Evalyn: ABA therapist assistant with structured behavioral insights"
+      ]
+    },
+    {
+      title: "Report Generation & Summaries", content: [
+        "Auto-generated, evidence-backed reports with trendlines and benchmarks",
+        "Integrated with global guidelines (WHO, IAP, CDC, NICE, ACOG)",
+        "Ready-to-share summaries for EMR or teleconsultation platforms"
+      ]
+    },
+    {
+      title: "Partner Dashboards & Analytics", content: [
+        "Role-based access for pediatricians, OB-GYNs, NGOs, and educators",
+        "Track engagement, screening outcomes, flagged risks, and wellness metrics",
+        "HIPAA/GDPR-compliant storage & API-ready for EMR/LMS sync"
+      ]
+    },
+    {
+      title: "White-Labeled Mobile Experiences", content: [
+        "Custom onboarding for different roles (mother, child, co-caregiver, teen)",
+        "Daily nudges + suggested wellness routines tailored by age & concern",
+        "Multilingual, culturally adaptive interface with visual summaries"
+      ]
+    },
+    {
+      title: "Integrated Telehealth", content: [
+        "Secure video consults, real-time data sync",
+        "Session notes + report upload functionality",
+        "Coordination between parent, child specialist, and mental health professional"
+      ]
+    },
   ];
 
   // 👇 Moved useState here
@@ -41,7 +71,7 @@ function PartenerLandingPage() {
       />
 
       <div className="relative flex font-quicksand justify-between items-center gap-[45px] mt-10 px-4">
-        <div className="w-[600px] flex flex-col items-center justify-center">
+        <div className="w-[600px] flex items-center justify-center">
           <img
             src="/images/partner_part_3.svg"
             alt="Step 1"
@@ -173,7 +203,10 @@ function PartenerLandingPage() {
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
           <svg
-            className="w-full h-[100px]"
+            className="w-full"
+            viewBox="0 0 1440 100"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               fill="#ffffff"

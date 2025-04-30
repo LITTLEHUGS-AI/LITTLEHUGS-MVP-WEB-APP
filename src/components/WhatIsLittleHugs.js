@@ -2,11 +2,11 @@ import React from "react";
 
 const WhatIsLittleHugs = () => {
   return (
-    <section className="w-full pt-4 font-quicksand mt-[120px]">
+    <section className="w-full font-quicksand mt-[120px] px-[80px]">
       <h2 className="text-center text-3xl font-semibold">What is LittleHugs?</h2>
 
       <div className="flex gap-4 justify-between p-4">
-        <div className="flex w-full justify-center items-center">
+        <div className="flex w-full">
           <img
             src="/images/where_litlehug.svg"
             alt="Heart in Hands"

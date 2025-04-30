@@ -189,7 +189,7 @@ const PricingPlans = () => {
       </div>
 
       <>
-        <div className="h-[10px] mt-[120px]"></div>
+        <div className="h-[10px] mt-[30px]"></div>
         <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
           {/* Curve Top */}
           <div className="absolute top-0 left-0 w-full">

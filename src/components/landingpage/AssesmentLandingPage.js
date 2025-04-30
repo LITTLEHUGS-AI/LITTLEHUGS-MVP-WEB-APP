@@ -52,37 +52,29 @@ function AssesmentLandingPage() {
             <div className="flex flex-col min-h-screen">
                 <Navbar />
 
-                <div
-                    className="py-16 px-[22px] relative overflow-hidden bg-[#E8E0F3]"
-                    style={{
-                        backgroundImage: "url('/images/assessment.png')",
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right bottom',
-                    }}
-                >
-
+                <div className="py-16 px-[80px] relative overflow-hidden bg-[#E8E0F3]">
                     {/* Cards */}
-                    <div className="flex flex-col md:flex-row justify-center items-center gap-8 z-10 relative">
+                    <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 z-10 relative mx-auto max-w-7xl">
                         {cards.map((card, index) => (
                             <div
                                 key={index}
-                                className="bg-[#FAF3ED] w-[350px] h-[400px] border border-gray-300 rounded-xl shadow-md p-6 max-w-sm flex flex-col items-center text-center"
+                                className="bg-[#FAF3ED] w-full md:w-[360px] border border-[#26323866] rounded-xl p-8 flex flex-col items-center text-center flex-1 min-h-[420px]"
                             >
-                                <h3 className="text-2xl font-medium font-quicksand text-gray-800 mb-6">
+                                <h3 className="text-[20px] font-semibold text-center font-quicksand text-gray-800 mb-8 leading-tight">
                                     {card.title}
                                 </h3>
-                                <p className="text-[16px] font-normal font-quicksand text-gray-600 mb-6">
+                                <p className="text-[16px] font-medium font-quicksand text-gray-600 mb-8 flex-grow">
                                     {card.description}
                                 </p>
-                                <button onClick={() => {
-                                    if (index === 0) {
-                                        setShowPopup(true)
-                                    } else {
-                                        navigate("/contact")
-                                    }
-                                }}
-                                    className="bg-[#1E2C2B] text-white py-2 mt-10 px-6 mb-6 rounded-full hover:bg-[#111818] transition"
+                                <button
+                                    onClick={() => {
+                                        if (index === 0) {
+                                            setShowPopup(true)
+                                        } else {
+                                            navigate("/contact")
+                                        }
+                                    }}
+                                    className="bg-[#1E2C2B] text-white py-3 px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[180px] text-base"
                                 >
                                     Learn more
                                 </button>
@@ -93,22 +85,22 @@ function AssesmentLandingPage() {
                 </div>
 
 
-                <div className="bg-white py-12 px-6 md:px-20 lg:px-32 font-medium font-quicksand">
-                    <p className="text-gray-800 text-[16px] leading-relaxed font-quicksand mb-2">
+                <div className="bg-white ml-8 mt-[40px] px-[80px] font-medium font-quicksand">
+                    <p className="text-gray-800 text-[28px] font-normal  font-quicksand ">
                         At LittleHugs, we believe that every woman, parent, and caregiver deserves support they can trust—
                         without the overwhelm of medical jargon or the pressure of a diagnosis.
                     </p>
-                    <p className="text-gray-800 text-[16px] leading-relaxed font-quicksand">
+                    <p className="text-gray-800 text-[28px] font-normal  font-quicksand">
                         That’s why we’ve built our self-check tools with compassion, clarity, and evidence-based insight—
                         in collaboration with experts in emotional health, child development, hormonal wellness, and more.
                     </p>
                 </div>
 
-                <section className="w-full bg-white mt-[40px] py-10 font-quicksand">
+               <section className="w-full bg-white  px-[80px] mt-[120px] font-quicksand">
                     <h2 className="text-center text-3xl font-semibold text-[#4A4B4F] mb-8">
                         What Our Tools Are (and What They’re Not)
                     </h2>
-                    <div className="flex flex-col lg:flex-row gap-10 px-6 lg:px-20 items-center">
+                    <div className="flex flex-col lg:flex-row gap-10 items-center">
                         {/* Text Section */}
                         <div className="w-full lg:w-1/2 text-[#4A4B4F] space-y-4 text-lg">
                             <p>
@@ -140,8 +132,8 @@ function AssesmentLandingPage() {
                     </div>
                 </section>
 
-                <div className="w-full px-5 mx-auto mt-[55px] font-quicksand flex flex-col items-center justify-center">
-                    <h2 className="text-3xl font-semibold mb-16 mt-8 text-center">
+                <div className="w-full mt-[120px] px-[80px] font-quicksand flex flex-col items-center justify-center">
+                    <h2 className="text-3xl font-semibold mb-8 text-center">
                         How Each Tool is Developed
                     </h2>
 
@@ -154,7 +146,7 @@ function AssesmentLandingPage() {
                                 <img
                                     src={`${item.img}`}
                                     alt={`Care ${index + 1}`}
-                                    className="w-24 h-24 mb-4"
+                                    className=""
                                 />
                                 <p className="text-xl font-normal text-[#4A4B4F]">{item.title}</p>
                             </div>
@@ -162,7 +154,7 @@ function AssesmentLandingPage() {
                     </div>
                 </div>
 
-                <section className="w-full bg-white mt-[68px] py-10 px-4 text-center font-quicksand">
+                <section className="w-full bg-white mt-[120px] px-[80px] text-center font-quicksand">
                     <h2 className="text-2xl md:text-3xl text-center font-semibold text-[#4A4B4F]">
                         We’re Building This Together
                     </h2>
@@ -197,13 +189,13 @@ function AssesmentLandingPage() {
                 </section>
 
                 <div
-                    className="w-full text-center text-gray-700 py-16 px-4"
+                    className="w-full mt-[120px] h-[300px] px-[80px] text-center text-gray-700"
                     style={{
                         backgroundImage: "url('/images/assesment_3.png')",
 
                     }}
                 >
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+                    <h2 className="text-2xl md:text-3xl font-semibold mb-4 mt-[100px]">
                         LittleHugs is here to help you understand, not diagnose.
                     </h2>
                     <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">

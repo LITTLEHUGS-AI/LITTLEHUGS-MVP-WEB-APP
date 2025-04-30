@@ -6,17 +6,24 @@ function SignUp() {
   return (
     <div className="flex flex-col min-h-screen bg-[#fef9f6]">
       <Navbar />
-      <div className="flex-grow flex items-center justify-center relative overflow-hidden">
+      <div className="flex-grow flex items-center justify-center relative overflow-hidden"
+        style={{
+          backgroundImage: "url('/images/signup.png')",
+          backgroundRepeat: 'no-repeat, no-repeat',
+          backgroundPosition: 'center, bottom left',
+          backgroundSize: 'cover, contain',
+        }}
+      >
         <div className="flex w-full max-w-6xl items-center justify-center p-6">
 
           {/* Left Decorative Side */}
           <div className="hidden md:flex w-1/2 flex-col justify-center items-start relative z-10">
             <h1 className="text-2xl md:text-3xl font-medium text-gray-700 mb-6">A Hug Ahead of Time</h1>
-            <img
+            {/* <img
               src="/images/signup.png"
               alt="Decor"
               className="w-full h-auto object-contain"
-            />
+            /> */}
           </div>
 
           {/* Right Form Side */}
@@ -80,7 +87,7 @@ function SignUp() {
                   className="mt-2 w-full flex items-center justify-center gap-2 text-sm bg-[#fef3e6] border border-gray-200 rounded-full py-2 hover:bg-[#f8e9d8]"
                 >
                   <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Google__G__logo.svg"
+                    src="/icons/google-icon.svg"
                     alt="Google"
                     className="w-5 h-5"
                   />
@@ -93,7 +100,7 @@ function SignUp() {
 
         {/* Bottom Wave Decoration */}
         <div className="absolute bottom-0 left-0 w-full z-0">
-          <img src="/images/wave-decoration.png" alt="Wave Background" className="w-full h-auto" />
+          <img src="/images/wave-decoration.png" alt="Wave Background" className="w-full h-[80px]" />
         </div>
       </div>
     </div>

@@ -149,67 +149,67 @@ const PricingPlans = () => {
           ))}
         </div>
       </div>
-    
+
       <div className="bg-white px-6 md:px-16  mt-[35px] text-gray-700">
-      <p className="text-xl font-normal font-quicksand md:text-base mb-4">
-        They’re not medical tests. They’re private, research-backed check-ins — designed to help you understand yourself and your child, before things feel too heavy.
-      </p>
-
-      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 text-center mt-[64px] mb-6">
-        Developed With Experts. Translated For You.
-      </h2>
-
-      <p className="mb-4 text-sm mt-[64px] md:text-base">
-        Each tool is co-developed or reviewed by the top pediatricians, child psychologists, and women’s wellness experts in the country, and translated into everyday, relatable language.
-      </p>
-
-      <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
-        <li><strong>EPDS</strong> – Edinburgh Postnatal Depression Scale</li>
-        <li><strong>GAD-7 & PHQ-9</strong> – for anxiety and mood self-checks</li>
-        <li><strong>WHO & IAP Developmental Guidelines</strong> – for child milestone tracking</li>
-        <li><strong>DSM-5 aligned behavior checklists</strong> – for early emotional insights in children</li>
-        <li><strong>Validated symptom scales</strong> – for PMS, perimenopause, and menopause wellness</li>
-        <li><strong>Ongoing research</strong> from NIH, CDC, and peer-reviewed health journals</li>
-      </ul>
-    </div>
-
-    <div className="bg-white px-6 md:px-16 py-12 mt-[45px] text-center text-gray-700">
-      <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
-        Private. Safe. Judgment-Free.
-      </h2>
-
-      <div className="max-w-2xl mx-auto">
-        <p className="font-medium text-gray-800 mb-1">
-          Your data stays yours. Always.
+        <p className="text-xl font-normal font-quicksand md:text-base mb-4">
+          They’re not medical tests. They’re private, research-backed check-ins — designed to help you understand yourself and your child, before things feel too heavy.
         </p>
-        <p className="text-sm md:text-base text-gray-600">
-          LittleHugs doesn’t diagnose or label. We simply help you notice the signs earlier, reflect with clarity, and take small, guided steps forward — all at your pace.
+
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 text-center mt-[64px] mb-6">
+          Developed With Experts. Translated For You.
+        </h2>
+
+        <p className="mb-4 text-sm mt-[64px] md:text-base">
+          Each tool is co-developed or reviewed by the top pediatricians, child psychologists, and women’s wellness experts in the country, and translated into everyday, relatable language.
         </p>
+
+        <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
+          <li><strong>EPDS</strong> – Edinburgh Postnatal Depression Scale</li>
+          <li><strong>GAD-7 & PHQ-9</strong> – for anxiety and mood self-checks</li>
+          <li><strong>WHO & IAP Developmental Guidelines</strong> – for child milestone tracking</li>
+          <li><strong>DSM-5 aligned behavior checklists</strong> – for early emotional insights in children</li>
+          <li><strong>Validated symptom scales</strong> – for PMS, perimenopause, and menopause wellness</li>
+          <li><strong>Ongoing research</strong> from NIH, CDC, and peer-reviewed health journals</li>
+        </ul>
       </div>
-    </div>
 
-    <div className="bg-[#FFF9E7] py-16 flex flex-col items-center text-center relative overflow-hidden">
-            <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
-                Join the Movement
-            </h2>
-            <p className="text-lg max-w-3xl text-[#4A4B4F] mb-10 px-4 font-quicksand">
-                We’re building more than a platform — we’re building a world where every child feels seen early,
-                and every caregiver feels supported. Whether you’re a school, clinic, parent, or simply someone
-                who believes in early care, we’d love to build with you.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-            <Link to="/assesment-landing">
-                <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
-                    Take the free test
-                </button>
-                </Link>
-                <Link to="/partener-landing">
-                <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
-                    Partner with us
-                </button>
-                </Link>
-            </div>
+      <div className="bg-white px-6 md:px-16 py-12 mt-[45px] text-center text-gray-700">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+          Private. Safe. Judgment-Free.
+        </h2>
+
+        <div className="max-w-2xl mx-auto">
+          <p className="font-medium text-gray-800 mb-1">
+            Your data stays yours. Always.
+          </p>
+          <p className="text-sm md:text-base text-gray-600">
+            LittleHugs doesn’t diagnose or label. We simply help you notice the signs earlier, reflect with clarity, and take small, guided steps forward — all at your pace.
+          </p>
         </div>
+      </div>
+
+      <div className="bg-[#FFF9E7] py-16 flex flex-col items-center text-center relative overflow-hidden">
+        <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
+          Join the Movement
+        </h2>
+        <p className="text-lg max-w-3xl text-[#4A4B4F] mb-10 px-4 font-quicksand">
+          We’re building more than a platform — we’re building a world where every child feels seen early,
+          and every caregiver feels supported. Whether you’re a school, clinic, parent, or simply someone
+          who believes in early care, we’d love to build with you.
+        </p>
+        <div className="flex flex-wrap justify-center gap-6">
+          <Link to="/assesment-landing">
+            <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
+              Take the free test
+            </button>
+          </Link>
+          <Link to="/partener-landing">
+            <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
+              Partner with us
+            </button>
+          </Link>
+        </div>
+      </div>
 
     </div>
   );

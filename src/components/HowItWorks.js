@@ -20,7 +20,7 @@ const HowItWorks = () => {
             <img
               src={`/images/step_${index + 1}.svg`}
               alt={`Step ${index + 1}`}
-              className="w-24 h-24 mb-4"
+              className="mb-4"
             />
             <p className="text-xl text-[#4A4B4F] font-medium text-start">{index + 1}. {step}</p>
           </div>

@@ -81,6 +81,7 @@ const features = [
 
 const PricingPlans = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -127,7 +128,9 @@ const PricingPlans = () => {
         <p className="text-gray-600 mb-6">
           Start with a free consultation with one of our pediatric experts and see how LittleHugs works for you.
         </p>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium transition duration-300">
+        <button
+          onClick={() => navigate("/contact")}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium transition duration-300">
           Take a Free Consultation
         </button>
       </div>
@@ -154,7 +157,7 @@ const PricingPlans = () => {
         </div>
       </div>
 
-      <div className="bg-white px-6 md:px-16  mt-[35px] text-gray-700">
+      {/* <div className="bg-white px-6 md:px-16  mt-[35px] text-gray-700">
         <p className="text-xl font-normal font-quicksand md:text-base mb-4">
           They’re not medical tests. They’re private, research-backed check-ins — designed to help you understand yourself and your child, before things feel too heavy.
         </p>
@@ -175,7 +178,7 @@ const PricingPlans = () => {
           <li><strong>Validated symptom scales</strong> – for PMS, perimenopause, and menopause wellness</li>
           <li><strong>Ongoing research</strong> from NIH, CDC, and peer-reviewed health journals</li>
         </ul>
-      </div>
+      </div> */}
 
       <div className="bg-white px-6 md:px-16 py-12 mt-[45px] text-center text-gray-700">
         <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">

@@ -227,6 +227,7 @@ function PartenerLandingPage() {
               <li>Schools</li>
               <li>NGO</li>
               <li>Therapy Centers</li>
+              <li>Agency</li>
             </ul>
           </div>
 

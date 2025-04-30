@@ -6,18 +6,21 @@ const Footer = () => {
 
   return (
     <>
-    <div className="h-[100px]"></div>
+    <div className="h-[10px] mt-[120px]"></div>
     <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
-          <svg
-            className="w-full h-[100px]"
-          >
-            <path
-              fill="#ffffff"
-              d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
-            ></path>
-          </svg>
+        <svg
+        className="w-full"
+        viewBox="0 0 1440 100"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="#ffffff"
+          d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+        ></path>
+      </svg>
         </div>
 
         {/* Footer Content */}

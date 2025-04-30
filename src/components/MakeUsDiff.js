@@ -21,7 +21,7 @@ function MakeUsDiff() {
     ];
 
     return (
-        <div className="w-full px-5 mx-auto mt-[68px] font-quicksand flex flex-col items-center justify-center">
+        <div className="w-full px-5 mx-auto mt-[120px] font-quicksand flex flex-col items-center justify-center">
             <h2 className="text-3xl font-medium mb-16 mt-8 text-center">
                 What makes us different?
             </h2>

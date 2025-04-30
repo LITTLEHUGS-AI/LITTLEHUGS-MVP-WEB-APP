@@ -2,7 +2,7 @@ import React from 'react'
 
 function WhyWeExist() {
     return (
-        <section className="w-full px-5 font-quicksand text-800 mt-[60px]">
+        <section className="w-full px-[80px] font-quicksand text-800 mt-[120px]">
             <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">Why we exist?</h2>
             <p className="text-xl font-normal font-quicksand ml-4 text-[#4A4B4F] mt-6">
                 Wellness often starts with a quiet question:
@@ -30,7 +30,7 @@ function WhyWeExist() {
                 </div>
             </div>
 
-            <div className="flex font-quicksand justify-between items-center gap-[32px] mt-10 px-4">
+            <div className="flex font-quicksand gap-[32px]">
                 <div className="w-[50%] flex flex-col items-center justify-center">
                     <img
                         src="/images/about_3.svg"

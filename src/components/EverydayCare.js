@@ -4,11 +4,11 @@ const EverydayCare = ({ title, subtitle, features }) => {
 
   return (
     <div className="w-full px-[80px] mx-auto mt-[120px] font-quicksand flex flex-col items-center justify-center">
-      <h2 className={`text-3xl leading-10 font-medium text-center ${subtitle ? "" : "mb-16"}`}>
+      <h2 className={`text-5xl font-medium text-center ${subtitle ? "mb-8" : "mb-16"}`}>
         {title}
       </h2>
       {subtitle && (
-        <h2 className="text-3xl leading-10 font-medium mb-16 text-center">
+        <h2 className="text-5xl font-medium mb-16 text-center">
           {subtitle}
         </h2>
       )}

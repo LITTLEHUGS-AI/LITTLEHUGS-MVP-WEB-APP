@@ -142,7 +142,7 @@ const PricingPlans = () => {
               <img
                 src={`${item.img}`}
                 alt={`Care ${index + 1}`}
-                className="w-24 h-24 mb-4"
+                className="mb-4"
               />
               <p className="text-xl font-normal text-[#4A4B4F]">{item.title}</p>
             </div>

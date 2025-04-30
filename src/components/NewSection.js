@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NewCareSection = () => {
   return (
-    <div className="relative w-full h-[420px] bg-[#FFC550] overflow-hidden">
+    <div className="relative w-full h-[420px] bg-[#FFC550] overflow-hidden mt-[120px]">
 
       {/* White Top Curve */}
       <div className="absolute top-0 left-0 w-full h-[180px] bg-white rounded-b-[80%]"></div>

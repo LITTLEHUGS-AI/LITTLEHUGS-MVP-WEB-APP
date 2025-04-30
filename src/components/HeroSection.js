@@ -22,7 +22,7 @@ const HeroSection = () => {
         <div className="flex items-center gap-4 mb-6">
           <Link to="/assesment-landing">
             <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-              Take for Free Test
+              Take the free test
             </button>
           </Link>
           <Link to="/partener-landing">

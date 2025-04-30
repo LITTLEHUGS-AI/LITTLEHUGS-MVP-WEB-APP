@@ -9,7 +9,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="w-full px-5 font-quicksand text-center text--800 mt-[20px]">
+    <section className="w-full px-5 font-quicksand text-center text--800 mt-[120px]">
       <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F]">How it works?</h2>
       <p className="text-xl font-medium font-quicksand text-[#4A4B4F] mt-1">Simple . Supportive . Self-led</p>
 

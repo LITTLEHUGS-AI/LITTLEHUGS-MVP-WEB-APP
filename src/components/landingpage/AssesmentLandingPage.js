@@ -182,7 +182,10 @@ function AssesmentLandingPage() {
 
                     {/* Join Button */}
                     <div className="mt-8">
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition">
+                        <button
+                            onClick={() => navigate("/contact")}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition"
+                        >
                             Join
                         </button>
                     </div>

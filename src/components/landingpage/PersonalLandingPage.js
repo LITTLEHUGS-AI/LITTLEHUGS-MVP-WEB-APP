@@ -69,7 +69,7 @@ function PersonalLandingPage() {
                                             navigate("/contact")
                                         }
                                     }}
-                                    className="bg-[#1E2C2B] text-white py-3 px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[180px] text-base"
+                                    className="bg-[#263238] text-white py-3 px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[180px] text-base"
                                 >
                                     Learn more
                                 </button>

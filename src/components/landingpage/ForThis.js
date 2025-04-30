@@ -79,7 +79,7 @@ function ForThis() {
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/3 flex justify-center">
+                <div className="w-full md:w-1/3 flex">
                     <img src={selectedData.image} alt="For This" className="w-[302px] h-auto" />
                 </div>
 

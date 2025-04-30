@@ -13,7 +13,7 @@ const EverydayCare = ({ title, subtitle, features }) => {
         </h2>
       )}
 
-      <div className={`w-full flex justify-between`}>
+      <div className={`w-full flex justify-between gap-10`}>
         {features.map((item, index) => (
           <div
             key={index}

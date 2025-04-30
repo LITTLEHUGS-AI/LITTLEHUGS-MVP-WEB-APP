@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from "react-router-dom";
+
 
 function LandingHeader({image, bg_color, title, description, sub_title, button_text}) {
     return (
@@ -14,9 +16,10 @@ function LandingHeader({image, bg_color, title, description, sub_title, button_t
                     {description}
                 </p>
                 <div className="flex items-center gap-4 mb-6">
-                    <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                <Link to="/partener-landing"><button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
                         {button_text ? button_text : "Try for Free"}
                     </button>
+                    </Link>
                 </div>
             </div>
             <div className="flex justify-center items-center p-5">

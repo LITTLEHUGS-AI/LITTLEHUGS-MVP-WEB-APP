@@ -8,10 +8,26 @@ function OurPartner() {
                 <div className="rounded-lg p-6 bg-[#FAF3ED]">
                     <img
                         src="/images/about_4.svg"
-                        alt="Haritha Vijay"
+                        alt="Shilpi Aggrawal Vijay"
                         className="w-full h-64 object-cover rounded-lg mb-4"
                     />
                     <h3 className="text-xl font-medium text-[#4A4B4F] mb-2">Haritha Vijay</h3>
+                    <div className="space-y-2 text-sm text-[#4A4B4F]">
+                        <p>M.Sc. Clinical Psychology |</p>
+                        <p>B.Ed. Special Education</p>
+                        <p>(Autism, RCI Certified)</p>
+                        <p className="mt-4">Specialized in child & adolescent mental health, neurodiversity (ASD, ADHD, CP, learning disabilities)</p>
+                        <p className="mt-4">Trained in ABA, REBT, CBT, play therapy, expressive arts therapy, and mindfulness practices</p>
+                        <p className="mt-4">Active member of the United Psychologists Association & certified graphologist</p>
+                    </div>
+                </div>
+                <div className="rounded-lg p-6 bg-[#FAF3ED]">
+                    <img
+                        src="/images/about_6.svg"
+                        alt="Haritha Vijay"
+                        className="w-full h-64 object-cover rounded-lg mb-4"
+                    />
+                    <h3 className="text-xl font-medium text-[#4A4B4F] mb-2"> Simran Kaur</h3>
                     <div className="space-y-2 text-sm text-[#4A4B4F]">
                         <p>M.Sc. Clinical Psychology |</p>
                         <p>B.Ed. Special Education</p>
@@ -27,7 +43,7 @@ function OurPartner() {
                         alt="Haritha Vijay"
                         className="w-full h-64 object-cover rounded-lg mb-4"
                     />
-                    <h3 className="text-xl font-medium text-[#4A4B4F] mb-2">Haritha Vijay</h3>
+                    <h3 className="text-xl font-medium text-[#4A4B4F] mb-2">Yinass Pushparani</h3>
                     <div className="space-y-2 text-sm text-[#4A4B4F]">
                         <p>M.Sc. Clinical Psychology |</p>
                         <p>B.Ed. Special Education</p>

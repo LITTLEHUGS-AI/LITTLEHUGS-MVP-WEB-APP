@@ -8,6 +8,8 @@ import PartenerLandingPage from "../components/landingpage/PartenerLandingPage";
 import AssesmentLandingPage from "../components/landingpage/AssesmentLandingPage";
 import SignIn from "../components/landingpage/SignIn";
 import SignUp from "../components/landingpage/SignUp";
+import Contact from "../components/landingpage/Contact";
+import PricingPlans from "../components/landingpage/PricingPlans";
 
 function AppRoutes() {
   return (
@@ -22,6 +24,8 @@ function AppRoutes() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/pricingplans" element={<PricingPlans />} />
           <Route path="/personal-landing" element={<PersonalLandingPage />} />
           <Route path="/partener-landing" element={<PartenerLandingPage />} />
           <Route path="/assesment-landing" element={<AssesmentLandingPage />} />

@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 const HeroSection = () => {
   return (
@@ -17,14 +19,20 @@ const HeroSection = () => {
           LittleHugs helps you check in, not check out. Discover personalized,
           non-clinical care insights—at home, in school, or on the go.
         </p>
+
         <div className="flex items-center gap-4 mb-6">
-          <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-            Try for Free
-          </button>
-          <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
-            Partner with us
-          </button>
+          <Link to="/assesment-landing">
+            <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+              Take for Free Test
+            </button>
+          </Link>
+          <Link to="/partener-landing">
+            <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
+              Partner with us
+            </button>
+          </Link>
         </div>
+
       </div>
 
       {/* Right Blob Content */}

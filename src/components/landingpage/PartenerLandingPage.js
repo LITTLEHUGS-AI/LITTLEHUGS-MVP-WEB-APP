@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../common/Navbar';
 import LandingHeader from './LandingHeader';
+import { Link } from "react-router-dom";
+
 
 function PartenerLandingPage() {
   const accordionData = [
@@ -198,9 +200,11 @@ function PartenerLandingPage() {
         {/* Center - Get LittleHugs */}
         <div className="mb-9 text-center">
           <h3 className="font-medium font-quicksand text-[28px] text-gray-800 ">Get LittleHugs</h3>
+          <Link to="/partener-landing">
           <button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 px-6 rounded-full transition">
             Get a Demo
           </button>
+          </Link>
         </div>
 
         {/* Right - Support */}

@@ -90,13 +90,13 @@ function PartenerLandingPage() {
         <div className="flex flex-col md:flex-row items-center justify-center mt-15 gap-16 w-full max-w-5xl">
 
           {/* Left Circle */}
-          
+
           <img
-                            src="/images/partner_part_4.svg"
-                            alt=""
-                            className="w-[400px]"
-                        />
-         
+            src="/images/partner_part_4.svg"
+            alt=""
+            className="w-[400px]"
+          />
+
 
           {/* Right Form */}
           <form className="w-90 space-y-4">
@@ -160,7 +160,6 @@ function PartenerLandingPage() {
 
             {/* Submit Button */}
             <button
-              type="submit"
               className="w-[25%] px-5 pt-4 bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition"
             >
               Submit
@@ -170,55 +169,55 @@ function PartenerLandingPage() {
         </div>
       </div>
 
-       <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-16">
-                {/* Curve Top */}
-                <div className="absolute top-0 left-0 w-full">
-                    <svg
-                        className="w-full h-[100px]"
-                    >
-                        <path
-                            fill="#ffffff"
-                            d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
-                        ></path>
-                    </svg>
-                </div>
-
-               {/* Footer Content */}
-      <div className="relative flex flex-col md:flex-row justify-around items-start md:items-center py-16 px-8">
-        
-        {/* Left - Who We Serve */}
-        <div className="text-center md:text-left space-y-2">
-          <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Who We Serve</h3>
-          <ul className="font-normal font-quicksand text-xl text-gray-600 space-y-1">
-            <li>Clinics</li>
-            <li>Schools</li>
-            <li>NGO</li>
-            <li>Therapy Centers</li>
-          </ul>
+      <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-16">
+        {/* Curve Top */}
+        <div className="absolute top-0 left-0 w-full">
+          <svg
+            className="w-full h-[100px]"
+          >
+            <path
+              fill="#ffffff"
+              d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+            ></path>
+          </svg>
         </div>
 
-        {/* Center - Get LittleHugs */}
-        <div className="mb-9 text-center">
-          <h3 className="font-medium font-quicksand text-[28px] text-gray-800 ">Get LittleHugs</h3>
-          <Link to="/partener-landing">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 px-6 rounded-full transition">
-            Get a Demo
-          </button>
-          </Link>
-        </div>
+        {/* Footer Content */}
+        <div className="relative flex flex-col md:flex-row justify-around items-start md:items-center py-16 px-8">
 
-        {/* Right - Support */}
-        <div className="text-center md:text-right space-y-2">
-          <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Support</h3>
-          <ul className="text-xl font-normal font-quicksand  text-gray-600 space-y-1">
-            <li>FAQ</li>
-            <li>Help</li>
-          </ul>
+          {/* Left - Who We Serve */}
+          <div className="text-center md:text-left space-y-2">
+            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Who We Serve</h3>
+            <ul className="font-normal font-quicksand text-xl text-gray-600 space-y-1">
+              <li>Clinics</li>
+              <li>Schools</li>
+              <li>NGO</li>
+              <li>Therapy Centers</li>
+            </ul>
+          </div>
+
+          {/* Center - Get LittleHugs */}
+          <div className="mb-9 text-center">
+            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 ">Get LittleHugs</h3>
+            <Link to="/partener-landing">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 px-6 rounded-full transition">
+                Get a Demo
+              </button>
+            </Link>
+          </div>
+
+          {/* Right - Support */}
+          <div className="text-center md:text-right space-y-2">
+            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Support</h3>
+            <ul className="text-xl font-normal font-quicksand  text-gray-600 space-y-1">
+              <li>FAQ</li>
+              <li>Help</li>
+            </ul>
+          </div>
+
         </div>
 
       </div>
-               
-            </div>
 
 
 

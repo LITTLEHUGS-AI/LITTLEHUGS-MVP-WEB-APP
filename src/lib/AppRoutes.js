@@ -10,10 +10,12 @@ import SignIn from "../components/landingpage/SignIn";
 import SignUp from "../components/landingpage/SignUp";
 import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
+import ScrollToTop from "./ScrollToTop";
 
 function AppRoutes() {
   return (
     <Router>
+      <ScrollToTop />
       <Suspense
         fallback={
           <div>

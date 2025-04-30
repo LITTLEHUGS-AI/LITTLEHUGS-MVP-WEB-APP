@@ -19,12 +19,12 @@ const EverydayCare = ({ title, subtitle, features }) => {
             key={index}
             className="flex flex-col items-center text-center gap-[28px]"
           >
-            <h3 className="text-xl font-normal">{item.title}</h3>
             <img
               src={`${item.img}`}
               alt={`Care ${index + 1}`}
-              className="w-24 h-24 mb-4"
+              className="mb-4"
             />
+            <h3 className="text-xl font-normal">{item.title}</h3>
             {/* <p className="text-xl text-black">{item.text}</p> */}
           </div>
         ))}

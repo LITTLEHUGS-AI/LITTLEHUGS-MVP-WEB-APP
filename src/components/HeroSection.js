@@ -10,14 +10,13 @@ const HeroSection = () => {
     >
       {/* Left Content */}
       <div className="max-w-[630px] h-[334px] top-274 left-80px gap- 24px">
-        <h1 className="text-4xl font-medium font-quicksand mb-4 leading-snug text-gray-800">
+        <h1 className="text-4xl font-medium font-quicksand mb-4 leading-snug text-[#4A4B4F]">
           Get clarity on your child’s<br />
           development — and your own<br />
           well-being — in just 5 minutes<br />
         </h1>
-        <p className="text-xl font-quicksand text-gray-600 mb-6">
-          LittleHugs helps you check in, not check out. Discover personalized,
-          non-clinical care insights—at home, in school, or on the go.
+        <p className="text-[20px] leading-8 font-quicksand text-[#4A4B4F] mb-6">
+          LittleHugs is a gentle, expert-backed wellness platform that helps parents and professionals understand, support, and care better — before it gets overwhelming.
         </p>
 
         <div className="flex items-center gap-4 mb-6">

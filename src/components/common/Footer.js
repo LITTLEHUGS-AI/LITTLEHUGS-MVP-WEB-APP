@@ -23,7 +23,7 @@ const Footer = () => {
         {/* Footer Content */}
         <div className="relative flex flex-col md:flex-row justify-around items-start md:items-center py-16 px-8">
         <div className="flex flex-col gap-3 justify-normal">
-          <h1 className="text-[28px] leading-8 font-medium mb-4 text-[#4A4B4F]">
+          <h1 className="text-[28px] leading-10 font-normal mb-4 text-[#4A4B4F]">
             Whether you're a mom,a caregiver,<br /> a school, or a clinic — LittleHugs<br />
             gives you a smarter way to care
           </h1>
@@ -41,11 +41,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="w-[50%] flex mb-20 gap-4 relative justify-center items-center">
-          <div className="w-full">
-            <input disabled className="w-full border border-[#263238] rounded-[8px] px-4 py-2" type="text" placeholder="Enter your email" />
+          <div className="w-[70%]">
+            <input disabled className="w-full border border-[#263238] rounded-[10px] h-[72px] px-4 py-2" type="text" placeholder="Enter your email" />
           </div>
           <div className="flex flex-col gap-3">
-            <button onClick={() => navigate("/contact")} className="bg-[#263238] text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+            <button onClick={() => navigate("/contact")} className="w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-[72px]">
               Subscribe
             </button>
           </div>

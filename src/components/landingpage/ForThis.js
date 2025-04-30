@@ -2,7 +2,7 @@ import React from 'react';
 
 function ForThis() {
     return (
-        <div className="w-full px-5 font-quicksand text-center text-gray-800 mt-5 flex flex-col items-center">
+        <div className="w-full px-[80px] mt-[120px] font-quicksand text-center text-gray-800 flex flex-col items-center">
             <h2 className="text-4xl font-medium text-[#4A4B4F] mb-10">Who is this for?</h2>
 
             <div className="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto p-4">

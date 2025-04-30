@@ -96,7 +96,7 @@ function AssesmentLandingPage() {
                     </p>
                 </div>
 
-               <section className="w-full bg-white  px-[80px] mt-[120px] font-quicksand">
+                <section className="w-full bg-white  px-[80px] mt-[120px] font-quicksand">
                     <h2 className="text-center text-3xl font-semibold text-[#4A4B4F] mb-8">
                         What Our Tools Are (and What They’re Not)
                     </h2>
@@ -188,22 +188,36 @@ function AssesmentLandingPage() {
                     </div>
                 </section>
 
-                <div
-                    className="w-full mt-[120px] h-[300px] px-[80px] text-center text-gray-700"
-                    style={{
-                        backgroundImage: "url('/images/assesment_3.png')",
-
-                    }}
-                >
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-4 mt-[100px]">
-                        LittleHugs is here to help you understand, not diagnose.
-                    </h2>
-                    <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-                        Everything we build is rooted in care, backed by science, and designed for the real you.
-                    </p>
-                </div>
-
             </div>
+
+            <>
+                <div className="h-[10px] mt-[60px]"></div>
+                <div className="relative bg-[#fef8e6] overflow-hidden py-16">
+                    {/* Curve Top */}
+                    <div className="absolute top-0 left-0 w-full">
+                        <svg
+                            className="w-full"
+                            viewBox="0 0 1440 100"
+                            preserveAspectRatio="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill="#ffffff"
+                                d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+                            ></path>
+                        </svg>
+                    </div>
+
+                    <div className='flex flex-col items-center justify-center'>
+                        <h2 className="text-2xl md:text-3xl font-semibold mb-4 mt-[100px]">
+                            LittleHugs is here to help you understand, not diagnose.
+                        </h2>
+                        <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
+                            Everything we build is rooted in care, backed by science, and designed for the real you.
+                        </p>
+                    </div>
+                </div>
+            </>
 
         </div>
     )

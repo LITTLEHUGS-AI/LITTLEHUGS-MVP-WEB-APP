@@ -188,28 +188,46 @@ const PricingPlans = () => {
         </div>
       </div>
 
-      <div className="bg-[#FFF9E7] py-16 flex flex-col items-center text-center relative overflow-hidden">
-        <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
-          Join the Movement
-        </h2>
-        <p className="text-lg max-w-3xl text-[#4A4B4F] mb-10 px-4 font-quicksand">
-          We’re building more than a platform — we’re building a world where every child feels seen early,
-          and every caregiver feels supported. Whether you’re a school, clinic, parent, or simply someone
-          who believes in early care, we’d love to build with you.
-        </p>
-        <div className="flex flex-wrap justify-center gap-6">
-          <Link to="/assesment-landing">
-            <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
-              Take the free test
-            </button>
-          </Link>
-          <Link to="/partener-landing">
-            <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
-              Partner with us
-            </button>
-          </Link>
+      <>
+        <div className="h-[10px] mt-[120px]"></div>
+        <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
+          {/* Curve Top */}
+          <div className="absolute top-0 left-0 w-full">
+            <svg
+              className="w-full"
+              viewBox="0 0 1440 100"
+              preserveAspectRatio="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#ffffff"
+                d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+              ></path>
+            </svg>
+          </div>
+
+          <div className='flex flex-col items-center justify-center'>
+            <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
+              Join the Movement
+            </h2>
+            <p className="text-lg max-w-3xl text-[#4A4B4F] mb-10 px-4 font-quicksand">
+              We’re building more than a platform — we’re building a world where every child feels seen early, and every caregiver feels supported. Whether you’re a school, clinic, parent, or simply someone who believes in early care, we’d love to build with you.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link to="/assesment-landing">
+                <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
+                  Take the free test
+                </button>
+              </Link>
+              <Link to="/partener-landing">
+                <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
+                  Partner with us
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
+      </>
 
     </div>
   );

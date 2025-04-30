@@ -1,8 +1,15 @@
 import React from 'react';
+import { useState } from 'react';
 import Navbar from '../common/Navbar';
+import WellnessAssessment from "./WellnessAssessment";
+import { useNavigate } from 'react-router-dom';
+
 
 
 function AssesmentLandingPage() {
+    const navigate = useNavigate()
+    const [showPopup, setShowPopup] = useState(false);
+
     const cards = [
         {
             title: "LittleHugs 360° Women’s Wellness Assessment",
@@ -68,13 +75,23 @@ function AssesmentLandingPage() {
                                 <p className="text-[16px] font-normal font-quicksand text-gray-600 mb-6">
                                     {card.description}
                                 </p>
-                                <button className="bg-[#1E2C2B] text-white py-2 mt-10 px-6 mb-6 rounded-full hover:bg-[#111818] transition">
+                                <button onClick={() => {
+                                    if (index === 0) {
+                                        setShowPopup(true)
+                                    } else {
+                                        navigate("/contact")
+                                    }
+                                }}
+                                    className="bg-[#1E2C2B] text-white py-2 mt-10 px-6 mb-6 rounded-full hover:bg-[#111818] transition"
+                                >
                                     Learn more
                                 </button>
                             </div>
                         ))}
                     </div>
+                    {showPopup && <WellnessAssessment onClose={() => setShowPopup(false)} />}
                 </div>
+
 
                 <div className="bg-white py-12 px-6 md:px-20 lg:px-32 font-medium font-quicksand">
                     <p className="text-gray-800 text-[16px] leading-relaxed font-quicksand mb-2">

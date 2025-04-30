@@ -190,6 +190,7 @@ function PartenerLandingPage() {
 
             {/* Submit Button */}
             <button
+              disabled
               className="w-[25%] px-5 pt-4 bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition"
             >
               Submit
@@ -232,7 +233,7 @@ function PartenerLandingPage() {
           {/* Center - Get LittleHugs */}
           <div className="mb-9 text-center">
             <h3 className="font-medium font-quicksand text-[28px] text-gray-800 ">Get LittleHugs</h3>
-            <Link to="/partener-landing">
+            <Link to="/contact">
               <button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 px-6 rounded-full transition">
                 Get a Demo
               </button>
@@ -240,13 +241,13 @@ function PartenerLandingPage() {
           </div>
 
           {/* Right - Support */}
-          <div className="text-center md:text-right space-y-2">
+          {/* <div className="text-center md:text-right space-y-2">
             <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Support</h3>
             <ul className="text-xl font-normal font-quicksand  text-gray-600 space-y-1">
               <li>FAQ</li>
               <li>Help</li>
             </ul>
-          </div>
+          </div> */}
 
         </div>
 

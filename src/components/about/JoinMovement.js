@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 function JoinMovement() {
     return (
-        <div className="bg-[#FFF9E7] px-[80px] mt-[120px] flex flex-col items-center text-center relative overflow-hidden">
+        <div className="bg-[#FFF9E7] px-[80px] mt-[120px] flex flex-col items-center text-center relative overflow-hidden py-10">
             <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
                 Join the Movement
             </h2>

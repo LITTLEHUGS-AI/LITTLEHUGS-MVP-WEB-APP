@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 const Footer = () => {
   return (
@@ -10,12 +12,16 @@ const Footer = () => {
             gives you a smarter way to care
           </h1>
           <div className="flex items-center gap-4 mb-6">
+          <Link to="/assesment-landing">
             <button className="bg-[#263238] text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
               Take the free test
             </button>
+            </Link>
+            <Link to="/partener-landing">
             <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
               Partner with us
             </button>
+            </Link>
           </div>
         </div>
         <div className="w-[50%] flex mb-20 gap-4 relative justify-center items-center">

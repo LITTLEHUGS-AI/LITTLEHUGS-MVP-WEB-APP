@@ -21,16 +21,16 @@ const Navbar = () => {
         <li><Link to="/personal-landing">For You</Link></li>
         <li><Link to="/partener-landing">For Partners</Link></li>
         <li><Link to="/assesment-landing">Assessments</Link></li>
-        <li><Link to="/">Pricing</Link></li>
+        <li><Link to="/pricingplans">Pricing</Link></li>
         <li><Link to="/about">About Us</Link></li>
-        <li><Link to="/">Contact Us</Link></li>
+        <li><Link to="/contact">Contact Us</Link></li>
       </ul>
 
       <button
-        onClick={() => navigate('/signin')}
+        onClick={() => navigate('/contact')}
         className="w-[120px] h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
       >
-        Sign In
+        Try For Free
       </button>
 
     </nav>

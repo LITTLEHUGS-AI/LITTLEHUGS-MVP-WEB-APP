@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 const NewCareSection = () => {
   return (
@@ -9,9 +11,11 @@ const NewCareSection = () => {
     
           {/* Centered Button */}
           <div className="absolute top-[120px] w-full flex justify-center">
+          <Link to="/signup">
             <button className="bg-[#4A7CFB] text-white px-10 py-3 rounded-full font-medium text-lg shadow-md hover:scale-105 transition-transform duration-300">
               Sign Up
             </button>
+            </Link>
           </div>
     
           {/* Outer Decorative Circle */}

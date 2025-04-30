@@ -1,5 +1,7 @@
 // src/components/JoinMovement.jsx
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 function JoinMovement() {
     return (
@@ -13,12 +15,16 @@ function JoinMovement() {
                 who believes in early care, we’d love to build with you.
             </p>
             <div className="flex flex-wrap justify-center gap-6">
+            <Link to="/assesment-landing">
                 <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
                     Take the free test
                 </button>
+                </Link>
+                <Link to="/partener-landing">
                 <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
                     Partner with us
                 </button>
+                </Link>
             </div>
         </div>
     );

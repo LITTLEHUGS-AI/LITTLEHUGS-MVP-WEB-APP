@@ -76,7 +76,7 @@ function AssesmentLandingPage() {
                     </div>
                 </div>
 
-                <div className="bg-white py-12 px-6 md:px-20 lg:px-32 text-center">
+                <div className="bg-white py-12 px-6 md:px-20 lg:px-32 font-medium font-quicksand">
                     <p className="text-gray-800 text-[16px] leading-relaxed font-quicksand mb-2">
                         At LittleHugs, we believe that every woman, parent, and caregiver deserves support they can trust—
                         without the overwhelm of medical jargon or the pressure of a diagnosis.
@@ -87,7 +87,7 @@ function AssesmentLandingPage() {
                     </p>
                 </div>
 
-                <section className="w-full bg-white py-10 font-quicksand">
+                <section className="w-full bg-white mt-[40px] py-10 font-quicksand">
                     <h2 className="text-center text-3xl font-semibold text-[#4A4B4F] mb-8">
                         What Our Tools Are (and What They’re Not)
                     </h2>
@@ -123,8 +123,8 @@ function AssesmentLandingPage() {
                     </div>
                 </section>
 
-                <div className="w-full px-5 mx-auto mt-[68px] font-quicksand flex flex-col items-center justify-center">
-                    <h2 className="text-3xl font-medium mb-16 mt-8 text-center">
+                <div className="w-full px-5 mx-auto mt-[55px] font-quicksand flex flex-col items-center justify-center">
+                    <h2 className="text-3xl font-semibold mb-16 mt-8 text-center">
                         How Each Tool is Developed
                     </h2>
 
@@ -145,11 +145,11 @@ function AssesmentLandingPage() {
                     </div>
                 </div>
 
-                <section className="w-full bg-white py-16 px-4 text-center font-quicksand">
-                    <h2 className="text-2xl md:text-3xl font-semibold text-[#4A4B4F]">
+                <section className="w-full bg-white mt-[68px] py-10 px-4 text-center font-quicksand">
+                    <h2 className="text-2xl md:text-3xl text-center font-semibold text-[#4A4B4F]">
                         We’re Building This Together
                     </h2>
-                    <p className="mt-2 text-[#4A4B4F] text-base md:text-lg max-w-2xl mx-auto">
+                    <p className="mt-7 text-[#4A4B4F] text-center ">
                         Your feedback helps us grow. If something feels unclear or you’d like to see a new tool, we’re listening.
                     </p>
 

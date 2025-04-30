@@ -8,7 +8,7 @@ function SignIn() {
             <Navbar />
             <div
                 className="min-h-screen flex items-center justify-center bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/signin-bg.png')" }} // Your uploaded background image
+                style={{ backgroundImage: "url('/images/sign in.png')" }} // Your uploaded background image
             >
                 <div className="bg-white rounded-md shadow-md p-8 w-full max-w-md border">
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-1">Sign In</h2>

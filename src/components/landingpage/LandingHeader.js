@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 
 
-function LandingHeader({image, bg_color, title, description, sub_title, button_text}) {
+function LandingHeader({ image, bg_color, title, description, sub_title, button_text }) {
     return (
         <div className={`w-full bg-[${bg_color}] font-quicksand flex items-center justify-between px-20 py-8`}>
             <div className="max-w-[630px] top-274 left-80px gap- 24px">
@@ -16,8 +16,8 @@ function LandingHeader({image, bg_color, title, description, sub_title, button_t
                     {description}
                 </p>
                 <div className="flex items-center gap-4 mb-6">
-                <Link to={`${button_text ? "/contact" : "/assesment-landing"}`}><button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                        {button_text ? button_text : "Try for Free"}
+                    <Link to={`${button_text ? "/contact" : "/assesment-landing"}`}><button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                        {button_text ? button_text : "Take the free test"}
                     </button>
                     </Link>
                 </div>

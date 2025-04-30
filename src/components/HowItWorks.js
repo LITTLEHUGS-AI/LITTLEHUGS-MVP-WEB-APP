@@ -9,7 +9,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="w-full px-5 font-quicksand text-center text--800 mt-[120px]">
+    <section className="w-full font-quicksand text-center text--800 mt-[120px] px-[80px]">
       <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F]">How it works?</h2>
       <p className="text-xl font-medium font-quicksand text-[#4A4B4F] mt-1">Simple . Supportive . Self-led</p>
 
@@ -22,7 +22,16 @@ const HowItWorks = () => {
               alt={`Step ${index + 1}`}
               className="mb-4"
             />
-            <p className="text-xl text-[#4A4B4F] font-medium text-start">{index + 1}. {step}</p>
+            <p className="text-xl text-[#4A4B4F] font-medium text-center">
+              {index + 1}. {step}
+              {/* {step === "Take a quick 5-minute self-check" ? (
+                <>
+                  Take a quick 5-minute <br /> self-check
+                </>
+              ) : (
+                <>{step}</>
+              )} */}
+            </p>
           </div>
         ))}
       </div>

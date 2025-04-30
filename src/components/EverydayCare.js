@@ -3,7 +3,7 @@ import React from "react";
 const EverydayCare = ({ title, subtitle, features }) => {
 
   return (
-    <div className="w-full px-5 mx-auto mt-[120px] font-quicksand flex flex-col items-center justify-center">
+    <div className="w-full px-[80px] mx-auto mt-[120px] font-quicksand flex flex-col items-center justify-center">
       <h2 className={`text-3xl leading-10 font-medium text-center ${subtitle ? "" : "mb-16"}`}>
         {title}
       </h2>
@@ -13,7 +13,7 @@ const EverydayCare = ({ title, subtitle, features }) => {
         </h2>
       )}
 
-      <div className={`flex justify-between ${subtitle ? "gap-[160px]" : "gap-[64px]"} `}>
+      <div className={`w-full flex justify-between`}>
         {features.map((item, index) => (
           <div
             key={index}

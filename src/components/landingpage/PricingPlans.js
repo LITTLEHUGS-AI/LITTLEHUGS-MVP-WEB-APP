@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../common/Navbar'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const plans = [
   {
@@ -80,6 +80,7 @@ const features = [
 ];
 
 const PricingPlans = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -91,7 +92,10 @@ const PricingPlans = () => {
                 <h3 className="text-xl font-semibold text-gray-800">{plan.title}</h3>
                 <p className="mt-1 text-sm text-gray-600">{plan.description}</p>
                 <p className="mt-4 text-2xl font-bold text-blue-600">{plan.price}</p>
-                <button className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <button
+                  onClick={() => {navigate("/contact")}}
+                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                >
                   {plan.button}
                 </button>
                 <ul className="mt-4 text-sm text-gray-700 space-y-2">
@@ -189,7 +193,7 @@ const PricingPlans = () => {
       </div>
 
       <>
-        <div className="h-[10px] mt-[120px]"></div>
+        <div className="h-[10px] mt-[30px]"></div>
         <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
           {/* Curve Top */}
           <div className="absolute top-0 left-0 w-full">

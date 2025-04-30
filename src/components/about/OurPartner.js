@@ -3,7 +3,7 @@ import React from 'react'
 function OurPartner() {
     return (
         <section className="w-full px-[80px] font-quicksand text-800 mt-[120px]">
-            <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">Our Partners in Care</h2>
+            <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">Meet Our's Experts</h2>
             <div className="flex flex-col md:flex-row justify-center gap-8 mt-8 mb-8">
                 <div className="rounded-lg p-6 bg-[#FAF3ED] w-1/4">
                     <img

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ForThis() {
     const dropdown_data = [
@@ -39,6 +40,8 @@ function ForThis() {
         description: "Daily milestone moments, sensory play, and gentle rituals that help your child thrive",
         image: "/landing/Children.png"
     })
+
+    const navigate = useNavigate()
 
     const handleNext = () => {
         const currentIndex = dropdown_data.findIndex(item => item.title === selectedData.title);
@@ -86,7 +89,9 @@ function ForThis() {
                 <div className="w-full md:w-1/3 text-left md:pl-8">
                     <h3 className="text-[24px] font-[600] text-[#4A4B4F] mb-4">{selectedData.sub_heading}</h3>
                     <p className="text-lg text-[#4A4B4F] mb-8">{selectedData.description}</p>
-                    <button className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-full">Explore Our Assessments</button>
+                    <button
+                        onClick={() => {navigate("/assesment-landing")}}
+                        className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-full">Explore Our Assessments</button>
                 </div>
             </div>
         </div>

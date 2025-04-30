@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const MainHeader = () => {
     return (
@@ -8,16 +9,23 @@ const MainHeader = () => {
                     We check in where most <br />
                     systems don’t
                 </h1>
-                <p className="text-xl font-quicksand text-[#4A4B4F]">
+                <p className="text-xl font-quicksand text-[#4A4B4F] mb-6">
                     LittleHugs is an emotionally intelligent wellness platform that helps families and institutions spot early signs of emotional and developmental risks — and respond with gentle, guided care.
                 </p>
                 <p className="text-xl font-quicksand text-[#4A4B4F] mb-6">
                     From the first nudge to the final insight, we’re here to make care simpler, stigma-free, and deeply human.
                 </p>
                 <div className="flex items-center gap-4 mb-6">
-                    <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                        Try for Free
-                    </button>
+                    <Link to="/assesment-landing">
+                        <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                            Take the free test
+                        </button>
+                    </Link>
+                    <Link to="/partener-landing">
+                        <button className="px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition">
+                            Partner with us
+                        </button>
+                    </Link>
                 </div>
             </div>
             <div className="flex justify-center items-center p-5">

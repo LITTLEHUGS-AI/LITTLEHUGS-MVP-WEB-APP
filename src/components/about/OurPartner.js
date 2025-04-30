@@ -2,9 +2,9 @@ import React from 'react'
 
 function OurPartner() {
     return (
-        <section className="w-full px-5 font-quicksand text-800 mt-[60px]">
+        <section className="w-full px-[80px] font-quicksand text-800 mt-[120px]">
             <h2 className="text-4xl font-medium font-quicksand text-[#4A4B4F] text-center">Our Partners in Care</h2>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-8 mb-8 max-w-7xl mx-auto px-10">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-8 mt-8 mb-8">
                 <div className="rounded-lg p-6 bg-[#FAF3ED]">
                     <img
                         src="/images/about_4.svg"

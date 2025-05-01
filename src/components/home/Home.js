@@ -33,18 +33,20 @@ function Home() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col w-full min-h-screen overflow-x-hidden">
             <Navbar />
-            <HeroSection />
-            <WhatIsLittleHugs />
-            <HowItWorks />
-            <DeserveCare />
-            <EverydayCare
-                title={everyDayCareData.title}
-                features={everyDayCareData.feature}
-            />
-            <MakeUsDiff />
-            {/* <NewCareSection /> */}
+            <main className="w-full">
+                <HeroSection />
+                <WhatIsLittleHugs />
+                <HowItWorks />
+                <DeserveCare />
+                <EverydayCare
+                    title={everyDayCareData.title}
+                    features={everyDayCareData.feature}
+                />
+                <MakeUsDiff />
+                {/* <NewCareSection /> */}
+            </main>
             <Footer />
         </div>
     )

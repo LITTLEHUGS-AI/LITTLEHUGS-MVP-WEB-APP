@@ -42,14 +42,23 @@ const Navbar = () => {
           <Link to="/contact">Contact Us</Link>
         </li>
       </ul>
-
-      <button
-        onClick={() => navigate('/contact')}
-        className="w-[120px] h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
-      >
-        Try For Free
-      </button>
-
+      {isActive("/contact") ? (
+        <>
+          <div
+            className="w-[120px] h-[42px]"
+          >
+          </div>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-[120px] h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
+          >
+            Try For Free
+          </button>
+        </>
+      )}
     </nav>
   );
 };

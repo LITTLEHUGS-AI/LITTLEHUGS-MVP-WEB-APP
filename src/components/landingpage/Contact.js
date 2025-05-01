@@ -95,12 +95,12 @@ const Contact = () => {
 
             <div
                 className="flex-grow bg-[#FFF7F2] flex items-center justify-center relative"
-                style={{
-                    backgroundImage: "url('/images/waitlist.png'), url('/images/littlehugs-bg.png')",
-                    backgroundRepeat: 'no-repeat, no-repeat',
-                    backgroundPosition: 'center, bottom left',
-                    backgroundSize: 'cover, contain',
-                }}
+                // style={{
+                //     backgroundImage: "url('/images/waitlist.png'), url('/images/littlehugs-bg.png')",
+                //     backgroundRepeat: 'no-repeat, no-repeat',
+                //     backgroundPosition: 'center, bottom left',
+                //     backgroundSize: 'cover, contain',
+                // }}
             >
                 <div className="w-full px-6 py-12 text-center">
                     <h1 className="text-2xl md:text-4xl font-medium font-quicksand text-[#4A4B4F] mb-4 text-center">

@@ -15,29 +15,31 @@ function MakeUsDiff() {
             img: "/images/make_3.svg",
         },
         {
-            title: " All-in-one, not all over the place",
+            title: "All-in-one, not all over the place",
             img: "/images/make_4.svg",
         },
     ];
 
     return (
-        <div className="w-full px-[80px] mx-auto mt-[120px] font-quicksand flex flex-col items-center justify-center">
-            <h2 className="text-3xl font-medium mb-16 mt-8 text-center">
+        <div className="w-full mx-auto mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px] font-quicksand flex flex-col items-center justify-center">
+            <h2 className="text-2xl sm:text-3xl font-medium mb-8 sm:mb-12 lg:mb-16 mt-4 sm:mt-6 lg:mt-8 text-center">
                 What makes us different?
             </h2>
 
-            <div className="w-full flex justify-between">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
                 {features.map((item, index) => (
                     <div
                         key={index}
-                        className="flex flex-col items-center text-center gap-[28px]"
+                        className="flex flex-col items-center text-center gap-4 md:gap-6 mb-8 lg:mb-0"
                     >
-                        <img
-                            src={`${item.img}`}
-                            alt={`Care ${index + 1}`}
-                            className="mb-4"
-                        />
-                        <p className="text-xl font-normal text-[#4A4B4F]">{item.title}</p>
+                        <div className="w-full flex justify-center">
+                            <img
+                                src={item.img}
+                                alt={`Feature ${index + 1}: ${item.title}`}
+                                className="mb-2 md:mb-4 max-w-full h-auto max-h-40"
+                            />
+                        </div>
+                        <p className="text-lg sm:text-xl font-normal text-[#4A4B4F] px-2">{item.title}</p>
                     </div>
                 ))}
             </div>

@@ -22,10 +22,10 @@ const WhatIsLittleHugs = () => {
           <div className="text-2xl sm:text-3xl md:text-4xl font-medium leading-snug text-[#4A4B4F] mb-4">
             "Early support for the people who care the most"
           </div>
-          <p className="text-base sm:text-lg md:text-xl pt-2 font-normal text-[#4A4B4F] mb-4">
+          <p className="text-base sm:text-lg md:text-xl pt-2 font-normal text-[#4A4B4F] mb-4 text-center md:text-left">
             LittleHugs is India's first emotionally intelligent care platform for women and children. We help caregivers and professionals screen for early signs of burnout, anxiety, and developmental delays — and guide them through gentle, expert-informed routines that bring clarity, not overwhelm.
           </p>
-          <p className="text-base sm:text-lg md:text-xl font-normal text-[#4A4B4F]">
+          <p className="text-base sm:text-lg md:text-xl font-normal text-[#4A4B4F] text-center md:text-left">
             Whether you're a mom navigating emotional exhaustion, or a therapist supporting dozens of children — LittleHugs was built to support you too.
           </p>
         </div>

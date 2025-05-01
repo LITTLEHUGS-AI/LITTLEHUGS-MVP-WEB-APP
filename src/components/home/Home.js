@@ -33,7 +33,7 @@ function Home() {
     };
 
     return (
-        <div className="flex flex-col w-full min-h-screen overflow-x-hidden">
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="w-full">
                 <HeroSection />

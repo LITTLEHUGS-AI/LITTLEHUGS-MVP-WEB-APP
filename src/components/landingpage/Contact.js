@@ -51,7 +51,15 @@ const Contact = () => {
                 purpose: formData.needFor
             };
 
-            const response = await fetch('https://api.ourlittlehugs.com/v1/api/contact-us/', {
+            const origin = window.location.origin;
+            let url = ""
+            if (origin === "https://www.ourlittlehugs.com") {
+                url = "https://api.ourlittlehugs.com/v1/api/contact-us/"
+            } else {
+                url = "https://api.ourlittlehugs.com/v1/api/contact-us/"
+            }
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ const HowItWorks = () => {
       </p>
 
       {/* Steps - Grid for small screens, Flex for larger screens */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex justify-between items-start gap-6 md:gap-8 mt-8 md:mt-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 lg:gap-12 mt-8 md:mt-10">
         {data.map((step, index) => (
           <div
             key={index}

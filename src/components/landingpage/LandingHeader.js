@@ -1,32 +1,46 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 
-
 function LandingHeader({ image, bg_color, title, description, sub_title, button_text }) {
+    // Handle dynamic background color with inline style since Tailwind
+    // doesn't support dynamic class names with string interpolation
+    const backgroundStyle = {
+        backgroundColor: bg_color || '#FAF3ED', // Default fallback color
+    };
+
     return (
-        <div className={`w-full bg-[${bg_color}] font-quicksand flex items-center justify-between px-20 py-8`}>
-            <div className="max-w-[630px] top-274 left-80px gap- 24px">
+        <div
+            className="w-full font-quicksand flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 py-8 md:py-12"
+            style={backgroundStyle}
+        >
+            {/* Text Content */}
+            <div className="w-full lg:max-w-[630px] order-2 lg:order-1 text-center lg:text-left mb-8 lg:mb-0">
                 {sub_title && (
-                    <p className='text-xl text-[#4A4B4F] font-medium'>{sub_title}</p>
+                    <p className='text-lg sm:text-xl text-[#4A4B4F] font-medium mb-2'>
+                        {sub_title}
+                    </p>
                 )}
-                <h1 className="text-4xl font-medium font-quicksand mb-4 leading-snug text-[#4A4B4F]">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 leading-snug text-[#4A4B4F]">
                     {title}
                 </h1>
-                <p className="text-xl font-quicksand text-[#4A4B4F] mb-6">
+                <p className="text-base sm:text-lg md:text-xl text-[#4A4B4F] mb-6">
                     {description}
                 </p>
-                <div className="flex items-center gap-4 mb-6">
-                    <Link to={`${button_text ? "/contact" : "/assesment-landing"}`}><button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                        {button_text ? button_text : "Take the free test"}
-                    </button>
+                <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
+                    <Link to={`${button_text ? "/contact" : "/assesment-landing"}`}>
+                        <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                            {button_text ? button_text : "Take the free test"}
+                        </button>
                     </Link>
                 </div>
             </div>
-            <div className="flex justify-center items-center p-5">
+
+            {/* Image Content */}
+            <div className="w-full lg:w-auto flex justify-center items-center p-2 sm:p-4 order-1 lg:order-2 mb-6 lg:mb-0">
                 <img
                     src={image ? image : "/images/about_header.svg"}
-                    alt="About Header"
-                    className="w-[400px] h-[400px]"
+                    alt="Header illustration"
+                    className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px] h-auto"
                 />
             </div>
         </div>

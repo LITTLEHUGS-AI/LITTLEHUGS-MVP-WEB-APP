@@ -70,37 +70,39 @@ function PartenerLandingPage() {
         button_text="Book a Demo"
       />
 
-      <div className="relative flex font-quicksand justify-between items-center gap-[45px] mt-10 px-4">
-        <div className="w-[600px] flex items-center justify-center">
+      <div className="relative flex flex-col lg:flex-row font-quicksand justify-between items-center gap-6 mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px]">
+        {/* Image Section */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center">
           <img
             src="/images/partner_part_3.svg"
             alt="Step 1"
-            className="h-[600px] "
+            className="w-full max-w-[400px] md:max-w-[500px] lg:max-w-[600px] h-auto lg:h-[600px] object-contain"
           />
         </div>
-        {/* Right Block */}
-        <div className="w-620 md:w-1/2 mt-7 mr-[85px] px-4 py-12">
-          <h2 className="text-3xl font-quicksand font-medium text-gray-800 mb-[20px]">Why LittleHugs?</h2>
-          <p className="uppercase text-[20px] font-quicksand font-medium text-gray-500 tracking-widest mb-6">
+
+        {/* Content Section */}
+        <div className="w-full lg:w-1/2 mt-6 lg:mt-7 lg:mr-[85px] px-0 sm:px-4 py-6 sm:py-8 md:py-12">
+          <h2 className="text-2xl sm:text-2xl md:text-3xl font-quicksand font-medium text-gray-800 mb-3 sm:mb-4 md:mb-[20px]">Why LittleHugs?</h2>
+          <p className="uppercase text-base sm:text-lg md:text-[20px] font-quicksand font-medium text-gray-500 tracking-widest mb-4 sm:mb-5 md:mb-6">
             It's time for mindfulness
           </p>
 
           {/* Accordions */}
-          <div className="space-y-4 font-quicksand font-medium text-[38px]">
+          <div className="space-y-3 sm:space-y-4 font-quicksand font-medium text-2xl sm:text-3xl md:text-[38px]">
             {accordionData.map((item, index) => (
-              <div key={index} className="border-b pb-4">
+              <div key={index} className="border-b pb-3 sm:pb-4">
                 <div
                   className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleAccordion(index)}
                 >
-                  <h3 className="text-[25px] font-medium text-gray-800">{item.title}</h3>
-                  <span className="text-xl">{openIndex === index ? "▾" : "▸"}</span>
+                  <h3 className="text-lg sm:text-xl md:text-[25px] font-medium text-gray-800">{item.title}</h3>
+                  <span className="text-base sm:text-lg md:text-xl">{openIndex === index ? "▾" : "▸"}</span>
                 </div>
 
                 {openIndex === index && item.content.length > 0 && (
-                  <ul className="mt-4 font-quicksand list-disc list-inside text-gray-600 space-y-2 text-xl">
+                  <ul className="mt-2 sm:mt-3 md:mt-4 font-quicksand list-disc list-inside text-gray-600 space-y-1 sm:space-y-2 text-base sm:text-lg md:text-xl">
                     {item.content.map((point, idx) => (
-                      <li key={idx}>{point}</li>
+                      <li key={idx} className="pl-2">{point}</li>
                     ))}
                   </ul>
                 )}
@@ -110,28 +112,26 @@ function PartenerLandingPage() {
         </div>
       </div>
 
-      <div className="flex flex-col mt-6 items-center justify-center min-h-screen p-8">
+      <div className="flex flex-col mt-6 items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
         {/* Heading */}
-        <h1 className="text-3xl md:text-3xl font-medium font-quicksand text-center mb-12">
+        <h1 className="text-2xl sm:text-2xl md:text-3xl font-medium font-quicksand text-center mb-6 sm:mb-8 md:mb-12">
           Request a demo to learn more about how we can support your team
         </h1>
 
         {/* Content */}
-        <div className="flex flex-col md:flex-row items-center justify-center mt-15 gap-16 w-full max-w-5xl">
+        <div className="flex flex-col items-center justify-center mt-6 sm:mt-8 md:mt-10 gap-8 sm:gap-10 md:gap-16 w-full max-w-5xl">
 
           {/* Left Circle */}
-
           <img
             src="/images/partner_part_4.svg"
             alt=""
-            className="w-[400px]"
+            className="w-full max-w-[250px] sm:max-w-[320px] md:max-w-[400px]"
           />
 
-
           {/* Right Form */}
-          <form className="w-90 space-y-4">
+          <form className="w-full max-w-md space-y-3 sm:space-y-4">
             {/* Organisation Type */}
-            <select className="w-full p-3 border rounded-md text-gray-600">
+            <select className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600">
               <option>Organisation Type</option>
               <option>School</option>
               <option>Clinic</option>
@@ -142,14 +142,14 @@ function PartenerLandingPage() {
             <input
               type="text"
               placeholder="Name"
-              className="w-full p-3 border rounded-md"
+              className="w-full p-2.5 sm:p-3 border rounded-md"
             />
 
             {/* Email */}
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-3 border rounded-md"
+              className="w-full p-2.5 sm:p-3 border rounded-md"
             />
 
             {/* Password */}
@@ -157,7 +157,7 @@ function PartenerLandingPage() {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-3 border rounded-md pr-10"
+                className="w-full p-2.5 sm:p-3 border rounded-md pr-10"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer">
                 👁️
@@ -165,14 +165,14 @@ function PartenerLandingPage() {
             </div>
 
             {/* Country and Language Preference */}
-            <div className="flex gap-4">
-              <select className="w-1/2 p-3 border rounded-md text-gray-600">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600">
                 <option>Country</option>
                 <option>USA</option>
                 <option>India</option>
                 <option>UK</option>
               </select>
-              <select className="w-1/2 p-3 border rounded-md text-gray-600">
+              <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600 mt-3 sm:mt-0">
                 <option>Language Preference</option>
                 <option>English</option>
                 <option>Spanish</option>
@@ -180,10 +180,10 @@ function PartenerLandingPage() {
             </div>
 
             {/* Checkbox */}
-            <div className="flex items-start pt-10 gap-7 text-sm font-quicksand font-bold text-gray-600">
+            <div className="flex items-start pt-5 sm:pt-6 md:pt-10 gap-3 sm:gap-4 md:gap-7 text-xs sm:text-sm font-quicksand font-bold text-gray-600">
               <input type="checkbox" className="mt-1" />
               <p>
-                I agree to LittleHugs’s <span className="underline cursor-pointer">Terms & Conditions</span> and acknowledge
+                I agree to LittleHugs's <span className="underline cursor-pointer">Terms & Conditions</span> and acknowledge
                 the <span className="underline cursor-pointer">Privacy Policy</span>.
               </p>
             </div>
@@ -191,7 +191,7 @@ function PartenerLandingPage() {
             {/* Submit Button */}
             <button
               disabled
-              className="w-[25%] px-5 pt-4 bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition"
+              className="w-full sm:w-auto sm:min-w-[120px] md:min-w-[150px] px-4 sm:px-5 py-2.5 sm:py-3 md:pt-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition mt-4"
             >
               Submit
             </button>
@@ -200,11 +200,12 @@ function PartenerLandingPage() {
         </div>
       </div>
 
-      <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-16">
+      <div className="relative bg-[#fef8e6] overflow-hidden mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px]">
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
           <svg
-            className="w-full"
+            className="w-full h-auto"
+            height="100"
             viewBox="0 0 1440 100"
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -217,12 +218,12 @@ function PartenerLandingPage() {
         </div>
 
         {/* Footer Content */}
-        <div className="relative flex flex-col md:flex-row justify-around items-start md:items-center py-16 px-8">
+        <div className="relative flex flex-col items-center gap-8 sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
 
           {/* Left - Who We Serve */}
-          <div className="text-center md:text-left space-y-2">
-            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Who We Serve</h3>
-            <ul className="font-normal font-quicksand text-xl text-gray-600 space-y-1">
+          <div className="text-center md:text-left space-y-1 sm:space-y-2">
+            <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800 mb-1 sm:mb-2">Who We Serve</h3>
+            <ul className="font-normal font-quicksand text-base sm:text-lg md:text-xl text-gray-600 space-y-0.5 sm:space-y-1">
               <li>Clinics</li>
               <li>Schools</li>
               <li>NGO</li>
@@ -232,30 +233,27 @@ function PartenerLandingPage() {
           </div>
 
           {/* Center - Get LittleHugs */}
-          <div className="mb-9 text-center">
-            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 ">Get LittleHugs</h3>
+          <div className="mb-0 sm:mb-4 md:mb-9 text-center">
+            <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
             <Link to="/contact">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white mt-4 py-2 px-6 rounded-full transition">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
                 Get a Demo
               </button>
             </Link>
           </div>
 
           {/* Right - Support */}
-          {/* <div className="text-center md:text-right space-y-2">
-            <h3 className="font-medium font-quicksand text-[28px] text-gray-800 mb-2">Support</h3>
-            <ul className="text-xl font-normal font-quicksand  text-gray-600 space-y-1">
-              <li>FAQ</li>
-              <li>Help</li>
-            </ul>
-          </div> */}
+          {/* Commented out as in original code */}
+          {/* <div className="text-center md:text-right space-y-1 sm:space-y-2">
+      <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800 mb-1 sm:mb-2">Support</h3>
+      <ul className="font-normal font-quicksand text-base sm:text-lg md:text-xl text-gray-600 space-y-0.5 sm:space-y-1">
+        <li>FAQ</li>
+        <li>Help</li>
+      </ul>
+    </div> */}
 
         </div>
-
       </div>
-
-
-
     </div>
   );
 };

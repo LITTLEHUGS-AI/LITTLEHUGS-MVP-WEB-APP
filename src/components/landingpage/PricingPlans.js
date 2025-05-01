@@ -19,7 +19,7 @@ const plans = [
   {
     title: "Self-Wellness Plan",
     description: "For women & caregivers focused on emotional well-being",
-    price: "Rs. 129/- / month",
+    price: "Rs. 129/- month",
     button: "Upgrade Plan",
     features: [
       "1 Assessment/month",
@@ -33,7 +33,7 @@ const plans = [
   },
   {
     title: "Co-Care Plan",
-    description: "For families caring for both the child and the caregiver’s wellness",
+    description: "For families caring for both the child and the caregiver's wellness",
     price: "Rs. 249 / month",
     button: "Upgrade Plan",
     features: [
@@ -60,6 +60,7 @@ const plans = [
     ]
   }
 ];
+
 const features = [
   {
     title: "Rooted in science",
@@ -85,34 +86,39 @@ const PricingPlans = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      {/* Pricing Plans Section */}
+      <div className="bg-white py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {plans.map((plan, index) => (
-            <div key={index} className="border rounded-lg shadow-sm p-6 flex flex-col justify-between">
+            <div
+              key={index}
+              className="border rounded-lg shadow-sm p-4 md:p-6 flex flex-col justify-between h-full transition-transform duration-300 hover:shadow-md hover:scale-[1.02]"
+            >
               <div>
-                <h3 className="text-xl font-semibold text-gray-800">{plan.title}</h3>
-                <p className="mt-1 text-sm text-gray-600">{plan.description}</p>
-                <p className="mt-4 text-2xl font-bold text-blue-600">{plan.price}</p>
+                <h3 className="text-lg md:text-xl font-semibold text-gray-800">{plan.title}</h3>
+                <p className="mt-1 text-xs md:text-sm text-gray-600">{plan.description}</p>
+                <p className="mt-3 md:mt-4 text-xl md:text-2xl font-bold text-blue-600">{plan.price}</p>
                 <button
-                  onClick={() => {navigate("/contact")}}
-                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                  onClick={() => { navigate("/contact") }}
+                  className="mt-3 md:mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300"
                 >
                   {plan.button}
                 </button>
-                <ul className="mt-4 text-sm text-gray-700 space-y-2">
+                <ul className="mt-3 md:mt-4 text-xs md:text-sm text-gray-700 space-y-1 md:space-y-2">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
-                      <span className="text-green-600 mr-2">✔</span>
-                      {feature}
+                      <span className="text-green-600 mr-2 flex-shrink-0">✔</span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 {plan.extras && (
-                  <p className="mt-4 text-sm text-gray-600 italic">{plan.extras}</p>
+                  <p className="mt-3 md:mt-4 text-xs md:text-sm text-gray-600 italic">{plan.extras}</p>
                 )}
               </div>
               {plan.note && (
-                <p className="mt-6 text-sm text-gray-800 font-medium">
+                <p className="mt-4 md:mt-6 text-xs md:text-sm text-gray-800 font-medium">
                   {plan.note}
                 </p>
               )}
@@ -121,11 +127,12 @@ const PricingPlans = () => {
         </div>
       </div>
 
-      <div className="text-center mt-[64px] px-4 bg-white">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+      {/* Consultation Section */}
+      <div className="text-center mt-8 md:mt-16 px-4 py-8 bg-white">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
           Not sure where to begin?
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-sm md:text-base text-gray-600 mb-6 max-w-2xl mx-auto">
           Start with a free consultation with one of our pediatric experts and see how LittleHugs works for you.
         </p>
         <button
@@ -135,53 +142,32 @@ const PricingPlans = () => {
         </button>
       </div>
 
-      <div className="w-full px-5 mx-auto mt-[45px] font-quicksand flex flex-col items-center justify-center">
-        <h2 className="text-3xl font-semibold mb-16 mt-8 text-center">
+      {/* Tools Development Section */}
+      <div className="w-full px-4 md:px-8 mx-auto mt-8 md:mt-12 font-quicksand flex flex-col items-center justify-center">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-8 md:mb-16 text-center">
           How Each Tool is Developed
         </h2>
 
-        <div className="flex justify-between gap-[64px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {features.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col items-center text-center gap-[28px]"
+              className="flex flex-col items-center text-center gap-4 md:gap-6"
             >
               <img
                 src={`${item.img}`}
                 alt={`Care ${index + 1}`}
-                className="mb-4"
+                className="mb-2 md:mb-4 w-16 md:w-auto"
               />
-              <p className="text-xl font-normal text-[#4A4B4F]">{item.title}</p>
+              <p className="text-lg md:text-xl font-normal text-[#4A4B4F]">{item.title}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* <div className="bg-white px-6 md:px-16  mt-[35px] text-gray-700">
-        <p className="text-xl font-normal font-quicksand md:text-base mb-4">
-          They’re not medical tests. They’re private, research-backed check-ins — designed to help you understand yourself and your child, before things feel too heavy.
-        </p>
-
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 text-center mt-[64px] mb-6">
-          Developed With Experts. Translated For You.
-        </h2>
-
-        <p className="mb-4 text-sm mt-[64px] md:text-base">
-          Each tool is co-developed or reviewed by the top pediatricians, child psychologists, and women’s wellness experts in the country, and translated into everyday, relatable language.
-        </p>
-
-        <ul className="list-disc pl-5 space-y-2 text-sm md:text-base">
-          <li><strong>EPDS</strong> – Edinburgh Postnatal Depression Scale</li>
-          <li><strong>GAD-7 & PHQ-9</strong> – for anxiety and mood self-checks</li>
-          <li><strong>WHO & IAP Developmental Guidelines</strong> – for child milestone tracking</li>
-          <li><strong>DSM-5 aligned behavior checklists</strong> – for early emotional insights in children</li>
-          <li><strong>Validated symptom scales</strong> – for PMS, perimenopause, and menopause wellness</li>
-          <li><strong>Ongoing research</strong> from NIH, CDC, and peer-reviewed health journals</li>
-        </ul>
-      </div> */}
-
-      <div className="bg-white px-6 md:px-16 py-12 mt-[45px] text-center text-gray-700">
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6">
+      {/* Privacy Section */}
+      <div className="bg-white px-4 md:px-16 py-8 md:py-12 mt-8 md:mt-12 text-center text-gray-700">
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 md:mb-6">
           Private. Safe. Judgment-Free.
         </h2>
 
@@ -189,53 +175,51 @@ const PricingPlans = () => {
           <p className="font-medium text-gray-800 mb-1">
             Your data stays yours. Always.
           </p>
-          <p className="text-sm md:text-base text-gray-600">
-            LittleHugs doesn’t diagnose or label. We simply help you notice the signs earlier, reflect with clarity, and take small, guided steps forward — all at your pace.
+          <p className="text-xs md:text-base text-gray-600">
+            LittleHugs doesn't diagnose or label. We simply help you notice the signs earlier, reflect with clarity, and take small, guided steps forward — all at your pace.
           </p>
         </div>
       </div>
 
-      <>
-        <div className="h-[10px] mt-[30px]"></div>
-        <div className="relative bg-[#fef8e6] overflow-hidden pt-20 pb-8">
-          {/* Curve Top */}
-          <div className="absolute top-0 left-0 w-full">
-            <svg
-              className="w-full"
-              viewBox="0 0 1440 100"
-              preserveAspectRatio="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill="#ffffff"
-                d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
-              ></path>
-            </svg>
-          </div>
+      {/* Join Movement Section */}
+      <div className="h-[10px] mt-6 md:mt-8"></div>
+      <div className="relative bg-[#fef8e6] overflow-hidden pt-12 md:pt-20 pb-8">
+        {/* Curve Top */}
+        <div className="absolute top-0 left-0 w-full">
+          <svg
+            className="w-full"
+            viewBox="0 0 1440 100"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#ffffff"
+              d="M0,100 C480,0 960,0 1440,100 L1440,0 L0,0 Z"
+            ></path>
+          </svg>
+        </div>
 
-          <div className='flex flex-col items-center justify-center'>
-            <h2 className="text-3xl font-semibold text-[#4A4B4F] mb-6 font-quicksand">
-              Join the Movement
-            </h2>
-            <p className="text-lg max-w-3xl text-[#4A4B4F] mb-10 px-4 font-quicksand">
-              We’re building more than a platform — we’re building a world where every child feels seen early, and every caregiver feels supported. Whether you’re a school, clinic, parent, or simply someone who believes in early care, we’d love to build with you.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <Link to="/assesment-landing">
-                <button className="bg-[#283036] text-white px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#1f252b] transition">
-                  Take the free test
-                </button>
-              </Link>
-              <Link to="/partener-landing">
-                <button className="border border-[#283036] text-[#283036] px-8 py-3 rounded-full font-semibold text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
-                  Partner with us
-                </button>
-              </Link>
-            </div>
+        <div className='flex flex-col items-center justify-center px-4'>
+          <h2 className="text-2xl md:text-3xl font-semibold text-[#4A4B4F] mb-4 md:mb-6 font-quicksand text-center">
+            Join the Movement
+          </h2>
+          <p className="text-base md:text-lg max-w-3xl text-[#4A4B4F] mb-6 md:mb-10 px-4 font-quicksand text-center">
+            We're building more than a platform — we're building a world where every child feels seen early, and every caregiver feels supported. Whether you're a school, clinic, parent, or simply someone who believes in early care, we'd love to build with you.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full sm:w-auto">
+            <Link to="/assesment-landing" className="w-full sm:w-auto">
+              <button className="w-full bg-[#283036] text-white px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#1f252b] transition">
+                Take the free test
+              </button>
+            </Link>
+            <Link to="/partener-landing" className="w-full sm:w-auto">
+              <button className="w-full border border-[#283036] text-[#283036] px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
+                Partner with us
+              </button>
+            </Link>
           </div>
         </div>
-      </>
-
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ const Contact = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        needFor: 'Organisation'
+        needFor: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
@@ -70,7 +70,7 @@ const Contact = () => {
                 setFormData({
                     name: '',
                     email: '',
-                    needFor: 'Organisation'
+                    needFor: ''
                 });
             console.log(formData);
             } else {
@@ -132,7 +132,7 @@ const Contact = () => {
                                 value={formData.name}
                                 onChange={handleChange}
                                 placeholder="* Name"
-                                className="w-full px-4 py-3 rounded-md border bg-[#FAF3ED] focus:outline-none focus:ring-2 focus:ring-[#FFA500]"
+                                className="w-full px-4 py-3 rounded-md border bg-[#FAF3ED] focus:outline-none"
                                 required
                             />
 
@@ -142,7 +142,7 @@ const Contact = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="* Email"
-                                className="w-full px-4 py-3 rounded-md border bg-[#FAF3ED] border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFA500]"
+                                className="w-full px-4 py-3 rounded-md border bg-[#FAF3ED] border-gray-300 focus:outline-none"
                                 required
                             />
 
@@ -150,9 +150,10 @@ const Contact = () => {
                                 name="needFor"
                                 value={formData.needFor}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-md border bg-[#FAF3ED] border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFA500]"
+                                className="w-full px-4 py-3 font-normal rounded-md border bg-[#FAF3ED] border-gray-300 focus:outline-none"
                                 required
                             >
+                                <option value="" disabled hidden>Select type</option>
                                 <option value="Organisation">Organisation</option>
                                 <option value="Personal">Personal</option>
                             </select>

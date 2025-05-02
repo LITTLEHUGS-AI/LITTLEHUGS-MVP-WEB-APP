@@ -7,13 +7,18 @@ function SignIn() {
         <div className="flex flex-col min-h-screen bg-[#fef9f6]">
             <Navbar />
             <div
-                className="min-h-screen flex items-center justify-center bg-cover bg-center"
-                style={{ backgroundImage: "url('/images/sign in.png')" }} // Your uploaded background image
+            className="flex-grow flex  items-center justify-center relative overflow-hidden"
+                style={{
+                    backgroundImage: "url('/images/sign in.png')",
+                    backgroundRepeat: 'no-repeat, no-repeat',
+                    backgroundPosition: 'center, top left',
+                    backgroundSize: 'cover, contain',
+                }} // Your uploaded background image
             >
                 <div className="bg-white rounded-md shadow-md p-8 w-full max-w-md border">
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-1">Sign In</h2>
                     <p className="text-center text-sm text-gray-600 mb-6">
-                        New here? <Link to="#" className="text-blue-500 hover:underline">Sign up</Link>
+                        New here? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
                     </p>
 
                     <form className="space-y-4">
@@ -49,12 +54,12 @@ function SignIn() {
                         <div className="flex justify-center mt-4">
                             <button
                                 type="button"
-                                className="w-full border px-4 py-2 rounded hover:bg-gray-100 bg-[#f9f0e9]"
-                            >
+                                className="mt-2 w-full flex items-center justify-center gap-2 text-sm bg-[#fef3e6] border border-gray-200 rounded-full py-2 hover:bg-[#f8e9d8]"
+                >
                                 <img
-                                    src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Google__G__logo.svg"
+                                    src="/icons/google-icon.svg"
                                     alt="Google"
-                                    className="w-5 h-5 inline mr-2"
+                                    className="w-10 h-5"
                                 />
                                 Sign in with Google
                             </button>

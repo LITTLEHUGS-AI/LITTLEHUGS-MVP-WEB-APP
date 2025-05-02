@@ -71,12 +71,10 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
+                <li>Developmental milestones (motor, speech, cognitive, social)</li>
+                <li>data[heading].input_l1Attention, learning, autism signs, behavioral regulation</li>
+                <li>Mood, anxiety, social-emotional health</li>
+                <li>Growth, nutrition, sensory function, immunizations</li>
               </ul>
             </div>
 
@@ -84,10 +82,10 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-6 sm:mb-8 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
+                <li>RAG status (Red/Amber/Green) for each domain</li>
+                <li>Risk flags and severity scores</li>
+                <li>data[heading].input_l1Personalized insights, home strategies, and referral guidance</li>
+                <li>Shareable caregiver summary (optional PDF)</li>
               </ul>
             </div>
           </>
@@ -101,12 +99,11 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
+                <li>Self-Awareness: Emotions, triggers, strengths</li>
+                <li>Self-Regulation: Stress management, impulse control</li>
+                <li>Social Awareness: Empathy, inclusion, perspective-taking</li>
+                <li>Relationship Skills: Communication, boundaries, conflict resolution</li>
+                <li>Responsible Decision-Making: Ethics, reflection, choices</li>
               </ul>
             </div>
 
@@ -114,10 +111,11 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-6 sm:mb-8 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
-                <li>data[heading].input_l1</li>
+                <li>Domain scores: Thriving, Developing, Needs Support</li>
+                <li>Strengths/growth summary</li>
+                <li>Personalized action steps & micro-habits</li>
+                <li>Optional external feedback layer (for children or shared settings)</li>
+                <li>Referral suggestions for high emotional or relational concern</li>
               </ul>
             </div>
           </>

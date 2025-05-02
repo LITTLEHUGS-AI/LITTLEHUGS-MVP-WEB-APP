@@ -132,7 +132,7 @@ function PartenerLandingPage() {
           <form className="w-full max-w-md space-y-3 sm:space-y-4">
             {/* Organisation Type */}
             <select className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600">
-              <option>Organisation Type</option>
+              <option value="" disabled hidden selected>Organisation Type</option>
               <option>School</option>
               <option>Clinic</option>
               <option>Other</option>
@@ -167,13 +167,13 @@ function PartenerLandingPage() {
             {/* Country and Language Preference */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600">
-                <option>Country</option>
+                <option value="" disabled hidden selected>Country</option>
                 <option>USA</option>
                 <option>India</option>
                 <option>UK</option>
               </select>
               <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600 mt-3 sm:mt-0">
-                <option>Language Preference</option>
+                <option value="" disabled hidden selected>Language Preference</option>
                 <option>English</option>
                 <option>Spanish</option>
               </select>

@@ -75,7 +75,7 @@ function ForThis() {
                         <img
                             src="/icons/mingcute_dow-line.svg"
                             alt="Previous"
-                            className={`w-8 h-8 transform rotate-180 ${dropdown_data.findIndex(item => item.title === selectedData.title) === 0 ? 'opacity-50' : 'opacity-100'}`}
+                            className={`w-8 h-8  ${dropdown_data.findIndex(item => item.title === selectedData.title) === 0 ? 'opacity-50' : 'opacity-100'}`}
                         />
                     </button>
                     <span className="text-lg font-medium text-[#4A4B4F]">

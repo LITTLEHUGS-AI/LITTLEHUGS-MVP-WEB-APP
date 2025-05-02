@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function AssesmentLandingPage() {
     const navigate = useNavigate();
     const [showPopup, setShowPopup] = useState(false);
+    const [title, setTitle] = useState("");
 
     const cards = [
         {
@@ -68,10 +69,13 @@ function AssesmentLandingPage() {
                                     <button
                                         onClick={() => {
                                             if (index === 0) {
-                                                setShowPopup(true);
-                                            } else {
-                                                navigate("/contact");
+                                                setTitle(1)
+                                            } else if (index === 1) {
+                                                setTitle(2)
+                                            } else if (index === 2) {
+                                                setTitle(3)
                                             }
+                                            setShowPopup(true);
                                         }}
                                         className="bg-[#1E2C2B] text-white py-2 md:py-3 px-6 md:px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[180px] text-sm md:text-base"
                                     >
@@ -81,7 +85,10 @@ function AssesmentLandingPage() {
                             ))}
                         </div>
                     </div>
-                    {showPopup && <WellnessAssessment onClose={() => setShowPopup(false)} />}
+                    {showPopup && <WellnessAssessment 
+                        onClose={() => setShowPopup(false)}
+                        heading={title}
+                    />}
                 </div>
 
                 {/* Introduction Section */}

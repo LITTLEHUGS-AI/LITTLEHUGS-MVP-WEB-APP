@@ -6,7 +6,7 @@ const plans = [
   {
     title: "Wellness Starter",
     description: "For first-time users exploring basic check-ins",
-    price: "Rs. 69/-",
+    price: "69₹",
     button: "Choose Plan",
     features: [
       "1 Assessment",
@@ -19,7 +19,7 @@ const plans = [
   {
     title: "Self-Wellness Plan",
     description: "For women & caregivers focused on emotional well-being",
-    price: "Rs. 129/- month",
+    price: "129₹ per month",
     button: "Upgrade Plan",
     features: [
       "1 Assessment/month",
@@ -34,7 +34,7 @@ const plans = [
   {
     title: "Co-Care Plan",
     description: "For families caring for both the child and the caregiver's wellness",
-    price: "Rs. 249 / month",
+    price: "249₹ per month",
     button: "Upgrade Plan",
     features: [
       "2 Assessments/month",

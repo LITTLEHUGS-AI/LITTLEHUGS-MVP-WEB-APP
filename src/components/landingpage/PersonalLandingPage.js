@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Navbar from '../common/Navbar'
 import LandingHeader from './LandingHeader'
 import ForThis from './ForThis'
-import { useNavigate } from 'react-router-dom';
 import WellnessAssessment from './WellnessAssessment';
 import { Link } from 'react-router-dom';
 // import HugSelection from './HugSelection'
@@ -25,8 +24,8 @@ function PersonalLandingPage() {
                 "A high-level mind-body-social scan that gives a complete picture of a woman’s mental health, emotional resilience, self-care capacity, and support system.",
         },
     ];
-    const navigate = useNavigate()
     const [showPopup, setShowPopup] = useState(false);
+    const [title, setTitle] = useState("");
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -66,10 +65,13 @@ function PersonalLandingPage() {
                                 <button
                                     onClick={() => {
                                         if (index === 0) {
-                                            setShowPopup(true)
-                                        } else {
-                                            navigate("/contact")
+                                            setTitle(1)
+                                        } else if (index === 1) {
+                                            setTitle(2)
+                                        } else if (index === 2) {
+                                            setTitle(3)
                                         }
+                                        setShowPopup(true);
                                     }}
                                     className="bg-[#263238] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[160px] sm:max-w-[180px] text-sm sm:text-base"
                                 >
@@ -78,7 +80,10 @@ function PersonalLandingPage() {
                             </div>
                         ))}
                     </div>
-                    {showPopup && <WellnessAssessment onClose={() => setShowPopup(false)} />}
+                    {showPopup && <WellnessAssessment 
+                        onClose={() => setShowPopup(false)}
+                        heading={title}
+                    />}
                 </div>
             </section>
             <>

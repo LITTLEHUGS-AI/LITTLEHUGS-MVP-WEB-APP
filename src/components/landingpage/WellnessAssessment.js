@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const WellnessAssessment = ({ onClose }) => {
+const WellnessAssessment = ({ onClose, heading }) => {
   const navigate = useNavigate();
 
   // Prevent body scrolling when modal is open
@@ -32,32 +32,97 @@ const WellnessAssessment = ({ onClose }) => {
         </button>
 
         {/* Title */}
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-          LittleHugs 360° Women's Wellness Assessment
-        </h1>
+        {heading === 1 ? (
+          <>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
+            LittleHugs 360° Women's Wellness Assessment
+            </h1>
 
-        {/* What it Assesses Section */}
-        <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
-          <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-            <li>Mood & emotional balance</li>
-            <li>Anxiety, overthinking</li>
-            <li>Physical energy & fatigue</li>
-            <li>Support systems in relationship quality</li>
-            <li>Self-care routines & burnout-warning sign</li>
-          </ul>
-        </div>
+            {/* What it Assesses Section */}
+            <div className="mb-4 sm:mb-6 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>Mood & emotional balance</li>
+                <li>Anxiety, overthinking</li>
+                <li>Physical energy & fatigue</li>
+                <li>Support systems in relationship quality</li>
+                <li>Self-care routines & burnout-warning sign</li>
+              </ul>
+            </div>
 
-        {/* Output Section */}
-        <div className="mb-6 sm:mb-8 px-2 sm:px-4">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
-          <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-            <li>HAC Wellness Score</li>
-            <li>Key theme insights (e.g. "You feel unsupported," "You're emotionally fatigued")</li>
-            <li>AI-supported nudges (swimming, rest rituals, conversation starter pools)</li>
-            <li>PDF summary with personal wellness trendline</li>
-          </ul>
-        </div>
+            {/* Output Section */}
+            <div className="mb-6 sm:mb-8 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>HAC Wellness Score</li>
+                <li>Key theme insights (e.g. "You feel unsupported," "You're emotionally fatigued")</li>
+                <li>AI-supported nudges (swimming, rest rituals, conversation starter pools)</li>
+                <li>PDF summary with personal wellness trendline</li>
+              </ul>
+            </div>
+          </>
+        ) : heading === 2 ? (
+          <>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
+            LittleHugs 360° Children's Wellness Assessment
+            </h1>
+
+            {/* What it Assesses Section */}
+            <div className="mb-4 sm:mb-6 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+              </ul>
+            </div>
+
+            {/* Output Section */}
+            <div className="mb-6 sm:mb-8 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+              </ul>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
+            Universal SEL Assessment
+            </h1>
+
+            {/* What it Assesses Section */}
+            <div className="mb-4 sm:mb-6 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+              </ul>
+            </div>
+
+            {/* Output Section */}
+            <div className="mb-6 sm:mb-8 px-2 sm:px-4">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
+              <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+                <li>data[heading].input_l1</li>
+              </ul>
+            </div>
+          </>
+        )}
+
 
         {/* Divider */}
         <div className="border-t border-gray-200 my-4 sm:my-6"></div>

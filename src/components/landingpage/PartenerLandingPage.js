@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../common/Navbar';
 import LandingHeader from './LandingHeader';
 import { Link } from "react-router-dom";
@@ -56,6 +56,38 @@ function PartenerLandingPage() {
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
+  };
+
+  const [countries, setCountries] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    fetch('https://restcountries.com/v3.1/all')
+      .then((res) => res.json())
+      .then((data) => {
+        const sorted = data
+          .map((country) => country.name.common)
+          .sort((a, b) => a.localeCompare(b));
+        setCountries(sorted);
+      })
+      .catch((error) => console.error('Error fetching countries:', error));
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelect = (country) => {
+    setSelectedCountry(country);
+    setIsOpen(false);
   };
 
   return (
@@ -133,9 +165,11 @@ function PartenerLandingPage() {
             {/* Organisation Type */}
             <select className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600">
               <option value="" disabled hidden selected>Organisation Type</option>
-              <option>School</option>
-              <option>Clinic</option>
-              <option>Other</option>
+              <option>Clinics</option>
+              <option>Schools</option>
+              <option>NGO</option>
+              <option>Therapy Centers</option>
+              <option>Organization</option>
             </select>
 
             {/* Name */}
@@ -165,19 +199,42 @@ function PartenerLandingPage() {
             </div>
 
             {/* Country and Language Preference */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600">
-                <option value="" disabled hidden selected>Country</option>
-                <option>USA</option>
-                <option>India</option>
-                <option>UK</option>
-              </select>
-              <select className="w-full sm:w-1/2 p-2.5 sm:p-3 border rounded-md text-gray-600 mt-3 sm:mt-0">
-                <option value="" disabled hidden selected>Language Preference</option>
-                <option>English</option>
-                <option>Spanish</option>
-              </select>
+            <div className="relative w-full" ref={dropdownRef}>
+              {/* Dropdown Trigger */}
+              <div
+                className="flex justify-between items-center border p-3 rounded-md text-gray-700 cursor-pointer bg-white hover:shadow-sm transition-shadow"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <span className={`${!selectedCountry ? 'text-gray-400' : ''}`}>
+                  {selectedCountry || 'Select Country'}
+                </span>
+                <svg
+                  className={`w-5 h-5 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+
+              {/* Dropdown List */}
+              {isOpen && (
+                <ul className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg z-20">
+                  {countries.map((country) => (
+                    <li
+                      key={country}
+                      onClick={() => handleSelect(country)}
+                      className="px-4 py-2 hover:bg-gray-100 text-gray-700 cursor-pointer transition-colors"
+                    >
+                      {country}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+
 
             {/* Checkbox */}
             <div className="flex items-start pt-5 sm:pt-6 md:pt-10 gap-3 sm:gap-4 md:gap-7 text-xs sm:text-sm font-quicksand font-bold text-gray-600">
@@ -228,7 +285,7 @@ function PartenerLandingPage() {
               <li>Schools</li>
               <li>NGO</li>
               <li>Therapy Centers</li>
-              <li>Agency</li>
+              <li>Organization</li>
             </ul>
           </div>
 

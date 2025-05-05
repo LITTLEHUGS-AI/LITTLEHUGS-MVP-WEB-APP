@@ -169,7 +169,7 @@ function PartenerLandingPage() {
               <option>Schools</option>
               <option>NGO</option>
               <option>Therapy Centers</option>
-              <option>Organization</option>
+              <option>Corporate</option>
             </select>
 
             {/* Name */}
@@ -285,7 +285,7 @@ function PartenerLandingPage() {
               <li>Schools</li>
               <li>NGO</li>
               <li>Therapy Centers</li>
-              <li>Organization</li>
+              <li>Corporate</li>
             </ul>
           </div>
 

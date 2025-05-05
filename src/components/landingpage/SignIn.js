@@ -15,9 +15,9 @@ function SignIn() {
                     backgroundSize: 'cover, contain',
                 }} // Your uploaded background image
             >
-                <div className="bg-white rounded-md shadow-md p-8 w-full max-w-md border">
+                <div className="bg-white rounded-md shadow-md p-8 w-[980px] max-w-md border">
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-1">Sign In</h2>
-                    <p className="text-center text-sm text-gray-600 mb-6">
+                    <p className="text-center text-sm py-2 mb-2 text-gray-600 ">
                         New here? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
                     </p>
 
@@ -33,11 +33,11 @@ function SignIn() {
                             className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
 
-                        <div className="text-right">
+                        <div className="text-left">
                             <Link to="#" className="text-sm text-orange-500 hover:underline">Forgot Password?</Link>
                         </div>
 
-                        <div className="flex items-start space-x-2 text-sm text-gray-600">
+                        <div className="flex items-start py-5 space-x-2 text-sm text-gray-600">
                             <input type="checkbox" id="terms" />
                             <label htmlFor="terms">
                                 I agree to LittleHugs's <Link to="#" className="text-blue-500 underline">Terms & Conditions</Link> and acknowledge the <Link to="#" className="text-blue-500 underline">Privacy Policy</Link>.
@@ -59,9 +59,9 @@ function SignIn() {
                                 <img
                                     src="/icons/google-icon.svg"
                                     alt="Google"
-                                    className="w-10 h-5"
+                                    className="w-10 h-5 justify-center"
                                 />
-                                Sign in with Google
+                               
                             </button>
                         </div>
                     </form>

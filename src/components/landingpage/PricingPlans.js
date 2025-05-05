@@ -6,7 +6,7 @@ const plans = [
   {
     title: "Wellness Starter",
     description: "For first-time users exploring basic check-ins",
-    price: "69₹",
+    price: "₹69 per month",
     button: "Choose Plan",
     features: [
       "1 Assessment",
@@ -19,7 +19,7 @@ const plans = [
   {
     title: "Self-Wellness Plan",
     description: "For women & caregivers focused on emotional well-being",
-    price: "129₹ per month",
+    price: "₹129 per month",
     button: "Upgrade Plan",
     features: [
       "1 Assessment/month",
@@ -34,7 +34,7 @@ const plans = [
   {
     title: "Co-Care Plan",
     description: "For families caring for both the child and the caregiver's wellness",
-    price: "249₹ per month",
+    price: "₹249 per month",
     button: "Upgrade Plan",
     features: [
       "2 Assessments/month",
@@ -89,6 +89,7 @@ const PricingPlans = () => {
 
       {/* Pricing Plans Section */}
       <div className="bg-white py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl md:text-3xl font-semibold mb-8 text-center">50% Offer for Early Birds</h1>
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {plans.map((plan, index) => (
             <div

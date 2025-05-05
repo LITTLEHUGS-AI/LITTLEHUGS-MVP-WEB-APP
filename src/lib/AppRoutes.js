@@ -6,7 +6,7 @@ import About from "../components/about/About";
 import PersonalLandingPage from "../components/landingpage/PersonalLandingPage";
 import PartenerLandingPage from "../components/landingpage/PartenerLandingPage";
 import AssesmentLandingPage from "../components/landingpage/AssesmentLandingPage";
-import SignIn from "../components/landingpage/SignIn";
+import SignIn from "../components/signin/SignIn";
 import SignUp from "../components/landingpage/SignUp";
 import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";

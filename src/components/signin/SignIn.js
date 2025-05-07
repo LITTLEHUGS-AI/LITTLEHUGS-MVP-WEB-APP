@@ -5,6 +5,8 @@ import SignInUI from "./Login";
 import { useAuth } from "../../lib/AuthContext";
 import { SignInFormSchema } from "./ValidationSchema";
 import { toastErrorMessage } from "../common/Constants";
+import routesConfig from "../../config/routesConfig";
+import DocumentHead from "../common/DocumentHead";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -42,7 +44,15 @@ function SignIn() {
     }
   }, [signInMutation.isError, signInMutation?.error]);
 
+  const { title, description } = routesConfig.signIn;
+
   return (
+    <>
+      <DocumentHead
+        title={title}
+        description={description}
+        slug={routesConfig.signIn.path}
+      />
       <SignInUI
         onSubmit={onSubmit}
         isError={signInMutation.isError}
@@ -54,8 +64,9 @@ function SignIn() {
         visible={visible}
         handleShowPassword={handleShowPassword}
         SignInFormSchema={SignInFormSchema}
-        // handleSsoLogin={handleSsoLogin}
+      // handleSsoLogin={handleSsoLogin}
       />
+    </>
 
   );
 }

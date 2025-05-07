@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { Loader } from "../components/common/Loader";
 import Home from "../components/home/Home";
 import About from "../components/about/About";
@@ -11,34 +12,34 @@ import SignUp from "../components/landingpage/SignUp";
 import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
+import routesConfig from "../config/routesConfig";
 
 function AppRoutes() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Suspense
-        fallback={
-          <div>
-            <Loader />
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/pricingplans" element={<PricingPlans />} />
-          <Route path="/personal-landing" element={<PersonalLandingPage />} />
-          <Route path="/partener-landing" element={<PartenerLandingPage />} />
-          <Route path="/assesment-landing" element={<AssesmentLandingPage />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-
-          {/* <Route element={<DefaultLayout />}> */}
-          {/* </Route> */}
-        </Routes>
-      </Suspense>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <Suspense
+          fallback={
+            <div>
+              <Loader />
+            </div>
+          }
+        >
+          <Routes>
+            <Route path={routesConfig.home.path} element={<Home />} />
+            <Route path={routesConfig.about.path} element={<About />} />
+            <Route path={routesConfig.contact.path} element={<Contact />} />
+            <Route path={routesConfig.pricingPlans.path} element={<PricingPlans />} />
+            <Route path={routesConfig.personalLanding.path} element={<PersonalLandingPage />} />
+            <Route path={routesConfig.partenerLanding.path} element={<PartenerLandingPage />} />
+            <Route path={routesConfig.assesmentLanding.path} element={<AssesmentLandingPage />} />
+            <Route path={routesConfig.signIn.path} element={<SignIn />} />
+            <Route path={routesConfig.signUp.path} element={<SignUp />} />
+          </Routes>
+        </Suspense>
+      </Router>
+    </HelmetProvider>
   );
 }
 

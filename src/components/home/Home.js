@@ -7,6 +7,8 @@ import DeserveCare from '../DeserveCare'
 import EverydayCare from '../EverydayCare'
 import Footer from '../common/Footer'
 import MakeUsDiff from '../MakeUsDiff'
+import routesConfig from '../../config/routesConfig'
+import DocumentHead from '../common/DocumentHead'
 // import NewCareSection from '../NewSection'
 
 function Home() {
@@ -32,23 +34,32 @@ function Home() {
         ]
     };
 
+    const { title, description } = routesConfig.home;
+
     return (
-        <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="w-full">
-                <HeroSection />
-                <WhatIsLittleHugs />
-                <HowItWorks />
-                <DeserveCare />
-                <EverydayCare
-                    title={everyDayCareData.title}
-                    features={everyDayCareData.feature}
-                />
-                <MakeUsDiff />
-                {/* <NewCareSection /> */}
-            </main>
-            <Footer />
-        </div>
+        <>
+            <DocumentHead
+                title={title}
+                description={description}
+                slug={routesConfig.home.path}
+            />
+            <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <main className="w-full">
+                    <HeroSection />
+                    <WhatIsLittleHugs />
+                    <HowItWorks />
+                    <DeserveCare />
+                    <EverydayCare
+                        title={everyDayCareData.title}
+                        features={everyDayCareData.feature}
+                    />
+                    <MakeUsDiff />
+                    {/* <NewCareSection /> */}
+                </main>
+                <Footer />
+            </div>
+        </>
     )
 }
 

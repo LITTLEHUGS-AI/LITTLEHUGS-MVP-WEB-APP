@@ -2,7 +2,7 @@ name: Build and Deploy React App
 
 on:
   push:
-    branches: [ main ]
+    branches: [ staging ]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --force
 
       - name: Build React App
         run: npm run build

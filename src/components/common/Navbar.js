@@ -33,14 +33,14 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <ul className="hidden lg:flex items-center gap-4 xl:gap-8 text-[#4A4B4F] font-medium font-quicksand text-base xl:text-xl">
-        <li className={isActive("/personal-landing") ? "font-bold" : ""}>
-          <Link to="/personal-landing">For You</Link>
+        <li className={isActive("/personal") ? "font-bold" : ""}>
+          <Link to="/personal">For You</Link>
         </li>
-        <li className={isActive("/partener-landing") ? "font-bold" : ""}>
-          <Link to="/partener-landing">For Partners</Link>
+        <li className={isActive("/partener") ? "font-bold" : ""}>
+          <Link to="/partener">For Partners</Link>
         </li>
-        <li className={isActive("/assesment-landing") ? "font-bold" : ""}>
-          <Link to="/assesment-landing">Assessments</Link>
+        <li className={isActive("/assesment") ? "font-bold" : ""}>
+          <Link to="/assesment">Assessments</Link>
         </li>
         <li className={isActive("/pricingplans") ? "font-bold" : ""}>
           <Link to="/pricingplans">Pricing</Link>
@@ -92,14 +92,14 @@ const Navbar = () => {
           }`}
       >
         <ul className="flex flex-col items-center gap-6 text-[#4A4B4F] font-medium font-quicksand text-xl">
-          <li className={isActive("/personal-landing") ? "font-bold" : ""}>
-            <Link to="/personal-landing" onClick={closeMenu}>For You</Link>
+          <li className={isActive("/personal") ? "font-bold" : ""}>
+            <Link to="/personal" onClick={closeMenu}>For You</Link>
           </li>
-          <li className={isActive("/partener-landing") ? "font-bold" : ""}>
-            <Link to="/partener-landing" onClick={closeMenu}>For Partners</Link>
+          <li className={isActive("/partener") ? "font-bold" : ""}>
+            <Link to="/partener" onClick={closeMenu}>For Partners</Link>
           </li>
-          <li className={isActive("/assesment-landing") ? "font-bold" : ""}>
-            <Link to="/assesment-landing" onClick={closeMenu}>Assessments</Link>
+          <li className={isActive("/assesment") ? "font-bold" : ""}>
+            <Link to="/assesment" onClick={closeMenu}>Assessments</Link>
           </li>
           <li className={isActive("/pricingplans") ? "font-bold" : ""}>
             <Link to="/pricingplans" onClick={closeMenu}>Pricing</Link>

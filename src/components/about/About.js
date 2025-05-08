@@ -5,6 +5,8 @@ import EverydayCare from '../EverydayCare'
 import WhyWeExist from './WhyWeExist'
 import OurPartner from './OurPartner'
 import JoinMovement from './JoinMovement'
+import DocumentHead from '../common/DocumentHead'
+import routesConfig from '../../config/routesConfig'
 
 function About() {
     const everyDayCareData = {
@@ -29,20 +31,28 @@ function About() {
             },
         ]
     };
+    const { title, description } = routesConfig.about;
 
     return (
-        <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <MainHeader />
-            <EverydayCare
-                title={everyDayCareData.title}
-                subtitle={everyDayCareData.subtitle}
-                features={everyDayCareData.feature}
+        <>
+            <DocumentHead
+                title={title}
+                description={description}
+                slug={routesConfig.about.path}
             />
-            <WhyWeExist />
-            <OurPartner />
-            <JoinMovement />
-        </div>
+            <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <MainHeader />
+                <EverydayCare
+                    title={everyDayCareData.title}
+                    subtitle={everyDayCareData.subtitle}
+                    features={everyDayCareData.feature}
+                />
+                <WhyWeExist />
+                <OurPartner />
+                <JoinMovement />
+            </div>
+        </>
     )
 }
 

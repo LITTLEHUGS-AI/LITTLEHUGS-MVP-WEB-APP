@@ -72,7 +72,7 @@ const WellnessAssessment = ({ onClose, heading }) => {
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Developmental milestones (motor, speech, cognitive, social)</li>
-                <li>data[heading].input_l1Attention, learning, autism signs, behavioral regulation</li>
+                <li>learning, autism signs, behavioral regulation</li>
                 <li>Mood, anxiety, social-emotional health</li>
                 <li>Growth, nutrition, sensory function, immunizations</li>
               </ul>
@@ -84,7 +84,7 @@ const WellnessAssessment = ({ onClose, heading }) => {
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>RAG status (Red/Amber/Green) for each domain</li>
                 <li>Risk flags and severity scores</li>
-                <li>data[heading].input_l1Personalized insights, home strategies, and referral guidance</li>
+                <li>Personalized insights, home strategies, and referral guidance</li>
                 <li>Shareable caregiver summary (optional PDF)</li>
               </ul>
             </div>

@@ -8,7 +8,8 @@ const plans = [
   {
     title: "Wellness Starter",
     description: "For first-time users exploring basic check-ins",
-    price: "₹69 per month",
+    originalPrice: "₹138/-",
+    price: "₹ 69/-",
     button: "Choose Plan",
     features: [
       "1 Assessment",
@@ -21,7 +22,8 @@ const plans = [
   {
     title: "Self-Wellness Plan",
     description: "For women & caregivers focused on emotional well-being",
-    price: "₹129 per month",
+    originalPrice: "₹258/-",
+    price: "₹ 129/-",
     button: "Upgrade Plan",
     features: [
       "1 Assessment/month",
@@ -36,7 +38,8 @@ const plans = [
   {
     title: "Co-Care Plan",
     description: "For families caring for both the child and the caregiver's wellness",
-    price: "₹249 per month",
+    originalPrice: "₹498/-",
+    price: "₹ 249/-",
     button: "Upgrade Plan",
     features: [
       "2 Assessments/month",
@@ -108,10 +111,10 @@ const PricingPlans = () => {
                 <div>
                   <h3 className="text-lg md:text-xl font-semibold text-gray-800">{plan.title}</h3>
                   <p className="mt-1 text-xs md:text-sm text-gray-600">{plan.description}</p>
-                  <p className="mt-3 md:mt-4 text-xl md:text-2xl font-bold text-blue-600">{plan.price}</p>
+                  <p className="mt-3 md:mt-4 text-xl md:text-2xl font-semibold text-[#263238]"><span className="text-[20px] text-gray-500 line-through">{plan.originalPrice}</span> {plan.price}</p>
                   <button
                     onClick={() => { navigate("/contact") }}
-                    className="mt-3 md:mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-300"
+                    className="mt-3 md:mt-4  bg-blue-600 hover:bg-blue-700 text-white py-2 px-7  rounded-full  transition duration-300"
                   >
                     {plan.button}
                   </button>
@@ -124,14 +127,14 @@ const PricingPlans = () => {
                     ))}
                   </ul>
                   {plan.extras && (
-                    <p className="mt-3 md:mt-4 text-xs md:text-sm text-gray-600 italic">{plan.extras}</p>
+                    <p className="text-center mt-3 md:mt-4 font-quicksand font-normal text-sm md:text-[20px] text-gray-600 leading-6">{plan.extras}</p>
+                  )}
+                  {plan.note && (
+                    <p className="text-center mt-4 md:mt-6 text-xs font-quicksand font-normal md:text-[20px] text-gray-800 leading-6">
+                      {plan.note}
+                    </p>
                   )}
                 </div>
-                {plan.note && (
-                  <p className="mt-4 md:mt-6 text-xs md:text-sm text-gray-800 font-medium">
-                    {plan.note}
-                  </p>
-                )}
               </div>
             ))}
           </div>

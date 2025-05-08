@@ -13,6 +13,7 @@ import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
 import routesConfig from "../config/routesConfig";
+import PersonalDashboard from "../components/dashboard/PersonalDashboard";
 
 function AppRoutes() {
   return (
@@ -36,6 +37,8 @@ function AppRoutes() {
             <Route path={routesConfig.assesmentLanding.path} element={<AssesmentLandingPage />} />
             <Route path={routesConfig.signIn.path} element={<SignIn />} />
             <Route path={routesConfig.signUp.path} element={<SignUp />} />
+            {/* dashboard */}
+            <Route path='/personal/dashboard' element={< PersonalDashboard/>} />
           </Routes>
         </Suspense>
       </Router>

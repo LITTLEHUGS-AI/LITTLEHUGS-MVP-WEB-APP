@@ -34,7 +34,7 @@ export const ToastProvider = ({ children }) => {
     return (
         <ToastContext.Provider value={{ addToast, removeToast }}>
             {children}
-            <div className="toast-container ">
+            <div className="toast-container hidden">
                 <div className={`toast-outer pt-2 pb-0 md:py-2 md:pt-12 flex flex-col gap-2 items-end`}>
                     {toasts.map((toast) => (
                         <TestToast

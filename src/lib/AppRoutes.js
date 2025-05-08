@@ -14,6 +14,7 @@ import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
 import routesConfig from "../config/routesConfig";
 import PersonalDashboard from "../components/dashboard/PersonalDashboard";
+import PersonalAssesment from "../components/dashboard/dashboardComponents/PersonalAssesment";
 
 function AppRoutes() {
   return (
@@ -39,6 +40,7 @@ function AppRoutes() {
             <Route path={routesConfig.signUp.path} element={<SignUp />} />
             {/* dashboard */}
             <Route path='/personal/dashboard' element={< PersonalDashboard/>} />
+            <Route path='/personal/assessment' element={<PersonalAssesment/>} />
           </Routes>
         </Suspense>
       </Router>

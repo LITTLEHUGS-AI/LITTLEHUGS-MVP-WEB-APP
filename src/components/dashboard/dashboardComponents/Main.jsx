@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Download, Share2 } from "lucide-react";
+import { getProfileDetails } from "../../../api/dashboard-api";
 
 const Main = () => {
-  // Circle score component to ensure consistent sizing and appearance
+  const [profileData, setProfileData] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const res = await getProfileDetails();
+      res && setProfileData(res);
+    })();
+  }, []);
   const CircleScore = ({ title, score, color, bgColor }) => (
     <div className={`${bgColor} p-4 rounded-lg`}>
       <h4 className="text-sm font-medium mb-2">{title}</h4>
@@ -48,7 +56,7 @@ const Main = () => {
     <>
       {/* Welcome Banner */}
       <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
-        <h2 className="text-xl font-medium mb-2">Hi UserName</h2>
+        <h2 className="text-xl font-medium mb-2">Hi {profileData && profileData.name}</h2>
         <p className="text-gray-700">
           In this moment, nothing is asked of you.
           <br />

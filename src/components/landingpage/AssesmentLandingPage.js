@@ -21,7 +21,7 @@ function AssesmentLandingPage() {
         {
             title: "LittleHugs 360° Children's Wellness Assessment",
             description:
-                "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support",
+                "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
         },
         {
             title: "Universal SEL Assessment",

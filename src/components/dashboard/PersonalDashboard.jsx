@@ -4,11 +4,10 @@ import Sidebar from "./dashboardComponents/Sidebar";
 import Main from "./dashboardComponents/Main";
 import RightHandSide from "./dashboardComponents/RightHandSide";
 import { Menu } from "lucide-react";
-import { Button, Drawer } from "antd";
+import { Drawer } from "antd";
 
 
 const PersonalDashboard = () => {
-    const [username, setUsername] = useState("Sethulakshmi");
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
       setOpen(true);

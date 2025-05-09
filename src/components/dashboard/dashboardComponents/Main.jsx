@@ -56,7 +56,7 @@ const Main = () => {
     <>
       {/* Welcome Banner */}
       <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
-        <h2 className="text-xl font-medium mb-2">Hi {profileData && profileData.name}</h2>
+        <h2 className="text-xl font-medium mb-2">Hi {profileData ? profileData.name : "UserName"}</h2>
         <p className="text-gray-700">
           In this moment, nothing is asked of you.
           <br />

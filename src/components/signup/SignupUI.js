@@ -50,6 +50,12 @@ function SignupUI({
     };
 
     useEffect(() => {
+        if (hasAuthenticated) {
+            navigate("/");
+        }
+    }, [hasAuthenticated, navigate]);
+
+    useEffect(() => {
         if (isSuccess) {
             methods.reset(INITIAL_VALUES);
         }
@@ -204,7 +210,7 @@ function SignupUI({
             weight: formData.get("weight"),
             height: formData.get("height"),
         };
-        motherMutation.mutate({data, access_token: hasAuthenticated});
+        motherMutation.mutate({ data, access_token: hasAuthenticated });
     }
 
     const submitChildProfile = (event) => {
@@ -218,7 +224,7 @@ function SignupUI({
             weight: formData.get("weight"),
             height: formData.get("height"),
         };
-        childMutation.mutate({data, access_token: hasAuthenticated});
+        childMutation.mutate({ data, access_token: hasAuthenticated });
     }
 
     return (

@@ -8,7 +8,7 @@ import PersonalLandingPage from "../components/landingpage/PersonalLandingPage";
 import PartenerLandingPage from "../components/landingpage/PartenerLandingPage";
 import AssesmentLandingPage from "../components/landingpage/AssesmentLandingPage";
 import SignIn from "../components/signin/SignIn";
-import SignUp from "../components/landingpage/SignUp";
+import Signup from "../components/signup/signup";
 import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
@@ -16,6 +16,7 @@ import routesConfig from "../config/routesConfig";
 import PersonalDashboard from "../components/dashboard/PersonalDashboard";
 import PersonalAssesment from "../components/dashboard/dashboardComponents/PersonalAssesment";
 import Plans from "../components/dashboard/dashboardComponents/Plans";
+import GoogleCallback from "../components/signin/GoogleCallback";
 
 function AppRoutes() {
   return (
@@ -38,11 +39,14 @@ function AppRoutes() {
             <Route path={routesConfig.partenerLanding.path} element={<PartenerLandingPage />} />
             <Route path={routesConfig.assesmentLanding.path} element={<AssesmentLandingPage />} />
             <Route path={routesConfig.signIn.path} element={<SignIn />} />
-            <Route path={routesConfig.signUp.path} element={<SignUp />} />
+            <Route path={routesConfig.signUp.path} element={<Signup />} />
             {/* dashboard */}
             <Route path='/personal/dashboard' element={< PersonalDashboard/>} />
             <Route path='/personal/assessment' element={<PersonalAssesment/>} />
             <Route path='/personal/plans' element={<Plans/>} />
+            <Route path='/auth/callback' element={<GoogleCallback />} />
+            
+           
           </Routes>
         </Suspense>
       </Router>

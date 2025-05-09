@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from '../common/Loader';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Navbar from '../common/Navbar';
-
-
+import { useAuth } from '../../lib/AuthContext';
+import useSignIn from '../signin/useSignIn';
+import { addToast } from '../../lib/useToastContext';
 
 const INITIAL_VALUES = {
     name: "",
     email: "",
     password: "",
-    city: "",
-    mother_tongue: "user",
+    country: "",
+    language: ""
 };
 
 function SignupUI({
@@ -26,17 +27,18 @@ function SignupUI({
     visible,
     handleShowPassword,
     SignInFormSchema,
-
+    isOtp,
+    setIsOtp,
 }) {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [showPopup, setShowPopup] = useState(false);
+    const [email, setEmail] = useState("rks262903+4gmail.com");
     const [showWellnessPopup, setShowWellnessPopup] = useState(false);
+    const [showChildWellnessPopup, setChildShowWellnessPopup] = useState(true);
+    const { otpMutation, motherMutation, childMutation } = useSignIn();
+    const { login, hasAuthenticated } = useAuth();
+    const navigate = useNavigate();
 
-
-    // const handleSubmitPopup = (e) => {
-    //     e.preventDefault();
-    //     setShowPopup(true);
-    // };
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
         resolver: zodResolver(SignInFormSchema),
@@ -44,6 +46,7 @@ function SignupUI({
 
     const handleSubmit = (data) => {
         onSubmit(data);
+        setEmail(data.email);
     };
 
     useEffect(() => {
@@ -64,6 +67,159 @@ function SignupUI({
             window.location.href = response.data.authorization_url;
         });
     };
+
+    const [otp, setOtp] = useState(Array(6).fill(""));
+    const [otpError, setOtpError] = useState(false);
+    const inputsRef = useRef([]);
+    const [timer, setTimer] = useState(60);
+    const [resendEnabled, setResendEnabled] = useState(false);
+    const otpdata = otpMutation?.data;
+
+    useEffect(() => {
+        if (timer > 0) {
+            const countdown = setTimeout(() => setTimer(timer - 1), 1000);
+            return () => clearTimeout(countdown);
+        } else {
+            setResendEnabled(true); // enable resend after timer hits 0
+        }
+    }, [timer]);
+
+    const handleChange = (value, index) => {
+        if (!isNaN(value)) {
+            setOtpError(false);
+            const updatedOtp = [...otp];
+            updatedOtp[index] = value;
+            setOtp(updatedOtp);
+            if (value && index < 5) {
+                inputsRef.current[index + 1].focus();
+            }
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+            inputsRef.current[index - 1].focus();
+        }
+    };
+
+    const handleSubmitForOTP = () => {
+        if (otp.some((digit) => digit === "")) {
+            setOtpError(true);
+            return;
+        }
+        const payload = {
+            email: email,
+            otp_code: otp.join(""),
+        }
+        otpMutation.mutate(payload)
+        // console.log(payload);
+        setIsOtp(true);
+    };
+
+    const handleResendOtp = () => {
+        const payload = {
+            email: email
+        }
+        otpMutation.mutate(payload)
+        setOtp(Array(6).fill(""));
+        inputsRef.current[0].focus();
+        setTimer(60);
+        setResendEnabled(false);
+    };
+
+    useEffect(() => {
+        if (otpMutation.isSuccess) {
+            login(otpdata);
+            setIsOtp(false);
+            setShowPopup(true);
+        }
+    }, [login, otpdata, otpMutation.isSuccess, setIsOtp]);
+
+    useEffect(() => {
+        if (motherMutation.isSuccess) {
+            setShowWellnessPopup(false);
+            navigate("/");
+            addToast({
+                type: "error",
+                message: "Mother profile created successfully",
+            });
+        }
+    }, [motherMutation.isSuccess, navigate]);
+
+    useEffect(() => {
+        if (childMutation.isSuccess) {
+            setChildShowWellnessPopup(false);
+            navigate("/");
+            addToast({
+                type: "error",
+                message: "Child profile created successfully",
+            });
+        }
+    }, [childMutation.isSuccess, navigate]);
+
+    useEffect(() => {
+        if (
+            otpMutation.isError &&
+            otpMutation?.error?.response?.status !== 401
+        ) {
+            addToast({
+                type: "error",
+                message: otpMutation?.error?.data.error || "Unknown error occurred",
+            });
+        }
+    }, [otpMutation.isError, otpMutation?.error]);
+
+    useEffect(() => {
+        if (
+            motherMutation.isError &&
+            motherMutation?.error?.response?.status !== 401
+        ) {
+            addToast({
+                type: "error",
+                message: motherMutation?.error?.response?.data?.message || "Unknown error occurred",
+            });
+        }
+    }, [motherMutation.isError, motherMutation?.error]);
+
+    useEffect(() => {
+        if (
+            childMutation.isError &&
+            childMutation?.error?.response?.status !== 401
+        ) {
+            addToast({
+                type: "error",
+                message: childMutation?.error?.response?.data?.message || "Unknown error occurred",
+            });
+        }
+    }, [childMutation.isError, childMutation?.error]);
+
+    const submitMotherProfile = (event) => {
+        event.preventDefault(); // Prevent page reload
+        const formData = new FormData(event.target); // event.target is the <form>
+        const data = {
+            dob: formData.get("dob"),
+            life_stage: formData.get("lifeStage"),
+            intent: [formData.get("goal")],
+            tone_prefrence: formData.get("tone"),
+            weight: formData.get("weight"),
+            height: formData.get("height"),
+        };
+        motherMutation.mutate({data, access_token: hasAuthenticated});
+    }
+
+    const submitChildProfile = (event) => {
+        event.preventDefault(); // Prevent page reload
+        const formData = new FormData(event.target); // event.target is the <form>
+        const data = {
+            name: formData.get("child_name"),
+            dob: formData.get("child_dob"),
+            age_group: formData.get("age_group"),
+            goal: [formData.get("gaol")],
+            weight: formData.get("weight"),
+            height: formData.get("height"),
+        };
+        childMutation.mutate({data, access_token: hasAuthenticated});
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-[#fef9f6]">
@@ -104,28 +260,28 @@ function SignupUI({
                                     message={isError ? message : ""}
                                     isDisabled={isPending}
                                 />
-                                <inputField
+                                <InputField
                                     label="Password"
                                     name="password"
                                     fieldId="password"
                                     placeHolder="Enter your Password"
                                     type={visible.password ? "text" : "password"}
-                                    visible 
+                                    visible
                                     showIcon={visible.password}
                                     handleChange={handleShowPassword}
                                     isDisabled={isPending}
                                 />
 
                                 <div className="flex gap-4">
-                                    <select {...methods.register("city")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600">
-                                        <option value="">* City</option>
+                                    <select {...methods.register("country")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                                        <option value="" hidden selected>* City</option>
                                         <option>New York</option>
                                         <option>Mumbai</option>
                                         <option>Delhi</option>
                                         <option>Chennai</option>
                                     </select>
-                                    <select  {...methods.register("mother_tongue")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600">
-                                        <option value="">* Mother tongue</option>
+                                    <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                                        <option value="" hidden selected>* Language</option>
                                         <option>English</option>
                                         <option>Hindi</option>
                                         <option>Tamil</option>
@@ -189,24 +345,24 @@ function SignupUI({
                                     <input
                                         type="checkbox"
                                         className="mt-1 accent-gray-700"
-                                        onChange={(e) => setShowWellnessPopup(e.target.checked)}
+                                        onChange={(e) => {
+                                            setShowWellnessPopup(e.target.checked);
+                                            setShowPopup(false);
+                                        }}
                                     />
                                     <span>Women’s Wellness Plan</span>
                                 </label>
 
                                 <label className="flex items-start space-x-2">
                                     <input type="checkbox" className="mt-1"
-                                        onChange={(e) => setShowWellnessPopup(e.target.checked)}
+                                        onChange={(e) => {
+                                            setChildShowWellnessPopup(e.target.checked);
+                                            setShowPopup(false);
+                                        }}
                                     />
                                     <span>Child’s Development & Growth Plan</span>
                                 </label>
                             </div>
-                            <button
-                                onClick={() => setShowPopup(false)}
-                                className="absolute bottom-4 right-4 text-white bg-orange-400 hover:bg-orange-500 text-xs px-4 py-1 rounded-full"
-                            >
-                                Done
-                            </button>
                         </div>
                     </div>
                 )}
@@ -231,66 +387,58 @@ function SignupUI({
                                 <p className="text-sm font-medium mb-4">23% Complete</p>
                             </div>
 
-                            {/* Form Fields */}
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                                <input type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
-                                <select className="border p-2 rounded">
-                                    <option disabled selected>* Current life stage</option>
-                                    <option>Early adulthood</option>
-                                    <option>Adulthood</option>
-                                    <option>Pregnancy</option>
-                                    <option>Menopause</option>
-                                    <option>Prefer not to say</option>
-                                </select>
-                                <select className="border p-2 rounded">
-                                    <option disabled selected>* Goal is to work on</option>
-                                    <option>Sleep</option>
-                                    <option>Hormones</option>
-                                    <option>fatigue</option>
-                                    <option>Anxiety</option>
-                                    <option>Self Care</option>
-                                </select>
-                                <select className="border p-2 rounded">
-                                    <option disabled selected>* Tone Preference</option>
-                                    <option>Reassuring</option>
-                                    <option>Motivational</option>
-                                    <option>Calming</option>
-                                    <option>Neutral</option>
-                                </select>
-                                <div className="relative">
-                                    <input type="text" placeholder="Weight" className="border p-2 rounded w-full" />
-                                    <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
+                            <form onSubmit={submitMotherProfile}>
+                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                    <input name="dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
+                                    <select name="lifeStage" className="border p-2 rounded" required>
+                                        <option value="" disabled selected>* Current life stage</option>
+                                        <option>Early adulthood</option>
+                                        <option>Adulthood</option>
+                                        <option>Pregnancy</option>
+                                        <option>Menopause</option>
+                                        <option>Prefer not to say</option>
+                                    </select>
+                                    <select name="goal" className="border p-2 rounded" required>
+                                        <option disabled selected>* Goal is to work on</option>
+                                        <option>Sleep</option>
+                                        <option>Hormones</option>
+                                        <option>fatigue</option>
+                                        <option>Anxiety</option>
+                                        <option>Self Care</option>
+                                    </select>
+                                    <select name="tone" className="border p-2 rounded" required>
+                                        <option disabled selected>* Tone Preference</option>
+                                        <option>Reassuring</option>
+                                        <option>Motivational</option>
+                                        <option>Calming</option>
+                                        <option>Neutral</option>
+                                    </select>
+                                    <div className="relative">
+                                        <input name="weight" type="text" placeholder="Weight" className="border p-2 rounded w-full" required />
+                                        <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
+                                    </div>
+                                    <div className="relative">
+                                        <input name="height" type="text" placeholder="Height" className="border p-2 rounded w-full" required />
+                                        <span className="absolute right-2 top-2.5 text-gray-500">cm</span>
+                                    </div>
                                 </div>
-                                <div className="relative">
-                                    <input type="text" placeholder="Height" className="border p-2 rounded w-full" />
-                                    <span className="absolute right-2 top-2.5 text-gray-500">cm</span>
-                                </div>
-                            </div>
 
-                            {/* Go to Dashboard Button */}
-                            <div className="mt-6 flex justify-center">
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
-                                    Go to the Dashboard
-                                </button>
-                            </div>
+                                {/* Go to Dashboard Button */}
+                                <div className="mt-6 flex justify-center">
+                                    <button type='submit' className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
+                                        Go to the Dashboard
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 )}
 
                 {/* for child */}
 
-                {showWellnessPopup && (
+                {showChildWellnessPopup && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                         <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
-
-                            {/* Close Button */}
-                            <button
-                                className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
-                                onClick={() => setShowWellnessPopup(false)}
-                            >
-                                ✕
-                            </button>
-
                             {/* Profile & Progress */}
                             <div className="flex flex-col items-center mb-6">
                                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
@@ -304,66 +452,125 @@ function SignupUI({
                             </div>
 
                             {/* Form Fields */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                <input
-                                    type="text"
-                                    placeholder="* Child's Name"
-                                    className="border p-2 rounded"
-                                />
-                                <div className="relative">
+                            <form onSubmit={submitChildProfile}>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                     <input
-                                        type="date"
-                                        placeholder="* Child's Date of Birth"
-                                        className="border p-2 rounded w-full"
+                                        name="child_name"
+                                        type="text"
+                                        placeholder="* Child's Name"
+                                        className="border p-2 rounded"
+                                        required
                                     />
-                                    <span className="absolute right-3 top-2.5 text-gray-500">
-                                        📅
+                                    <div className="relative">
+                                        <input name="child_dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded w-full" />
+                                    </div>
+
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="* Weight"
+                                            className="border p-2 rounded w-full pr-10"
+                                            name='weight'
+                                            required
+                                        />
+                                        <span className="absolute right-3 top-2.5 text-gray-500">kg</span>
+                                    </div>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="* Height"
+                                            className="border p-2 rounded w-full pr-10"
+                                            name='height'
+                                            required
+                                        />
+                                        <span className="absolute right-3 top-2.5 text-gray-500">cm</span>
+                                    </div>
+
+                                    <select name='age_group' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* Age Group</option>
+                                        <option>0-2 years</option>
+                                        <option>3-5 years</option>
+                                        <option>6-12 years</option>
+                                    </select>
+
+                                    <select name='gaol' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* Goal</option>
+                                        <option>Growth</option>
+                                        <option>Nutrition</option>
+                                        <option>Activity</option>
+                                    </select>
+                                </div>
+
+                                {/* Dashboard Button */}
+                                <div className="mt-8 flex justify-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full"
+                                    >
+                                        Go to the Dashboard
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {isOtp && (
+                    <>
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                            <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
+                                <h2 className="text-2xl font-semibold text-center text-gray-800">
+                                    OTP Authentication
+                                </h2>
+                                <p className="text-center text-gray-500 my-3">Please enter the OTP</p>
+
+                                {/* OTP Inputs */}
+                                <div className="flex justify-center gap-3 mb-4">
+                                    {otp.map((digit, index) => (
+                                        <input
+                                            key={index}
+                                            type="text"
+                                            maxLength="1"
+                                            value={digit}
+                                            onChange={(e) => handleChange(e.target.value, index)}
+                                            onKeyDown={(e) => handleKeyDown(e, index)}
+                                            ref={(el) => (inputsRef.current[index] = el)}
+                                            className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                        />
+                                    ))}
+                                </div>
+                                {otpError && (
+                                    <span className="text-[#DC2626] text-xs leading-[16px] font-normal">
+                                        Please enter OTP
                                     </span>
+                                )}
+
+                                {/* Timer or Resend */}
+                                <div className="text-right text-sm mb-4 pr-2">
+                                    {resendEnabled ? (
+                                        <button
+                                            onClick={handleResendOtp}
+                                            className="text-blue-500 hover:underline focus:outline-none"
+                                        >
+                                            Resend
+                                        </button>
+                                    ) : (
+                                        <span className="text-gray-500">
+                                            00:{("0" + timer).slice(-2)}
+                                        </span>
+                                    )}
                                 </div>
 
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="* Weight"
-                                        className="border p-2 rounded w-full pr-10"
-                                    />
-                                    <span className="absolute right-3 top-2.5 text-gray-500">kg</span>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="* Height"
-                                        className="border p-2 rounded w-full pr-10"
-                                    />
-                                    <span className="absolute right-3 top-2.5 text-gray-500">cm</span>
-                                </div>
-
-                                <select className="border p-2 rounded">
-                                    <option>* Age Group</option>
-                                    <option>0-2 years</option>
-                                    <option>3-5 years</option>
-                                    <option>6-12 years</option>
-                                </select>
-
-                                <select className="border p-2 rounded">
-                                    <option>* Goal</option>
-                                    <option>Growth</option>
-                                    <option>Nutrition</option>
-                                    <option>Activity</option>
-                                </select>
-                            </div>
-
-                            {/* Dashboard Button */}
-                            <div className="mt-8 flex justify-center">
+                                {/* Continue Button */}
                                 <button
-                                    className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full"
-                                    onClick={() => setShowWellnessPopup(false)}
+                                    onClick={handleSubmitForOTP}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition duration-200"
                                 >
-                                    Go to the Dashboard
+                                    Continue
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </>
                 )}
 
                 {/* for child and womens */}

@@ -48,8 +48,8 @@ const signUpValidationSchema = z
         /[^a-zA-Z0-9]/,
         "Password must include at least one special character."
       ),
-    city: z.string().min(1, "City is required."),
-    mother_tongue: z.string().min(1, "Mother tongue is required."),
+    country: z.string().min(1, "Country is required."),
+    language: z.string().min(1, "Mother tongue is required."),
   });
 
 export { signUpValidationSchema };

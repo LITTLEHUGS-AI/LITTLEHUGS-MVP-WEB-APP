@@ -3,7 +3,6 @@ import { getProfileDetails } from '../../../api/dashboard-api';
 
 const ProfileUi = () => {
     const [profileData, setProfileData] = useState({});
-
     useEffect(() => {
       (async () => {
         const res = await getProfileDetails();
@@ -23,7 +22,7 @@ const ProfileUi = () => {
             />
           </div>
           <span className="ml-2 font-medium">
-            {profileData && profileData.name}
+            {profileData ? profileData.name : "UserName"}
           </span>
         </div>
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">

@@ -26,9 +26,9 @@ const GoogleCallback = () => {
           try {
             const response = await axios.post(
               `${apiUrl}/v1/api/google/callback`,
-                { access_token: code }
+                { access_token: code, is_mobile: false }
             );
-            const access_token = response?.data?.access_token;
+            const access_token = response?.data;
             localStorage.setItem("accessToken", access_token);
             login(access_token);
             window.location.href = "/";

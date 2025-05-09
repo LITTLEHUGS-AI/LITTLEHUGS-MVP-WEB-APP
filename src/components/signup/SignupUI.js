@@ -32,9 +32,9 @@ function SignupUI({
 }) {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [showPopup, setShowPopup] = useState(false);
-    const [email, setEmail] = useState("rks262903+4gmail.com");
+    const [email, setEmail] = useState("");
     const [showWellnessPopup, setShowWellnessPopup] = useState(false);
-    const [showChildWellnessPopup, setChildShowWellnessPopup] = useState(true);
+    const [showChildWellnessPopup, setChildShowWellnessPopup] = useState(false);
     const { otpMutation, motherMutation, childMutation } = useSignIn();
     const { login, hasAuthenticated } = useAuth();
     const navigate = useNavigate();

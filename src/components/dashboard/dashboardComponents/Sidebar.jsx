@@ -38,7 +38,7 @@ const Sidebar = () => {
           </NavLink>
 
           <NavLink
-            to="/personal/pricing"
+            to="/personal/plans"
             className={({ isActive }) =>
               `flex items-center p-2 rounded ${
                 isActive
@@ -48,7 +48,7 @@ const Sidebar = () => {
             }
           >
             <IndianRupee size={20} />
-            <span className="ml-3 font-semibold">Pricing</span>
+            <span className="ml-3 font-semibold">Plans</span>
           </NavLink>
 
           <NavLink

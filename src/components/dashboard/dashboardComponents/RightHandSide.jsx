@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { getProfileDetails } from "../../../api/dashboard-api";
+import { getInsightsData } from "../../../api/dashboard-api";
 import ProfileUi from "./ProfileUi";
 
 const RightHandSide = () => {
+  const [insights, setInsights] = useState({});
+  useEffect(() => {
+    (async () => {
+      const res = await getInsightsData();
+      res && setInsights(res);
+    })();
+  }, []);
   return (
     <>
-    <ProfileUi/>
+      <ProfileUi />
       {/* Mood Trend Section */}
       <div className="my-6">
         <h3 className="text-lg font-medium mb-4">Mood trend</h3>
@@ -17,22 +23,21 @@ const RightHandSide = () => {
       <div className="mb-6">
         <h3 className="text-lg font-medium mb-4">Insight Cards</h3>
         <div className="space-y-4">
-          <div className="p-4 bg-orange-50 rounded-lg">
-            <p className="text-gray-800">
-              You're carrying emotional load without enough release
-            </p>
-          </div>
-          <div className="p-4 bg-orange-50 rounded-lg">
-            <p className="text-gray-800">
-              Your physical wellness is affecting your mood more than you
-              realize
-            </p>
-          </div>
-          <div className="p-4 bg-orange-50 rounded-lg">
-            <p className="text-gray-800">
-              You're doing better than you think—but you deserve more ease
-            </p>
-          </div>
+          {insights?.results?.length > 0 ? (
+            insights.results.map((item) => (
+              <div key={item.id} className="p-4 bg-orange-50 rounded-lg">
+                <p className="text-gray-800">
+                  <span className="font-semibold">Personality Insight:{" "}</span>
+                  {item.persnality_insights}
+                </p>
+                <p className="text-gray-800 mt-2">
+                  <span className="font-semibold">Next Step:</span> {item.next_step_suggestions}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No insights available.</p>
+          )}
         </div>
       </div>
 

@@ -42,11 +42,7 @@ const PersonalAssessment = () => {
 
               <div className="flex flex-col gap-3 mt-auto">
                 <button className="bg-gray-800 text-white py-2 px-4 rounded-full font-medium hover:bg-gray-700 transition-colors">
-                  Take assessment
-                </button>
-
-                <button className="text-gray-700 py-2 px-4 rounded-full border border-gray-400 font-medium hover:bg-gray-100 transition-colors">
-                  Learn more
+                  Learn More
                 </button>
               </div>
             </div>
@@ -65,11 +61,7 @@ const PersonalAssessment = () => {
 
               <div className="flex flex-col gap-3 mt-auto">
                 <button className="bg-gray-800 text-white py-2 px-4 rounded-full font-medium hover:bg-gray-700 transition-colors">
-                  Take assessment
-                </button>
-
-                <button className="text-gray-700 py-2 px-4 rounded-full border border-gray-400 font-medium hover:bg-gray-100 transition-colors">
-                  Learn more
+                  Learn More
                 </button>
               </div>
             </div>
@@ -88,11 +80,7 @@ const PersonalAssessment = () => {
 
               <div className="flex flex-col gap-3 mt-auto">
                 <button className="bg-gray-800 text-white py-2 px-4 rounded-full font-medium hover:bg-gray-700 transition-colors">
-                  Take assessment
-                </button>
-
-                <button className="text-gray-700 py-2 px-4 rounded-full border border-gray-400 font-medium hover:bg-gray-100 transition-colors">
-                  Learn more
+                  Learn More
                 </button>
               </div>
             </div>

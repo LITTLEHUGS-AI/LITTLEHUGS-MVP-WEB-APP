@@ -15,6 +15,7 @@ import ScrollToTop from "./ScrollToTop";
 import routesConfig from "../config/routesConfig";
 import PersonalDashboard from "../components/dashboard/PersonalDashboard";
 import PersonalAssesment from "../components/dashboard/dashboardComponents/PersonalAssesment";
+import Plans from "../components/dashboard/dashboardComponents/Plans";
 
 function AppRoutes() {
   return (
@@ -41,6 +42,7 @@ function AppRoutes() {
             {/* dashboard */}
             <Route path='/personal/dashboard' element={< PersonalDashboard/>} />
             <Route path='/personal/assessment' element={<PersonalAssesment/>} />
+            <Route path='/personal/plans' element={<Plans/>} />
           </Routes>
         </Suspense>
       </Router>

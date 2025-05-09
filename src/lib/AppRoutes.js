@@ -13,6 +13,9 @@ import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
 import routesConfig from "../config/routesConfig";
+import PersonalDashboard from "../components/dashboard/PersonalDashboard";
+import PersonalAssesment from "../components/dashboard/dashboardComponents/PersonalAssesment";
+import Plans from "../components/dashboard/dashboardComponents/Plans";
 import GoogleCallback from "../components/signin/GoogleCallback";
 
 function AppRoutes() {
@@ -37,6 +40,10 @@ function AppRoutes() {
             <Route path={routesConfig.assesmentLanding.path} element={<AssesmentLandingPage />} />
             <Route path={routesConfig.signIn.path} element={<SignIn />} />
             <Route path={routesConfig.signUp.path} element={<Signup />} />
+            {/* dashboard */}
+            <Route path='/personal/dashboard' element={< PersonalDashboard/>} />
+            <Route path='/personal/assessment' element={<PersonalAssesment/>} />
+            <Route path='/personal/plans' element={<Plans/>} />
             <Route path='/auth/callback' element={<GoogleCallback />} />
             
            

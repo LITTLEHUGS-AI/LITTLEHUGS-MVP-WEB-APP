@@ -8,7 +8,8 @@ import axios from "axios";
 import Navbar from '../common/Navbar';
 import { useAuth } from '../../lib/AuthContext';
 import useSignIn from '../signin/useSignIn';
-import { addToast } from '../../lib/useToastContext';
+// import { addToast } from '../../lib/useToastContext';
+import { toastErrorMessage } from "../common/Constants";
 
 const INITIAL_VALUES = {
     name: "",
@@ -80,6 +81,7 @@ function SignupUI({
     const [timer, setTimer] = useState(60);
     const [resendEnabled, setResendEnabled] = useState(false);
     const otpdata = otpMutation?.data;
+    const [resentOtp, setResentOtp] = useState(false);
 
     useEffect(() => {
         if (timer > 0) {
@@ -113,12 +115,12 @@ function SignupUI({
             setOtpError(true);
             return;
         }
+        setResentOtp(false);
         const payload = {
             email: email,
             otp_code: otp.join(""),
         }
         otpMutation.mutate(payload)
-        // console.log(payload);
         setIsOtp(true);
     };
 
@@ -131,24 +133,27 @@ function SignupUI({
         inputsRef.current[0].focus();
         setTimer(60);
         setResendEnabled(false);
+        setResentOtp(true);
     };
 
     useEffect(() => {
         if (otpMutation.isSuccess) {
-            login(otpdata);
-            setIsOtp(false);
-            setShowPopup(true);
+            if (!resentOtp) {
+                login(otpdata);
+                setIsOtp(false);
+                setShowPopup(true);
+            }
         }
-    }, [login, otpdata, otpMutation.isSuccess, setIsOtp]);
+    }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp]);
 
     useEffect(() => {
         if (motherMutation.isSuccess) {
             setShowWellnessPopup(false);
             navigate("/");
-            addToast({
-                type: "error",
-                message: "Mother profile created successfully",
-            });
+            // addToast({
+            //     type: "error",
+            //     message: "Mother profile created successfully",
+            // });
         }
     }, [motherMutation.isSuccess, navigate]);
 
@@ -156,10 +161,10 @@ function SignupUI({
         if (childMutation.isSuccess) {
             setChildShowWellnessPopup(false);
             navigate("/");
-            addToast({
-                type: "error",
-                message: "Child profile created successfully",
-            });
+            // addToast({
+            //     type: "error",
+            //     message: "Child profile created successfully",
+            // });
         }
     }, [childMutation.isSuccess, navigate]);
 
@@ -168,9 +173,13 @@ function SignupUI({
             otpMutation.isError &&
             otpMutation?.error?.response?.status !== 401
         ) {
-            addToast({
-                type: "error",
-                message: otpMutation?.error?.data.error || "Unknown error occurred",
+            // addToast({
+            //     type: "error",
+            //     message: otpMutation?.error?.data.error || "Unknown error occurred",
+            // });
+            toastErrorMessage({
+                content: otpMutation?.error?.data.error || "Unknown error occurred",
+                option: { type: "" },
             });
         }
     }, [otpMutation.isError, otpMutation?.error]);
@@ -180,9 +189,13 @@ function SignupUI({
             motherMutation.isError &&
             motherMutation?.error?.response?.status !== 401
         ) {
-            addToast({
-                type: "error",
-                message: motherMutation?.error?.response?.data?.message || "Unknown error occurred",
+            // addToast({
+            //     type: "error",
+            //     message: motherMutation?.error?.response?.data?.message || "Unknown error occurred",
+            // });
+            toastErrorMessage({
+                content: motherMutation?.error?.response?.data?.message || "Unknown error occurred",
+                option: { type: "" },
             });
         }
     }, [motherMutation.isError, motherMutation?.error]);
@@ -192,9 +205,13 @@ function SignupUI({
             childMutation.isError &&
             childMutation?.error?.response?.status !== 401
         ) {
-            addToast({
-                type: "error",
-                message: childMutation?.error?.response?.data?.message || "Unknown error occurred",
+            // addToast({
+            //     type: "error",
+            //     message: childMutation?.error?.response?.data?.message || "Unknown error occurred",
+            // });
+            toastErrorMessage({
+                content: childMutation?.error?.response?.data?.message || "Unknown error occurred",
+                option: { type: "" },
             });
         }
     }, [childMutation.isError, childMutation?.error]);

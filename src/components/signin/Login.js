@@ -35,13 +35,12 @@ function SignInUI({
     const handleLogin = (logintype) => {
         let redirect_url = ""
         if (logintype === "google-login") {
-            redirect_url = `${window.location.origin}/auth/google/callback`
+            redirect_url = `${window.location.origin}/auth`
         } else {
             redirect_url = `${window.location.origin}/auth/ms/callback`
         }
-        sessionStorage.removeItem("chats");
         axios.get(`${apiUrl}/v1/api/google/login?redirect_url=${redirect_url}`).then((response) => {
-            window.location.href = response.data.authorization_url;
+            window.location.href = response.data.auth_url;
         });
     };
 

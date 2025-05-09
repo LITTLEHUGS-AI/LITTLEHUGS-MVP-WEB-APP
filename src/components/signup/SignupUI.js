@@ -38,6 +38,7 @@ function SignupUI({
     const [showChildWellnessPopup, setChildShowWellnessPopup] = useState(false);
     const { otpMutation, motherMutation, childMutation } = useSignIn();
     const { login, hasAuthenticated } = useAuth();
+    const [accessToken, setAccessToken] = useState();
     const navigate = useNavigate();
 
     const methods = useForm({
@@ -140,6 +141,7 @@ function SignupUI({
         if (otpMutation.isSuccess) {
             if (!resentOtp) {
                 login(otpdata);
+                setAccessToken(`token ${otpdata.token}`)
                 setIsOtp(false);
                 setShowPopup(true);
             }
@@ -227,7 +229,7 @@ function SignupUI({
             weight: formData.get("weight"),
             height: formData.get("height"),
         };
-        motherMutation.mutate({ data, access_token: hasAuthenticated });
+        motherMutation.mutate({ data, access_token: accessToken });
     }
 
     const submitChildProfile = (event) => {
@@ -241,7 +243,7 @@ function SignupUI({
             weight: formData.get("weight"),
             height: formData.get("height"),
         };
-        childMutation.mutate({ data, access_token: hasAuthenticated });
+        childMutation.mutate({ data, access_token: accessToken });
     }
 
     return (

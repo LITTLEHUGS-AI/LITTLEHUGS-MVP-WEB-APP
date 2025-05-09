@@ -13,6 +13,7 @@ import Contact from "../components/landingpage/Contact";
 import PricingPlans from "../components/landingpage/PricingPlans";
 import ScrollToTop from "./ScrollToTop";
 import routesConfig from "../config/routesConfig";
+import GoogleCallback from "../components/signin/GoogleCallback";
 
 function AppRoutes() {
   return (
@@ -36,7 +37,7 @@ function AppRoutes() {
             <Route path={routesConfig.assesmentLanding.path} element={<AssesmentLandingPage />} />
             <Route path={routesConfig.signIn.path} element={<SignIn />} />
             <Route path={routesConfig.signUp.path} element={<Signup />} />
-           
+            <Route path='/auth/callback' element={<GoogleCallback />} />
             
            
           </Routes>

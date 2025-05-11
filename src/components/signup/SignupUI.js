@@ -92,7 +92,6 @@ function SignupUI({
     const [resendEnabled, setResendEnabled] = useState(false);
     const otpdata = otpMutation?.data;
     const [resentOtp, setResentOtp] = useState(false);
-    const [termsAccepted, setTermsAccepted] = useState(false);
 
     useEffect(() => {
         if (timer > 0) {

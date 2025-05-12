@@ -48,7 +48,7 @@ function setupApiAccessToken(accessToken) {
 
   axiosClient?.interceptors.request.use(
     (config) => {
-      config["headers"]["Authorization"] = `Bearer ${accessToken}`;
+      config["headers"]["Authorization"] = `${accessToken}`;
       return config;
     },
     (error) => Promise.reject(error)

@@ -6,9 +6,13 @@ import {
   IndianRupee,
   ChartColumnIncreasing,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = () => {
+
+  const logout = ()=>{
+    localStorage.clear('accessToken');
+  }
   return (
     <>
       {/* Logo */}
@@ -75,10 +79,10 @@ const Sidebar = () => {
             <Settings size={20} />
             <span className="ml-3 font-semibold">Settings</span>
           </div>
-          <div className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
+          <Link to="/" onClick={logout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
             <LogOut size={20} />
             <span className="ml-3 font-semibold">Logout</span>
-          </div>
+          </Link>
         </div>
       </div>
 

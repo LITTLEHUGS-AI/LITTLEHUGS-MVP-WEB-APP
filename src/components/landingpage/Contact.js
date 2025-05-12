@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../common/Navbar';
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -176,13 +177,12 @@ const Contact = () => {
                                     <option value="Personal">Personal</option>
                                 </select>
 
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="bg-[#1D1D1D] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-[#333] transition disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base"
+                                <Link
+                                    to="/signup"
+                                    className="block bg-[#1D1D1D] text-white px-4 mt-8 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-[#333] transition disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base"
                                 >
-                                    {isSubmitting ? 'Processing...' : 'Join the Waitlist'}
-                                </button>
+                                    {isSubmitting ? 'Processing...' : 'Sign Up'}
+                                </Link>
                             </form>
                         </div>
                     </div>

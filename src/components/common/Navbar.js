@@ -59,7 +59,7 @@ const Navbar = () => {
           <div className="w-[120px] h-[42px]"></div>
         ) : (
           <button
-            onClick={() => navigate('/signin')}
+            onClick={() => navigate('/signup')}
             className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
           >
             Try For Free
@@ -117,7 +117,7 @@ const Navbar = () => {
           {!isActive("/contact") && (
             <button
               onClick={() => {
-                navigate('/signin');
+                navigate('/signup');
                 closeMenu();
               }}
               className="w-full max-w-xs h-12 bg-[#4F7DDD] hover:bg-blue-700 text-white text-base font-medium px-4 py-2 rounded-[10px]"

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 
-function LandingHeader({ image, bg_color, title, description, sub_title, button_text }) {
+function LandingHeader({ image, bg_color, title, description, sub_title, button_text, link }) {
     // Handle dynamic background color with inline style since Tailwind
     // doesn't support dynamic class names with string interpolation
     const backgroundStyle = {
@@ -27,7 +27,7 @@ function LandingHeader({ image, bg_color, title, description, sub_title, button_
                     {description}
                 </p>
                 <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
-                    <Link to="/signup">
+                    <Link to={link != null ? link : "/signup"}>
                         <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
                             {button_text ? button_text : "Take the free test"}
                         </button>

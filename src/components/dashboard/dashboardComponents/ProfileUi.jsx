@@ -22,7 +22,7 @@ const ProfileUi = () => {
   useEffect(() => {
     (async () => {
       const res = await getProfileDetails();
-      res && setProfileData(res);
+      res && setProfileData(res) && setProfile(res);
     })();
   }, []);
 
@@ -49,7 +49,6 @@ const ProfileUi = () => {
 
   return (
     <>
-      {/* User Profile */}
       <div
         onClick={showModal}
         className="lg:flex items-center justify-between hidden border p-3 rounded-md border-gray-400 cp"

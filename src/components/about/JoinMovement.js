@@ -14,12 +14,12 @@ function JoinMovement() {
                 who believes in early care, we'd love to build with you.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-6 w-full max-w-xs sm:max-w-none">
-                <Link to="/assesment-landing" className="w-full sm:w-auto">
+                <Link to="/signup" className="w-full sm:w-auto">
                     <button className="bg-[#283036] text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#1f252b] transition w-full sm:w-auto">
                         Take the free test
                     </button>
                 </Link>
-                <Link to="/partener-landing" className="w-full sm:w-auto mt-3 sm:mt-0">
+                <Link to="/signup" className="w-full sm:w-auto mt-3 sm:mt-0">
                     <button className="border border-[#283036] text-[#283036] px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition w-full sm:w-auto">
                         Partner with us
                     </button>

@@ -209,7 +209,7 @@ function AssesmentLandingPage() {
                             {/* Join Button */}
                             <div className="mt-6 md:mt-8">
                                 <button
-                                    onClick={() => navigate("/contact")}
+                                    onClick={() => navigate("/signup")}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-5 md:px-6 py-2 rounded-full transition text-sm md:text-base"
                                 >
                                     Join

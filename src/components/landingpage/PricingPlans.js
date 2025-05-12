@@ -113,7 +113,7 @@ const PricingPlans = () => {
                   <p className="mt-1 text-xs md:text-sm text-gray-600">{plan.description}</p>
                   <p className="mt-3 md:mt-4 text-xl md:text-2xl font-semibold text-[#263238]"><span className="text-[20px] text-gray-500 line-through">{plan.originalPrice}</span> {plan.price}</p>
                   <button
-                    onClick={() => { navigate("/contact") }}
+                    onClick={() => { navigate("/signup") }}
                     className="mt-3 md:mt-4  bg-blue-600 hover:bg-blue-700 text-white py-2 px-7  rounded-full  transition duration-300"
                   >
                     {plan.button}
@@ -220,12 +220,12 @@ const PricingPlans = () => {
               We're building more than a platform — we're building a world where every child feels seen early, and every caregiver feels supported. Whether you're a school, clinic, parent, or simply someone who believes in early care, we'd love to build with you.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full sm:w-auto">
-              <Link to="/assesment-landing" className="w-full sm:w-auto">
+              <Link to="/signup" className="w-full sm:w-auto">
                 <button className="w-full bg-[#283036] text-white px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#1f252b] transition">
                   Take the free test
                 </button>
               </Link>
-              <Link to="/partener-landing" className="w-full sm:w-auto">
+              <Link to="/signup" className="w-full sm:w-auto">
                 <button className="w-full border border-[#283036] text-[#283036] px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
                   Partner with us
                 </button>

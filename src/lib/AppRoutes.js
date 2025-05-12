@@ -18,6 +18,7 @@ import PersonalAssesment from "../components/dashboard/dashboardComponents/Perso
 import Plans from "../components/dashboard/dashboardComponents/Plans";
 import GoogleCallback from "../components/signin/GoogleCallback";
 import PartnerDashboardLayout from "../components/partner/PartnerDashboardLayout";
+import AssesmentConsent from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentConsent";
 
 function AppRoutes() {
   return (
@@ -65,6 +66,10 @@ function AppRoutes() {
             />
             <Route path="/personal/plans" element={<Plans />} />
             <Route path="/auth/callback" element={<GoogleCallback />} />
+            <Route
+              path="/personal/asssesment-consent"
+              element={<AssesmentConsent />}
+            />
           </Routes>
         </Suspense>
       </Router>

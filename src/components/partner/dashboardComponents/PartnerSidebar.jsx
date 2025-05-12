@@ -26,7 +26,7 @@ const PartnerSidebar = ({ onTabChange }) => {
 
   return (
     <aside className="flex flex-col h-screen bg-white w-full font-quicksand">
-      <div className="flex items-center justify-center px-6 py-4 border-b border-gray-300">
+      <div className="h-[10%] flex items-center justify-center px-6 py-4 border-b border-gray-300">
         <img
           src="/images/MDI-Logo.png"
           alt="MYDATA INSIGHTS"
@@ -34,7 +34,7 @@ const PartnerSidebar = ({ onTabChange }) => {
         />
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="h-[80%] flex-1 px-4 py-6 space-y-2">
         <button
           onClick={() => handleTabClick("dashboard")}
           className={`group flex items-center px-4 py-2 font-normal text-base transition-colors relative w-full text-left bg-white ${

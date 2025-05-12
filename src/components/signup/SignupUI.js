@@ -43,7 +43,7 @@ function SignupUI({
     const { otpMutation, motherMutation, childMutation } = useSignIn();
     const { login, hasAuthenticated } = useAuth();
     const [accessToken, setAccessToken] = useState();
-    const [isAccepted, setIsAccepted] = useState(false);
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
     const navigate = useNavigate();
 
     const methods = useForm({
@@ -346,8 +346,8 @@ function SignupUI({
                                     <input
                                         type="checkbox"
                                         id="termsAccepted"
-                                        checked={isAccepted}
-                                        onChange={(e) => setIsAccepted(e.target.checked)}
+                                        checked={isTermsAccepted}
+                                        onChange={(e) => setIsTermsAccepted(e.target.checked)}
                                         className="mt-1"
                                     />
                                     <label htmlFor="terms" className="text-gray-600">
@@ -365,8 +365,8 @@ function SignupUI({
 
                                 <button
                                     type="submit"
-                                    className={`${isPending ? "sign-load" : "sign"} w-full ${!isAccepted ? "bg-gray-400 cursor-not-allowed" : "bg-[#4776E6] hover:bg-[#365fbd]"} text-white text-sm py-2 rounded-full transition`}
-                                    disabled={!isAccepted}>
+                                    className={`${isPending ? "sign-load" : "sign"} w-full ${!isTermsAccepted ? "bg-gray-400 cursor-not-allowed" : "bg-[#4776E6] hover:bg-[#365fbd]"} text-white text-sm py-2 rounded-full transition`}
+                                    disabled={!isTermsAccepted}>
                                     {isPending ? <ButtonLoader /> : " Sign Up"}
                                 </button>
 

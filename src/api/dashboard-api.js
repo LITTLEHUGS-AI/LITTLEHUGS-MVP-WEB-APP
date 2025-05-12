@@ -6,7 +6,7 @@ export const getProfileDetails = async () => {
       `https://api.ourlittlehugs.com/v1/api/user-profiles`,
       {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("accessToken"),
         },
       }
     );

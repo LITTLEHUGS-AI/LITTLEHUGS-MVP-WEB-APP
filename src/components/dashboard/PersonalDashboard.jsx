@@ -60,7 +60,7 @@ const PersonalDashboard = () => {
         headerStyle={{ display: "none" }}
       >
         <Sidebar />
-      </Drawer>
+      </Drawer> 
     </>
   );
 };

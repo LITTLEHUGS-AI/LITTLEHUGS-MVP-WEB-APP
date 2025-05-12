@@ -17,7 +17,7 @@ function SignIn() {
   useEffect(() => {
     if (signInMutation.isSuccess) {
       login(data);
-      window.location.href = "/";
+      window.location.href = "/personal/dashboard";
     }
   }, [data, login, signInMutation.isSuccess]);
 

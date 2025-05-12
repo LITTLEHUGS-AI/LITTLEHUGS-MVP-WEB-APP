@@ -8,15 +8,15 @@ import axios from "axios";
 import Navbar from '../common/Navbar';
 import { useAuth } from '../../lib/AuthContext';
 import useSignIn from '../signin/useSignIn';
-// import { addToast } from '../../lib/useToastContext';
 import { toastErrorMessage } from "../common/Constants";
-import { apiClient } from '../../api/api-client';
+import { apiClient, setupApiAccessToken } from '../../api/api-client';
 
 const INITIAL_VALUES = {
     name: "",
     email: "",
     password: "",
     country: "",
+    organisation_type: "",
     language: ""
 };
 
@@ -38,14 +38,15 @@ function SignupUI({
 
     const [allLanguages, setAllLanguages] = useState([]);
     const [allCountries, setAllCountries] = useState([]);
-    const [showWellnessPopup, setShowWellnessPopup] = useState(false);
-    const [showChildWellnessPopup, setChildShowWellnessPopup] = useState(false);
+    const [showWomenPopup, setshowWomenPopup] = useState(false);
+    const [showChildPopup, setshowChildPopup] = useState(false);
     const { otpMutation, motherMutation, childMutation } = useSignIn();
     const { login, hasAuthenticated } = useAuth();
     const [accessToken, setAccessToken] = useState();
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
     const navigate = useNavigate();
 
+    const [currentStep, setCurrentStep] = useState(1);
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
         resolver: zodResolver(SignInFormSchema),
@@ -92,6 +93,8 @@ function SignupUI({
     const [resendEnabled, setResendEnabled] = useState(false);
     const otpdata = otpMutation?.data;
     const [resentOtp, setResentOtp] = useState(false);
+
+    const [selected, setSelected] = useState('personal');
 
     useEffect(() => {
         if (timer > 0) {
@@ -159,7 +162,7 @@ function SignupUI({
 
     useEffect(() => {
         if (motherMutation.isSuccess) {
-            setShowWellnessPopup(false);
+            // setShowWellnessPopup(false);
             navigate("/");
             // addToast({
             //     type: "error",
@@ -170,7 +173,7 @@ function SignupUI({
 
     useEffect(() => {
         if (childMutation.isSuccess) {
-            setChildShowWellnessPopup(false);
+            // setChildShowWellnessPopup(false);
             navigate("/");
             // addToast({
             //     type: "error",
@@ -271,6 +274,64 @@ function SignupUI({
         setAllCountries([...countries]);
     }
 
+    async function handleProfile() {
+
+        if (selected === 'personal') {
+            const promises = [];
+            setupApiAccessToken(accessToken);
+            try {
+                if (showWomenPopup) {
+                    const womenProfilePromise = apiClient.post('https://api.ourlittlehugs.com/v1/api/mother-profile', {
+                        "dob": "2025-05-12",
+                        "life_stage": "string",
+                        "weight": 0,
+                        "height": 0,
+                        "life_style": 0,
+                        "occupation": 0,
+                        "tone_preference": "string"
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log('Mother profile data successfully sent');
+                        } else {
+                            console.error('Error sending mother profile data');
+                        }
+                    });
+
+                    promises.push(womenProfilePromise);
+                }
+
+                if (showChildPopup) {
+                    const childProfilePromise = apiClient.post('https://api.ourlittlehugs.com/v1/api/child-profile', {
+                        "name": "raj kumar 2",
+                        "dob": "2025-05-12",
+                        "age_group": "2",
+                        "goal": {},
+                        "relation_with_child": "",
+                        "weight": 0,
+                        "height": 0
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log('Child profile data successfully sent');
+                        } else {
+                            console.error('Error sending child profile data');
+                        }
+                    });
+
+                    promises.push(childProfilePromise);
+                }
+                await Promise.all(promises);
+
+                navigate("/personal/dashboard")
+            }
+            catch (error) {
+                alert('Some Error Occured')
+            }
+        }
+        if (selected === 'partner') {
+            navigate("/partner/dashboard")
+        }
+    }
+
 
     return (
         <div className="flex flex-col min-h-screen bg-[#fef9f6]">
@@ -298,6 +359,25 @@ function SignupUI({
                         </p>
                         <FormProvider {...methods}>
                             <form className="space-y-4" onSubmit={methods.handleSubmit(handleSubmit)}>
+
+                                <div className="flex items-center justify-center mt-10">
+                                    <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setSelected('personal')}
+                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'personal'
+                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                        >
+                                            Personal
+                                        </button>
+                                        <button
+                                            onClick={() => setSelected('partner')}
+                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'partner'
+                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                        >
+                                            Partner
+                                        </button>
+                                    </div>
+                                </div>
                                 <InputField
                                     name="name"
                                     fieldId="name"
@@ -322,6 +402,15 @@ function SignupUI({
                                     handleChange={handleShowPassword}
                                     isDisabled={isPending}
                                 />
+
+                                <select {...methods.register("country")} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                                    <option value="" hidden selected>* Country</option>
+                                    {allCountries.map((country, i) => (
+                                        <option key={i} value={country}>
+                                            {country}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 <div className="flex gap-4">
                                     <select {...methods.register("country")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
@@ -389,37 +478,196 @@ function SignupUI({
                     </div>
                 </div>
 
+
                 {/* Popup Modal */}
                 {(showPopup === 1) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[250px] relative">
-                            <h3 className="text-gray-800 font-medium mb-4 text-base">I need LittleHugs for</h3>
-                            <div className="space-y-3 text-sm text-gray-700">
-                                <label className="flex items-start gap-2">
-                                    <input
-                                        type="checkbox"
-                                        className="mt-1 accent-gray-700"
-                                        onChange={(e) => {
-                                            setShowWellnessPopup(e.target.checked);
-                                            setShowPopup(null);
-                                        }}
-                                    />
-                                    <span>Women’s Wellness Plan</span>
-                                </label>
+                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
 
-                                <label className="flex items-start space-x-2">
-                                    <input type="checkbox" className="mt-1"
-                                        onChange={(e) => {
-                                            setChildShowWellnessPopup(e.target.checked);
-                                            setShowPopup(null);
-                                        }}
-                                    />
-                                    <span>Child’s Development & Growth Plan</span>
-                                </label>
+                            <div className="mb-8 mx-auto w-full max-w-xl">
+                                <div className="flex max-w-60 justify-between items-center mx-auto mb-2">
+                                    {["Profile Selection", "Profile Completion"].map((step, index) => (
+                                        <div key={index} className="flex flex-col items-center text-center">
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${index + 1 === currentStep ? 'bg-blue-500 text-white' :
+                                                index + 1 < currentStep ? 'bg-blue-500 text-white' : 'bg-gray-400 text-white'}`}>
+                                                {index + 1}
+                                            </div>
+                                            <div className={`mt-2 text-sm ${index + 1 === currentStep ? 'text-blue-500' : 'text-gray-500'}`}>
+                                                {step}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
+                            {(currentStep === 1) && <>
+                                <h3 className="text-gray-800 font-medium mb-4 text-base">I need LittleHugs for</h3>
+                                <div className="space-y-3 text-sm text-gray-700">
+                                    <label className="flex items-start gap-2">
+                                        <input className="mt-1"
+                                            type="checkbox"
+                                            checked={showWomenPopup}
+                                            onChange={(e) => setshowWomenPopup(prev => !prev)}
+                                        />
+                                        <span>Women’s Wellness Plan</span>
+                                    </label>
+
+                                    <label className="flex items-start space-x-2">
+                                        <input type="checkbox" className="mt-1"
+                                            checked={showChildPopup}
+                                            onChange={(e) => setshowChildPopup(prev => !prev)}
+                                        />
+                                        <span>Child’s Development & Growth Plan</span>
+                                    </label>
+                                </div>
+                            </>}
+
+                            {(currentStep === 2) &&
+                                <>
+                                    {/* for women */}
+                                    {showWomenPopup && (
+                                        <div className='mb-12'>
+                                            <h2 className='font-bold'>Women Profile</h2>
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
+                                                    <img src="/images/women.png" alt="Profile" className="w-full h-full object-cover" />
+                                                </div>
+                                            </div>
+
+                                            <form onSubmit={submitMotherProfile}>
+                                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                                    <input name="dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
+                                                    <select name="lifeStage" className="border p-2 rounded" required>
+                                                        <option value="" disabled selected>* Current life stage</option>
+                                                        <option>Early adulthood</option>
+                                                        <option>Adulthood</option>
+                                                        <option>Pregnancy</option>
+                                                        <option>Menopause</option>
+                                                        <option>Prefer not to say</option>
+                                                    </select>
+                                                    <select name="goal" className="border p-2 rounded" required>
+                                                        <option disabled selected>* Goal is to work on</option>
+                                                        <option>Sleep</option>
+                                                        <option>Hormones</option>
+                                                        <option>fatigue</option>
+                                                        <option>Anxiety</option>
+                                                        <option>Self Care</option>
+                                                    </select>
+                                                    <select name="tone" className="border p-2 rounded" required>
+                                                        <option disabled selected>* Tone Preference</option>
+                                                        <option>Reassuring</option>
+                                                        <option>Motivational</option>
+                                                        <option>Calming</option>
+                                                        <option>Neutral</option>
+                                                    </select>
+                                                    <div className="relative">
+                                                        <input name="weight" type="text" placeholder="Weight" className="border p-2 rounded w-full" required />
+                                                        <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
+                                                    </div>
+                                                    <div className="relative">
+                                                        <input name="height" type="text" placeholder="Height" className="border p-2 rounded w-full" required />
+                                                        <span className="absolute right-2 top-2.5 text-gray-500">cm</span>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    )}
+                                    {/* for child */}
+                                    {showChildPopup && (
+                                        <div className='mt-12'>
+                                            <h2 className='font-bold'>Child Profile</h2>
+                                            {/* Profile */}
+                                            <div className="flex flex-col items-center mb-6">
+                                                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
+                                                    <img
+                                                        src="/images/women.png"
+                                                        alt="Profile"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Form Fields */}
+                                            <form onSubmit={submitChildProfile}>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                                    <input
+                                                        name="child_name"
+                                                        type="text"
+                                                        placeholder="* Child's Name"
+                                                        className="border p-2 rounded"
+                                                        required
+                                                    />
+                                                    <div className="relative">
+                                                        <input name="child_dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded w-full" />
+                                                    </div>
+
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="* Weight"
+                                                            className="border p-2 rounded w-full pr-10"
+                                                            name='weight'
+                                                            required
+                                                        />
+                                                        <span className="absolute right-3 top-2.5 text-gray-500">kg</span>
+                                                    </div>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="* Height"
+                                                            className="border p-2 rounded w-full pr-10"
+                                                            name='height'
+                                                            required
+                                                        />
+                                                        <span className="absolute right-3 top-2.5 text-gray-500">cm</span>
+                                                    </div>
+
+                                                    <select name='age_group' className="border p-2 rounded" required>
+                                                        <option value="" hidden selected>* Age Group</option>
+                                                        <option>0-2 years</option>
+                                                        <option>3-5 years</option>
+                                                        <option>6-12 years</option>
+                                                    </select>
+
+                                                    <select name='gaol' className="border p-2 rounded" required>
+                                                        <option value="" hidden selected>* Goal</option>
+                                                        <option>Growth</option>
+                                                        <option>Nutrition</option>
+                                                        <option>Activity</option>
+                                                    </select>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    )}
+                                </>
+                            }
+
+                            <div className="mt-8 flex justify-between">
+                                {(currentStep === 2) &&
+                                    <button
+                                        className={`px-8 py-2 text-white rounded-full ${currentStep > 1 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
+                                        onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, 2))}
+                                        disabled={currentStep < 2}                                >
+                                        Back
+                                    </button>}
+                                {(currentStep === 1) && <button
+                                    className={`px-8 py-2 text-white rounded-full ${(showWomenPopup || showChildPopup) ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
+                                    onClick={() => setCurrentStep(prevStep => Math.min(prevStep + 1, 2))}
+                                    disabled={currentStep >= 2 || (!showWomenPopup && !showChildPopup)}                                >
+                                    Next
+                                </button>}
+                                {(currentStep === 2) &&
+                                    <div onClick={handleProfile} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
+                                        Go to the Dashboard
+                                    </div>}
+                            </div>
+
                         </div>
                     </div>
                 )}
+
                 {(showPopup === 'Terms&Conditions') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-[#FAF3ED] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
                         {/* Header */}
@@ -711,212 +959,61 @@ function SignupUI({
                 </div>)}
 
 
-                {showWellnessPopup && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                        <div className="bg-white rounded-xl w-[550px] p-8 relative text-gray-700">
-                            {/* Close Button */}
-                            <button
-                                className="absolute top-4 right-4 text-gray-500 hover:text-black"
-                                onClick={() => setShowWellnessPopup(false)}
-                            >
-                                ✕
-                            </button>
-
-                            {/* Profile Image & Progress */}
-                            <div className="flex flex-col items-center">
-                                <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
-                                    <img src="/images/women.png" alt="Profile" className="w-full h-full object-cover" />
-                                </div>
-                                <p className="text-sm font-medium mb-4">23% Complete</p>
-                            </div>
-
-                            <form onSubmit={submitMotherProfile}>
-                                <div className="grid grid-cols-2 gap-4 text-sm">
-                                    <input name="dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
-                                    <select name="lifeStage" className="border p-2 rounded" required>
-                                        <option value="" disabled selected>* Current life stage</option>
-                                        <option>Early adulthood</option>
-                                        <option>Adulthood</option>
-                                        <option>Pregnancy</option>
-                                        <option>Menopause</option>
-                                        <option>Prefer not to say</option>
-                                    </select>
-                                    <select name="goal" className="border p-2 rounded" required>
-                                        <option disabled selected>* Goal is to work on</option>
-                                        <option>Sleep</option>
-                                        <option>Hormones</option>
-                                        <option>fatigue</option>
-                                        <option>Anxiety</option>
-                                        <option>Self Care</option>
-                                    </select>
-                                    <select name="tone" className="border p-2 rounded" required>
-                                        <option disabled selected>* Tone Preference</option>
-                                        <option>Reassuring</option>
-                                        <option>Motivational</option>
-                                        <option>Calming</option>
-                                        <option>Neutral</option>
-                                    </select>
-                                    <div className="relative">
-                                        <input name="weight" type="text" placeholder="Weight" className="border p-2 rounded w-full" required />
-                                        <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
-                                    </div>
-                                    <div className="relative">
-                                        <input name="height" type="text" placeholder="Height" className="border p-2 rounded w-full" required />
-                                        <span className="absolute right-2 top-2.5 text-gray-500">cm</span>
-                                    </div>
-                                </div>
-
-                                {/* Go to Dashboard Button */}
-                                <div className="mt-6 flex justify-center">
-                                    <button type='submit' className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
-                                        Go to the Dashboard
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-
-                {/* for child */}
-
-                {showChildWellnessPopup && (
+                {isOtp && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
                         <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
-                            {/* Profile & Progress */}
-                            <div className="flex flex-col items-center mb-6">
-                                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
-                                    <img
-                                        src="/images/women.png"
-                                        alt="Profile"
-                                        className="w-full h-full object-cover"
+                            <h2 className="text-2xl font-semibold text-center text-gray-800">
+                                OTP Authentication
+                            </h2>
+                            <p className="text-center text-gray-500 my-3">Please enter the OTP</p>
+
+                            {/* OTP Inputs */}
+                            <div className="flex justify-center gap-3 mb-4">
+                                {otp.map((digit, index) => (
+                                    <input
+                                        key={index}
+                                        type="text"
+                                        maxLength="1"
+                                        value={digit}
+                                        onChange={(e) => handleChange(e.target.value, index)}
+                                        onKeyDown={(e) => handleKeyDown(e, index)}
+                                        ref={(el) => (inputsRef.current[index] = el)}
+                                        className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
-                                </div>
-                                <p className="text-sm font-medium">23 % Complete</p>
+                                ))}
+                            </div>
+                            {otpError && (
+                                <span className="text-[#DC2626] text-xs leading-[16px] font-normal">
+                                    Please enter OTP
+                                </span>
+                            )}
+
+                            {/* Timer or Resend */}
+                            <div className="text-right text-sm mb-4 pr-2">
+                                {resendEnabled ? (
+                                    <button
+                                        onClick={handleResendOtp}
+                                        className="text-blue-500 hover:underline focus:outline-none"
+                                    >
+                                        Resend
+                                    </button>
+                                ) : (
+                                    <span className="text-gray-500">
+                                        00:{("0" + timer).slice(-2)}
+                                    </span>
+                                )}
                             </div>
 
-                            {/* Form Fields */}
-                            <form onSubmit={submitChildProfile}>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                    <input
-                                        name="child_name"
-                                        type="text"
-                                        placeholder="* Child's Name"
-                                        className="border p-2 rounded"
-                                        required
-                                    />
-                                    <div className="relative">
-                                        <input name="child_dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded w-full" />
-                                    </div>
-
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            placeholder="* Weight"
-                                            className="border p-2 rounded w-full pr-10"
-                                            name='weight'
-                                            required
-                                        />
-                                        <span className="absolute right-3 top-2.5 text-gray-500">kg</span>
-                                    </div>
-                                    <div className="relative">
-                                        <input
-                                            type="text"
-                                            placeholder="* Height"
-                                            className="border p-2 rounded w-full pr-10"
-                                            name='height'
-                                            required
-                                        />
-                                        <span className="absolute right-3 top-2.5 text-gray-500">cm</span>
-                                    </div>
-
-                                    <select name='age_group' className="border p-2 rounded" required>
-                                        <option value="" hidden selected>* Age Group</option>
-                                        <option>0-2 years</option>
-                                        <option>3-5 years</option>
-                                        <option>6-12 years</option>
-                                    </select>
-
-                                    <select name='gaol' className="border p-2 rounded" required>
-                                        <option value="" hidden selected>* Goal</option>
-                                        <option>Growth</option>
-                                        <option>Nutrition</option>
-                                        <option>Activity</option>
-                                    </select>
-                                </div>
-
-                                {/* Dashboard Button */}
-                                <div className="mt-8 flex justify-center">
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full"
-                                    >
-                                        Go to the Dashboard
-                                    </button>
-                                </div>
-                            </form>
+                            {/* Continue Button */}
+                            <button
+                                onClick={handleSubmitForOTP}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition duration-200"
+                            >
+                                Continue
+                            </button>
                         </div>
                     </div>
                 )}
-
-                {isOtp && (
-                    <>
-                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                            <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
-                                <h2 className="text-2xl font-semibold text-center text-gray-800">
-                                    OTP Authentication
-                                </h2>
-                                <p className="text-center text-gray-500 my-3">Please enter the OTP</p>
-
-                                {/* OTP Inputs */}
-                                <div className="flex justify-center gap-3 mb-4">
-                                    {otp.map((digit, index) => (
-                                        <input
-                                            key={index}
-                                            type="text"
-                                            maxLength="1"
-                                            value={digit}
-                                            onChange={(e) => handleChange(e.target.value, index)}
-                                            onKeyDown={(e) => handleKeyDown(e, index)}
-                                            ref={(el) => (inputsRef.current[index] = el)}
-                                            className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        />
-                                    ))}
-                                </div>
-                                {otpError && (
-                                    <span className="text-[#DC2626] text-xs leading-[16px] font-normal">
-                                        Please enter OTP
-                                    </span>
-                                )}
-
-                                {/* Timer or Resend */}
-                                <div className="text-right text-sm mb-4 pr-2">
-                                    {resendEnabled ? (
-                                        <button
-                                            onClick={handleResendOtp}
-                                            className="text-blue-500 hover:underline focus:outline-none"
-                                        >
-                                            Resend
-                                        </button>
-                                    ) : (
-                                        <span className="text-gray-500">
-                                            00:{("0" + timer).slice(-2)}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Continue Button */}
-                                <button
-                                    onClick={handleSubmitForOTP}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition duration-200"
-                                >
-                                    Continue
-                                </button>
-                            </div>
-                        </div>
-                    </>
-                )}
-
-                {/* for child and womens */}
 
 
                 {/* Bottom Wave Decoration */}

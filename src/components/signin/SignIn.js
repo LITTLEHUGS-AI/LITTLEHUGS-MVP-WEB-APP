@@ -21,11 +21,11 @@ function SignIn() {
     }
   }, [data, login, signInMutation.isSuccess]);
 
-  useEffect(() => {
-    if (hasAuthenticated) {
-      navigate("/");
-    }
-  }, [hasAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (hasAuthenticated) {
+  //     navigate("/");
+  //   }
+  // }, [hasAuthenticated, navigate]);
 
   const onSubmit = (data) => {
     signInMutation.mutate(data);

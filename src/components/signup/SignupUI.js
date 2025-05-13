@@ -17,6 +17,7 @@ const INITIAL_VALUES = {
     password: "",
     country: "",
     organisation_type: "",
+    is_organization: false,
     language: ""
 };
 
@@ -57,15 +58,16 @@ function SignupUI({
     }, [])
 
     const handleSubmit = (data) => {
+        data = { ...data, is_organization: (selected === 'personal') ? false : true }
         onSubmit(data);
         setEmail(data.email);
     };
 
-    useEffect(() => {
-        if (hasAuthenticated) {
-            navigate("/");
-        }
-    }, [hasAuthenticated, navigate]);
+    // useEffect(() => {
+    //     if (hasAuthenticated) {
+    //         navigate("/personal/dashboard");
+    //     }
+    // }, [hasAuthenticated, navigate]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -155,7 +157,12 @@ function SignupUI({
                 login(otpdata);
                 setAccessToken(`token ${otpdata.token}`)
                 setIsOtp(false);
-                setShowPopup(1);
+
+                if (selected === 'personal')
+                    setShowPopup(1);
+                if (selected === 'partner')
+                    setShowPopup(2);
+
             }
         }
     }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp]);
@@ -275,10 +282,10 @@ function SignupUI({
     }
 
     async function handleProfile() {
+            setupApiAccessToken(accessToken);
 
         if (selected === 'personal') {
             const promises = [];
-            setupApiAccessToken(accessToken);
             try {
                 if (showWomenPopup) {
                     const womenProfilePromise = apiClient.post('https://api.ourlittlehugs.com/v1/api/mother-profile', {
@@ -328,7 +335,18 @@ function SignupUI({
             }
         }
         if (selected === 'partner') {
-            navigate("/partner/dashboard")
+            apiClient.post('https://api.ourlittlehugs.com/v1/api/organisation-profile', {
+                "organisation_name": "My Org",
+                "description": "Default Description",
+                "org_offers": ['offer 1', 'offer 2'],
+                "littlehug_for": ['for 1 ', 'for 2']
+            }).then(response => {
+                if (response) {
+                    navigate("/partner/dashboard")
+                } else {
+                    alert('Some Error Occured')
+                }
+            });
         }
     }
 
@@ -357,27 +375,29 @@ function SignupUI({
                         <p className="text-center text-sm text-gray-500 mb-6">
                             Already have an account? <Link to="/signin" className="text-blue-600 hover:underline">Sign in</Link>
                         </p>
+
+                        <div className="flex items-center justify-center my-6">
+                            <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
+                                <button
+                                    onClick={() => setSelected('personal')}
+                                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'personal'
+                                        ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                >
+                                    Personal
+                                </button>
+                                <button
+                                    onClick={() => setSelected('partner')}
+                                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'partner'
+                                        ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                >
+                                    Partner
+                                </button>
+                            </div>
+                        </div>
+
                         <FormProvider {...methods}>
                             <form className="space-y-4" onSubmit={methods.handleSubmit(handleSubmit)}>
 
-                                <div className="flex items-center justify-center mt-10">
-                                    <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setSelected('personal')}
-                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'personal'
-                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                                        >
-                                            Personal
-                                        </button>
-                                        <button
-                                            onClick={() => setSelected('partner')}
-                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'partner'
-                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                                        >
-                                            Partner
-                                        </button>
-                                    </div>
-                                </div>
                                 <InputField
                                     name="name"
                                     fieldId="name"
@@ -450,7 +470,6 @@ function SignupUI({
                                         </span>
                                     </label>
                                 </div>
-
 
                                 <button
                                     type="submit"
@@ -667,6 +686,84 @@ function SignupUI({
                         </div>
                     </div>
                 )}
+
+                {(showPopup === 2) && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
+
+                            <div className="flex flex-col items-center mb-6">
+                                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
+                                    <img
+                                        src="/images/women.png"
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Form Fields */}
+                            <form className="flex flex-col gap-4" onSubmit={submitChildProfile}>
+                                <input
+                                    name="org_name"
+                                    type="text"
+                                    placeholder="* Organisation Name"
+                                    className="w-full border p-2 rounded"
+                                    required
+                                />
+
+                                <input
+                                    name="description"
+                                    type="text"
+                                    placeholder="Description"
+                                    className="w-full border p-2 rounded"
+                                    required
+                                />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <input
+                                        type="text"
+                                        placeholder="* city"
+                                        className="border p-2 rounded w-full pr-10"
+                                        name='city'
+                                        required
+                                    />
+
+                                    <input
+                                        type="text"
+                                        placeholder="* Language prefrence"
+                                        className="border p-2 rounded w-full pr-10"
+                                        name='language'
+                                        required
+                                    />
+
+                                    <select name='age_group' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* Services you offer</option>
+                                        <option>0-2 years</option>
+                                        <option>3-5 years</option>
+                                        <option>6-12 years</option>
+                                    </select>
+
+                                    <select name='gaol' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* You want LittleHugs for</option>
+                                        <option>Growth</option>
+                                        <option>Nutrition</option>
+                                        <option>Activity</option>
+                                    </select>
+
+                                </div>
+
+                            </form>
+
+                            <div className="mt-8 flex justify-center">
+                                <div onClick={handleProfile} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
+                                    Go to the Dashboard
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
 
                 {(showPopup === 'Terms&Conditions') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-[#FAF3ED] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

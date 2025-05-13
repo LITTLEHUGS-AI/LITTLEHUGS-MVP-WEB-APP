@@ -8,22 +8,34 @@ import { apiClient } from '../../api/api-client.js';
 
 function PartenerLandingPage() {
   const [showPopup, setShowPopup] = useState(null);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+
 
   const [formData, setFormData] = useState({
     organization_type: '',
     name: '',
     email: '',
-    city: '',
-    language: '',
+    country: '',
+    language: ''
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
+
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country);
+    setFormData({
+      ...formData,
+      country
+    });
+    setIsOpen(false);
+  };
+  
   const [openIndex, setOpenIndex] = useState(0);
 
   const toggleAccordion = (index) => {
@@ -62,10 +74,7 @@ function PartenerLandingPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSelect = (country) => {
-    setSelectedCountry(country);
-    setIsOpen(false);
-  };
+
   const { title, description } = routesConfig.partenerLanding;
 
   const handleSubmit = async (e) => {
@@ -84,6 +93,14 @@ function PartenerLandingPage() {
       alert(err)
     }
   };
+
+
+  // Check if all form fields are filled and terms are agreed to
+  useEffect(() => {
+    const { organization_type, name, email, country, language } = formData;
+    const allFieldsFilled = organization_type && name && email && country && language;
+    setIsFormValid(allFieldsFilled && agreedToTerms);
+  }, [formData, agreedToTerms]);
 
   return (
     <>
@@ -515,102 +532,128 @@ function PartenerLandingPage() {
               className="w-full max-w-[250px] sm:max-w-[320px] md:max-w-[400px]"
             />
 
-            <form className="w-full max-w-md space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
-              <select name="organization_type" className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600" onChange={handleChange}>
-                <option value="" disabled hidden selected>Organisation Type</option>
-                <option>Clinics</option>
-                <option>Schools</option>
-                <option>NGO</option>
-                <option>Therapy Centers</option>
-                <option>Corporate</option>
-              </select>
+      <form className="w-full max-w-md space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
+      <select 
+        name="organization_type" 
+        className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600" 
+        onChange={handleChange}
+        value={formData.organization_type}
+        required
+      >
+        <option value="" disabled hidden>Organisation Type</option>
+        <option>Clinics</option>
+        <option>Schools</option>
+        <option>NGO</option>
+        <option>Therapy Centers</option>
+        <option>Corporate</option>
+      </select>
 
-              {/* Name */}
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleChange}
-                className="w-full p-2.5 sm:p-3 border rounded-md"
-              />
+      {/* Name */}
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        value={formData.name}
+        onChange={handleChange}
+        className="w-full p-2.5 sm:p-3 border rounded-md"
+        required
+      />
 
-              {/* Email */}
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleChange}
-                className="w-full p-2.5 sm:p-3 border rounded-md"
-              />
+      {/* Email */}
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        className="w-full p-2.5 sm:p-3 border rounded-md"
+        required
+      />
 
-              {/* Country and Language Preference */}
-              <div className="relative w-full" ref={dropdownRef}>
-                {/* Dropdown Trigger */}
-                <div
-                  className="flex justify-between items-center border p-3 rounded-md text-gray-700 cursor-pointer bg-white hover:shadow-sm transition-shadow"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <span className={`${!selectedCountry ? 'text-gray-400' : ''}`}>
-                    {selectedCountry || 'Select Country'}
-                  </span>
-                  <svg
-                    className={`w-5 h-5 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+      {/* Country and Language Preference */}
+      <div className="relative w-full" ref={dropdownRef}>
+        {/* Dropdown Trigger */}
+        <div
+          className="flex justify-between items-center border p-3 rounded-md text-gray-700 cursor-pointer bg-white hover:shadow-sm transition-shadow"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className={`${!selectedCountry ? 'text-gray-400' : ''}`}>
+            {selectedCountry || 'Select Country'}
+          </span>
+          <svg
+            className={`w-5 h-5 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
 
-                {/* Dropdown List */}
-                {isOpen && (
-                  <ul className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg z-20">
-                    {countries.map((country) => (
-                      <li
-                        key={country}
-                        onClick={() => handleSelect(country)}
-                        className="px-4 py-2 hover:bg-gray-100 text-gray-700 cursor-pointer transition-colors"
-                      >
-                        {country}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <select name="language" className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" onChange={handleChange} required>
-                <option value="" hidden selected>* Language</option>
-                {allLanguages.map((language, i) => (
-                  <option key={i} value={language}>
-                    {language}
-                  </option>
-                ))}
-              </select>
-
-
-              {/* Checkbox */}
-              <div className="flex items-start pt-5 sm:pt-6 md:pt-10 gap-3 sm:gap-4 md:gap-7 text-xs sm:text-sm font-quicksand font-bold text-gray-600">
-                <input type="checkbox" className="mt-1" />
-                <label htmlFor="terms" className="text-gray-600">
-                  I agree to LittleHugs’s{' '}
-                  <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline">
-                    Terms & Conditions
-                  </span>{' '}
-                  and acknowledge the{' '}
-                  <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline">
-                    Privacy Policy
-                  </span>
-                </label>
-              </div>
-
-              <button
-                className="w-full sm:min-w-[120px] md:min-w-[150px] px-4 sm:px-5 py-2.5 sm:py-3 md:pt-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition mt-4"
+        {/* Dropdown List */}
+        {isOpen && (
+          <ul className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg z-20">
+            {countries.map((country) => (
+              <li
+                key={country}
+                onClick={() => handleCountrySelect(country)}
+                className="px-4 py-2 hover:bg-gray-100 text-gray-700 cursor-pointer transition-colors"
               >
-                Request DEMO
-              </button>
-            </form>
+                {country}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <select 
+        name="language" 
+        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" 
+        onChange={handleChange} 
+        value={formData.language}
+        required
+      >
+        <option value="" hidden>* Language</option>
+        {allLanguages.map((language, i) => (
+          <option key={i} value={language}>
+            {language}
+          </option>
+        ))}
+      </select>
+
+      {/* Checkbox */}
+      <div className="flex items-start pt-5 sm:pt-6 md:pt-10 gap-3 sm:gap-4 md:gap-7 text-xs sm:text-sm font-quicksand font-bold text-gray-600">
+        <input 
+          type="checkbox" 
+          className="mt-1"
+          checked={agreedToTerms}
+          onChange={() => setAgreedToTerms(!agreedToTerms)}
+          required
+        />
+        <label htmlFor="terms" className="text-gray-600">
+          I agree to LittleHugs's{' '}
+          <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline cursor-pointer">
+            Terms & Conditions
+          </span>{' '}
+          and acknowledge the{' '}
+          <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline cursor-pointer">
+            Privacy Policy
+          </span>
+        </label>
+      </div>
+
+      <button
+        className={`w-full sm:min-w-[120px] md:min-w-[150px] px-4 sm:px-5 py-2.5 sm:py-3 md:pt-4 text-white rounded-full transition mt-4 ${
+          isFormValid 
+            ? 'bg-blue-500 hover:bg-blue-600 cursor-pointer' 
+            : 'bg-blue-300 cursor-not-allowed'
+        }`}
+        disabled={!isFormValid}
+      >
+        Request DEMO
+      </button>
+    </form>
 
           </div>
         </div>

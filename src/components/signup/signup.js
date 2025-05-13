@@ -14,7 +14,7 @@ function handleSubmitApi(mutate, data) {
         country: data.country,
         language: data.language,
         is_personal: true,
-        is_organization: false,
+        is_organization: data.is_organization,
     };
     return mutate(payload);
 }

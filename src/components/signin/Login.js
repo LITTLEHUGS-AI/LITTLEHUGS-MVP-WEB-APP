@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormProvider, useForm } from "react-hook-form";
 import Navbar from '../common/Navbar';
@@ -44,9 +44,74 @@ function SignInUI({
         });
     };
 
+    const inputsRef = useRef([]);
+    const [otp, setOtp] = useState(Array(6).fill(""));
+    const [forgetEmail, setForgetEmail] = useState('');
+    const [forgetEmailStep, setForgetEmailStep] = useState(0);
     const [showPopup, setShowPopup] = useState(null);
-        const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-    
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+
+
+    async function handleForgetEmailSubmit() {
+        try {
+            const res = await fetch('https://api.ourlittlehugs.com/v1/api/password-reset/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "email": forgetEmail })
+            });
+
+            if (!res.ok) throw new Error('Network response was not ok');
+
+            setForgetEmailStep(2)
+
+        } catch (error) {
+            console.error('Error during POST:', error);
+        }
+    }
+
+
+    async function handleForgetOtpSubmit() {
+
+        try {
+            const res = await fetch('https://api.ourlittlehugs.com/v1/api/password-reset/reset', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "email": forgetEmail,
+                    "otp_code": otp.join(''),
+                    "password": "Password@123",
+                    "confirm_password": "Password@123"
+                })
+            });
+
+            if (!res.ok) throw new Error('Network response was not ok');
+
+            setShowPopup(null);
+            setForgetEmailStep(0);
+            alert('Passord Chnaged')
+
+        } catch (error) {
+            console.error('Error during POST:', error);
+        }
+    }
+
+    const handleChangeOTP = (value, index) => {
+        if (!isNaN(value)) {
+            // setOtpError(false);
+            const updatedOtp = [...otp];
+            updatedOtp[index] = value;
+            setOtp(updatedOtp);
+            if (value && index < 5) {
+                inputsRef.current[index + 1].focus();
+            }
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+            inputsRef.current[index - 1].focus();
+        }
+    };
 
     return (
         <div className="flex flex-col min-h-screen bg-[#fef9f6]">
@@ -60,6 +125,73 @@ function SignInUI({
                     backgroundSize: 'cover, contain',
                 }} // Your uploaded background image
             >
+
+                {(showPopup === 'ForgetPassword') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-lg text-center shadow-lg p-8 max-w-md w-full">
+
+                        {forgetEmailStep === 1 && <>
+                            <h2 className="text-2xl font-medium text-gray-700 mb-2">
+                                Please provide your email ID
+                            </h2>
+
+                            <p className="text-gray-400 mb-6">
+                                We will send an OTP to this ID
+                            </p>
+
+                            <div className="mb-6">
+                                <input
+                                    type="email"
+                                    placeholder="* Email"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={forgetEmail}
+                                    onChange={(e) => setForgetEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleForgetEmailSubmit}
+                                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-full transition duration-200"
+                            >
+                                Reset Password
+                            </button>
+                        </>}
+
+                        {forgetEmailStep === 2 && <>
+                            <h2 className="text-2xl font-semibold text-center text-gray-800">
+                                OTP Authentication
+                            </h2>
+                            <p className="text-center text-gray-500 my-3">Please enter the OTP</p>
+
+                            <div className="flex justify-center gap-3 mb-4">
+                                {otp.map((digit, index) => (
+                                    <input
+                                        key={index}
+                                        type="text"
+                                        maxLength="1"
+                                        value={digit}
+                                        onChange={(e) => handleChangeOTP(e.target.value, index)}
+                                        onKeyDown={(e) => handleKeyDown(e, index)}
+                                        ref={(el) => (inputsRef.current[index] = el)}
+                                        className="w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    />
+                                ))}
+                            </div>
+                            {/* {otpError && (
+                                <span className="text-[#DC2626] text-xs leading-[16px] font-normal">
+                                    Please enter OTP
+                                </span>
+                            )} */}
+                            <button
+                                onClick={handleForgetOtpSubmit}
+                                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-full transition duration-200"
+                            >
+                                Submit OTP
+                            </button>
+                        </>}
+                    </div>
+
+                </div>)}
+
 
                 {(showPopup === 'Terms&Conditions') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-[#FAF3ED] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -389,29 +521,29 @@ function SignInUI({
                             />
 
                             <div className="text-right">
-                                <Link to="#" className="text-sm text-orange-500 hover:underline">Forgot Password?</Link>
+                                <button type="button" onClick={() => { setShowPopup('ForgetPassword'); setForgetEmailStep(1) }} className="text-sm text-orange-500 hover:underline">Forgot Password?</button>
                             </div>
 
-                           
-                              <div className="flex items-start space-x-2 text-sm">
-                                    <input
-                                        type="checkbox"
-                                        id="terms"
-                                        checked={isTermsAccepted}
-                                        onChange={(e) => setIsTermsAccepted(e.target.checked)}
-                                        className="mt-1"
-                                    />
-                                    <label htmlFor="terms" className="text-gray-600">
-                                        I agree to LittleHugs’s{' '}
-                                        <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline">
-                                            Terms & Conditions
-                                        </span>{' '}
-                                        and acknowledge the{' '}
-                                        <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline">
-                                            Privacy Policy
-                                        </span>
-                                    </label>
-                                </div>
+
+                            <div className="flex items-start space-x-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    checked={isTermsAccepted}
+                                    onChange={(e) => setIsTermsAccepted(e.target.checked)}
+                                    className="mt-1"
+                                />
+                                <label htmlFor="terms" className="text-gray-600">
+                                    I agree to LittleHugs’s{' '}
+                                    <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline">
+                                        Terms & Conditions
+                                    </span>{' '}
+                                    and acknowledge the{' '}
+                                    <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline">
+                                        Privacy Policy
+                                    </span>
+                                </label>
+                            </div>
 
                             <Button
                                 isDisabled={isPending}

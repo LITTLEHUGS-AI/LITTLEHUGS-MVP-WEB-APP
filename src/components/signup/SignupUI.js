@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
@@ -17,6 +17,7 @@ const INITIAL_VALUES = {
     password: "",
     country: "",
     organisation_type: "",
+    is_organization: false,
     language: ""
 };
 
@@ -32,40 +33,40 @@ function SignupUI({
     isOtp,
     setIsOtp,
 }) {
+    const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
+
     const [showPopup, setShowPopup] = useState(null);
     const [email, setEmail] = useState("");
-
     const [allLanguages, setAllLanguages] = useState([]);
     const [allCountries, setAllCountries] = useState([]);
     const [showWomenPopup, setshowWomenPopup] = useState(false);
     const [showChildPopup, setshowChildPopup] = useState(false);
     const { otpMutation, motherMutation, childMutation } = useSignIn();
-    const { login, hasAuthenticated } = useAuth();
+    const { login } = useAuth();
+    // const { login, hasAuthenticated } = useAuth();
     const [accessToken, setAccessToken] = useState();
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-    const navigate = useNavigate();
-
     const [currentStep, setCurrentStep] = useState(1);
+
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
         resolver: zodResolver(SignInFormSchema),
     });
 
-    useState(() => {
-        fetchLanguages();
-    }, [])
+    useState(() => fetchLanguages(), [])
 
     const handleSubmit = (data) => {
+        data = { ...data, is_personal: (selected === 'personal') ? true : false, is_organization: (selected === 'personal') ? false : true }
         onSubmit(data);
         setEmail(data.email);
     };
 
-    useEffect(() => {
-        if (hasAuthenticated) {
-            navigate("/");
-        }
-    }, [hasAuthenticated, navigate]);
+    // useEffect(() => {
+    //     if (hasAuthenticated) {
+    //         navigate("/personal/dashboard");
+    //     }
+    // }, [hasAuthenticated, navigate]);
 
     useEffect(() => {
         if (isSuccess) {
@@ -95,6 +96,53 @@ function SignupUI({
     const [resentOtp, setResentOtp] = useState(false);
 
     const [selected, setSelected] = useState('personal');
+
+
+    const womenGoalOptions = ['Sleep', 'Hormones', 'Fatigue', 'Anxiety', 'Self Care'];
+    const [isWomenGoalOpen, setIsWomenGoalOpen] = useState(false);
+    const [selectedWomenGoalOptions, setSelectedWomenGoalOptions] = useState([]);
+    const toggleWomenGoalDropdown = () => setIsWomenGoalOpen(!isWomenGoalOpen);
+    const toggleWomenGoalOption = (option) => {
+        setSelectedWomenGoalOptions(prevSelected => {
+            if (prevSelected.some(item => item === option))
+                return prevSelected.filter(item => item !== option);
+            else
+                return [...prevSelected, option];
+        });
+    };
+
+
+    const toneOptions = ['Reassuring', 'Motivational', 'Calming', 'Neutral'];
+    const [isToneOpen, setIsToneOpen] = useState(false);
+    const [selectedToneOptions, setSelectedToneOptions] = useState([]);
+    const toggleToneDropdown = () => setIsToneOpen(!isToneOpen);
+    const toggleToneOption = (option) => {
+        setSelectedToneOptions(prevSelected => {
+            if (prevSelected.some(item => item === option))
+                return prevSelected.filter(item => item !== option);
+            else
+                return [...prevSelected, option];
+        });
+    };
+
+
+    const womenChildOptions = ['Growth', 'Nutrition', 'Activity'];
+    const [isChildGoalOpen, setIsChildGoalOpen] = useState(false);
+    const [selectedChildGoalOptions, setSelectedChildGoalOptions] = useState([]);
+    const toggleChildGoalDropdown = () => setIsChildGoalOpen(!isChildGoalOpen);
+    const toggleChildGoalOption = (option) => {
+        setSelectedChildGoalOptions(prevSelected => {
+            if (prevSelected.some(item => item === option))
+                return prevSelected.filter(item => item !== option);
+            else
+                return [...prevSelected, option];
+        });
+    };
+
+    const [womenDP, setWomenDP] = useState('/images/women-demo.png');
+    const [childDP, setChildDP] = useState('/images/child-demo.png');
+
+
 
     useEffect(() => {
         if (timer > 0) {
@@ -155,10 +203,15 @@ function SignupUI({
                 login(otpdata);
                 setAccessToken(`token ${otpdata.token}`)
                 setIsOtp(false);
-                setShowPopup(1);
+
+                if (selected === 'personal')
+                    setShowPopup(1);
+                if (selected === 'partner')
+                    setShowPopup(2);
+
             }
         }
-    }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp]);
+    }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp, selected]);
 
     useEffect(() => {
         if (motherMutation.isSuccess) {
@@ -275,10 +328,10 @@ function SignupUI({
     }
 
     async function handleProfile() {
+        setupApiAccessToken(accessToken);
 
         if (selected === 'personal') {
             const promises = [];
-            setupApiAccessToken(accessToken);
             try {
                 if (showWomenPopup) {
                     const womenProfilePromise = apiClient.post('https://api.ourlittlehugs.com/v1/api/mother-profile', {
@@ -328,7 +381,18 @@ function SignupUI({
             }
         }
         if (selected === 'partner') {
-            navigate("/partner/dashboard")
+            apiClient.post('https://api.ourlittlehugs.com/v1/api/organisation-profile', {
+                "organisation_name": "My Org",
+                "description": "Default Description",
+                "org_offers": ['offer 1', 'offer 2'],
+                "littlehug_for": ['for 1 ', 'for 2']
+            }).then(response => {
+                if (response) {
+                    navigate("/partner/dashboard")
+                } else {
+                    alert('Some Error Occured')
+                }
+            });
         }
     }
 
@@ -357,27 +421,29 @@ function SignupUI({
                         <p className="text-center text-sm text-gray-500 mb-6">
                             Already have an account? <Link to="/signin" className="text-blue-600 hover:underline">Sign in</Link>
                         </p>
+
+                        <div className="flex items-center justify-center my-6">
+                            <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
+                                <button
+                                    onClick={() => setSelected('personal')}
+                                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'personal'
+                                        ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                >
+                                    Personal
+                                </button>
+                                <button
+                                    onClick={() => setSelected('partner')}
+                                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'partner'
+                                        ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                >
+                                    Partner
+                                </button>
+                            </div>
+                        </div>
+
                         <FormProvider {...methods}>
                             <form className="space-y-4" onSubmit={methods.handleSubmit(handleSubmit)}>
 
-                                <div className="flex items-center justify-center mt-10">
-                                    <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setSelected('personal')}
-                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'personal'
-                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                                        >
-                                            Personal
-                                        </button>
-                                        <button
-                                            onClick={() => setSelected('partner')}
-                                            className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === 'partner'
-                                                ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
-                                        >
-                                            Partner
-                                        </button>
-                                    </div>
-                                </div>
                                 <InputField
                                     name="name"
                                     fieldId="name"
@@ -451,7 +517,6 @@ function SignupUI({
                                     </label>
                                 </div>
 
-
                                 <button
                                     type="submit"
                                     className={`${isPending ? "sign-load" : "sign"} w-full ${!isTermsAccepted ? "bg-gray-400 cursor-not-allowed" : "bg-[#4776E6] hover:bg-[#365fbd]"} text-white text-sm py-2 rounded-full transition`}
@@ -482,7 +547,7 @@ function SignupUI({
                 {/* Popup Modal */}
                 {(showPopup === 1) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
+                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[800px] mx-6">
 
                             <div className="mb-8 mx-auto w-full max-w-xl">
                                 <div className="flex max-w-60 justify-between items-center mx-auto mb-2">
@@ -523,43 +588,117 @@ function SignupUI({
                             </>}
 
                             {(currentStep === 2) &&
-                                <>
+                                <div className='flex gap-12'>
                                     {/* for women */}
                                     {showWomenPopup && (
-                                        <div className='mb-12'>
-                                            <h2 className='font-bold'>Women Profile</h2>
-                                            <div className="flex flex-col items-center">
-                                                <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
-                                                    <img src="/images/women.png" alt="Profile" className="w-full h-full object-cover" />
-                                                </div>
+                                        <div className='min-w-[300px]'>
+                                            <h2 className='font-bold text-center'>Women Profile</h2>
+                                            <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
+                                                <label htmlFor="womenDPInput">
+                                                    <img src={womenDP} alt="Profile" className="w-full h-full object-cover cursor-pointer" />
+                                                </label>
+                                                <input
+                                                    type="file" accept="image/*" id="womenDPInput" style={{ display: 'none' }}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            const imageUrl = URL.createObjectURL(file);
+                                                            setWomenDP(imageUrl);
+                                                        }
+                                                    }}
+                                                />
                                             </div>
 
                                             <form onSubmit={submitMotherProfile}>
                                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                                     <input name="dob" type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
                                                     <select name="lifeStage" className="border p-2 rounded" required>
-                                                        <option value="" disabled selected>* Current life stage</option>
+                                                        <option value="" disabled hidden>* Current life stage</option>
                                                         <option>Early adulthood</option>
                                                         <option>Adulthood</option>
                                                         <option>Pregnancy</option>
                                                         <option>Menopause</option>
                                                         <option>Prefer not to say</option>
                                                     </select>
-                                                    <select name="goal" className="border p-2 rounded" required>
-                                                        <option disabled selected>* Goal is to work on</option>
-                                                        <option>Sleep</option>
-                                                        <option>Hormones</option>
-                                                        <option>fatigue</option>
-                                                        <option>Anxiety</option>
-                                                        <option>Self Care</option>
-                                                    </select>
-                                                    <select name="tone" className="border p-2 rounded" required>
-                                                        <option disabled selected>* Tone Preference</option>
-                                                        <option>Reassuring</option>
-                                                        <option>Motivational</option>
-                                                        <option>Calming</option>
-                                                        <option>Neutral</option>
-                                                    </select>
+
+                                                    <div>
+                                                        {/* Dropdown button */}
+                                                        <div
+                                                            className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                                                            onClick={toggleWomenGoalDropdown}
+                                                        >
+                                                            {selectedWomenGoalOptions.length === 0 ? (
+                                                                <span className="text-gray-500">* Goal is to work on</span>
+                                                            ) : (
+                                                                selectedWomenGoalOptions.map(option => (
+                                                                    <div key={option} className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1">
+                                                                        <span>{option}</span>
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+
+                                                        {/* Dropdown menu */}
+                                                        {isWomenGoalOpen && (
+                                                            <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                                                                {womenGoalOptions.map(option => (
+                                                                    <div
+                                                                        key={option}
+                                                                        className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(item => item === option) ? 'bg-blue-50' : ''}`}
+                                                                        onClick={() => toggleWomenGoalOption(option)}
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedWomenGoalOptions.some(item => item === option)}
+                                                                            readOnly
+                                                                            className="mr-2"
+                                                                        />
+                                                                        {option}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div>
+                                                        {/* Dropdown button */}
+                                                        <div
+                                                            className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                                                            onClick={toggleToneDropdown}
+                                                        >
+                                                            {selectedToneOptions.length === 0 ? (
+                                                                <span className="text-gray-500">* Tone Preference</span>
+                                                            ) : (
+                                                                selectedToneOptions.map(option => (
+                                                                    <div key={option} className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1">
+                                                                        <span>{option}</span>
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+
+                                                        {/* Dropdown menu */}
+                                                        {isToneOpen && (
+                                                            <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                                                                {toneOptions.map(option => (
+                                                                    <div
+                                                                        key={option}
+                                                                        className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(item => item === option) ? 'bg-blue-50' : ''}`}
+                                                                        onClick={() => toggleToneOption(option)}
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedToneOptions.some(item => item === option)}
+                                                                            readOnly
+                                                                            className="mr-2"
+                                                                        />
+                                                                        {option}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
                                                     <div className="relative">
                                                         <input name="weight" type="text" placeholder="Weight" className="border p-2 rounded w-full" required />
                                                         <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
@@ -573,19 +712,27 @@ function SignupUI({
                                             </form>
                                         </div>
                                     )}
+
+
                                     {/* for child */}
                                     {showChildPopup && (
-                                        <div className='mt-12'>
-                                            <h2 className='font-bold'>Child Profile</h2>
+                                        <div className=''>
+                                            <h2 className='font-bold text-center'>Child Profile</h2>
                                             {/* Profile */}
-                                            <div className="flex flex-col items-center mb-6">
-                                                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
-                                                    <img
-                                                        src="/images/women.png"
-                                                        alt="Profile"
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </div>
+                                            <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
+                                                <label htmlFor="childDPInput">
+                                                    <img src={childDP} alt="Profile" className="w-full h-full object-cover cursor-pointer" />
+                                                </label>
+                                                <input
+                                                    type="file" accept="image/*" id="childDPInput" style={{ display: 'none' }}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            const imageUrl = URL.createObjectURL(file);
+                                                            setChildDP(imageUrl);
+                                                        }
+                                                    }}
+                                                />
                                             </div>
 
                                             {/* Form Fields */}
@@ -630,18 +777,59 @@ function SignupUI({
                                                         <option>6-12 years</option>
                                                     </select>
 
-                                                    <select name='gaol' className="border p-2 rounded" required>
-                                                        <option value="" hidden selected>* Goal</option>
-                                                        <option>Growth</option>
-                                                        <option>Nutrition</option>
-                                                        <option>Activity</option>
-                                                    </select>
+
+                                                    <div>
+                                                        {/* Dropdown button */}
+                                                        <div
+                                                            className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                                                            onClick={toggleChildGoalDropdown}
+                                                        >
+                                                            {selectedChildGoalOptions.length === 0 ? (
+                                                                <span className="text-gray-500">* Goal</span>
+                                                            ) : (
+                                                                selectedChildGoalOptions.map(option => (
+                                                                    <div key={option} className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1">
+                                                                        <span>{option}</span>
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+
+                                                        {/* Dropdown menu */}
+                                                        {isChildGoalOpen && (
+                                                            <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                                                                {womenChildOptions.map(option => (
+                                                                    <div
+                                                                        key={option}
+                                                                        className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(item => item === option) ? 'bg-blue-50' : ''}`}
+                                                                        onClick={() => toggleChildGoalOption(option)}
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedChildGoalOptions.some(item => item === option)}
+                                                                            readOnly
+                                                                            className="mr-2"
+                                                                        />
+                                                                        {option}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+
+
+
+
+
                                                 </div>
 
                                             </form>
                                         </div>
                                     )}
-                                </>
+
+
+                                </div>
                             }
 
                             <div className="mt-8 flex justify-between">
@@ -667,6 +855,84 @@ function SignupUI({
                         </div>
                     </div>
                 )}
+
+                {(showPopup === 2) && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+                        <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
+
+                            <div className="flex flex-col items-center mb-6">
+                                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
+                                    <img
+                                        src="/images/women.png"
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Form Fields */}
+                            <form className="flex flex-col gap-4" onSubmit={submitChildProfile}>
+                                <input
+                                    name="org_name"
+                                    type="text"
+                                    placeholder="* Organisation Name"
+                                    className="w-full border p-2 rounded"
+                                    required
+                                />
+
+                                <input
+                                    name="description"
+                                    type="text"
+                                    placeholder="Description"
+                                    className="w-full border p-2 rounded"
+                                    required
+                                />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <input
+                                        type="text"
+                                        placeholder="* city"
+                                        className="border p-2 rounded w-full pr-10"
+                                        name='city'
+                                        required
+                                    />
+
+                                    <input
+                                        type="text"
+                                        placeholder="* Language prefrence"
+                                        className="border p-2 rounded w-full pr-10"
+                                        name='language'
+                                        required
+                                    />
+
+                                    <select name='age_group' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* Services you offer</option>
+                                        <option>0-2 years</option>
+                                        <option>3-5 years</option>
+                                        <option>6-12 years</option>
+                                    </select>
+
+                                    <select name='gaol' className="border p-2 rounded" required>
+                                        <option value="" hidden selected>* You want LittleHugs for</option>
+                                        <option>Growth</option>
+                                        <option>Nutrition</option>
+                                        <option>Activity</option>
+                                    </select>
+
+                                </div>
+
+                            </form>
+
+                            <div className="mt-8 flex justify-center">
+                                <div onClick={handleProfile} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full">
+                                    Go to the Dashboard
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
 
                 {(showPopup === 'Terms&Conditions') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-[#FAF3ED] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

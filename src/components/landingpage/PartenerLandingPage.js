@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../common/Navbar';
 import { Link } from "react-router-dom";
 import routesConfig from '../../config/routesConfig';
@@ -7,35 +7,71 @@ import { apiClient } from '../../api/api-client.js';
 
 
 function PartenerLandingPage() {
-  const [showPopup, setShowPopup] = useState(null);
+  const { title, description } = routesConfig.partenerLanding;
 
-  const [formData, setFormData] = useState({
+  const [showPopup, setShowPopup] = useState(null);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [openIndex, setOpenIndex] = useState(0);
+  const [allCountries, setAllCountries] = useState([]);
+  const [allLanguages, setLanguages] = useState([]);
+  const [loadingDemo, setLoadingdDmo] = useState(false);
+
+  const INITIAT_STATE = {
     organization_type: '',
     name: '',
     email: '',
-    city: '',
-    language: '',
-  });
+    country: '',
+    language: ''
+  };
+
+  const [formData, setFormData] = useState(INITIAT_STATE);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-  const [openIndex, setOpenIndex] = useState(0);
-
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? -1 : index);
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const [countries, setCountries] = useState([]);
-  const [allLanguages, setLanguages] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
 
+  const toggleAccordion = (index) => setOpenIndex(openIndex === index ? -1 : index);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoadingdDmo(true);
+    try {
+      const result = await apiClient.post('https://api.ourlittlehugs.com/v1/api/demo/', {
+        organization_type: formData.organization_type,
+        name: formData.name,
+        email: formData.email,
+        city: formData.country,
+        language: formData.language
+      });
+
+      if (result.id) {
+        alert('Booked Demo Successfully\nThanks');
+        setFormData(INITIAT_STATE);
+        setAgreedToTerms(false);
+      }
+
+    } catch (err) {
+      alert('Try Again!\nSome Error Occured')
+    } finally {
+      setLoadingdDmo(false);
+    }
+  };
+
+
+  // Check if all form fields are filled and terms are agreed to
+  useEffect(() => {
+    const { organization_type, name, email, country, language } = formData;
+    const allFieldsFilled = organization_type && name && email && country && language;
+    setIsFormValid(allFieldsFilled && agreedToTerms);
+  }, [formData, agreedToTerms]);
+
+  // Fetch Countries Data
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all')
       .then((res) => res.json())
@@ -47,43 +83,10 @@ function PartenerLandingPage() {
           if (country.name?.common) countries.add(country.name.common);
         });
         setLanguages([...languages]);
-        setCountries([...countries]);
+        setAllCountries([...countries]);
       })
       .catch((error) => console.error('Error fetching countries:', error));
   }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSelect = (country) => {
-    setSelectedCountry(country);
-    setIsOpen(false);
-  };
-  const { title, description } = routesConfig.partenerLanding;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const result = await apiClient.post('https://api.ourlittlehugs.com/v1/api/demo/', {
-        organization_type: formData.organization_type,
-        name: formData.name,
-        email: formData.email,
-        city: selectedCountry,
-        language: formData.language
-      });
-
-      if (result.id) alert('Booked Demo Successfully\nThanks')
-    } catch (err) {
-      alert(err)
-    }
-  };
 
   return (
     <>
@@ -516,8 +519,14 @@ function PartenerLandingPage() {
             />
 
             <form className="w-full max-w-md space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
-              <select name="organization_type" className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600" onChange={handleChange}>
-                <option value="" disabled hidden selected>Organisation Type</option>
+              <select
+                name="organization_type"
+                className="w-full p-2.5 sm:p-3 border rounded-md text-gray-600"
+                onChange={handleChange}
+                value={formData.organization_type}
+                required
+              >
+                <option value="" disabled hidden>Organisation Type</option>
                 <option>Clinics</option>
                 <option>Schools</option>
                 <option>NGO</option>
@@ -530,8 +539,10 @@ function PartenerLandingPage() {
                 type="text"
                 name="name"
                 placeholder="Name"
+                value={formData.name}
                 onChange={handleChange}
                 className="w-full p-2.5 sm:p-3 border rounded-md"
+                required
               />
 
               {/* Email */}
@@ -539,49 +550,35 @@ function PartenerLandingPage() {
                 type="email"
                 name="email"
                 placeholder="Email"
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full p-2.5 sm:p-3 border rounded-md"
+                required
               />
 
-              {/* Country and Language Preference */}
-              <div className="relative w-full" ref={dropdownRef}>
-                {/* Dropdown Trigger */}
-                <div
-                  className="flex justify-between items-center border p-3 rounded-md text-gray-700 cursor-pointer bg-white hover:shadow-sm transition-shadow"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  <span className={`${!selectedCountry ? 'text-gray-400' : ''}`}>
-                    {selectedCountry || 'Select Country'}
-                  </span>
-                  <svg
-                    className={`w-5 h-5 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+              <select
+                name="country"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                onChange={handleChange}
+                value={formData.country}
+                required
+              >
+                <option value="" hidden>* Country</option>
+                {allCountries.map((country, i) => (
+                  <option key={i} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
 
-                {/* Dropdown List */}
-                {isOpen && (
-                  <ul className="absolute mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg z-20">
-                    {countries.map((country) => (
-                      <li
-                        key={country}
-                        onClick={() => handleSelect(country)}
-                        className="px-4 py-2 hover:bg-gray-100 text-gray-700 cursor-pointer transition-colors"
-                      >
-                        {country}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <select name="language" className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" onChange={handleChange} required>
-                <option value="" hidden selected>* Language</option>
+              <select
+                name="language"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                onChange={handleChange}
+                value={formData.language}
+                required
+              >
+                <option value="" hidden>* Language</option>
                 {allLanguages.map((language, i) => (
                   <option key={i} value={language}>
                     {language}
@@ -589,26 +586,54 @@ function PartenerLandingPage() {
                 ))}
               </select>
 
-
               {/* Checkbox */}
               <div className="flex items-start pt-5 sm:pt-6 md:pt-10 gap-3 sm:gap-4 md:gap-7 text-xs sm:text-sm font-quicksand font-bold text-gray-600">
-                <input type="checkbox" className="mt-1" />
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={agreedToTerms}
+                  onChange={() => setAgreedToTerms(!agreedToTerms)}
+                  required
+                />
                 <label htmlFor="terms" className="text-gray-600">
-                  I agree to LittleHugs’s{' '}
-                  <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline">
+                  I agree to LittleHugs's{' '}
+                  <span onClick={() => setShowPopup('Terms&Conditions')} className="text-blue-600 underline cursor-pointer">
                     Terms & Conditions
                   </span>{' '}
                   and acknowledge the{' '}
-                  <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline">
+                  <span onClick={() => setShowPopup('PrivacyPolicy')} className="text-blue-600 underline cursor-pointer">
                     Privacy Policy
                   </span>
                 </label>
               </div>
 
               <button
-                className="w-full sm:min-w-[120px] md:min-w-[150px] px-4 sm:px-5 py-2.5 sm:py-3 md:pt-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition mt-4"
-              >
-                Request DEMO
+                className={`w-full sm:min-w-[120px] md:min-w-[150px] px-4 sm:px-5 py-2.5 sm:py-3 md:pt-4 text-white rounded-full transition mt-4 ${(isFormValid && !loadingDemo)
+                  ? 'bg-blue-500 hover:bg-blue-600 cursor-pointer' : 'bg-blue-300 cursor-not-allowed'}`}
+                disabled={!isFormValid || loadingDemo}
+              >{loadingDemo ? <div className='flex items-center justify-center gap-2 px-4 py-2'>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                Loading...
+              </div> : "Request DEMO"}
               </button>
             </form>
 

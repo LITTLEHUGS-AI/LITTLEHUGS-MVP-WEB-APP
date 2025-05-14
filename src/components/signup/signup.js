@@ -13,8 +13,8 @@ function handleSubmitApi(mutate, data) {
         password: data.password,
         country: data.country,
         language: data.language,
-        is_personal: true,
-        is_organization: false,
+        is_personal: data.is_personal,
+        is_organization: data.is_organization,
     };
     return mutate(payload);
 }

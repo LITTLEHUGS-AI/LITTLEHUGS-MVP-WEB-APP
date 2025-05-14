@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { Settings, LayoutDashboard, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { logout } from "../../../api/partner-apis";
+import { usePartner } from "../../../lib/PartnerContext";
+import { Tooltip } from "antd";
 
 const PartnerSidebar = ({ onTabChange }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [activeSubTab, setActiveSubTab] = useState(null);
+  const { logo, clearLogo, userProfile } = usePartner();
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -24,11 +31,41 @@ const PartnerSidebar = ({ onTabChange }) => {
     onTabChange && onTabChange("settings", subTab);
   };
 
+  const handleLogout = async () => {
+    console.log("logout--------");
+    try {
+      const response = await logout();
+      console.log("response------------", response);
+      if (response) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("orgLogo");
+        localStorage.removeItem("teamMembers");
+        clearLogo();
+        toast.success("Logged out successfully");
+        navigate("/signin");
+      } else {
+        toast.error(response?.message || "Failed to logout. Please try again.");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to logout. Please try again.";
+      toast.error(errorMessage);
+      console.error("Logout error:", error);
+    }
+  };
+
+  const truncateEmail = (str, maxLength) => {
+    if (str?.length > maxLength) {
+      return str?.slice(0, maxLength - 3) + "...";
+    }
+    return str;
+  };
+
   return (
     <aside className="flex flex-col h-screen bg-white w-full font-quicksand">
       <div className="h-[10%] flex items-center justify-center px-6 py-4 border-b border-gray-300">
         <img
-          src="/images/MDI-Logo.png"
+          src={logo || "/images/MDI-Logo.png"}
           alt="MYDATA INSIGHTS"
           className="h-14 w-auto"
         />
@@ -100,11 +137,16 @@ const PartnerSidebar = ({ onTabChange }) => {
           className="w-10 h-10 rounded-full border"
         />
         <div className="flex flex-col">
-          <span className="text-sm font-normal text-gray-900">
-            amitsingh@gm...
-          </span>
+          <Tooltip title={userProfile?.email || "amitsingh@gm..."}>
+            <span className="text-sm font-normal text-gray-900">
+              {truncateEmail(userProfile?.email, 15) || "amitsingh@gm..."}
+            </span>
+          </Tooltip>
         </div>
-        <LogOut className="ml-auto w-6 h-6 text-gray-600 cursor-pointer hover:text-gray-900" />
+        <LogOut
+          className="ml-auto w-6 h-6 text-gray-600 cursor-pointer hover:text-gray-900"
+          onClick={handleLogout}
+        />
       </div>
     </aside>
   );

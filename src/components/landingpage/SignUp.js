@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import Navbar from '../common/Navbar';
-import { Link } from 'react-router-dom';
-import routesConfig from '../../config/routesConfig';
-import DocumentHead from '../common/DocumentHead';
+import React, { useState } from "react";
+import Navbar from "../common/Navbar";
+import { Link } from "react-router-dom";
+import routesConfig from "../../config/routesConfig";
+import DocumentHead from "../common/DocumentHead";
 
 function SignUp() {
   const [showPopup, setShowPopup] = useState(false);
   const [showWellnessPopup, setShowWellnessPopup] = useState(false);
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,22 +27,29 @@ function SignUp() {
           className="flex-grow flex items-center justify-center relative overflow-hidden"
           style={{
             backgroundImage: "url('/images/signup.png')",
-            backgroundRepeat: 'no-repeat, no-repeat',
-            backgroundPosition: 'center, bottom left',
-            backgroundSize: 'cover, contain',
+            backgroundRepeat: "no-repeat, no-repeat",
+            backgroundPosition: "center, bottom left",
+            backgroundSize: "cover, contain",
           }}
         >
           <div className="flex w-full max-w-6xl items-center justify-center p-6">
             {/* Left Decorative Side */}
             <div className="hidden md:flex w-1/2 flex-col justify-center items-start relative z-10">
-              <h1 className="text-2xl md:text-3xl font-medium text-gray-700 mb-6">A Hug Ahead of Time</h1>
+              <h1 className="text-2xl md:text-3xl font-medium text-gray-700 mb-6">
+                A Hug Ahead of Time
+              </h1>
             </div>
 
             {/* Right Form Side */}
             <div className="w-full md:w-1/2 bg-white border border-gray-200 rounded-md p-10 shadow-md relative z-10">
-              <h2 className="text-2xl font-bold text-center text-gray-800 mb-1">Sign Up</h2>
+              <h2 className="text-2xl font-bold text-center text-gray-800 mb-1">
+                Sign Up
+              </h2>
               <p className="text-center text-sm text-gray-500 mb-6">
-                Already have an account? <Link to="/signin" className="text-blue-600 hover:underline">Sign in</Link>
+                Already have an account?{" "}
+                <Link to="/signin" className="text-blue-600 hover:underline">
+                  Sign in
+                </Link>
               </p>
 
               <form className="space-y-4" onSubmit={handleSubmit}>
@@ -83,14 +89,15 @@ function SignUp() {
                 <div className="flex items-start space-x-2 text-sm">
                   <input type="checkbox" id="terms" className="mt-1" />
                   <label htmlFor="terms" className="text-gray-600">
-                    I agree to LittleHugs’s{' '}
+                    I agree to LittleHugs’s{" "}
                     <Link to="#" className="text-blue-600 underline">
                       Terms & Conditions
-                    </Link>{' '}
-                    and acknowledge the{' '}
+                    </Link>{" "}
+                    and acknowledge the{" "}
                     <Link to="#" className="text-blue-600 underline">
                       Privacy Policy
-                    </Link>.
+                    </Link>
+                    .
                   </label>
                 </div>
 
@@ -122,7 +129,9 @@ function SignUp() {
           {showPopup && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
               <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[250px] relative">
-                <h3 className="text-gray-800 font-medium mb-4 text-base">I need LittleHugs for</h3>
+                <h3 className="text-gray-800 font-medium mb-4 text-base">
+                  I need LittleHugs for
+                </h3>
                 <div className="space-y-3 text-sm text-gray-700">
                   <label className="flex items-start gap-2">
                     <input
@@ -134,7 +143,9 @@ function SignUp() {
                   </label>
 
                   <label className="flex items-start space-x-2">
-                    <input type="checkbox" className="mt-1"
+                    <input
+                      type="checkbox"
+                      className="mt-1"
                       onChange={(e) => setShowWellnessPopup(e.target.checked)}
                     />
                     <span>Child’s Development & Growth Plan</span>
@@ -150,7 +161,6 @@ function SignUp() {
             </div>
           )}
 
-
           {showWellnessPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
               <div className="bg-white rounded-xl w-[550px] p-8 relative text-gray-700">
@@ -165,16 +175,26 @@ function SignUp() {
                 {/* Profile Image & Progress */}
                 <div className="flex flex-col items-center">
                   <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
-                    <img src="/images/women.png" alt="Profile" className="w-full h-full object-cover" />
+                    <img
+                      src="/images/women.png"
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <p className="text-sm font-medium mb-4">23% Complete</p>
                 </div>
 
                 {/* Form Fields */}
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <input type="date" placeholder="Date Of Birth" className="border p-2 rounded" />
+                  <input
+                    type="date"
+                    placeholder="Date Of Birth"
+                    className="border p-2 rounded"
+                  />
                   <select className="border p-2 rounded">
-                    <option disabled selected>* Current life stage</option>
+                    <option disabled selected>
+                      * Current life stage
+                    </option>
                     <option>Early adulthood</option>
                     <option>Adulthood</option>
                     <option>Pregnancy</option>
@@ -182,7 +202,9 @@ function SignUp() {
                     <option>Prefer not to say</option>
                   </select>
                   <select className="border p-2 rounded">
-                    <option disabled selected>* Goal is to work on</option>
+                    <option disabled selected>
+                      * Goal is to work on
+                    </option>
                     <option>Sleep</option>
                     <option>Hormones</option>
                     <option>fatigue</option>
@@ -190,19 +212,33 @@ function SignUp() {
                     <option>Self Care</option>
                   </select>
                   <select className="border p-2 rounded">
-                    <option disabled selected>* Tone Preference</option>
+                    <option disabled selected>
+                      * Tone Preference
+                    </option>
                     <option>Reassuring</option>
                     <option>Motivational</option>
                     <option>Calming</option>
                     <option>Neutral</option>
                   </select>
                   <div className="relative">
-                    <input type="text" placeholder="Weight" className="border p-2 rounded w-full" />
-                    <span className="absolute right-2 top-2.5 text-gray-500">kg</span>
+                    <input
+                      type="text"
+                      placeholder="Weight"
+                      className="border p-2 rounded w-full"
+                    />
+                    <span className="absolute right-2 top-2.5 text-gray-500">
+                      kg
+                    </span>
                   </div>
                   <div className="relative">
-                    <input type="text" placeholder="Height" className="border p-2 rounded w-full" />
-                    <span className="absolute right-2 top-2.5 text-gray-500">cm</span>
+                    <input
+                      type="text"
+                      placeholder="Height"
+                      className="border p-2 rounded w-full"
+                    />
+                    <span className="absolute right-2 top-2.5 text-gray-500">
+                      cm
+                    </span>
                   </div>
                 </div>
 
@@ -221,7 +257,6 @@ function SignUp() {
           {showWellnessPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
               <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
-
                 {/* Close Button */}
                 <button
                   className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
@@ -266,7 +301,9 @@ function SignUp() {
                       placeholder="* Weight"
                       className="border p-2 rounded w-full pr-10"
                     />
-                    <span className="absolute right-3 top-2.5 text-gray-500">kg</span>
+                    <span className="absolute right-3 top-2.5 text-gray-500">
+                      kg
+                    </span>
                   </div>
                   <div className="relative">
                     <input
@@ -274,7 +311,9 @@ function SignUp() {
                       placeholder="* Height"
                       className="border p-2 rounded w-full pr-10"
                     />
-                    <span className="absolute right-3 top-2.5 text-gray-500">cm</span>
+                    <span className="absolute right-3 top-2.5 text-gray-500">
+                      cm
+                    </span>
                   </div>
 
                   <select className="border p-2 rounded">
@@ -306,7 +345,6 @@ function SignUp() {
           )}
 
           {/* for child and womens */}
-
 
           {/* Bottom Wave Decoration */}
           <div className="absolute bottom-0 left-0 w-full z-0">

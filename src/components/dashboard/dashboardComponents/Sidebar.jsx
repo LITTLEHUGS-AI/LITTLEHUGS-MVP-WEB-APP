@@ -12,6 +12,7 @@ const Sidebar = () => {
 
   const logout = ()=>{
     localStorage.clear('accessToken');
+    localStorage.clear('userType');
   }
   return (
     <>

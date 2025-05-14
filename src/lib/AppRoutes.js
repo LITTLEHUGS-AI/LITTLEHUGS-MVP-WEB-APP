@@ -20,6 +20,9 @@ import GoogleCallback from "../components/signin/GoogleCallback";
 import PartnerDashboardLayout from "../components/partner/PartnerDashboardLayout";
 import AssesmentConsent from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentConsent";
 import ProtectedRoute from "./ProtectedRoute";
+import OpenRoute from "./OpenRoute";
+import AcceptInviteUser from "../temp/AcceptInviteUser";
+import AcceptInviteTeam from "../temp/AcceptInviteTeam";
 
 function AppRoutes() {
   return (
@@ -34,27 +37,27 @@ function AppRoutes() {
           }
         >
           <Routes>
-            <Route path={routesConfig.home.path} element={<Home />} />
-            <Route path={routesConfig.about.path} element={<About />} />
-            <Route path={routesConfig.contact.path} element={<Contact />} />
+            <Route path={routesConfig.home.path} element={<OpenRoute> <Home /></OpenRoute>} />
+            <Route path={routesConfig.about.path} element={<OpenRoute><About /></OpenRoute>} />
+            <Route path={routesConfig.contact.path} element={<OpenRoute><Contact /></OpenRoute>} />
             <Route
               path={routesConfig.pricingPlans.path}
-              element={<PricingPlans />}
+              element={<OpenRoute><PricingPlans /></OpenRoute>}
             />
             <Route
               path={routesConfig.personalLanding.path}
-              element={<PersonalLandingPage />}
+              element={<OpenRoute><PersonalLandingPage /></OpenRoute>}
             />
             <Route
               path={routesConfig.partenerLanding.path}
-              element={<PartenerLandingPage />}
+              element={<OpenRoute><PartenerLandingPage /></OpenRoute>}
             />
             <Route
               path={routesConfig.assesmentLanding.path}
-              element={<AssesmentLandingPage />}
+              element={<OpenRoute><AssesmentLandingPage /></OpenRoute>}
             />
-            <Route path={routesConfig.signIn.path} element={<SignIn />} />
-            <Route path={routesConfig.signUp.path} element={<Signup />} />
+            <Route path={routesConfig.signIn.path} element={<OpenRoute><SignIn /></OpenRoute>} />
+            <Route path={routesConfig.signUp.path} element={<OpenRoute><Signup /></OpenRoute>} />
             {/* dashboard */}
             <Route path="/auth/callback" element={<GoogleCallback />} />
 
@@ -102,6 +105,12 @@ function AppRoutes() {
                 </ProtectedRoute>
               }
             />
+
+            <Route path="/accept-invite-user/:inviteId" element={<AcceptInviteUser />} />
+            <Route path="/accept-invite-team/:inviteId" element={<AcceptInviteTeam/>} />
+
+
+
           </Routes>
         </Suspense>
       </Router>

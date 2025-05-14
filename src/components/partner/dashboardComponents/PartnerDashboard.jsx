@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
-import { Input, Select, Button } from "antd";
+import { Input, Select } from "antd";
+import { getTeamMembers, inviteUser } from "../../../api/partner-apis";
+import { toast } from "react-toastify";
+import CommonLoader from "./CommonLoader";
 
 const users = [
   {
@@ -89,12 +92,61 @@ const PartnerDashboard = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [therapist, setTherapist] = useState("");
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [inviteLoading, setInviteLoading] = useState(false);
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, []);
+
+  const fetchTeamMembers = async () => {
+    try {
+      setLoading(true);
+      const response = await getTeamMembers();
+      const options = response.map((member) => ({
+        label: member.name,
+        value: member.name,
+      }));
+      setTeamMembers(options);
+    } catch (error) {
+      console.error("Error fetching team members:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to fetch team members"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleOpenAddUser = () => setIsAddUserOpen(true);
   const handleCloseAddUser = () => setIsAddUserOpen(false);
-  const handleInviteUser = () => {
-    // Add invite logic here
-    setIsAddUserOpen(false);
+  const handleInviteUser = async () => {
+    if (!userName.trim() || !email.trim() || !therapist) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      setInviteLoading(true);
+      await inviteUser({
+        name: userName,
+        email: email,
+      });
+
+      toast.success("User invited successfully!");
+      setIsAddUserOpen(false);
+      setUserName("");
+      setEmail("");
+      setTherapist("");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to invite user. Please try again."
+      );
+    } finally {
+      setInviteLoading(false);
+    }
   };
 
   return (
@@ -253,51 +305,6 @@ const PartnerDashboard = () => {
       </div>
       {/* Charts below both main and insight cards */}
       <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-4">
-        {/* Domains Chart */}
-        <div className="flex flex-col gap-2 w-full">
-          <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
-            Domains
-          </span>
-          <div className="border border-gray-300 rounded-[12px] bg-white p-4 flex flex-col h-[12.5rem] w-full">
-            <div className="flex flex-row items-center h-full">
-              <div className="w-[60%] flex items-center justify-center">
-                <ResponsiveContainer width={180} height={180}>
-                  <PieChart>
-                    <Pie
-                      data={domainData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={35}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      paddingAngle={3}
-                    >
-                      {domainData.map((entry, idx) => (
-                        <Cell key={`cell-${idx}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="w-[40%] flex flex-col justify-center gap-2">
-                {domainData.map((d, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 text-xs md:text-base text-gray-600"
-                  >
-                    <span
-                      className="inline-block w-4 h-4 rounded-full"
-                      style={{ background: d.color }}
-                    ></span>
-                    {d.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
         {/* Assessments Chart */}
         <div className="flex flex-col gap-2 w-full">
           <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
@@ -328,6 +335,52 @@ const PartnerDashboard = () => {
               </div>
               <div className="w-[40%] flex flex-col justify-center gap-2">
                 {assessmentData.map((d, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 text-xs md:text-base text-gray-600"
+                  >
+                    <span
+                      className="inline-block w-4 h-4 rounded-full"
+                      style={{ background: d.color }}
+                    ></span>
+                    {d.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Domains Chart */}
+        <div className="flex flex-col gap-2 w-full">
+          <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
+            Domains
+          </span>
+          <div className="border border-gray-300 rounded-[12px] bg-white p-4 flex flex-col h-[12.5rem] w-full">
+            <div className="flex flex-row items-center h-full">
+              <div className="w-[60%] flex items-center justify-center">
+                <ResponsiveContainer width={180} height={180}>
+                  <PieChart>
+                    <Pie
+                      data={domainData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={35}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      paddingAngle={3}
+                    >
+                      {domainData.map((entry, idx) => (
+                        <Cell key={`cell-${idx}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="w-[40%] flex flex-col justify-center gap-2">
+                {domainData.map((d, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-2 text-xs md:text-base text-gray-600"
@@ -387,19 +440,26 @@ const PartnerDashboard = () => {
                 placeholder="* Assigned Therapist"
                 value={therapist}
                 onChange={setTherapist}
-                options={[]}
+                options={teamMembers}
+                loading={loading}
                 className="h-[2.5rem]"
               />
             </div>
           </div>
           <div className="flex justify-end mt-2">
-            <Button
-              type="primary"
-              className="bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand"
+            <CommonLoader
+              loading={inviteLoading}
+              disabled={!userName.trim() || !email.trim() || !therapist}
               onClick={handleInviteUser}
+              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${
+                !userName.trim() || !email.trim() || !therapist
+                  ? "bg-[#4F7DDDBF] cursor-not-allowed"
+                  : ""
+              }`}
+              type="primary"
             >
-              Invite User
-            </Button>
+              {inviteLoading ? "Inviting..." : "Invite User"}
+            </CommonLoader>
           </div>
         </div>
       </CommonModal>

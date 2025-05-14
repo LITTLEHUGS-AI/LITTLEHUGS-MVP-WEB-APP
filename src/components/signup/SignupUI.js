@@ -88,7 +88,7 @@ function SignupUI({
         navigate('/signin')
       }
     }
-  }, [isSuccess, methods, invitee.token, navigate]);
+  }, [isSuccess, methods, invitee, navigate]);
 
   const handleLogin = (logintype) => {
     let redirect_url = "";

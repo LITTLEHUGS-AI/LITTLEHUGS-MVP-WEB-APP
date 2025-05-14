@@ -107,7 +107,7 @@ function AppRoutes() {
             />
 
             <Route path="/accept-invite-user/:inviteId" element={<AcceptInviteUser />} />
-            <Route path="/accept-invite-team/:inviteId" element={<AcceptInviteTeam/>} />
+            <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam/>} />
 
 
 

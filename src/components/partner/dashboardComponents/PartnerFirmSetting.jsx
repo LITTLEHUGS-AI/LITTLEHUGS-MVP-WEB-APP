@@ -1,16 +1,224 @@
-import React, { useState, useEffect } from "react";
-import { Input, Select, Button } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { Input, Spin } from "antd";
+import apiService from "../../../api/api-service";
+import { apiClient } from "../../../api/api-client";
+import { toast } from "react-toastify";
+import { usePartner } from "../../../lib/PartnerContext";
+import CommonLoader from "./CommonLoader";
 
 const { TextArea } = Input;
 
+// Options for the dropdowns
+const SERVICES_OFFERED_OPTIONS = [
+  { label: "Developmental Screening", value: "Developmental Screening" },
+  { label: "Health Monitoring", value: "Health Monitoring" },
+  { label: "School Readiness", value: "School Readiness" },
+  { label: "Behavioral Therapy", value: "Behavioral Therapy" },
+  { label: "Parental Counseling", value: "Parental Counseling" },
+];
+
+const LITTLEHUGS_FOR_OPTIONS = [
+  { label: "Screening Tool", value: "Screening Tool" },
+  { label: "Progress Tracking", value: "Progress Tracking" },
+  { label: "Report Sharing", value: "Report Sharing" },
+  { label: "Team Collaboration", value: "Team Collaboration" },
+  { label: "Child Wellness Nudges", value: "Child Wellness Nudges" },
+  { label: "Parental Support Nudges", value: "Parental Support Nudges" },
+];
+
+// Custom multi-select dropdown component
+const CustomMultiSelectDropdown = ({
+  placeholder,
+  options,
+  selected,
+  setSelected,
+}) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleOptionToggle = (value) => {
+    setSelected((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    );
+  };
+
+  return (
+    <div ref={ref} className="relative w-full md:w-1/2">
+      <div
+        className={`flex items-center justify-between border border-[#26323866] rounded-lg px-4 py-2 cursor-pointer bg-white`}
+        onClick={() => setOpen((o) => !o)}
+        tabIndex={0}
+      >
+        <span
+          className={`select-none ${
+            selected.length === 0 ? "text-gray-400" : "text-gray-700"
+          }`}
+        >
+          {selected.length === 0
+            ? placeholder
+            : options
+                .filter((opt) => selected.includes(opt.value))
+                .map((opt) => opt.label)
+                .join(", ")}
+        </span>
+        <span className="text-lg text-gray-400">&#x25BC;</span>
+      </div>
+      {open && (
+        <div className="absolute left-0 right-0 z-10 bg-white border border-[#26323866] rounded-b-lg shadow-lg mt-1">
+          {options.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50"
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(option.value)}
+                onChange={() => handleOptionToggle(option.value)}
+                className="mr-3 w-4 h-4"
+              />
+              <span className="text-gray-700">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Custom single-select dropdown component
+const CustomSingleSelectDropdown = ({
+  placeholder,
+  options,
+  selected,
+  setSelected,
+}) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative w-full md:w-1/2">
+      <div
+        className={`flex items-center justify-between border border-[#26323866] rounded-lg px-4 py-2 cursor-pointer bg-white`}
+        onClick={() => setOpen((o) => !o)}
+        tabIndex={0}
+      >
+        <span
+          className={`select-none ${
+            !selected ? "text-gray-400" : "text-gray-700"
+          }`}
+        >
+          {selected ? selected : placeholder}
+        </span>
+        <span className="text-lg text-gray-400">&#x25BC;</span>
+      </div>
+      {open && (
+        <div className="absolute left-0 right-0 z-10 bg-white border border-[#26323866] rounded-b-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
+          {options.map((option) => (
+            <label
+              key={option}
+              className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50"
+              onClick={() => {
+                setSelected(option);
+                setOpen(false);
+              }}
+            >
+              <input
+                type="radio"
+                checked={selected === option}
+                readOnly
+                className="mr-3 w-4 h-4"
+              />
+              <span className="text-gray-700">{option}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PartnerFirmSetting = () => {
-  const [logo, setLogo] = useState(null);
+  const { setLogo } = usePartner();
+
+  const [logo, setLogoLocal] = useState(null);
   const [numEmployees, setNumEmployees] = useState("2-9");
   const [descRows, setDescRows] = useState(window.innerWidth < 768 ? 4 : 7);
+  const [servicesOffered, setServicesOffered] = useState([]);
+  const [littleHugsFor, setLittleHugsFor] = useState([]);
+  const [allCountries, setAllCountries] = useState([]);
+  const [allLanguages, setAllLanguages] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [organisationName, setOrganisationName] = useState("");
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
+
+  // Fetch organization profile data
+  useEffect(() => {
+    const fetchOrganizationProfile = async () => {
+      try {
+        setProfileLoading(true);
+        const response = await apiService.get("/organisation-profile");
+        console.log("Organization profile response:", response);
+
+        if (response) {
+          setOrganisationName(response?.organisation_name || "");
+          setDescription(response?.description || "");
+          setServicesOffered(response?.org_offers || []);
+          setLittleHugsFor(response?.littlehug_for || []);
+          setSelectedCity(response?.city || "");
+          setSelectedLanguage(response?.language || "");
+          setNumEmployees(response?.number_of_employees || "");
+
+          if (response?.logo) {
+            setLogo(response?.logo);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching organization profile:", error);
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to fetch organization profile"
+        );
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    fetchOrganizationProfile();
+  }, [setLogo]);
 
   const handleLogoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setLogo(e.target.files[0]);
+      const file = e.target.files[0];
+      setLogoLocal(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogo(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -21,6 +229,64 @@ const PartnerFirmSetting = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    async function fetchCountriesAndLanguages() {
+      const data = await apiClient.get("https://restcountries.com/v3.1/all");
+      const languages = new Set();
+      const countries = new Set();
+      data.forEach((country) => {
+        if (country.languages)
+          Object.values(country.languages).forEach((lang) =>
+            languages.add(lang)
+          );
+        if (country.name?.common) countries.add(country.name.common);
+      });
+      setAllLanguages([...languages].sort());
+      setAllCountries([...countries].sort());
+    }
+    fetchCountriesAndLanguages();
+  }, []);
+
+  const isFormValid =
+    organisationName.trim() &&
+    description.trim() &&
+    selectedCity &&
+    selectedLanguage &&
+    servicesOffered.length > 0 &&
+    littleHugsFor.length > 0;
+
+  const handleSave = async () => {
+    if (!isFormValid) return;
+    setLoading(true);
+    try {
+      await apiService.put("/organisation-profile", {
+        organisation_name: organisationName,
+        description,
+        org_offers: servicesOffered,
+        littlehug_for: littleHugsFor,
+        city: selectedCity,
+        language: selectedLanguage,
+        number_of_employees: numEmployees,
+      });
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to update profile. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (profileLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-[60vh]">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full px-3 pt-6 md:px-8 font-quicksand">
@@ -69,11 +335,15 @@ const PartnerFirmSetting = () => {
               <Input
                 placeholder="* Organisation name"
                 className="h-10 md:h-[3.5rem] w-full border-[#26323866] text-[14px] md:text-base"
+                value={organisationName}
+                onChange={(e) => setOrganisationName(e.target.value)}
               />
               <TextArea
                 placeholder="Description"
                 rows={descRows}
                 className="resize-none h-20 md:h-[10rem] w-full mt-2 border-[#26323866] text-[14px] md:text-base"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div className="hidden md:flex w-full md:w-[30%] flex-col gap-2 border border-[#26323866] rounded-lg p-4 items-center justify-start mt-4 md:mt-0">
@@ -128,30 +398,34 @@ const PartnerFirmSetting = () => {
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-4 mt-3 w-full">
             <div className="flex flex-row w-full gap-3">
-              <Select
+              <CustomSingleSelectDropdown
                 placeholder="* City"
-                className="firm-setting-select w-1/2 h-10 md:h-[3.5rem] border-[#26323866] text-[14px] md:text-base"
-                options={[]}
+                options={allCountries}
+                selected={selectedCity}
+                setSelected={setSelectedCity}
               />
-              <Select
+              <CustomSingleSelectDropdown
                 placeholder="* Language"
-                className="firm-setting-select w-1/2 h-10 md:h-[3.5rem] border-[#26323866] text-[14px] md:text-base"
-                options={[]}
+                options={allLanguages}
+                selected={selectedLanguage}
+                setSelected={setSelectedLanguage}
               />
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-4 mt-3">
-            <Select
+            {/* Services you offer */}
+            <CustomMultiSelectDropdown
               placeholder="* Services you offer"
-              className="firm-setting-select w-full md:w-1/2 h-10 md:h-[3.5rem] border-[#26323866] text-[14px] md:text-base"
-              options={[]}
-              suffixIcon={<span className="text-lg">▼</span>}
+              options={SERVICES_OFFERED_OPTIONS}
+              selected={servicesOffered}
+              setSelected={setServicesOffered}
             />
-            <Select
+            {/* You want LittleHugs for */}
+            <CustomMultiSelectDropdown
               placeholder="* You want LittleHugs for"
-              className="firm-setting-select w-full md:w-1/2 h-10 md:h-[3.5rem] border-[#26323866] text-[14px] md:text-base"
-              options={[]}
-              suffixIcon={<span className="text-lg">▼</span>}
+              options={LITTLEHUGS_FOR_OPTIONS}
+              selected={littleHugsFor}
+              setSelected={setLittleHugsFor}
             />
           </div>
 
@@ -179,12 +453,17 @@ const PartnerFirmSetting = () => {
         </div>
       </div>
       <div className="flex justify-center mt-8">
-        <Button
+        <CommonLoader
+          loading={loading}
+          disabled={!isFormValid || loading}
+          onClick={handleSave}
+          className={`w-full md:w-[30rem] text-white text-[16px] md:text-lg font-normal rounded-full px-4 md:px-16 py-2 h-auto font-quicksand ${
+            isFormValid ? "bg-[#4F7DDD]" : "bg-[#4F7DDDBF] cursor-not-allowed"
+          }`}
           type="primary"
-          className="w-full md:w-[30rem] bg-[#4F7DDDBF] text-white text-[16px] md:text-lg font-normal rounded-full px-4 md:px-16 py-2 h-auto font-quicksand"
         >
-          Save
-        </Button>
+          {loading ? "Saving..." : "Save"}
+        </CommonLoader>
       </div>
     </div>
   );

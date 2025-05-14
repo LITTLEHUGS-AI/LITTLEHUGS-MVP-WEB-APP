@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from 'react';
+import {  useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormProvider, useForm } from "react-hook-form";
 import Navbar from '../common/Navbar';
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
-import axios from "axios";
 import { Button } from "react-aria-components";
+import axios from "axios";
 
 const INITIAL_VALUES = {
     email: "",
@@ -23,6 +23,7 @@ function SignInUI({
     SignInFormSchema,
 }) {
     const apiUrl = process.env.REACT_APP_API_URL;
+
 
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
@@ -50,6 +51,7 @@ function SignInUI({
     const [forgetEmailStep, setForgetEmailStep] = useState(0);
     const [showPopup, setShowPopup] = useState(null);
     const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+
 
 
     async function handleForgetEmailSubmit() {

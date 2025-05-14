@@ -7,7 +7,19 @@ import { useState } from "react";
 function useSignUp() {
     const signUpMutation = useMutation({
         mutationFn: async (signUpPayload) => {
-            return apiClient.post("/v1/api/register", signUpPayload);
+            let url = "/v1/api/register";
+            let payload = { ...signUpPayload };
+
+            if (signUpPayload.invite?.token && signUpPayload.invite?.type === "team") {
+                url = "/v1/api/register-invited-member";
+                payload = { ...payload, "token": signUpPayload.invite.token }
+            }
+             if (signUpPayload.invite?.token && signUpPayload.invite?.type === "user") {
+                url = "/v1/api/register-invited-user";
+                payload = { ...payload, "token": signUpPayload.invite.token }
+            }
+
+            return apiClient.post(url, payload);
         },
     });
 

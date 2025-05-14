@@ -18,10 +18,14 @@ function SignIn() {
     if (signInMutation.isSuccess) {
       const responseData = signInMutation.data;
       login(data);
-      if (responseData.is_organization === true)
+      if (responseData.is_organization === true) {
+        localStorage.setItem("userType", 'partner');
         window.location.href = "/partner/dashboard";
-      if (responseData.is_personal === true)
+      }
+      if (responseData.is_personal === true) {
+        localStorage.setItem("userType", 'personal');
         window.location.href = "/personal/dashboard";
+      }
     }
   }, [data, login, signInMutation.isSuccess, signInMutation.data]);
 

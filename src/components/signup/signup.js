@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import SignupUI from './SignupUI'
 import { useNavigate } from 'react-router-dom'
 import useSignUp from './useSignup';
-import {signUpValidationSchema} from './ValidationSchema'
+import { signUpValidationSchema } from './ValidationSchema'
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
 
-function handleSubmitApi(mutate, data) {
+function handleSubmitApi(mutate, data, invite) {
     const payload = {
         name: data.name,
         email: data.email,
@@ -15,8 +15,9 @@ function handleSubmitApi(mutate, data) {
         language: data.language,
         is_personal: data.is_personal,
         is_organization: data.is_organization,
+        invite
     };
-    return mutate(payload);
+    return mutate(payload, invite);
 }
 
 function Signup() {
@@ -27,13 +28,15 @@ function Signup() {
 
     useEffect(() => {
         if (signUpMutation.isSuccess) {
-            setIsOtp(true);
+            //Check if it a Invite or Gernal Signup
+            if (signUpMutation.data.organization);
+            else setIsOtp(true);
         }
-    }, [navigate, signUpMutation.isSuccess]);
+    }, [navigate, signUpMutation.isSuccess, signUpMutation.data.organization]);
 
-    const onSubmit = (data) => {
-        handleSubmitApi(signUpMutation.mutate, data);
-    };
+    const onSubmit = (data, inviteType) => { handleSubmitApi(signUpMutation.mutate, data, inviteType) }
+
+
     const { title, description } = routesConfig.signUp;
 
     return (

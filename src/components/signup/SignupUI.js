@@ -3,13 +3,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../common/Navbar";
 import { useAuth } from "../../lib/AuthContext";
 import useSignIn from "../signin/useSignIn";
 import { toastErrorMessage } from "../common/Constants";
 import { apiClient, setupApiAccessToken } from "../../api/api-client";
+import { toast } from "react-toastify";
 
 const INITIAL_VALUES = {
   name: "",
@@ -34,28 +35,32 @@ function SignupUI({
   setIsOtp,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const apiUrl = process.env.REACT_APP_API_URL;
 
-    const [showPopup, setShowPopup] = useState(null);
-    const [email, setEmail] = useState("");
-    const [allLanguages, setAllLanguages] = useState([]);
- const [allCountries, setAllCountries] = useState([]);
+  const [showPopup, setShowPopup] = useState(null);
+  const [email, setEmail] = useState("");
+  const [allLanguages, setAllLanguages] = useState([]);
+  const [allCountries, setAllCountries] = useState([]);
   const [allCities, setAllCities] = useState([]);
-    const [showWomenPopup, setshowWomenPopup] = useState(false);
-    const [showChildPopup, setshowChildPopup] = useState(false);
-    const { otpMutation, motherMutation, childMutation } = useSignIn();
-    const { login } = useAuth();
-    // const { login, hasAuthenticated } = useAuth();
-    const [accessToken, setAccessToken] = useState();
-    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+  const [showWomenPopup, setshowWomenPopup] = useState(false);
+  const [showChildPopup, setshowChildPopup] = useState(false);
+  const { otpMutation, motherMutation, childMutation } = useSignIn();
+  const { login } = useAuth();
+  // const { login, hasAuthenticated } = useAuth();
+  const [accessToken, setAccessToken] = useState();
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
-    const methods = useForm({
-        defaultValues: INITIAL_VALUES,
-        resolver: zodResolver(SignInFormSchema),
-    });
-      const { watch } = methods;
+  const methods = useForm({
+    defaultValues: INITIAL_VALUES,
+    resolver: zodResolver(SignInFormSchema),
+  });
+  const { watch } = methods;
   const formData = watch();
+
+  const [invitee, setInvite] = useState(null);
 
 
 
@@ -65,7 +70,7 @@ function SignupUI({
       is_personal: selected === "personal" ? true : false,
       is_organization: selected === "personal" ? false : true,
     };
-    onSubmit(data);
+    onSubmit(data, invitee);
     setEmail(data.email);
   };
 
@@ -78,8 +83,12 @@ function SignupUI({
   useEffect(() => {
     if (isSuccess) {
       methods.reset(INITIAL_VALUES);
+      if (invitee.token) {
+        toast.success('Registration Successfull');
+        navigate('/signin')
+      }
     }
-  }, [isSuccess, methods]);
+  }, [isSuccess, methods, invitee.token, navigate]);
 
   const handleLogin = (logintype) => {
     let redirect_url = "";
@@ -316,7 +325,7 @@ function SignupUI({
     childMutation.mutate({ data, access_token: accessToken });
   };
 
-   
+
   // Fetch Countries & Languages Data
   useEffect(() => {
     fetch('https://countriesnow.space/api/v0.1/countries')
@@ -342,21 +351,25 @@ function SignupUI({
   }, []);
 
 
-   useEffect(() => {
-    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country: formData.country })
-    })
-      .then(response => response.json())
-      .then(data => { if (data && data.data) {
-    setAllCities(data.data);
-  } else {
-    setAllCities([]);
-  }})
-      .catch(error => {
-        console.error('Error:', error);
-      });
+  useEffect(() => {
+    if (formData.country) {
+      fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country: formData.country })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.data) {
+            setAllCities(data.data);
+          } else {
+            setAllCities([]);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
   }, [formData.country])
 
 
@@ -435,6 +448,80 @@ function SignupUI({
     }
   }
 
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get('token');
+    if ((queryParams.get('invite-type') === 'partner-team') && token) {
+
+      setInvite({ type: 'team', token });
+
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/member-invite/${token}`, {
+            method: 'GET',
+            headers: {
+              'accept': 'application/json',
+              'X-CSRFTOKEN': 'CgwkMP2tAkAZ0XirxsWPFQNMpOi8T8lSpGbWOQwgXxQYhkSzmwSIq2mQzUWHniq8'
+            }
+          });
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const data = await response.json();
+          if (data.name && data.email && data.organisation) {
+            methods.setValue('name', data.name);
+            methods.setValue('email', data.email);
+            methods.setValue('password', '');
+            setSelected('partner')
+          }
+          console.log(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchUserData();
+    }
+
+
+
+    if ((queryParams.get('invite-type') === 'partner-user') && token) {
+
+      setInvite({ type: 'user', token });
+
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/user-invite/${token}`, {
+            method: 'GET',
+            headers: {
+              'accept': 'application/json',
+              'X-CSRFTOKEN': 'CgwkMP2tAkAZ0XirxsWPFQNMpOi8T8lSpGbWOQwgXxQYhkSzmwSIq2mQzUWHniq8'
+            }
+          });
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const data = await response.json();
+          if (data.name && data.email && data.organisation) {
+            methods.setValue('name', data.name);
+            methods.setValue('email', data.email);
+            methods.setValue('password', '');
+            setSelected('personal')
+          }
+          console.log(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchUserData();
+    }
+
+
+
+  }, [location, methods]);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#fef9f6]">
       <Navbar />
@@ -471,21 +558,19 @@ function SignupUI({
               <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setSelected("personal")}
-                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${
-                    selected === "personal"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
+                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "personal"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                    }`}
                 >
                   Personal
                 </button>
                 <button
                   onClick={() => setSelected("partner")}
-                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${
-                    selected === "partner"
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-100"
-                  }`}
+                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "partner"
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
+                    }`}
                 >
                   Partner
                 </button>
@@ -495,7 +580,7 @@ function SignupUI({
             <FormProvider {...methods}>
               <form
                 className="space-y-4"
-                onSubmit={methods.handleSubmit(handleSubmit)}
+                onSubmit={methods.handleSubmit(handleSubmit, invitee)}
               >
                 <InputField
                   name="name"
@@ -537,24 +622,24 @@ function SignupUI({
                   ))}
                 </select>
 
-                                <div className="flex gap-4">
-                                    <select {...methods.register("city")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                                        <option value="" hidden selected>* City</option>
-                                        {allCities.map((city, i) => (
-                                            <option key={i} value={city}>
-                                                {city}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                                        <option value="" hidden selected>* Language</option>
-                                        {allLanguages.map((language, i) => (
-                                            <option key={i} value={language}>
-                                                {language}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+                <div className="flex gap-4">
+                  <select {...methods.register("city")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden selected>* City</option>
+                    {allCities.map((city, i) => (
+                      <option key={i} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                  <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden selected>* Language</option>
+                    {allLanguages.map((language, i) => (
+                      <option key={i} value={language}>
+                        {language}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 <div className="flex items-start space-x-2 text-sm">
                   <input
@@ -584,11 +669,10 @@ function SignupUI({
 
                 <button
                   type="submit"
-                  className={`${isPending ? "sign-load" : "sign"} w-full ${
-                    !isTermsAccepted
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-[#4776E6] hover:bg-[#365fbd]"
-                  } text-white text-sm py-2 rounded-full transition`}
+                  className={`${isPending ? "sign-load" : "sign"} w-full ${!isTermsAccepted
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#4776E6] hover:bg-[#365fbd]"
+                    } text-white text-sm py-2 rounded-full transition`}
                   disabled={!isTermsAccepted}
                 >
                   {isPending ? <ButtonLoader /> : " Sign Up"}
@@ -609,6 +693,8 @@ function SignupUI({
                 </div>
               </form>
             </FormProvider>
+
+            {/* {invite && } */}
           </div>
         </div>
 
@@ -625,22 +711,20 @@ function SignupUI({
                         className="flex flex-col items-center text-center"
                       >
                         <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            index + 1 === currentStep
-                              ? "bg-blue-500 text-white"
-                              : index + 1 < currentStep
+                          className={`w-8 h-8 rounded-full flex items-center justify-center ${index + 1 === currentStep
+                            ? "bg-blue-500 text-white"
+                            : index + 1 < currentStep
                               ? "bg-blue-500 text-white"
                               : "bg-gray-400 text-white"
-                          }`}
+                            }`}
                         >
                           {index + 1}
                         </div>
                         <div
-                          className={`mt-2 text-sm ${
-                            index + 1 === currentStep
-                              ? "text-blue-500"
-                              : "text-gray-500"
-                          }`}
+                          className={`mt-2 text-sm ${index + 1 === currentStep
+                            ? "text-blue-500"
+                            : "text-gray-500"
+                            }`}
                         >
                           {step}
                         </div>
@@ -759,13 +843,12 @@ function SignupUI({
                                 {womenGoalOptions.map((option) => (
                                   <div
                                     key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${
-                                      selectedWomenGoalOptions.some(
-                                        (item) => item === option
-                                      )
-                                        ? "bg-blue-50"
-                                        : ""
-                                    }`}
+                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                      (item) => item === option
+                                    )
+                                      ? "bg-blue-50"
+                                      : ""
+                                      }`}
                                     onClick={() =>
                                       toggleWomenGoalOption(option)
                                     }
@@ -813,13 +896,12 @@ function SignupUI({
                                 {toneOptions.map((option) => (
                                   <div
                                     key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${
-                                      selectedToneOptions.some(
-                                        (item) => item === option
-                                      )
-                                        ? "bg-blue-50"
-                                        : ""
-                                    }`}
+                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(
+                                      (item) => item === option
+                                    )
+                                      ? "bg-blue-50"
+                                      : ""
+                                      }`}
                                     onClick={() => toggleToneOption(option)}
                                   >
                                     <input
@@ -977,13 +1059,12 @@ function SignupUI({
                                 {womenChildOptions.map((option) => (
                                   <div
                                     key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${
-                                      selectedToneOptions.some(
-                                        (item) => item === option
-                                      )
-                                        ? "bg-blue-50"
-                                        : ""
-                                    }`}
+                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(
+                                      (item) => item === option
+                                    )
+                                      ? "bg-blue-50"
+                                      : ""
+                                      }`}
                                     onClick={() =>
                                       toggleChildGoalOption(option)
                                     }
@@ -1012,11 +1093,10 @@ function SignupUI({
               <div className="mt-8 flex justify-between">
                 {currentStep === 2 && (
                   <button
-                    className={`px-8 py-2 text-white rounded-full ${
-                      currentStep > 1
-                        ? "bg-blue-500 hover:bg-blue-600"
-                        : "bg-gray-400"
-                    } transition-colors`}
+                    className={`px-8 py-2 text-white rounded-full ${currentStep > 1
+                      ? "bg-blue-500 hover:bg-blue-600"
+                      : "bg-gray-400"
+                      } transition-colors`}
                     onClick={() =>
                       setCurrentStep((prevStep) => Math.min(prevStep - 1, 2))
                     }
@@ -1027,11 +1107,10 @@ function SignupUI({
                 )}
                 {currentStep === 1 && (
                   <button
-                    className={`px-8 py-2 text-white rounded-full ${
-                      showWomenPopup || showChildPopup
-                        ? "bg-blue-500 hover:bg-blue-600"
-                        : "bg-gray-400"
-                    } transition-colors`}
+                    className={`px-8 py-2 text-white rounded-full ${showWomenPopup || showChildPopup
+                      ? "bg-blue-500 hover:bg-blue-600"
+                      : "bg-gray-400"
+                      } transition-colors`}
                     onClick={() =>
                       setCurrentStep((prevStep) => Math.min(prevStep + 1, 2))
                     }

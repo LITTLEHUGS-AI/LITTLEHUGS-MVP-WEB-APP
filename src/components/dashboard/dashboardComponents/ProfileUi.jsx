@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { getProfileDetails } from "../../../api/dashboard-api";
+import { useEffect, useState } from "react";
+import { getChildProfileDetails, getWomenProfileDetails } from "../../../api/dashboard-api";
 import { Modal } from "antd";
 import { Calendar, ChevronDown } from "lucide-react";
 
 const ProfileUi = () => {
-  const [profileData, setProfileData] = useState({});
+
+  const [selectedProfile, setSelectedProfile] = useState('women');
+
+  const [womenProfileData, setWomenProfileData] = useState({});
+  const [childProfileData, setChildProfileData] = useState({});
+
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profile, setProfile] = useState({
     city: "",
@@ -21,8 +27,11 @@ const ProfileUi = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await getProfileDetails();
-      res && setProfileData(res) && setProfile(res);
+      const res1 = await getWomenProfileDetails();
+      res1 && setWomenProfileData(res1) && setProfile(res1);
+
+      const res2 = await getChildProfileDetails();
+      res2 && setChildProfileData(res2.profiles[0]);
     })();
   }, []);
 
@@ -46,6 +55,11 @@ const ProfileUi = () => {
     console.log("Profile saved:", profile);
     // Handle form submission
   };
+  useEffect(() => {
+    if (selectedProfile === 'women') setProfile(womenProfileData);
+    if (selectedProfile === 'child') setProfile(childProfileData);
+  }, [selectedProfile, womenProfileData, childProfileData])
+
 
   return (
     <>
@@ -62,7 +76,7 @@ const ProfileUi = () => {
             />
           </div>
           <span className="ml-2 font-medium">
-            {profileData.name ? profileData.name : "UserName"}
+            {womenProfileData.name ? womenProfileData.name : "UserName"}
           </span>
         </div>
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
@@ -90,183 +104,313 @@ const ProfileUi = () => {
             Profile
           </h1>
 
-          <div className="flex justify-center mb-6">
-            <div className="relative">
-              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-yellow-400">
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  {/* Placeholder for profile image */}
-                  <span className="text-gray-400">Photo</span>
+
+          <div className="flex gap-8 justify-center items-center">
+
+            <div className="flex justify-center  mb-6">
+              <div className="relative">
+                <div
+                  className={`${selectedProfile === 'women' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
+                >
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <img
+                      onClick={() => setSelectedProfile('women')}
+                      alt="Women Profile"
+                      src="/images/women-demo.png"
+                      className="w-full h-full object-cover cursor-pointer"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="mt-2 text-center text-sm font-medium">
-                100 % Complete
+            </div>
+
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div
+                  className={`${selectedProfile === 'child' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
+                >
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <img
+                      onClick={() => setSelectedProfile('child')}
+                      alt="Child Profile"
+                      src="/images/child-demo.png"
+                      className="w-full h-full object-cover cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * City
-                </label>
-                <div className="flex items-center border rounded-md">
+
+          <button onClick={() => console.log(womenProfileData)}>Women</button>;
+          <button onClick={() => console.log(childProfileData)}>Child</button>
+
+
+          {selectedProfile === 'women' &&
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * City
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.city}
+                      onChange={(e) => handleChange("city", e.target.value)}
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Language
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.language}
+                      onChange={(e) => handleChange("language", e.target.value)}
+                    />
+                    {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Date Of Birth
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.dateOfBirth}
+                      onChange={(e) =>
+                        handleChange("dateOfBirth", e.target.value)
+                      }
+                      placeholder="YYYY-MM-DD"
+                    />
+                    <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Current life stage
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.currentLifeStage}
+                      onChange={(e) =>
+                        handleChange("currentLifeStage", e.target.value)
+                      }
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Weight
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.weight}
+                      onChange={(e) => handleChange("weight", e.target.value)}
+                    />
+                    <span className="text-gray-400 mr-3">kg</span>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Height
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.height}
+                      onChange={(e) => handleChange("height", e.target.value)}
+                    />
+                    <span className="text-gray-400 mr-3">cm</span>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Occupation
+                  </label>
                   <input
                     type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.city}
-                    onChange={(e) => handleChange("city", e.target.value)}
+                    className="w-full p-3 border rounded-md outline-none"
+                    value={womenProfileData.occupation}
+                    onChange={(e) => handleChange("occupation", e.target.value)}
                   />
-                  <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Lifestyle
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full p-3 border rounded-md outline-none"
+                    value={womenProfileData.lifestyle}
+                    onChange={(e) => handleChange("lifestyle", e.target.value)}
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Goal is to work on
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.goal}
+                      onChange={(e) => handleChange("goal", e.target.value)}
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Tone Preference
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={womenProfileData.tonePreference}
+                      onChange={(e) =>
+                        handleChange("tonePreference", e.target.value)
+                      }
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
                 </div>
               </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Language
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.language}
-                    onChange={(e) => handleChange("language", e.target.value)}
-                  />
-                  <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+              <div className="mt-8">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors"
+                >
+                  Save
+                </button>
+              </div>
+            </form>}
+
+          {selectedProfile === 'child' &&
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Child Name
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={profile.name}
+                      onChange={(e) => handleChange("city", e.target.value)}
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
                 </div>
-              </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Date Of Birth
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.dateOfBirth}
-                    onChange={(e) =>
-                      handleChange("dateOfBirth", e.target.value)
-                    }
-                    placeholder="YYYY-MM-DD"
-                  />
-                  <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Date of Birth
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={profile.dob}
+                      onChange={(e) => handleChange("language", e.target.value)}
+                    />
+                    {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
+                  </div>
                 </div>
-              </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Current life stage
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.currentLifeStage}
-                    onChange={(e) =>
-                      handleChange("currentLifeStage", e.target.value)
-                    }
-                  />
-                  <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Age Group
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={profile.age_group}
+                      onChange={(e) =>
+                        handleChange("dateOfBirth", e.target.value)
+                      }
+                      placeholder="YYYY-MM-DD"
+                    />
+                    <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
                 </div>
-              </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Weight
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.weight}
-                    onChange={(e) => handleChange("weight", e.target.value)}
-                  />
-                  <span className="text-gray-400 mr-3">kg</span>
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Weight
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={profile.weight}
+                      onChange={(e) =>
+                        handleChange("currentLifeStage", e.target.value)
+                      }
+                    />
+                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                  </div>
                 </div>
-              </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Height
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.height}
-                    onChange={(e) => handleChange("height", e.target.value)}
-                  />
-                  <span className="text-gray-400 mr-3">cm</span>
+
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Height
+                  </label>
+                  <div className="flex items-center border rounded-md">
+                    <input
+                      type="text"
+                      className="flex-grow p-3 outline-none rounded-md"
+                      value={profile.height}
+                      onChange={(e) => handleChange("height", e.target.value)}
+                    />
+                    <span className="text-gray-400 mr-3">cm</span>
+                  </div>
                 </div>
+
               </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Occupation
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border rounded-md outline-none"
-                  value={profile.occupation}
-                  onChange={(e) => handleChange("occupation", e.target.value)}
-                />
+              <div className="mt-8">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors"
+                >
+                  Save
+                </button>
               </div>
+            </form>}
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Lifestyle
-                </label>
-                <input
-                  type="text"
-                  className="w-full p-3 border rounded-md outline-none"
-                  value={profile.lifestyle}
-                  onChange={(e) => handleChange("lifestyle", e.target.value)}
-                />
-              </div>
 
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Goal is to work on
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.goal}
-                    onChange={(e) => handleChange("goal", e.target.value)}
-                  />
-                  <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label className="block text-sm text-gray-500 mb-1">
-                  * Tone Preference
-                </label>
-                <div className="flex items-center border rounded-md">
-                  <input
-                    type="text"
-                    className="flex-grow p-3 outline-none rounded-md"
-                    value={profile.tonePreference}
-                    onChange={(e) =>
-                      handleChange("tonePreference", e.target.value)
-                    }
-                  />
-                  <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors"
-              >
-                Save
-              </button>
-            </div>
-          </form>
         </div>
       </Modal>
     </>

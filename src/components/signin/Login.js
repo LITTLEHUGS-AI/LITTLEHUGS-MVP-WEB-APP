@@ -88,7 +88,7 @@ function SignInUI({
 
             setShowPopup(null);
             setForgetEmailStep(0);
-            alert('Passord Chnaged')
+            alert('Password Chnaged')
 
         } catch (error) {
             console.error('Error during POST:', error);
@@ -547,8 +547,7 @@ function SignInUI({
 
                             <Button
                                 isDisabled={isPending}
-                                className={`${isPending ? "sign-load" : "sign"
-                                    } w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200`}
+                                className={`${isPending ? "sign-load" : "sign"} w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200`}
                                 type="submit"
                             >
                                 {isPending ? <ButtonLoader /> : "Sign In"}

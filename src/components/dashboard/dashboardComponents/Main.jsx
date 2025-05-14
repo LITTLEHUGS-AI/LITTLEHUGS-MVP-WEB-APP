@@ -3,8 +3,9 @@ import { Download } from "lucide-react";
 import {
   getAssessmentData,
   getInsightsData,
-  getProfileDetails,
+  // getProfileDetails,
   getShareAssessment,
+  getWomenProfileDetails,
 } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -23,7 +24,7 @@ const Main = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await getProfileDetails();
+      const res = await getWomenProfileDetails();
       res && setProfileData(res);
     })();
 

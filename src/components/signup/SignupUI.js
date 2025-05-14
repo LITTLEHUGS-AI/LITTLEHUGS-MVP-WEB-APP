@@ -36,25 +36,28 @@ function SignupUI({
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const [showPopup, setShowPopup] = useState(null);
-  const [email, setEmail] = useState("");
-  const [allLanguages, setAllLanguages] = useState([]);
-  const [allCountries, setAllCountries] = useState([]);
-  const [showWomenPopup, setshowWomenPopup] = useState(false);
-  const [showChildPopup, setshowChildPopup] = useState(false);
-  const { otpMutation, motherMutation, childMutation } = useSignIn();
-  const { login } = useAuth();
-  // const { login, hasAuthenticated } = useAuth();
-  const [accessToken, setAccessToken] = useState();
-  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+    const [showPopup, setShowPopup] = useState(null);
+    const [email, setEmail] = useState("");
+    const [allLanguages, setAllLanguages] = useState([]);
+ const [allCountries, setAllCountries] = useState([]);
+  const [allCities, setAllCities] = useState([]);
+    const [showWomenPopup, setshowWomenPopup] = useState(false);
+    const [showChildPopup, setshowChildPopup] = useState(false);
+    const { otpMutation, motherMutation, childMutation } = useSignIn();
+    const { login } = useAuth();
+    // const { login, hasAuthenticated } = useAuth();
+    const [accessToken, setAccessToken] = useState();
+    const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
 
-  const methods = useForm({
-    defaultValues: INITIAL_VALUES,
-    resolver: zodResolver(SignInFormSchema),
-  });
+    const methods = useForm({
+        defaultValues: INITIAL_VALUES,
+        resolver: zodResolver(SignInFormSchema),
+    });
+      const { watch } = methods;
+  const formData = watch();
 
-  useState(() => fetchLanguages(), []);
+
 
   const handleSubmit = (data) => {
     data = {
@@ -313,19 +316,50 @@ function SignupUI({
     childMutation.mutate({ data, access_token: accessToken });
   };
 
-  async function fetchLanguages() {
-    const data = await apiClient.get("https://restcountries.com/v3.1/all");
+   
+  // Fetch Countries & Languages Data
+  useEffect(() => {
+    fetch('https://countriesnow.space/api/v0.1/countries')
+      .then(response => response.json())
+      .then(result => {
+        const countryNames = result.data.map(item => item.country);
+        setAllCountries([...countryNames]);
+      })
+      .catch(error => {
+        console.error('Error fetching countries:', error);
+      });
 
-    const languages = new Set();
-    const countries = new Set();
-    data.forEach((country) => {
-      if (country.languages)
-        Object.values(country.languages).forEach((lang) => languages.add(lang));
-      if (country.name?.common) countries.add(country.name.common);
-    });
-    setAllLanguages([...languages]);
-    setAllCountries([...countries]);
-  }
+    fetch('https://restcountries.com/v3.1/all')
+      .then((res) => res.json())
+      .then((data) => {
+        const languages = new Set();
+        data.forEach(country => {
+          if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang));
+        });
+        setAllLanguages([...languages]);
+      })
+      .catch((error) => console.error('Error fetching countries:', error));
+  }, []);
+
+
+   useEffect(() => {
+    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country: formData.country })
+    })
+      .then(response => response.json())
+      .then(data => { if (data && data.data) {
+    setAllCities(data.data);
+  } else {
+    setAllCities([]);
+  }})
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, [formData.country])
+
+
 
   async function handleProfile() {
     setupApiAccessToken(accessToken);
@@ -503,36 +537,24 @@ function SignupUI({
                   ))}
                 </select>
 
-                <div className="flex gap-4">
-                  <select
-                    {...methods.register("country")}
-                    className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden selected>
-                      * City
-                    </option>
-                    {allCountries.map((country, i) => (
-                      <option key={i} value={country}>
-                        {country}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    {...methods.register("language")}
-                    className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden selected>
-                      * Language
-                    </option>
-                    {allLanguages.map((language, i) => (
-                      <option key={i} value={language}>
-                        {language}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                                <div className="flex gap-4">
+                                    <select {...methods.register("city")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                                        <option value="" hidden selected>* City</option>
+                                        {allCities.map((city, i) => (
+                                            <option key={i} value={city}>
+                                                {city}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                                        <option value="" hidden selected>* Language</option>
+                                        {allLanguages.map((language, i) => (
+                                            <option key={i} value={language}>
+                                                {language}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
                 <div className="flex items-start space-x-2 text-sm">
                   <input

@@ -19,6 +19,7 @@ import Plans from "../components/dashboard/dashboardComponents/Plans";
 import GoogleCallback from "../components/signin/GoogleCallback";
 import PartnerDashboardLayout from "../components/partner/PartnerDashboardLayout";
 import AssesmentConsent from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentConsent";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
@@ -55,20 +56,51 @@ function AppRoutes() {
             <Route path={routesConfig.signIn.path} element={<SignIn />} />
             <Route path={routesConfig.signUp.path} element={<Signup />} />
             {/* dashboard */}
-            <Route path="/personal/dashboard" element={<PersonalDashboard />} />
+            <Route path="/auth/callback" element={<GoogleCallback />} />
+
+            <Route
+              path="/personal/dashboard"
+              element={
+                <ProtectedRoute>
+                  <PersonalDashboard />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/partner/dashboard"
-              element={<PartnerDashboardLayout />}
+              element={
+                <ProtectedRoute>
+                  <PartnerDashboardLayout />
+                </ProtectedRoute>
+              }
             />
+
             <Route
               path="/personal/assessment"
-              element={<PersonalAssesment />}
+              element={
+                <ProtectedRoute>
+                  <PersonalAssesment />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/personal/plans" element={<Plans />} />
-            <Route path="/auth/callback" element={<GoogleCallback />} />
+
+            <Route
+              path="/personal/plans"
+              element={
+                <ProtectedRoute>
+                  <Plans />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/personal/asssesment-consent"
-              element={<AssesmentConsent />}
+              element={
+                <ProtectedRoute>
+                  <AssesmentConsent />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </Suspense>

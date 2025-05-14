@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getProfileDetails = async () => {
+export const getWomenProfileDetails = async () => {
   try {
     const response = await axios.get(
       `https://api.ourlittlehugs.com/v1/api/user-profiles`,
@@ -8,6 +8,22 @@ export const getProfileDetails = async () => {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
         },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getChildProfileDetails = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/child-profile`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        }
       }
     );
     return response.data;
@@ -33,7 +49,7 @@ export const getAssessmentData = async () => {
   }
 };
 
-export const getShareAssessment = async () =>{
+export const getShareAssessment = async () => {
   try {
     const response = await axios.get(
       `https://api.ourlittlehugs.com/v1/api/share-assessment/`,
@@ -49,7 +65,7 @@ export const getShareAssessment = async () =>{
   }
 }
 
-export const getInsightsData = async () =>{
+export const getInsightsData = async () => {
   try {
     const response = await axios.get(
       `https://api.ourlittlehugs.com/v1/api/insights/`,

@@ -14,6 +14,7 @@ function PartenerLandingPage() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [openIndex, setOpenIndex] = useState(0);
   const [allCountries, setAllCountries] = useState([]);
+  const [allCities, setAllCities] = useState([]);
   const [allLanguages, setLanguages] = useState([]);
   const [loadingDemo, setLoadingdDmo] = useState(false);
 
@@ -46,7 +47,7 @@ function PartenerLandingPage() {
         organization_type: formData.organization_type,
         name: formData.name,
         email: formData.email,
-        city: formData.country,
+        city: formData.city,
         language: formData.language
       });
 
@@ -71,22 +72,46 @@ function PartenerLandingPage() {
     setIsFormValid(allFieldsFilled && agreedToTerms);
   }, [formData, agreedToTerms]);
 
-  // Fetch Countries Data
+  // Fetch Countries & Languages Data
   useEffect(() => {
+    fetch('https://countriesnow.space/api/v0.1/countries')
+      .then(response => response.json())
+      .then(result => {
+        const countryNames = result.data.map(item => item.country);
+        setAllCountries([...countryNames]);
+      })
+      .catch(error => {
+        console.error('Error fetching countries:', error);
+      });
+
     fetch('https://restcountries.com/v3.1/all')
       .then((res) => res.json())
       .then((data) => {
         const languages = new Set();
-        const countries = new Set();
         data.forEach(country => {
           if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang));
-          if (country.name?.common) countries.add(country.name.common);
         });
         setLanguages([...languages]);
-        setAllCountries([...countries]);
       })
       .catch((error) => console.error('Error fetching countries:', error));
   }, []);
+
+  useEffect(() => {
+    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country: formData.country })
+    })
+      .then(response => response.json())
+      .then(data => { if (data && data.data) {
+    setAllCities(data.data);
+  } else {
+    setAllCities([]);
+  }})
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, [formData.country])
 
   return (
     <>
@@ -567,6 +592,21 @@ function PartenerLandingPage() {
                 {allCountries.map((country, i) => (
                   <option key={i} value={country}>
                     {country}
+                  </option>
+                ))}
+              </select>
+
+                <select
+                name="city"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                onChange={handleChange}
+                value={formData.city}
+                required
+              >
+                <option value="" hidden>* City</option>
+                {allCities.map((city, i) => (
+                  <option key={i} value={city}>
+                    {city}
                   </option>
                 ))}
               </select>

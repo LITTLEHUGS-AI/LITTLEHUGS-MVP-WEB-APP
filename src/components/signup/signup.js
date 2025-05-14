@@ -32,7 +32,7 @@ function Signup() {
             if (signUpMutation.data.organization);
             else setIsOtp(true);
         }
-    }, [navigate, signUpMutation.isSuccess, signUpMutation.data.organization]);
+    }, [navigate, signUpMutation.isSuccess, signUpMutation.data]);
 
     const onSubmit = (data, inviteType) => { handleSubmitApi(signUpMutation.mutate, data, inviteType) }
 

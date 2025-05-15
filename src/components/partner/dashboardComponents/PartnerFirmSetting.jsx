@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Input, Spin } from "antd";
 import apiService from "../../../api/api-service";
 import { apiClient } from "../../../api/api-client";
 import { toast } from "react-toastify";
 import { usePartner } from "../../../lib/PartnerContext";
 import CommonLoader from "./CommonLoader";
+import {
+  updateLogo,
+  getOrganizationProfile,
+  updateOrganizationProfile,
+} from "../../../api/partner-apis";
 
 const { TextArea } = Input;
 
@@ -158,12 +163,16 @@ const CustomSingleSelectDropdown = ({
   );
 };
 
+const getInitialDescRows = () =>
+  typeof window !== "undefined" && window.innerWidth < 768 ? 4 : 7;
+
 const PartnerFirmSetting = () => {
   const { setLogo } = usePartner();
 
   const [logo, setLogoLocal] = useState(null);
+  const [logoFile, setLogoFile] = useState(null);
   const [numEmployees, setNumEmployees] = useState("2-9");
-  const [descRows, setDescRows] = useState(window.innerWidth < 768 ? 4 : 7);
+  const [descRows, setDescRows] = useState(getInitialDescRows);
   const [servicesOffered, setServicesOffered] = useState([]);
   const [littleHugsFor, setLittleHugsFor] = useState([]);
   const [allCountries, setAllCountries] = useState([]);
@@ -176,44 +185,42 @@ const PartnerFirmSetting = () => {
   const [profileLoading, setProfileLoading] = useState(true);
 
   // Fetch organization profile data
-  useEffect(() => {
-    const fetchOrganizationProfile = async () => {
-      try {
-        setProfileLoading(true);
-        const response = await apiService.get("/organisation-profile");
-        console.log("Organization profile response:", response);
-
-        if (response) {
-          setOrganisationName(response?.organisation_name || "");
-          setDescription(response?.description || "");
-          setServicesOffered(response?.org_offers || []);
-          setLittleHugsFor(response?.littlehug_for || []);
-          setSelectedCity(response?.city || "");
-          setSelectedLanguage(response?.language || "");
-          setNumEmployees(response?.number_of_employees || "");
-
-          if (response?.logo) {
-            setLogo(response?.logo);
-          }
+  const fetchOrganizationProfile = useCallback(async (showLoader = true) => {
+    try {
+      if (showLoader) setProfileLoading(true);
+      const response = await getOrganizationProfile();
+      console.log("response------------", response);
+      if (response) {
+        setOrganisationName(response?.organisation_name || "");
+        setDescription(response?.description || "");
+        setServicesOffered(response?.org_offers || []);
+        setLittleHugsFor(response?.littlehug_for || []);
+        setSelectedCity(response?.city || "");
+        setSelectedLanguage(response?.language || "");
+        setNumEmployees(response?.number_of_employees || "");
+        if (response?.logo) {
+          setLogo(response.logo);
+          setLogoLocal(response.logo);
         }
-      } catch (error) {
-        console.error("Error fetching organization profile:", error);
-        toast.error(
-          error?.response?.data?.message ||
-            "Failed to fetch organization profile"
-        );
-      } finally {
-        setProfileLoading(false);
       }
-    };
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to fetch organization profile"
+      );
+    } finally {
+      if (showLoader) setProfileLoading(false);
+    }
+  }, []);
 
-    fetchOrganizationProfile();
-  }, [setLogo]);
+  useEffect(() => {
+    fetchOrganizationProfile(true);
+  }, [fetchOrganizationProfile]);
 
   const handleLogoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setLogoLocal(file);
+      setLogoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogo(reader.result);
@@ -224,7 +231,7 @@ const PartnerFirmSetting = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setDescRows(window.innerWidth < 768 ? 4 : 7);
+      setDescRows(getInitialDescRows());
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -260,7 +267,10 @@ const PartnerFirmSetting = () => {
     if (!isFormValid) return;
     setLoading(true);
     try {
-      await apiService.put("/organisation-profile", {
+      if (logoFile) {
+        await updateLogo(logoFile);
+      }
+      await updateOrganizationProfile({
         organisation_name: organisationName,
         description,
         org_offers: servicesOffered,
@@ -269,6 +279,8 @@ const PartnerFirmSetting = () => {
         language: selectedLanguage,
         number_of_employees: numEmployees,
       });
+      await fetchOrganizationProfile(false);
+      setLogoFile(null);
       toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error(
@@ -307,9 +319,9 @@ const PartnerFirmSetting = () => {
       <div className="flex flex-col items-center md:hidden mb-4">
         <label htmlFor="logo-upload-input" className="cursor-pointer">
           <div className="w-16 h-16 rounded-full border-4 border-[#979FA8] flex items-center justify-center bg-[#D9DDE1] overflow-hidden">
-            {logo ? (
+            {logo !== null ? (
               <img
-                src={URL.createObjectURL(logo)}
+                src={logo}
                 alt="Logo"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -358,7 +370,11 @@ const PartnerFirmSetting = () => {
                   <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-[#979FA8] flex items-center justify-center bg-[#D9DDE1] overflow-hidden mb-2">
                     {logo ? (
                       <img
-                        src={URL.createObjectURL(logo)}
+                        src={
+                          typeof logo === "string"
+                            ? logo
+                            : URL.createObjectURL(logo)
+                        }
                         alt="Logo"
                         className="w-full h-full object-cover rounded-full"
                       />

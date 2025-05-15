@@ -64,11 +64,22 @@ const PartnerSidebar = ({ onTabChange }) => {
   return (
     <aside className="flex flex-col h-screen bg-white w-full font-quicksand">
       <div className="h-[10%] flex items-center justify-center px-6 py-4 border-b border-gray-300">
-        <img
-          src={logo || "/images/MDI-Logo.png"}
-          alt="MYDATA INSIGHTS"
-          className="h-14 w-auto"
-        />
+        {logo ? (
+          <img src={logo} alt="MYDATA INSIGHTS" className="h-14 w-auto" />
+        ) : (
+          <svg
+            width="56"
+            height="56"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-14 w-14"
+          >
+            <circle cx="12" cy="12" r="12" fill="#D9DDE1" />
+            <circle cx="12" cy="10" r="4" fill="#979FA8" />
+            <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4" fill="#979FA8" />
+          </svg>
+        )}
       </div>
 
       <nav className="h-[80%] flex-1 px-4 py-6 space-y-2">

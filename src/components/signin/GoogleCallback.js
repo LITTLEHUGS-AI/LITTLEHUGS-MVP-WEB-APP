@@ -26,12 +26,14 @@ const GoogleCallback = () => {
           try {
             const response = await axios.post(
               `${apiUrl}/v1/api/google/callback`,
-                { access_token: code, is_mobile: false }
+              { access_token: code, is_mobile: false }
             );
             const access_token = response?.data;
             localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("userType", 'personal');
+
             login(access_token);
-            window.location.href = "/";
+            window.location.href = "/personal/dashboard";
           } catch (error) {
             console.error("Error during authentication", error);
           }
@@ -50,8 +52,10 @@ const GoogleCallback = () => {
             );
             const access_token = response?.data?.access_token;
             localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("userType", 'personal');
+
             login(access_token);
-            window.location.href = "/";
+            window.location.href = "/personal/dashboard";
           } catch (error) {
             console.error("Error during authentication", error);
           }
@@ -66,7 +70,7 @@ const GoogleCallback = () => {
 
   useEffect(() => {
     if (hasAuthenticated) {
-      navigate("/new-chat");
+      // navigate("/new-chat");
     }
   }, [hasAuthenticated, navigate]);
 

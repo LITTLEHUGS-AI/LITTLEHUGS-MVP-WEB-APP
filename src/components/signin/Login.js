@@ -139,7 +139,7 @@ function SignInUI({
                     backgroundRepeat: 'no-repeat, no-repeat',
                     backgroundPosition: 'center, top left',
                     backgroundSize: 'cover, contain',
-                }} // Your uploaded background image
+                }} 
             >
 
                 {(showPopup === 'ForgetPassword') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">

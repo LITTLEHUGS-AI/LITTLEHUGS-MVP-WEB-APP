@@ -40,7 +40,6 @@ export const PartnerProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await getUserProfile();
-      console.log("response------------", response);
       setUserProfile(response);
       setError(null);
     } catch (err) {

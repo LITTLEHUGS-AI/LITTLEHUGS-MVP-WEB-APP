@@ -30,6 +30,7 @@ function Signup() {
         if (signUpMutation.isSuccess) {
             //Check if it a Invite or Gernal Signup
             if (signUpMutation.data.organization);
+            
             else setIsOtp(true);
         }
     }, [navigate, signUpMutation.isSuccess, signUpMutation.data]);

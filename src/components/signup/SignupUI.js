@@ -53,6 +53,9 @@ function SignupUI({
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
+  const womenFormRef = useRef(null);
+  const childFormRef = useRef(null);
+
   const methods = useForm({
     defaultValues: INITIAL_VALUES,
     resolver: zodResolver(SignInFormSchema),
@@ -60,7 +63,7 @@ function SignupUI({
   const { watch } = methods;
   const formData = watch();
 
-  const [invitee, setInvite] = useState(null);
+  const [invitee, setInvite] = useState({});
 
 
 
@@ -255,7 +258,8 @@ function SignupUI({
       //     message: otpMutation?.error?.data.error || "Unknown error occurred",
       // });
       toastErrorMessage({
-        content: otpMutation?.error?.data.error || "Unknown error occurred",
+        content: "Unknown error occurred",
+        // content: otpMutation?.error?.data.error || "Unknown error occurred",
         option: { type: "" },
       });
     }
@@ -297,19 +301,19 @@ function SignupUI({
     }
   }, [childMutation.isError, childMutation?.error]);
 
-  const submitMotherProfile = (event) => {
-    event.preventDefault(); // Prevent page reload
-    const formData = new FormData(event.target); // event.target is the <form>
-    const data = {
-      dob: formData.get("dob"),
-      life_stage: formData.get("lifeStage"),
-      intent: [formData.get("goal")],
-      tone_prefrence: formData.get("tone"),
-      weight: formData.get("weight"),
-      height: formData.get("height"),
-    };
-    motherMutation.mutate({ data, access_token: accessToken });
-  };
+  // const submitMotherProfile = (event) => {
+  //   event.preventDefault(); 
+  //   const formData = new FormData(event.target); 
+  //   const data = {
+  //     dob: formData.get("dob"),
+  //     life_stage: formData.get("lifeStage"),
+  //     intent: [formData.get("goal")],
+  //     tone_prefrence: formData.get("tone"),
+  //     weight: formData.get("weight"),
+  //     height: formData.get("height"),
+  //   };
+  //   motherMutation.mutate({ data, access_token: accessToken });
+  // };
 
   const submitChildProfile = (event) => {
     event.preventDefault(); // Prevent page reload
@@ -381,21 +385,24 @@ function SignupUI({
       const promises = [];
       try {
         if (showWomenPopup) {
+          const womenFormDataRaw = new FormData(womenFormRef.current);
+
           const womenProfilePromise = apiClient
             .post("https://api.ourlittlehugs.com/v1/api/mother-profile", {
-              dob: "2025-05-12",
-              life_stage: "string",
-              weight: 0,
-              height: 0,
-              life_style: 0,
-              occupation: 0,
-              tone_preference: "string",
+              dob: womenFormDataRaw.get("dob"),
+              life_stage: womenFormDataRaw.get("lifeStage"),
+              weight: womenFormDataRaw.get("weight"),
+              height: womenFormDataRaw.get("height"),
+              life_style: womenFormDataRaw.get("lifeStyle"),
+              occupation: womenFormDataRaw.get("occupation"),
+              intent: [...selectedWomenGoalOptions],
+              tone_prefrence: womenFormDataRaw.get("tone")
             })
             .then((response) => {
-              if (response.ok) {
+              if (response.profile) {
                 console.log("Mother profile data successfully sent");
               } else {
-                console.error("Error sending mother profile data");
+                toast.error('Error in Mother Profile');
               }
             });
 
@@ -403,21 +410,23 @@ function SignupUI({
         }
 
         if (showChildPopup) {
+          const childFormDataRaw = new FormData(childFormRef.current);
+
           const childProfilePromise = apiClient
             .post("https://api.ourlittlehugs.com/v1/api/child-profile", {
-              name: "raj kumar 2",
-              dob: "2025-05-12",
-              age_group: "2",
-              goal: {},
-              relation_with_child: "",
-              weight: 0,
-              height: 0,
+              name: childFormDataRaw.get("name"),
+              dob: childFormDataRaw.get("dob"),
+              age_group: childFormDataRaw.get("ageGroup"),
+              goal: [childFormDataRaw.get("goal")],
+              relation_with_child: childFormDataRaw.get("relationWithChild"),
+              weight: childFormDataRaw.get("weight"),
+              height: childFormDataRaw.get("height"),
             })
             .then((response) => {
-              if (response.ok) {
+              if (response.profile) {
                 console.log("Child profile data successfully sent");
               } else {
-                console.error("Error sending child profile data");
+                toast.error('Error in Child Profile');
               }
             });
 
@@ -632,7 +641,7 @@ function SignupUI({
                     ))}
                   </select>
                   <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden selected>* Language</option>
+                    <option value="" hidden selected>* Mother Tongue</option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -792,7 +801,7 @@ function SignupUI({
                         />
                       </div>
 
-                      <form onSubmit={submitMotherProfile}>
+                      <form ref={womenFormRef} >
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <input
                             name="dob"
@@ -977,10 +986,10 @@ function SignupUI({
                       </div>
 
                       {/* Form Fields */}
-                      <form onSubmit={submitChildProfile}>
+                      <form ref={childFormRef} >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <input
-                            name="child_name"
+                            name="name"
                             type="text"
                             placeholder="* Child's Name"
                             className="border p-2 rounded"
@@ -988,7 +997,7 @@ function SignupUI({
                           />
                           <div className="relative">
                             <input
-                              name="child_dob"
+                              name="dob"
                               type="date"
                               placeholder="Date Of Birth"
                               className="border p-2 rounded w-full"
@@ -1021,7 +1030,7 @@ function SignupUI({
                           </div>
 
                           <select
-                            name="age_group"
+                            name="ageGroup"
                             className="border p-2 rounded"
                             required
                           >

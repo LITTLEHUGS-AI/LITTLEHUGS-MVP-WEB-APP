@@ -271,10 +271,14 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>
-        <div className="border p-8 border-slate-500 rounded-md h-[200px] mt-5 mx-4 mb-4 flex items-center justify-center">
-          <p className="text-2xl text-slate-500
-          ">Collage of dashboard</p>
-        </div>
+      <div className="border border-slate-500 rounded-md h-[320px] mt-5 mx-4 mb-4 flex items-center justify-center overflow-hidden">
+  <img 
+    alt="Dashboard Collage" 
+    src="/images/dashboardCollageWeb.png" 
+    className="w-full h-full object-cover" 
+  />
+</div>
+
       </div>
     </div>
   );

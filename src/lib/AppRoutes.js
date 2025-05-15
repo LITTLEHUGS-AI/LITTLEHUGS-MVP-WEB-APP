@@ -110,7 +110,6 @@ function AppRoutes() {
             <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam/>} />
 
 
-
           </Routes>
         </Suspense>
       </Router>

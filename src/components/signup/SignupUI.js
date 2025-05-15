@@ -86,10 +86,6 @@ function SignupUI({
   useEffect(() => {
     if (isSuccess) {
       methods.reset(INITIAL_VALUES);
-      if (invitee.token) {
-        toast.success('Registration Successfull');
-        navigate('/signin')
-      }
     }
   }, [isSuccess, methods, invitee, navigate]);
 
@@ -288,46 +284,12 @@ function SignupUI({
       childMutation.isError &&
       childMutation?.error?.response?.status !== 401
     ) {
-      // addToast({
-      //     type: "error",
-      //     message: childMutation?.error?.response?.data?.message || "Unknown error occurred",
-      // });
       toastErrorMessage({
-        content:
-          childMutation?.error?.response?.data?.message ||
-          "Unknown error occurred",
+        content: childMutation?.error?.response?.data?.message || "Unknown error occurred",
         option: { type: "" },
       });
     }
   }, [childMutation.isError, childMutation?.error]);
-
-  // const submitMotherProfile = (event) => {
-  //   event.preventDefault(); 
-  //   const formData = new FormData(event.target); 
-  //   const data = {
-  //     dob: formData.get("dob"),
-  //     life_stage: formData.get("lifeStage"),
-  //     intent: [formData.get("goal")],
-  //     tone_prefrence: formData.get("tone"),
-  //     weight: formData.get("weight"),
-  //     height: formData.get("height"),
-  //   };
-  //   motherMutation.mutate({ data, access_token: accessToken });
-  // };
-
-  const submitChildProfile = (event) => {
-    event.preventDefault(); // Prevent page reload
-    const formData = new FormData(event.target); // event.target is the <form>
-    const data = {
-      name: formData.get("child_name"),
-      dob: formData.get("child_dob"),
-      age_group: formData.get("age_group"),
-      goal: [formData.get("gaol")],
-      weight: formData.get("weight"),
-      height: formData.get("height"),
-    };
-    childMutation.mutate({ data, access_token: accessToken });
-  };
 
 
   // Fetch Countries & Languages Data
@@ -563,28 +525,32 @@ function SignupUI({
               </Link>
             </p>
 
-            <div className="flex items-center justify-center my-6">
-              <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setSelected("personal")}
-                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "personal"
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                    }`}
-                >
-                  Personal
-                </button>
-                <button
-                  onClick={() => setSelected("partner")}
-                  className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "partner"
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                    }`}
-                >
-                  Partner
-                </button>
+
+            {Object.keys(invitee).length === 0 &&
+              <div className="flex items-center justify-center my-6">
+                <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setSelected("personal")}
+                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "personal"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                      }`}
+                  >
+                    Personal
+                  </button>
+                  <button
+                    onClick={() => setSelected("partner")}
+                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "partner"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-100"
+                      }`}
+                  >
+                    Partner
+                  </button>
+                </div>
               </div>
-            </div>
+            }
+
 
             <FormProvider {...methods}>
               <form
@@ -703,7 +669,6 @@ function SignupUI({
               </form>
             </FormProvider>
 
-            {/* {invite && } */}
           </div>
         </div>
 
@@ -1149,7 +1114,7 @@ function SignupUI({
               <div className="flex flex-col items-center mb-6">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
                   <img
-                    src="/images/women.png"
+                    src="https://cdn-icons-png.flaticon.com/512/2098/2098439.png"
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -1157,10 +1122,7 @@ function SignupUI({
               </div>
 
               {/* Form Fields */}
-              <form
-                className="flex flex-col gap-4"
-                onSubmit={submitChildProfile}
-              >
+              <form className="flex flex-col gap-4">
                 <input
                   name="org_name"
                   type="text"
@@ -1177,22 +1139,37 @@ function SignupUI({
                   required
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <input
-                    type="text"
-                    placeholder="* city"
-                    className="border p-2 rounded w-full pr-10"
-                    name="city"
-                    required
-                  />
+                <select
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                  required
+                >
+                  <option value="" hidden selected>
+                    * Country
+                  </option>
+                  {allCountries.map((country, i) => (
+                    <option key={i} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
 
-                  <input
-                    type="text"
-                    placeholder="* Language prefrence"
-                    className="border p-2 rounded w-full pr-10"
-                    name="language"
-                    required
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden selected>* City</option>
+                    {allCities.map((city, i) => (
+                      <option key={i} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                  <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden selected>* Mother Tongue</option>
+                    {allLanguages.map((language, i) => (
+                      <option key={i} value={language}>
+                        {language}
+                      </option>
+                    ))}
+                  </select>
 
                   <select
                     name="age_group"
@@ -1202,18 +1179,23 @@ function SignupUI({
                     <option value="" hidden selected>
                       * Services you offer
                     </option>
-                    <option>0-2 years</option>
-                    <option>3-5 years</option>
-                    <option>6-12 years</option>
+                    <option>Developmental Screening</option>
+                    <option>Health Monitoring</option>
+                    <option>School Readiness</option>
+                    <option>Behavioral Therapy</option>
+                    <option>Parental Counseling</option>
                   </select>
 
                   <select name="gaol" className="border p-2 rounded" required>
                     <option value="" hidden selected>
                       * You want LittleHugs for
                     </option>
-                    <option>Growth</option>
-                    <option>Nutrition</option>
-                    <option>Activity</option>
+                    <option>Screening Tool</option>
+                    <option>Progress Tracking</option>
+                    <option>Report Sharing</option>
+                    <option>Team Collaboration</option>
+                    <option>Child Wellness Nudges</option>
+                    <option>Parental Support Nudges</option>
                   </select>
                 </div>
               </form>

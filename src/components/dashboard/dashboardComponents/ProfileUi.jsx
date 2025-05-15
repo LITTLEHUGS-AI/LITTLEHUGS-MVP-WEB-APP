@@ -2,36 +2,54 @@ import { useEffect, useState } from "react";
 import { getChildProfileDetails, getWomenProfileDetails } from "../../../api/dashboard-api";
 import { Modal } from "antd";
 import { Calendar, ChevronDown } from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const ProfileUi = () => {
 
   const [selectedProfile, setSelectedProfile] = useState('women');
 
   const [womenProfileData, setWomenProfileData] = useState({});
+  const [womenDP, setWomenDP] = useState('/images/women-demo.png');
   const [childProfileData, setChildProfileData] = useState({});
+  const [childDP, setChildDP] = useState('/images/child-demo.png');
 
+  const [completeProfile, setCompleteProfile] = useState('Calculating')
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profile, setProfile] = useState({
-    city: "",
-    language: "",
-    dateOfBirth: "",
-    currentLifeStage: "",
-    weight: "",
-    height: "",
-    occupation: "",
-    lifestyle: "",
-    goal: "",
-    tonePreference: "",
-  });
+  // const [userProfile, setuserProfile] = useState({
+  //   city: "",
+  //   language: "",
+  //   dateOfBirth: "",
+  //   currentLifeStage: "",
+  //   weight: "",
+  //   height: "",
+  //   occupation: "",
+  //   lifestyle: "",
+  //   goal: "",
+  //   tonePreference: "",
+  // });
 
   useEffect(() => {
     (async () => {
-      const res1 = await getWomenProfileDetails();
-      res1 && setWomenProfileData(res1) && setProfile(res1);
+      try {
+        const res1 = await getWomenProfileDetails();
+        // setuserProfile(res1);
 
-      const res2 = await getChildProfileDetails();
-      res2 && setChildProfileData(res2.profiles[0]);
+        const women = { ...res1.mother_profile };
+        women.name = res1.name;
+        women.city = res1.city;
+        women.language = res1.language;
+        if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`)
+        setWomenProfileData({ ...women });
+        getProfileCompletion(women);
+
+        const res2 = await getChildProfileDetails();
+        res2 && setChildProfileData(res2.profiles[0]);
+        if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
+      } catch (error) {
+        toast.error(error)
+      }
     })();
   }, []);
 
@@ -47,18 +65,87 @@ const ProfileUi = () => {
     setIsModalOpen(false);
   };
   const handleChange = (field, value) => {
-    setProfile((prev) => ({ ...prev, [field]: value }));
+    // setuserProfile((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Profile saved:", profile);
-    // Handle form submission
+  const handleSubmit = async (file) => {
+    if (selectedProfile === 'women') {
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      try {
+        await axios.put(
+          'https://api.ourlittlehugs.com/v1/api/user-mother-profile-image',
+          formData,
+          {
+            headers: {
+              'accept': 'application/json',
+              'authorization': localStorage.getItem("accessToken"),
+              'content-type': 'multipart/form-data'
+            }
+          }
+        )
+
+        toast.success('Women Image Chnaged Succesfull ')
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+
+
+    }
+
+    if (selectedProfile === 'child') {
+
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('profile_id', childProfileData.id);
+
+      try {
+        await axios.put(
+          'https://api.ourlittlehugs.com/v1/api/user-child-profile-image',
+          formData,
+          {
+            headers: {
+              'accept': 'application/json',
+              'authorization': localStorage.getItem("accessToken"),
+              'content-type': 'multipart/form-data'
+            }
+          }
+        )
+
+        toast.success('Child Image Chnaged Succesfull ')
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+
+
+    }
   };
-  useEffect(() => {
-    if (selectedProfile === 'women') setProfile(womenProfileData);
-    if (selectedProfile === 'child') setProfile(childProfileData);
-  }, [selectedProfile, womenProfileData, childProfileData])
+
+
+
+
+  const getProfileCompletion = (profile) => {
+    const keys = Object.keys(profile);
+    const totalKeys = keys.length;
+
+    if (totalKeys === 0) return 0;
+
+    const completedKeys = keys.filter((key) => {
+      const value = profile[key];
+      // Check for non-empty, non-null, non-undefined, non-empty-array/object
+      if (value === null || value === undefined) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return false;
+
+      return true;
+    });
+
+    setCompleteProfile(Math.round((completedKeys.length / totalKeys) * 100));
+  };
+
 
 
   return (
@@ -70,13 +157,13 @@ const ProfileUi = () => {
         <div className="flex items-center">
           <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80"
+              src={selectedProfile === 'women' ? womenDP : childDP}
               alt="Profile"
               className="h-full w-full object-cover"
             />
           </div>
           <span className="ml-2 font-medium">
-            {womenProfileData.name ? womenProfileData.name : "UserName"}
+            {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
           </span>
         </div>
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
@@ -108,48 +195,71 @@ const ProfileUi = () => {
           <div className="flex gap-8 justify-center items-center">
 
             <div className="flex justify-center  mb-6">
-              <div className="relative">
+              <div className="relative flex flex-col items-center">
                 <div
                   className={`${selectedProfile === 'women' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
                 >
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                     <img
-                      onClick={() => setSelectedProfile('women')}
+                      onClick={() => { setSelectedProfile('women'); getProfileCompletion(womenProfileData) }}
                       alt="Women Profile"
-                      src="/images/women-demo.png"
+                      src={womenDP}
                       className="w-full h-full object-cover cursor-pointer"
                     />
                   </div>
                 </div>
+                {selectedProfile === 'women' && <input
+                  type="file"
+                  accept="image/jpeg"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const imageUrl = URL.createObjectURL(file);
+                      setWomenDP(imageUrl);
+                      handleSubmit(file)
+                    }
+                  }}
+                />}
+
               </div>
             </div>
 
             {childProfileData && <div className="flex justify-center mb-6">
-              <div className="relative">
+              <div className="relative flex flex-col items-center">
                 <div
                   className={`${selectedProfile === 'child' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
                 >
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                     <img
-                      onClick={() => setSelectedProfile('child')}
+                      onClick={() => { setSelectedProfile('child'); getProfileCompletion(childProfileData) }}
                       alt="Child Profile"
-                      src="/images/child-demo.png"
+                      src={childDP}
                       className="w-full h-full object-cover cursor-pointer"
                     />
                   </div>
                 </div>
+                {selectedProfile === 'child' && <input
+                  type="file"
+                  accept="image/jpeg"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const imageUrl = URL.createObjectURL(file);
+                      setChildDP(imageUrl);
+                      handleSubmit(file)
+                    }
+                  }}
+                />}
               </div>
             </div>}
 
           </div>
 
 
-          <button onClick={() => console.log(womenProfileData)}>Women</button>;
-          <button onClick={() => console.log(childProfileData)}>Child</button>
-
+          <div className="text-center mb-4">{completeProfile} %</div>
 
           {selectedProfile === 'women' &&
-            <form onSubmit={handleSubmit}>
+            <form >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -189,7 +299,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.dateOfBirth}
+                      value={womenProfileData.dob}
                       onChange={(e) =>
                         handleChange("dateOfBirth", e.target.value)
                       }
@@ -207,7 +317,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.currentLifeStage}
+                      value={womenProfileData.life_stage}
                       onChange={(e) =>
                         handleChange("currentLifeStage", e.target.value)
                       }
@@ -265,7 +375,7 @@ const ProfileUi = () => {
                   <input
                     type="text"
                     className="w-full p-3 border rounded-md outline-none"
-                    value={womenProfileData.lifestyle}
+                    value={womenProfileData.life_style}
                     onChange={(e) => handleChange("lifestyle", e.target.value)}
                   />
                 </div>
@@ -278,7 +388,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.goal}
+                      value={womenProfileData.intent}
                       onChange={(e) => handleChange("goal", e.target.value)}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
@@ -293,7 +403,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.tonePreference}
+                      value={womenProfileData.tone_prefrence}
                       onChange={(e) =>
                         handleChange("tonePreference", e.target.value)
                       }
@@ -314,7 +424,7 @@ const ProfileUi = () => {
             </form>}
 
           {selectedProfile === 'child' &&
-            <form onSubmit={handleSubmit}>
+            <form >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -324,7 +434,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={profile.name}
+                      value={childProfileData.name}
                       onChange={(e) => handleChange("city", e.target.value)}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
@@ -339,7 +449,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={profile.dob}
+                      value={childProfileData.dob}
                       onChange={(e) => handleChange("language", e.target.value)}
                     />
                     {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
@@ -354,7 +464,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={profile.age_group}
+                      value={childProfileData.age_group}
                       onChange={(e) =>
                         handleChange("dateOfBirth", e.target.value)
                       }
@@ -372,7 +482,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={profile.weight}
+                      value={childProfileData.weight}
                       onChange={(e) =>
                         handleChange("currentLifeStage", e.target.value)
                       }
@@ -391,7 +501,7 @@ const ProfileUi = () => {
                     <input
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
-                      value={profile.height}
+                      value={childProfileData.height}
                       onChange={(e) => handleChange("height", e.target.value)}
                     />
                     <span className="text-gray-400 mr-3">cm</span>

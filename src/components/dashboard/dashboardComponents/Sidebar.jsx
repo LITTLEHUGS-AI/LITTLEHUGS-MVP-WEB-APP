@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Settings,
   LogOut,
@@ -6,13 +5,18 @@ import {
   IndianRupee,
   ChartColumnIncreasing,
 } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { logout } from "../../../api/partner-apis";
 
 const Sidebar = () => {
 
-  const logout = ()=>{
+  const navigate = useNavigate();
+
+  const handleLogout = async()=>{
+    await logout();
     localStorage.clear('accessToken');
     localStorage.clear('userType');
+    navigate('/signin');
   }
   return (
     <>
@@ -80,7 +84,7 @@ const Sidebar = () => {
             <Settings size={20} />
             <span className="ml-3 font-semibold">Settings</span>
           </div>
-          <Link to="/" onClick={logout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
+          <Link to="/" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
             <LogOut size={20} />
             <span className="ml-3 font-semibold">Logout</span>
           </Link>

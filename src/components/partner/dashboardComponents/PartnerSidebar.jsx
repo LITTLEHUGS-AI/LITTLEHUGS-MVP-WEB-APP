@@ -39,6 +39,7 @@ const PartnerSidebar = ({ onTabChange }) => {
       if (response) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("orgLogo");
+         localStorage.clear('userType');
         localStorage.removeItem("teamMembers");
         clearLogo();
         toast.success("Logged out successfully");

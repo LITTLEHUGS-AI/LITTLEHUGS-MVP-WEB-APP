@@ -26,6 +26,11 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = `${token}`;
     }
 
+    // Remove Content-Type for FormData so browser sets it with boundary
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
+
     return config;
   },
   (error) => {
@@ -119,11 +124,28 @@ const apiService = {
     }
   },
 
-  // PUT request
+  // PUT request (for JSON)
   put: async (endpoint, data = {}) => {
     try {
       const response = await axiosInstance.put(endpoint, data);
       console.log("response put------------", response);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  },
+
+  // PUT request for FormData (e.g., logo upload)
+  putForm: async (endpoint, data = {}, config = {}) => {
+    try {
+      // Remove Content-Type if present so browser sets it with boundary
+      // if (config.headers && config.headers["Content-Type"]) {
+      //   delete config.headers["Content-Type"];
+      // }
+      console.log("config------------", config);
+      const response = await axiosInstance.put(endpoint, data, config);
+      console.log("response putForm------------", response);
       return response.data;
     } catch (error) {
       handleError(error);

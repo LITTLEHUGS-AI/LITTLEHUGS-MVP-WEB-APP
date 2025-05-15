@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
-import { Input, Select } from "antd";
+import { Input, Spin } from "antd";
 import { getTeamMembers, inviteTeamMember } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
@@ -23,7 +23,6 @@ const PartnerTeamMember = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("Admin");
   const [loading, setLoading] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
   const [fetchLoading, setFetchLoading] = useState(true);
@@ -68,15 +67,9 @@ const PartnerTeamMember = () => {
       const response = await inviteTeamMember({ name, email });
       console.log("response------------", response);
       toast.success("Member invited successfully!");
-
-      // Refresh the team members list after successful invite
-      await fetchTeamMembers();
-
-      // Reset form
       setIsModalOpen(false);
       setName("");
       setEmail("");
-      setRole("Admin");
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
@@ -110,8 +103,8 @@ const PartnerTeamMember = () => {
       </div>
 
       {fetchLoading ? (
-        <div className="flex flex-col items-center justify-center h-40 text-gray-500 text-base">
-          Loading team members...
+        <div className="flex items-center justify-center w-full h-[60vh]">
+          <Spin size="large" />
         </div>
       ) : teamMembers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-40 text-gray-500 text-base">
@@ -155,9 +148,6 @@ const PartnerTeamMember = () => {
                   <th className="text-left px-4 py-2 font-normal text-gray-700 border-b border-r border-[#4A4B4F80]">
                     Email
                   </th>
-                  <th className="text-left px-4 py-2 font-normal text-gray-700 border-b border-[#4A4B4F80]">
-                    Role
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -174,7 +164,6 @@ const PartnerTeamMember = () => {
                     <td className="px-4 py-2 text-gray-700 text-sm">
                       {member.email}
                     </td>
-                    <td className="px-4 py-2 text-gray-700 text-sm">Admin</td>
                   </tr>
                 ))}
               </tbody>
@@ -189,7 +178,6 @@ const PartnerTeamMember = () => {
           setIsModalOpen(false);
           setName("");
           setEmail("");
-          setRole("Admin");
         }}
         title={
           <div className="w-full text-center font-normal text-[16px] md:text-2xl">
@@ -219,20 +207,6 @@ const PartnerTeamMember = () => {
               className="h-9 md:h-[2.5rem] text-[14px]"
             />
           </div>
-        </div>
-        <div className="flex flex-col w-full mt-4 font-quicksand">
-          <label className="mb-1 text-gray-700 text-sm font-quicksand">
-            Role
-          </label>
-          <Select
-            value={role}
-            onChange={setRole}
-            className="w-full h-9 md:h-[2.5rem] text-[14px] font-quicksand"
-            options={[
-              { label: "Admin", value: "Admin" },
-              { label: "Member", value: "Member" },
-            ]}
-          />
         </div>
         <div className="flex justify-end mt-6">
           <CommonLoader

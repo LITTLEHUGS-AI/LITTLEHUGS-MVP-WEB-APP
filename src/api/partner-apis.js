@@ -26,15 +26,32 @@ export const getUserProfile = () => {
   return apiService.get("/user-profiles");
 };
 
+export const getUserLists = () => {
+  return apiService.get("/partner-users/assessments/");
+};
+
 // User Invite API
 export const inviteUser = (data) => {
   return apiService.post("/user-invite/", {
     name: data.name,
     email: data.email,
+    therapist: data.therapist,
   });
 };
 
 // Logout APIs
 export const logout = () => {
   return apiService.post("/logout");
+};
+
+// Logo Update API
+export const updateLogo = (file) => {
+  console.log("file------------", file);
+  const formData = new FormData();
+  formData.append("logo", file);
+  return apiService.putForm("/update-logo", formData, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 };

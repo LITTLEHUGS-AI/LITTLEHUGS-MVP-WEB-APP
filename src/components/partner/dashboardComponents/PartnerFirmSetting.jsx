@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Input, Spin } from "antd";
-import apiService from "../../../api/api-service";
 import { apiClient } from "../../../api/api-client";
 import { toast } from "react-toastify";
 import { usePartner } from "../../../lib/PartnerContext";
@@ -185,32 +184,36 @@ const PartnerFirmSetting = () => {
   const [profileLoading, setProfileLoading] = useState(true);
 
   // Fetch organization profile data
-  const fetchOrganizationProfile = useCallback(async (showLoader = true) => {
-    try {
-      if (showLoader) setProfileLoading(true);
-      const response = await getOrganizationProfile();
-      console.log("response------------", response);
-      if (response) {
-        setOrganisationName(response?.organisation_name || "");
-        setDescription(response?.description || "");
-        setServicesOffered(response?.org_offers || []);
-        setLittleHugsFor(response?.littlehug_for || []);
-        setSelectedCity(response?.city || "");
-        setSelectedLanguage(response?.language || "");
-        setNumEmployees(response?.number_of_employees || "");
-        if (response?.logo) {
-          setLogo(response.logo);
-          setLogoLocal(response.logo);
+  const fetchOrganizationProfile = useCallback(
+    async (showLoader = true) => {
+      try {
+        if (showLoader) setProfileLoading(true);
+        const response = await getOrganizationProfile();
+        console.log("response------------", response);
+        if (response) {
+          setOrganisationName(response?.organisation_name || "");
+          setDescription(response?.description || "");
+          setServicesOffered(response?.org_offers || []);
+          setLittleHugsFor(response?.littlehug_for || []);
+          setSelectedCity(response?.city || "");
+          setSelectedLanguage(response?.language || "");
+          setNumEmployees(response?.number_of_employees || "");
+          if (response?.logo) {
+            setLogo(response.logo);
+            setLogoLocal(response.logo);
+          }
         }
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed to fetch organization profile"
+        );
+      } finally {
+        if (showLoader) setProfileLoading(false);
       }
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message || "Failed to fetch organization profile"
-      );
-    } finally {
-      if (showLoader) setProfileLoading(false);
-    }
-  }, []);
+    },
+    [setLogo]
+  );
 
   useEffect(() => {
     fetchOrganizationProfile(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
@@ -23,6 +23,7 @@ const PartnerDashboard = () => {
   const [usersLoading, setUsersLoading] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const initialFetchDone = useRef(false);
   const [assessmentData, setAssessmentData] = useState([
     { name: "women-wellness-360", value: 0, color: "#A5B4FC" },
     { name: "child-wellness-360", value: 0, color: "#FDE68A" },
@@ -40,12 +41,7 @@ const PartnerDashboard = () => {
     { name: "Mental Clarity & Cognitive Load", value: 0, color: "#FFC655" },
   ]);
 
-  useEffect(() => {
-    fetchTeamMembers();
-    fetchUsers();
-  }, []);
-
-  const fetchTeamMembers = async () => {
+  const fetchTeamMembers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getTeamMembers();
@@ -62,10 +58,22 @@ const PartnerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const calculateDomainData = (results) => {
-    const updatedDomainData = domainData.map((domain) => {
+  const calculateDomainData = useCallback((results) => {
+    const domainStructure = [
+      { name: "Emotional Well-being", value: 0, color: "#B1A4E7" },
+      {
+        name: "Social Support & Relationship Health",
+        value: 0,
+        color: "#D3CBA5",
+      },
+      { name: "Self-Care & Routine Habits", value: 0, color: "#D9E4FC" },
+      { name: "Stress & Burnout Risk", value: 0, color: "#69A664" },
+      { name: "Mental Clarity & Cognitive Load", value: 0, color: "#FFC655" },
+    ];
+
+    return domainStructure.map((domain) => {
       const count = results.filter((user) =>
         user.domains.includes(domain.name)
       ).length;
@@ -74,12 +82,16 @@ const PartnerDashboard = () => {
         value: count,
       };
     });
+  }, []);
 
-    return updatedDomainData;
-  };
+  const calculateAssessmentData = useCallback((results) => {
+    const assessmentStructure = [
+      { name: "women-wellness-360", value: 0, color: "#A5B4FC" },
+      { name: "child-wellness-360", value: 0, color: "#FDE68A" },
+      { name: "sel-assessment-360", value: 0, color: "#FCA5A5" },
+    ];
 
-  const calculateAssessmentData = (results) => {
-    const updatedAssessmentData = assessmentData.map((assessment) => {
+    return assessmentStructure.map((assessment) => {
       const count = results.filter(
         (user) => user.assessment_type === assessment.name
       ).length;
@@ -88,11 +100,9 @@ const PartnerDashboard = () => {
         value: count,
       };
     });
+  }, []);
 
-    return updatedAssessmentData;
-  };
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setUsersLoading(true);
       const response = await getUserLists();
@@ -119,7 +129,15 @@ const PartnerDashboard = () => {
     } finally {
       setUsersLoading(false);
     }
-  };
+  }, [calculateAssessmentData, calculateDomainData]);
+
+  useEffect(() => {
+    if (!initialFetchDone.current) {
+      fetchTeamMembers();
+      fetchUsers();
+      initialFetchDone.current = true;
+    }
+  }, [fetchTeamMembers, fetchUsers]);
 
   const handleOpenAddUser = () => setIsAddUserOpen(true);
   const handleCloseAddUser = () => setIsAddUserOpen(false);

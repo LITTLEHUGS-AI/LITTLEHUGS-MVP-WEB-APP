@@ -9,7 +9,6 @@ import {
 } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Link } from "react-router-dom";
 
 const Main = () => {
   const [profileData, setProfileData] = useState({});
@@ -150,7 +149,7 @@ const Main = () => {
 
       <div className="relative">
 
-        {(Object.keys(insights).length === 0) &&
+        {/* {(Object.keys(insights).length === 0) &&
           <div className="fixed inset-0 flex flex-col justify-center items-center ring-2 z-50">
             <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-1/3">
               <h2 className="text-xl font-semibold">Please Take an Assesment to view your Dashboard</h2>
@@ -159,10 +158,10 @@ const Main = () => {
               </Link>
             </div>
           </div>
-        }
+        } */}
 
         {/* Dashboard Content */}
-        <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${(Object.keys(insights).length === 0) && "blur" }`}      >
+        <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${(Object.keys(insights).length === 0) && "" }`}      >
           <h2 className="text-xl font-medium mb-4">Dashboard</h2>
           <div className="grid grid-cols-12 gap-4 w-full mb-6 items-center">
             <div className="md:col-span-2 col-span-12">

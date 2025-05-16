@@ -1,5 +1,4 @@
 import {
-  Settings,
   LogOut,
   LayoutDashboard,
   IndianRupee,
@@ -80,10 +79,6 @@ const Sidebar = () => {
       <div className="p-4 mt-8">
         <p className="text-xs font-medium text-gray-500 mb-4">GENERAL</p>
         <div className="space-y-2">
-          <div className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
-            <Settings size={20} />
-            <span className="ml-3 font-semibold">Settings</span>
-          </div>
           <Link to="/" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
             <LogOut size={20} />
             <span className="ml-3 font-semibold">Logout</span>
@@ -91,14 +86,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Download App Banner */}
-      <div className="mx-4 mt-auto mb-8 bg-gray-800 rounded-lg p-4 text-white fixed bottom-0">
-        <h3 className="font-semibold">Download Our Mobile App</h3>
-        <p className="text-xs text-gray-300 mb-4">Lorem ipsum</p>
-        <button className="bg-blue-500 text-white w-full py-2 rounded text-sm font-medium cp">
-          Download
-        </button>
-      </div>
     </>
   );
 };

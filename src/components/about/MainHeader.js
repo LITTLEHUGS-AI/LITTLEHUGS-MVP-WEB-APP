@@ -21,7 +21,7 @@ const MainHeader = () => {
                             Take the free test
                         </button>
                     </Link>
-                    <Link to="/signup" className="w-full sm:w-auto mt-3 sm:mt-0">
+                    <Link to="/partner#book-a-demo" className="w-full sm:w-auto mt-3 sm:mt-0">
                         <button className="px-4 sm:px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition w-full sm:w-auto text-sm sm:text-base">
                             Partner with us
                         </button>

@@ -13,40 +13,36 @@ const RightHandSide = () => {
   return (
     <>
       <ProfileUi />
-      {/* Mood Trend Section */}
-      <div className="my-6">
-        <h3 className="text-lg font-medium mb-4">Mood trend</h3>
-        <div className="h-48 bg-white rounded-lg border border-gray-200"></div>
-      </div>
 
       {/* Insight Cards */}
-      <div className="mb-6">
+      <div className="my-6">
         <h3 className="text-lg font-medium mb-4">Insight Cards</h3>
         <div className="space-y-4">
-          {insights?.results?.length > 0 ? (
-            insights.results.map((item) => (
-              <div key={item.id} className="p-4 bg-orange-50 rounded-lg">
-                <p className="text-gray-800">
-                  <span className="font-semibold">Personality Insight:{" "}</span>
-                  {item.persnality_insights}
-                </p>
-                <p className="text-gray-800 mt-2">
-                  <span className="font-semibold">Next Step:</span> {item.next_step_suggestions}
-                </p>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500">No insights available.</p>
-          )}
+
+          <div className="p-4 bg-orange-50 rounded-lg">
+            <p className="text-gray-800">
+              <span className="font-semibold">Personality Insight:{" "}</span>
+            </p>
+            <p className="text-gray-800 mt-2">
+              <span className="font-semibold">Next Step Suggestions :</span>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                <li>Self-nudge packs (affirmations, sleep ritual, mini-care planner)</li>
+                <li>Smart nudges activated for flagged domains</li>
+                <li>Next check-in reminder: 7 days or custom schedule</li>
+                <li>Journaling prompt</li>
+                <li>Talk to our therapist</li>
+              </ul>
+            </p>
+          </div>
+
         </div>
       </div>
 
       {/* Download App Banner */}
-      <div className="mt-6">
-        <p className="text-center mb-4">
-          Download our Mobile App to get personalised nudges for your insights
-        </p>
-        <button className="bg-blue-500 text-white w-full py-2 rounded-lg">
+      <div className="mx-4 mt-auto mb-8 bg-gray-800 rounded-lg p-4 text-white fixed bottom-0">
+        <h3 className="font-semibold">Download Our Mobile App</h3>
+        <p className="text-xs text-gray-300 mb-4">from Google Play Store</p>
+        <button className="bg-blue-500 text-white w-full py-2 rounded text-sm font-medium cp">
           Download
         </button>
       </div>

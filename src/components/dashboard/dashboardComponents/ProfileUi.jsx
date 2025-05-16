@@ -4,6 +4,7 @@ import { Modal } from "antd";
 import { Calendar, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import store from "../../../config/storeInstance";
 
 const ProfileUi = () => {
 
@@ -17,24 +18,24 @@ const ProfileUi = () => {
   const [completeProfile, setCompleteProfile] = useState('Calculating')
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [userProfile, setuserProfile] = useState({
-  //   city: "",
-  //   language: "",
-  //   dateOfBirth: "",
-  //   currentLifeStage: "",
-  //   weight: "",
-  //   height: "",
-  //   occupation: "",
-  //   lifestyle: "",
-  //   goal: "",
-  //   tonePreference: "",
-  // });
+
+  const handleWomenProfileChange = () => { };
+
+  const handleChildProfileChange = (e) => {
+    setChildProfileData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value
+    }));
+  };
 
   useEffect(() => {
     (async () => {
       try {
+        // if (Object.keys(store.getData()).length !== 0) {
+        //   setWomenProfileData()
+        //   return;
+        // }
         const res1 = await getWomenProfileDetails();
-        // setuserProfile(res1);
 
         const women = { ...res1.mother_profile };
         women.name = res1.name;
@@ -46,12 +47,13 @@ const ProfileUi = () => {
 
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
+        store.setData({ current: selectedProfile, women, child: res2.profiles[0] });
         if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
       } catch (error) {
         toast.error(error)
       }
     })();
-  }, []);
+  }, [selectedProfile]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -63,9 +65,6 @@ const ProfileUi = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-  const handleChange = (field, value) => {
-    // setuserProfile((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (file) => {
@@ -96,7 +95,6 @@ const ProfileUi = () => {
     }
 
     if (selectedProfile === 'child') {
-
       const formData = new FormData();
       formData.append('image', file);
       formData.append('profile_id', childProfileData.id);
@@ -114,13 +112,31 @@ const ProfileUi = () => {
           }
         )
 
+        delete childProfileData.image;
+        const response = await fetch(`https://api.ourlittlehugs.com/v1/api/child-profiles/${childProfileData.id}`, {
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': localStorage.getItem("accessToken"),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(childProfileData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // const result = await response.json();
+
         toast.success('Child Image Chnaged Succesfull ')
       } catch (error) {
-        console.error('Upload failed:', error);
+        toast.error('Upload failed:', error)
       }
 
 
     }
+
   };
 
 
@@ -146,6 +162,12 @@ const ProfileUi = () => {
     setCompleteProfile(Math.round((completedKeys.length / totalKeys) * 100));
   };
 
+
+
+  //   useEffect(() => {
+  //   const unsubscribe = store.subscribe(setData);
+  //   return () => unsubscribe();
+  // }, []);
 
 
   return (
@@ -270,7 +292,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.city}
-                      onChange={(e) => handleChange("city", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange("city", e.target.value)}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
@@ -285,7 +307,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.language}
-                      onChange={(e) => handleChange("language", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange("language", e.target.value)}
                     />
                     {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
                   </div>
@@ -301,7 +323,7 @@ const ProfileUi = () => {
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.dob}
                       onChange={(e) =>
-                        handleChange("dateOfBirth", e.target.value)
+                        handleWomenProfileChange("dateOfBirth", e.target.value)
                       }
                       placeholder="YYYY-MM-DD"
                     />
@@ -319,7 +341,7 @@ const ProfileUi = () => {
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.life_stage}
                       onChange={(e) =>
-                        handleChange("currentLifeStage", e.target.value)
+                        handleWomenProfileChange("currentLifeStage", e.target.value)
                       }
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
@@ -335,7 +357,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.weight}
-                      onChange={(e) => handleChange("weight", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange("weight", e.target.value)}
                     />
                     <span className="text-gray-400 mr-3">kg</span>
                   </div>
@@ -350,7 +372,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.height}
-                      onChange={(e) => handleChange("height", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange("height", e.target.value)}
                     />
                     <span className="text-gray-400 mr-3">cm</span>
                   </div>
@@ -364,7 +386,7 @@ const ProfileUi = () => {
                     type="text"
                     className="w-full p-3 border rounded-md outline-none"
                     value={womenProfileData.occupation}
-                    onChange={(e) => handleChange("occupation", e.target.value)}
+                    onChange={(e) => handleWomenProfileChange("occupation", e.target.value)}
                   />
                 </div>
 
@@ -376,7 +398,7 @@ const ProfileUi = () => {
                     type="text"
                     className="w-full p-3 border rounded-md outline-none"
                     value={womenProfileData.life_style}
-                    onChange={(e) => handleChange("lifestyle", e.target.value)}
+                    onChange={(e) => handleWomenProfileChange("lifestyle", e.target.value)}
                   />
                 </div>
 
@@ -389,7 +411,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.intent}
-                      onChange={(e) => handleChange("goal", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange("goal", e.target.value)}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
@@ -405,7 +427,7 @@ const ProfileUi = () => {
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.tone_prefrence}
                       onChange={(e) =>
-                        handleChange("tonePreference", e.target.value)
+                        handleWomenProfileChange("tonePreference", e.target.value)
                       }
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
@@ -425,6 +447,8 @@ const ProfileUi = () => {
 
           {selectedProfile === 'child' &&
             <form >
+
+              <button type="button" onClick={() => console.table(childProfileData)} >Child</button>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -433,9 +457,10 @@ const ProfileUi = () => {
                   <div className="flex items-center border rounded-md">
                     <input
                       type="text"
+                      name="name"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.name}
-                      onChange={(e) => handleChange("city", e.target.value)}
+                      onChange={handleChildProfileChange}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
@@ -448,9 +473,10 @@ const ProfileUi = () => {
                   <div className="flex items-center border rounded-md">
                     <input
                       type="text"
+                      name="dob"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.dob}
-                      onChange={(e) => handleChange("language", e.target.value)}
+                      onChange={handleChildProfileChange}
                     />
                     {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
                   </div>
@@ -463,11 +489,10 @@ const ProfileUi = () => {
                   <div className="flex items-center border rounded-md">
                     <input
                       type="text"
+                      name="age_group"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.age_group}
-                      onChange={(e) =>
-                        handleChange("dateOfBirth", e.target.value)
-                      }
+                      onChange={handleChildProfileChange}
                       placeholder="YYYY-MM-DD"
                     />
                     <Calendar className="w-5 h-5 text-gray-400 mr-3" />
@@ -481,16 +506,14 @@ const ProfileUi = () => {
                   <div className="flex items-center border rounded-md">
                     <input
                       type="text"
+                      name="weight"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.weight}
-                      onChange={(e) =>
-                        handleChange("currentLifeStage", e.target.value)
-                      }
+                      onChange={handleChildProfileChange}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
                 </div>
-
 
 
                 <div className="relative">
@@ -500,11 +523,12 @@ const ProfileUi = () => {
                   <div className="flex items-center border rounded-md">
                     <input
                       type="text"
+                      name="height"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.height}
-                      onChange={(e) => handleChange("height", e.target.value)}
+                      onChange={handleChildProfileChange}
                     />
-                    <span className="text-gray-400 mr-3">cm</span>
+                    <span className="text-gray-400 mr-3`">cm</span>
                   </div>
                 </div>
 
@@ -518,8 +542,8 @@ const ProfileUi = () => {
                   Save
                 </button>
               </div>
-            </form>}
-
+            </form>
+          }
 
         </div>
       </Modal>

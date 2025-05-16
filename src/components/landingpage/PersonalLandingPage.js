@@ -128,7 +128,7 @@ function PersonalLandingPage() {
                                         Take the free test
                                     </button>
                                 </Link>
-                                <Link to="/signup" className="w-full sm:w-auto">
+                                <Link to="/partner#book-a-demoe check in where most sys" className="w-full sm:w-auto">
                                     <button className="border border-[#283036] text-[#283036] px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition w-full">
                                         Partner with us
                                     </button>

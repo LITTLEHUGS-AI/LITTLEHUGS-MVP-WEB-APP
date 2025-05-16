@@ -17,7 +17,7 @@ function handleSubmitApi(mutate, data, invite) {
         is_organization: data.is_organization,
         invite
     };
-    return mutate(payload, invite);
+    return mutate(payload);
 }
 
 function Signup() {
@@ -30,12 +30,28 @@ function Signup() {
         if (signUpMutation.isSuccess) {
             //Check if it a Invite or Gernal Signup
             if (signUpMutation.data.organization);
-            
+
             else setIsOtp(true);
         }
     }, [navigate, signUpMutation.isSuccess, signUpMutation.data]);
 
-    const onSubmit = (data, inviteType) => { handleSubmitApi(signUpMutation.mutate, data, inviteType) }
+    const onSubmit = async (data, inviteType) => {
+        const res = await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);
+
+        if (inviteType.token) {
+            // toast.success('Registration Successfull');
+            localStorage.setItem('accessToken', `token ${res.token}`);
+            if (inviteType.type === 'team') {
+                localStorage.setItem('userType', 'partner');
+                navigate('/partner/dashboard')
+            }
+            if (inviteType.type === 'user') {
+                localStorage.setItem('userType', 'user');
+                navigate('/personal/dashboard')
+            }
+        }
+
+    }
 
 
     const { title, description } = routesConfig.signUp;

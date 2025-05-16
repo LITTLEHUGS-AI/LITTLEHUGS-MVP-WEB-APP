@@ -1190,12 +1190,16 @@ function SignupUI({
                     <option value="" hidden selected>
                       * You want LittleHugs for
                     </option>
-                    <option>Screening Tool</option>
-                    <option>Progress Tracking</option>
-                    <option>Report Sharing</option>
-                    <option>Team Collaboration</option>
-                    <option>Child Wellness Nudges</option>
-                    <option>Parental Support Nudges</option>
+                    <option>Development & Emmotional Screening</option>
+                    <option>Assessment and Reporting</option>
+                    <option>Structured Early Interventions</option>
+                    <option>Progress Tracking & Team Collaboration</option>
+                    <option>Bulk Onboarding and Outreach</option>
+                    <option>Data Insights and Impact Reporting</option>
+                    <option>Smart Nudges for Caregivers</option>
+                    <option>Therapy Center Tools</option>
+                    <option>School & Counselor Tools</option>
+                    <option>NGO & Community Health Tools</option>
                   </select>
                 </div>
               </form>

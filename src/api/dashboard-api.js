@@ -36,7 +36,7 @@ export const getAssessmentData = async () => {
       `https://api.ourlittlehugs.com/v1/api/assessments/`,
       {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("accessToken"),
         },
       }
     );
@@ -53,7 +53,7 @@ export const getShareAssessment = async () => {
       `https://api.ourlittlehugs.com/v1/api/share-assessment/`,
       {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("accessToken"),
         },
       }
     );
@@ -69,7 +69,7 @@ export const getInsightsData = async () => {
       `https://api.ourlittlehugs.com/v1/api/insights/`,
       {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: localStorage.getItem("accessToken"),
         },
       }
     );

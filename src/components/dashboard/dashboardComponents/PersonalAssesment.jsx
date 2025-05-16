@@ -1,10 +1,11 @@
 import Sidebar from "./Sidebar";
 import ProfileUi from "./ProfileUi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import store from "../../../config/storeInstance";
 
 const PersonalAssessment = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(null);
 
   return (
@@ -19,7 +20,7 @@ const PersonalAssessment = () => {
         <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
           <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
             <p className="p-0 text-[20px] text-slate-500">
-              You have not taken any assessment till date !
+              In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
             </p>
           </div>
           <div className="col-span-2">
@@ -87,6 +88,7 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>}
+
         {showPopup === "Children" && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div
             className="bg-white rounded-lg shadow-lg w-full max-w-[650px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 relative mx-4"
@@ -145,6 +147,7 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>}
+
         {showPopup === "SEL" && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div
             className="bg-white rounded-lg shadow-lg w-full max-w-[650px] max-h-[90vh] overflow-y-auto p-4 sm:p-6 relative mx-4"
@@ -205,7 +208,6 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>}
-
 
         <div className="bg-purple-100 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
@@ -271,13 +273,14 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>
-      <div className="border border-slate-500 rounded-md h-[320px] mt-5 mx-4 mb-4 flex items-center justify-center overflow-hidden">
-  <img 
-    alt="Dashboard Collage" 
-    src="/images/dashboardCollageWeb.png" 
-    className="w-full h-full object-cover" 
-  />
-</div>
+        
+        <div className="border border-slate-500 rounded-md h-[320px] mt-5 mx-4 mb-4 flex items-center justify-center overflow-hidden">
+          <img
+            alt="Dashboard Collage"
+            src="/images/dashboardCollageWeb.png"
+            className="w-full h-full object-cover"
+          />
+        </div>
 
       </div>
     </div>

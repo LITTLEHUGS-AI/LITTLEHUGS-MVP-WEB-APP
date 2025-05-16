@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/AuthContext";
 import { Loader } from "../common/Loader";
+import { getWomenProfileDetails } from "../../api/dashboard-api";
 
 const GoogleCallback = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -55,7 +56,7 @@ const GoogleCallback = () => {
             localStorage.setItem("userType", 'personal');
 
             login(access_token);
-            window.location.href = "/personal/dashboard";
+
           } catch (error) {
             console.error("Error during authentication", error);
           }
@@ -71,6 +72,12 @@ const GoogleCallback = () => {
   useEffect(() => {
     if (hasAuthenticated) {
       // navigate("/new-chat");
+      getWomenProfileDetails().then((res) => {
+        if (res.is_personal)
+          navigate('/personal/dashboard');
+        if(res.is_organization)
+          navigate('/partner/dashboard');
+      });
     }
   }, [hasAuthenticated, navigate]);
 

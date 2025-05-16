@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { getInsightsData } from "../../../api/dashboard-api";
+// import React, { useEffect, useState } from "react";
+// import { getInsightsData } from "../../../api/dashboard-api";
 import ProfileUi from "./ProfileUi";
 
 const RightHandSide = () => {
-  const [insights, setInsights] = useState({});
-  useEffect(() => {
-    (async () => {
-      const res = await getInsightsData();
-      res && setInsights(res);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await getInsightsData();
+  //     res && setInsights(res);
+  //   })();
+  // }, []);
   return (
     <>
       <ProfileUi />

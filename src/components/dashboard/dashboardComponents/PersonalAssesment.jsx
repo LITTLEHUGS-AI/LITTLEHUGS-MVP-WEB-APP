@@ -1,8 +1,7 @@
 import Sidebar from "./Sidebar";
 import ProfileUi from "./ProfileUi";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
-import store from "../../../config/storeInstance";
 
 const PersonalAssessment = () => {
   const navigate = useNavigate();

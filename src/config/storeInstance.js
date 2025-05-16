@@ -1,9 +1,6 @@
 class Store {
   constructor() {
-    this.data = {
-      user: null,
-      theme: 'light',
-    };
+    this.data = {};
     this.listeners = [];
   }
 

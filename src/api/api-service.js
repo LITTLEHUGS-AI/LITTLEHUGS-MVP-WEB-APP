@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
         case 401:
           // Unauthorized - Clear token and redirect to login
           localStorage.removeItem("auth_token");
-          window.location.href = "/login";
+          window.location.href = "/signin";
           break;
 
         case 403:

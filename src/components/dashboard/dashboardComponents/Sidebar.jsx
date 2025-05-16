@@ -4,18 +4,13 @@ import {
   IndianRupee,
   ChartColumnIncreasing,
 } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { logout } from "../../../api/partner-apis";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = () => {
 
-  const navigate = useNavigate();
-
-  const handleLogout = async()=>{
-    await logout();
+  const handleLogout = async () => {
     localStorage.clear('accessToken');
     localStorage.clear('userType');
-    navigate('/signin');
   }
   return (
     <>
@@ -34,10 +29,9 @@ const Sidebar = () => {
           <NavLink
             to="/personal/dashboard"
             className={({ isActive }) =>
-              `flex items-center p-2 rounded ${
-                isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
               }`
             }
           >
@@ -48,10 +42,9 @@ const Sidebar = () => {
           <NavLink
             to="/personal/plans"
             className={({ isActive }) =>
-              `flex items-center p-2 rounded ${
-                isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
               }`
             }
           >
@@ -62,10 +55,9 @@ const Sidebar = () => {
           <NavLink
             to="/personal/assessment"
             className={({ isActive }) =>
-              `flex items-center p-2 rounded ${
-                isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
               }`
             }
           >
@@ -79,7 +71,7 @@ const Sidebar = () => {
       <div className="p-4 mt-8">
         <p className="text-xs font-medium text-gray-500 mb-4">GENERAL</p>
         <div className="space-y-2">
-          <Link to="/" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
+          <Link to="/signin" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
             <LogOut size={20} />
             <span className="ml-3 font-semibold">Logout</span>
           </Link>

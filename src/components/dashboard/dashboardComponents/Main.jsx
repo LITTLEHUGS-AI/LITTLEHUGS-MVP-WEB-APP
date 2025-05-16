@@ -1,28 +1,27 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import {
   getAssessmentData,
-  getInsightsData,
-  // getProfileDetails,
   getShareAssessment,
   getWomenProfileDetails,
 } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Main = () => {
+
+  const [isBlur, setIsBlur] = useState(true);
+
   const [data, setData] = useState({});
   const [latestdate, setLatestDate] = useState(null);
 
-  const [ragWellnessScore, setRagWellnessScore] = useState([]);
-
+  const [domainWellnessScore, setDomainWellnessScore] = useState([]);
 
   const [profileData, setProfileData] = useState({});
   const [assessment, setAssessment] = useState({});
   const [shareAssessmentData, setShareAssessmentData] = useState({});
-  const [insights, setInsights] = useState({});
-
 
   useEffect(() => {
 
@@ -42,10 +41,10 @@ const Main = () => {
       const res = await getShareAssessment();
       res && setShareAssessmentData(res);
     })();
-    (async () => {
-      const res = await getInsightsData();
-      res && setInsights(res);
-    })();
+    // (async () => {
+    //   const res = await getInsightsData();
+    //   res && setInsights(res);
+    // })();
   }, []);
 
   const downloadPDF = () => {
@@ -98,24 +97,25 @@ const Main = () => {
   };
 
   const getColorByScore = (score) => {
-    if (score >= 80) return '#22c55e'; // green-500
-    if (score >= 60) return '#facc15'; // yellow-400
-    if (score >= 40) return '#fb923c'; // orange-400
+    if (score >= 80) return '#22c55e'; // green
+    if (score >= 60) return '#facc15'; // yellow
+    if (score >= 40) return '#fb923c'; // red
     return '#ef4444'; // red-500
   };
 
-  const getBgColorByScore = (score) => {
-    if (score >= 80) return 'bg-green-100';
-    if (score >= 60) return 'bg-yellow-100';
-    if (score >= 40) return 'bg-orange-100';
-    return 'bg-red-100';
-  };
 
-
-  const CircleScore = ({ title, score }) => {
-    const color = getColorByScore(score);
+  const CircleScore = ({ index, title, score }) => {
+    let bgColor = 'bg-green-100';
+    switch (index) {
+      case 1: bgColor = '#F9BD87'; break;
+      case 2: bgColor = '#A5D3C6'; break;
+      case 3: bgColor = '#E7E1F9'; break;
+      case 4: bgColor = '#FFFAE2'; break;
+      case 5: bgColor = '#F8DBDB'; break;
+      default: bgColor = 'bg-green-100';
+    }
     return (
-      <div className={`flex flex-col ${getBgColorByScore(score)} p-4 rounded-lg`}>
+      <div style={{ backgroundColor: bgColor }} className={`flex flex-col p-4 rounded-lg`}>
         <h4 className="flex-1 text-sm font-medium mb-2">{title}</h4>
         <div className="flex justify-center">
           <div className="relative w-24 h-24 flex-shrink-0">
@@ -133,7 +133,7 @@ const Main = () => {
                 cy="50"
                 r="45"
                 fill="none"
-                stroke={color}
+                stroke={getColorByScore(score)}
                 strokeWidth="10"
                 strokeDasharray="283"
                 strokeDashoffset={283 - (score / 100) * 283}
@@ -148,7 +148,7 @@ const Main = () => {
                 fontWeight="bold"
                 fill="#333"
               >
-                {score}/100
+                {Math.ceil(score)}/100
               </text>
             </svg>
           </div>
@@ -172,11 +172,16 @@ const Main = () => {
         return response.json();
       })
       .then(data => {
+        if (data.count === 0) {
+          setIsBlur(true);
+          return;
+        }
+        setIsBlur(false);
         setData(data);
         const domainInsights = data.results[0].assessment_output.domain_insights;
         const domainArray = Object.keys(domainInsights).map(key => domainInsights[key]);
-        setRagWellnessScore(domainArray);
-        setLatestDate(data.results[0].assessment_output.created_at)
+        setDomainWellnessScore(domainArray);
+        setLatestDate(data.results[0].assessment_output.created_at);
         console.log(domainArray[0].domain)
       })
       .catch(err => toast.error(err.message));
@@ -198,21 +203,21 @@ const Main = () => {
       </div>
 
 
-      <div className="relative">
+      <div className="w-full">
 
-        {/* {(Object.keys(insights).length === 0) &&
-          <div className="fixed inset-0 flex flex-col justify-center items-center ring-2 z-50">
-            <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-1/3">
-              <h2 className="text-xl font-semibold">Please Take an Assesment to view your Dashboard</h2>
-              <Link to="/personal/assessment" className="block w-52 mt-4 bg-red-500 text-white text-center p-2 rounded"            >
+        {isBlur &&
+          <div className="flex justify-center items-center w-full">
+            <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl font-semibold">Please Take an Assessment to view your Dashboard</h2>
+              <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 rounded cursor-pointer"  >
                 Go to Assessment
               </Link>
             </div>
           </div>
-        } */}
+        }
 
         {/* Dashboard Content */}
-        <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${(Object.keys(insights).length === 0) && ""}`}      >
+        <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${isBlur && 'blur'}`}      >
           <h2 className="text-xl font-medium mb-4">Dashboard</h2>
 
 
@@ -263,7 +268,7 @@ const Main = () => {
           </div> */}
 
           <div className="flex justify-between">
-            <div className="my-4"><b>Lastest Assessment Name </b> : {assessment.results && assessment.results[0].assessment_name} </div>
+            <div className="my-4"><b>Lastest Assessment Name </b> : {assessment?.results?.[0]?.assessment_name ?? 'N/A'} </div>
             <div className="my-4"><b>Lastest Assessment Date </b> : {latestdate && new Date(latestdate).toLocaleString()} </div>
           </div>
 
@@ -272,12 +277,13 @@ const Main = () => {
             <h3 className="text-lg font-medium mb-4">Domain Wellness Score</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-              {ragWellnessScore.map((assessment, index) => (
+              {domainWellnessScore.map((assessment, index) => (
                 <CircleScore
+                  key={index}
                   title={assessment?.domain || 'fetching'}
                   score={assessment?.score || '0'}
                   color="#22c55e"
-                  bgColor="bg-orange-100"
+                  index={index + 1}
                 />
               ))}
 
@@ -299,7 +305,7 @@ const Main = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {ragWellnessScore.map((item, index) => (
+                  {domainWellnessScore.map((item, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {item.domain}
@@ -310,13 +316,18 @@ const Main = () => {
                             className="inline-block w-4 h-4 rounded-full mr-2"
                             style={{ backgroundColor: getColorByScore(item.score) }}
                           />
-                         <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
+                          <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-700">
-                        {item.positive_summary ? `"${item.positive_summary}"` : ''}
-                        <br />
-                        {item.negative_summary ? `"${item.negative_summary}"` : ''}
+                        <ul className="list-disc pl-5">
+                          {item.positive_summary && (
+                            <li>                           {item.positive_summary}                            </li>
+                          )}
+                          {item.negative_summary && (
+                            <li>{item.negative_summary}                            </li>
+                          )}
+                        </ul>
                       </td>
                     </tr>
                   ))}
@@ -346,6 +357,8 @@ const Main = () => {
         </div>
 
       </div>
+
+
 
     </>
   );

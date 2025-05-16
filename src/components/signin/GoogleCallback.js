@@ -57,6 +57,13 @@ const GoogleCallback = () => {
 
             login(access_token);
 
+            getWomenProfileDetails().then((res) => {
+              if (res.is_personal)
+                navigate('/personal/dashboard');
+              if (res.is_organization)
+                navigate('/partner/dashboard');
+            });
+
           } catch (error) {
             console.error("Error during authentication", error);
           }
@@ -67,19 +74,11 @@ const GoogleCallback = () => {
     };
 
     fetchUser();
-  }, [apiUrl, location.search, login]);
+  }, [apiUrl, navigate, location.search, login]);
 
   useEffect(() => {
-    if (hasAuthenticated) {
-      // navigate("/new-chat");
-      getWomenProfileDetails().then((res) => {
-        if (res.is_personal)
-          navigate('/personal/dashboard');
-        if(res.is_organization)
-          navigate('/partner/dashboard');
-      });
-    }
-  }, [hasAuthenticated, navigate]);
+    if (hasAuthenticated);
+  }, [hasAuthenticated]);
 
   <div>
     <Loader />

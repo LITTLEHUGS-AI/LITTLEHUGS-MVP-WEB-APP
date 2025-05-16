@@ -1,14 +1,16 @@
-// import React, { useEffect, useState } from "react";
-// import { getInsightsData } from "../../../api/dashboard-api";
+import { useEffect, useState } from "react";
+import { getShareAssessment } from "../../../api/dashboard-api";
 import ProfileUi from "./ProfileUi";
 
 const RightHandSide = () => {
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await getInsightsData();
-  //     res && setInsights(res);
-  //   })();
-  // }, []);
+  const [insight, setInsight] = useState('N/A');
+  useEffect(() => {
+    (async () => {
+      const res = await getShareAssessment();
+      setInsight(res?.results?.[0]?.assessment_output?.personality_insight || 'N/A');
+    })();
+  }, []);
+
   return (
     <>
       <ProfileUi />
@@ -20,7 +22,7 @@ const RightHandSide = () => {
 
           <div className="p-4 bg-orange-50 rounded-lg">
             <p className="text-gray-800">
-              <span className="font-semibold">Personality Insight:{" "}</span>
+              <div className="mb-2"><span className="font-semibold">Personality Insight:</span> {insight}</div>
             </p>
             <p className="text-gray-800 mt-2">
               <span className="font-semibold">Next Step Suggestions :</span>

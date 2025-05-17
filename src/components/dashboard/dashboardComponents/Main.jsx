@@ -188,6 +188,20 @@ const Main = () => {
   }
 
 
+  // useEffect(() => {
+  //   if (data && Object.keys(data).length > 0 && Array.isArray(data.results) && data.results.length > 0 && assessment && Object.keys(assessment).length > 0 && Array.isArray(assessment.results) && assessment.results.length > 0) {
+  //     console.log(data, assessment);
+  //     const a =       parseInt(data.count) ;
+  //     const b =  parseInt(assessment.results);
+
+  //    const c = typeof a;
+  //    const d =  typeof b;
+
+  //     debugger;
+  //   }
+  // }, [data, assessment]);
+
+
   return (
     <>
       {/* Welcome Banner */}
@@ -196,9 +210,7 @@ const Main = () => {
           Hi {profileData.name ? profileData.name : "UserName"}
         </h2>
         <p className="text-gray-700">
-          In this moment, nothing is asked of you.
-          <br />
-          You are allowed to pause. To rest. To simply be.
+          In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be.
         </p>
       </div>
 
@@ -238,8 +250,8 @@ const Main = () => {
             <div className="bg-white border border-gray-200 p-4 rounded-lg">
               <h3 className="text-sm font-medium text-gray-600">Incomplete</h3>
               {Number.isFinite(parseInt(data.count))}
-              <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.results))
-                ? parseInt(data.count) - parseInt(assessment.results)
+              <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count))
+                ? parseInt(data.count) - parseInt(assessment.count)
                 : ''}</p>
             </div>
           </div>

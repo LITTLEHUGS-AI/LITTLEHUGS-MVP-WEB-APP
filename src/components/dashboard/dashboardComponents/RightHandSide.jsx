@@ -39,14 +39,6 @@ const RightHandSide = () => {
         </div>
       </div>
 
-      {/* Download App Banner */}
-      <div className="mx-4 mt-auto mb-8 bg-gray-800 rounded-lg p-4 text-white fixed bottom-0">
-        <h3 className="font-semibold">Download Our Mobile App</h3>
-        <p className="text-xs text-gray-300 mb-4">from Google Play Store</p>
-        <button className="bg-blue-500 text-white w-full py-2 rounded text-sm font-medium cp">
-          Download
-        </button>
-      </div>
     </>
   );
 };

@@ -1,8 +1,8 @@
-import React from "react";
 import ProfileUi from "./ProfileUi";
 import Sidebar from "./Sidebar";
 
 const Plans = () => {
+
   return (
     <>
       <div className="flex h-screen bg-gray-50">
@@ -16,13 +16,14 @@ const Plans = () => {
           <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
             <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
               <p className="p-0 text-[20px] text-slate-500">
-                You have not taken any assessment till date !
+            In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
               </p>
             </div>
             <div className="col-span-2">
               <ProfileUi />
             </div>
           </div>
+
           {/* Plans Card */}
           <div className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto">
             {/* Wellness Starter Plan */}

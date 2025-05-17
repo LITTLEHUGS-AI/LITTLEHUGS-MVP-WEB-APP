@@ -67,14 +67,26 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* General Options */}
-      <div className="p-4 mt-8">
-        <p className="text-xs font-medium text-gray-500 mb-4">GENERAL</p>
-        <div className="space-y-2">
-          <Link to="/signin" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
-            <LogOut size={20} />
-            <span className="ml-3 font-semibold">Logout</span>
-          </Link>
+
+      <div className="fixed bottom-0">
+        {/* General Options */}
+        <div className="p-4 mt-8">
+          <p className="text-xs font-medium text-gray-500 mb-4">GENERAL</p>
+          <div className="space-y-2">
+            <Link to="/signin" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
+              <LogOut size={20} />
+              <span className="ml-3 font-semibold">Logout</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Download App Banner */}
+        <div className="mx-4 mt-auto mb-8 bg-gray-800 rounded-lg p-4 text-white">
+          <h3 className="font-semibold">Download Our Mobile App</h3>
+          <p className="text-xs text-gray-300 mb-4">from Google Play Store</p>
+          <button className="bg-blue-500 text-white w-full py-2 rounded text-sm font-medium cp">
+            Download
+          </button>
         </div>
       </div>
 

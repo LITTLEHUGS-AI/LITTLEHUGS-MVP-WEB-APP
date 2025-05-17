@@ -11,6 +11,7 @@ import useSignIn from "../signin/useSignIn";
 import { toastErrorMessage } from "../common/Constants";
 import { apiClient, setupApiAccessToken } from "../../api/api-client";
 import { toast } from "react-toastify";
+import { ColumnsSettingsIcon, Cross, X } from "lucide-react";
 
 const INITIAL_VALUES = {
   name: "",
@@ -198,6 +199,7 @@ function SignupUI({
     };
     otpMutation.mutate(payload);
     setIsOtp(true);
+    setOtp(Array(6).fill(""));
   };
 
   const handleResendOtp = () => {
@@ -675,38 +677,45 @@ function SignupUI({
         {/* Popup Modal */}
         {showPopup === 1 && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-            <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[800px] mx-6">
-              <div className="mb-8 mx-auto w-full max-w-xl">
-                <div className="flex max-w-60 justify-between items-center mx-auto mb-2">
-                  {["Profile Selection", "Profile Completion"].map(
-                    (step, index) => (
+            <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg max-w-[800px] mx-6">
+
+
+              <div className="flex items-center justify-between space-x-6">
+
+                <div />
+
+                <div className="flex max-w-60 justify-between items-center space-x-6">
+                  {["Profile Selection", "Profile Completion"].map((step, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center text-center"
+                    >
                       <div
-                        key={index}
-                        className="flex flex-col items-center text-center"
-                      >
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center ${index + 1 === currentStep
+                        className={`w-8 h-8 rounded-full flex items-center justify-center ${index + 1 === currentStep
+                          ? "bg-blue-500 text-white"
+                          : index + 1 < currentStep
                             ? "bg-blue-500 text-white"
-                            : index + 1 < currentStep
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-400 text-white"
-                            }`}
-                        >
-                          {index + 1}
-                        </div>
-                        <div
-                          className={`mt-2 text-sm ${index + 1 === currentStep
-                            ? "text-blue-500"
-                            : "text-gray-500"
-                            }`}
-                        >
-                          {step}
-                        </div>
+                            : "bg-gray-400 text-white"
+                          }`}
+                      >
+                        {index + 1}
                       </div>
-                    )
-                  )}
+                      <div
+                        className={`mt-2 text-sm ${index + 1 === currentStep ? "text-blue-500" : "text-gray-500"
+                          }`}
+                      >
+                        {step}
+                      </div>
+                    </div>
+                  ))}
                 </div>
+
+                <button onClick={() => { setShowPopup(null) }}>
+                  <X className="w-5 h-5 text-red-600" />
+                </button>
+
               </div>
+
 
               {currentStep === 1 && (
                 <>
@@ -741,7 +750,7 @@ function SignupUI({
                 <div className="flex gap-12">
                   {/* for women */}
                   {showWomenPopup && (
-                    <div className="min-w-[300px]">
+                    <div className="min-w-[300px] mx-auto">
                       <h2 className="font-bold text-center">Women Profile</h2>
                       <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
                         <label htmlFor="womenDPInput">
@@ -789,6 +798,46 @@ function SignupUI({
                             <option>Prefer not to say</option>
                           </select>
 
+                          <div className="relative">
+                            <input
+                              name="weight"
+                              type="text"
+                              placeholder="Weight"
+                              className="border p-2 rounded w-full"
+                              required
+                            />
+                            <span className="absolute right-2 top-2.5 text-gray-500">
+                              kg
+                            </span>
+                          </div>
+                          <div className="relative">
+                            <input
+                              name="height"
+                              type="text"
+                              placeholder="Height"
+                              className="border p-2 rounded w-full"
+                              required
+                            />
+                            <span className="absolute right-2 top-2.5 text-gray-500">
+                              cm
+                            </span>
+                          </div>
+
+
+                          <select name="lifeStyle" className="border p-2 rounded" required>
+                            <option value="" disabled hidden>
+                              * Life Style
+                            </option>
+                            <option>Nuclear Family</option>
+                            <option>Joint Family</option>
+                            <option>Single Parent</option>
+                            <option>Shared Accommodation / Hostel</option>
+                            <option>Urban / Metro City</option>
+                            <option>Suburban / Town</option>
+                            <option>Rural / Village</option>
+                          </select>
+
+
                           <div>
                             {/* Dropdown button */}
                             <div
@@ -829,9 +878,7 @@ function SignupUI({
                                   >
                                     <input
                                       type="checkbox"
-                                      checked={selectedWomenGoalOptions.some(
-                                        (item) => item === option
-                                      )}
+                                      checked={selectedWomenGoalOptions.some((item) => item === option)}
                                       readOnly
                                       className="mr-2"
                                     />
@@ -841,6 +888,7 @@ function SignupUI({
                               </div>
                             )}
                           </div>
+
 
                           <div>
                             {/* Dropdown button */}
@@ -893,30 +941,6 @@ function SignupUI({
                             )}
                           </div>
 
-                          <div className="relative">
-                            <input
-                              name="weight"
-                              type="text"
-                              placeholder="Weight"
-                              className="border p-2 rounded w-full"
-                              required
-                            />
-                            <span className="absolute right-2 top-2.5 text-gray-500">
-                              kg
-                            </span>
-                          </div>
-                          <div className="relative">
-                            <input
-                              name="height"
-                              type="text"
-                              placeholder="Height"
-                              className="border p-2 rounded w-full"
-                              required
-                            />
-                            <span className="absolute right-2 top-2.5 text-gray-500">
-                              cm
-                            </span>
-                          </div>
                         </div>
                       </form>
                     </div>
@@ -1648,9 +1672,17 @@ function SignupUI({
         {isOtp && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div className="bg-white rounded-xl w-full max-w-[650px] p-8 relative text-gray-700 shadow-xl">
-              <h2 className="text-2xl font-semibold text-center text-gray-800">
-                OTP Authentication
-              </h2>
+
+              <div className="flex items-center justify-between space-x-6">
+                <div />
+                <h2 className="text-2xl font-semibold text-center text-gray-800">
+                  OTP Authentication
+                </h2>
+                <button onClick={() => setIsOtp(false)}>
+                  <X className="w-5 h-5 text-red-600" />
+                </button>
+              </div>
+
               <p className="text-center text-gray-500 my-3">
                 Please enter the OTP
               </p>

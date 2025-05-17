@@ -1,10 +1,8 @@
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../lib/AuthContext";
 import { Loader } from "../common/Loader";
-import { getWomenProfileDetails } from "../../api/dashboard-api";
+import axios from "axios";
 
 const GoogleCallback = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -47,22 +45,20 @@ const GoogleCallback = () => {
             let payload = {
               token: token,
             };
-            const response = await axios.post(
-              `${apiUrl}/auth/v2/login`,
-              payload
-            );
+            const response = await axios.post(`${apiUrl}/auth/v2/login`, payload);
             const access_token = response?.data?.access_token;
             localStorage.setItem("accessToken", access_token);
             localStorage.setItem("userType", 'personal');
 
             login(access_token);
+            navigate('/personal/dashboard');
 
-            getWomenProfileDetails().then((res) => {
-              if (res.is_personal)
-                navigate('/personal/dashboard');
-              if (res.is_organization)
-                navigate('/partner/dashboard');
-            });
+            // getWomenProfileDetails().then((res) => {
+            //   if (res.is_personal)
+            //     navigate('/personal/dashboard');
+            //   if (res.is_organization)
+            //     navigate('/partner/dashboard');
+            // });
 
           } catch (error) {
             console.error("Error during authentication", error);

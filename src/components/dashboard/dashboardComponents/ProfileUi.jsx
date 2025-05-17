@@ -307,7 +307,7 @@ const ProfileUi = () => {
               </div>
             </div>
 
-            {Object.keys(childProfileData).length > 0 && <div className="flex justify-center mb-6">
+            {childProfileData && Object.keys(childProfileData).length > 0 && <div className="flex justify-center mb-6">
               <div className="relative flex flex-col items-center">
                 <div
                   className={`${selectedProfile === 'child' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}

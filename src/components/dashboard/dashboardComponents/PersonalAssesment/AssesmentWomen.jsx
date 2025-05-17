@@ -1,82 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../Sidebar";
 import ProfileUi from "../ProfileUi";
+import useAssessmentQuestions from "../../../../api/personal-assessment";
+import GoalsQuestionnaire from './GoalAssessment';
 
-export default function AssesmentConsent() {
+export default function AssesmentWomen() {
+
+    const { questions: goalQuestions } = useAssessmentQuestions('goal', 1);
+    const { questions: intentQuestions } = useAssessmentQuestions('intent', 1);
+
+
+    const [goalsQuestionnaire, setGoalsQuestionnaire] = useState([]);
+    const [intentQuestionnaire, setIntentQuestionnaire] = useState([]);
+
     const [currentStep, setCurrentStep] = useState(1);
     const [quesLoding, setQuesLoding] = useState(false);
 
+
     const [consentAccept, setConsentAccept] = useState([]);
-    const [selectedGoals, setSelectedGoals] = useState([]);
     const [selectedPurposes, setSelectedPurposes] = useState([]);
 
     const steps = ["Consent", "Goal", "Purpose", "Assessment"];
+
 
     function step1(term) {
         if (consentAccept.includes(term)) setConsentAccept(prev => prev.filter(item => item !== term));
         else setConsentAccept(prev => [...prev, term]);
     }
 
-    const goals = [
-        {
-            id: "understand",
-            emoji: "👤",
-            title: "Understand how I've been feeling lately",
-            description: `I want a snapshot of my emotional state.`
-        },
-        {
-            id: "support",
-            emoji: "😔",
-            title: "Find out if I might need support",
-            description: `I'm not sure if what I'm feeling is okay—I'd like to know if I need help.`
-        },
-        {
-            id: "wellbeing",
-            emoji: "🌱",
-            title: "Improve my overall well-being",
-            description: `I want gentle tips to feel more balanced.`
-        },
-        {
-            id: "stress",
-            emoji: "🔴",
-            title: "Manage stress, burnout, or overwhelm",
-            description: `I've been feeling stretched and exhausted.`
-        },
-        {
-            id: "reconnect",
-            emoji: "🤍",
-            title: "Reconnect with myself emotionally",
-            description: `I feel a bit disconnected from who I am—I want to check in.`
-        },
-        {
-            id: "tired",
-            emoji: "💤",
-            title: "Figure out why I'm tired all the time",
-            description: `Fatigue and sleep are big issues—I need clarity.`
-        },
-        {
-            id: "better",
-            emoji: "🔒",
-            title: "Be a better version of myself for me/my family",
-            description: `I want to feel more present, emotionally and physically.`
-        },
-        {
-            id: "moment",
-            emoji: "💛",
-            title: "Just taking a moment for myself",
-            description: `I don't have anything major—just checking in and caring for myself.`
-        }
-    ];
-
-    const toggleGoal = (goalId) => {
-        if (selectedGoals.includes(goalId)) setSelectedGoals(prev => prev.filter(id => id !== goalId));
-        else setSelectedGoals(prev => [...prev, goalId]);
-    };
 
     const togglePurpose = (purpose) => {
         if (selectedPurposes.includes(purpose)) setSelectedPurposes(prev => prev.filter(id => id !== purpose));
         else setSelectedPurposes(prev => [...prev, purpose]);
     };
+
+
+    useEffect(() => {
+        if (goalQuestions?.results?.length > 0){ setGoalsQuestionnaire(goalQuestions.results); };
+    }, [goalQuestions]);
+
+    useEffect(() => {
+        if (intentQuestions?.results?.length > 0) {setIntentQuestionnaire(intentQuestions.results); };
+    }, [intentQuestions]);
+
+
 
     return (
         <div className="flex h-screen bg-gray-50">
@@ -97,6 +64,7 @@ export default function AssesmentConsent() {
                         <ProfileUi />
                     </div>
                 </div>
+
 
                 {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />
@@ -188,30 +156,14 @@ export default function AssesmentConsent() {
                             </>}
 
                             {currentStep === 2 && <>
+
                                 <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
-                                    What do you hope to gain from this check-in today? (Select all that applies)
+                                    What do you hope to gain from this check-in today? (Select all that applies) 2
                                 </h2>
-
-                                <div className="space-y-4">
-                                    {goals.map((goal) => (
-                                        <button
-                                            key={goal.id}
-                                            className={`w-full text-left p-6 rounded-lg border-2 ${selectedGoals.includes(goal.id)
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 bg-white hover:border-gray-300'
-                                                } transition-colors flex flex-col`}
-                                            onClick={() => toggleGoal(goal.id)}
-                                        >
-                                            <div className="flex items-center">
-                                                <span className="text-2xl mr-2">{goal.emoji}</span>
-                                                <span className="font-medium">{goal.title}</span>
-                                            </div>
-                                            <p className="text-gray-600 mt-1 ml-8">{goal.description}</p>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                <div className="mt-8 flex justify-between">
+                                <GoalsQuestionnaire
+                                    ques={goalsQuestionnaire}
+                                />
+                                <div className="mb-8 flex gap-8 justify-between">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
                                         onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, steps.length))}
@@ -220,9 +172,8 @@ export default function AssesmentConsent() {
                                     </button>
 
                                     <button
-                                        className={`px-8 py-2 text-white rounded-full ${selectedGoals.length > 0 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
+                                        className={`px-8 py-2 text-white rounded-full ${true ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
                                         onClick={() => setCurrentStep(prevStep => Math.min(prevStep + 1, steps.length))}
-                                        disabled={selectedGoals.length === 0}
                                     >
                                         Next
                                     </button>
@@ -230,6 +181,32 @@ export default function AssesmentConsent() {
                             </>}
 
                             {currentStep === 3 && <>
+
+                                <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
+                                    What do you hope to gain from this check-in today? (Select all that applies) 3
+                                </h2>
+                                <GoalsQuestionnaire
+                                    ques={intentQuestionnaire}
+                                />
+                                <div className="mb-8 flex gap-8 justify-between">
+                                    <button
+                                        className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
+                                        onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, steps.length))}
+                                    >
+                                        Back
+                                    </button>
+
+                                    <button
+                                        className={`px-8 py-2 text-white rounded-full ${true ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
+                                        onClick={() => setQuesLoding(true)}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </>}
+
+
+                            {currentStep === 4 && <>
 
                                 <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
                                     1. What brings you here today? (Select all that applies)
@@ -259,9 +236,8 @@ export default function AssesmentConsent() {
                                     </button>
 
                                     <button
-                                        className={`px-8 py-2 text-white rounded-full ${selectedGoals.length > 0 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
+                                        className={`px-8 py-2 text-white rounded-full bg-blue-500 hover:bg-blue-600 transition-colors`}
                                         onClick={() => { setCurrentStep(prevStep => Math.min(prevStep + 1, steps.length)); setQuesLoding(true) }}
-                                        disabled={selectedGoals.length === 0}
                                     >
                                         Next
                                     </button>

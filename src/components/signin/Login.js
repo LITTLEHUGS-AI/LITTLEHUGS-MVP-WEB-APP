@@ -24,7 +24,6 @@ function SignInUI({
 }) {
     const apiUrl = process.env.REACT_APP_API_URL;
 
-
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
         resolver: zodResolver(SignInFormSchema),
@@ -56,7 +55,6 @@ function SignInUI({
         password: '',
         confirmPassword: '',
     });
-
 
 
     async function handleForgetEmailSubmit() {
@@ -123,11 +121,9 @@ function SignInUI({
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value, }));
     };
+
 
     return (
         <div className="flex flex-col min-h-screen bg-[#fef9f6]">
@@ -139,7 +135,7 @@ function SignInUI({
                     backgroundRepeat: 'no-repeat, no-repeat',
                     backgroundPosition: 'center, top left',
                     backgroundSize: 'cover, contain',
-                }} 
+                }}
             >
 
                 {(showPopup === 'ForgetPassword') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -230,7 +226,6 @@ function SignInUI({
                     </div>
 
                 </div>)}
-
 
                 {(showPopup === 'Terms&Conditions') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-[#FAF3ED] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -364,6 +359,7 @@ function SignInUI({
                 </div>
 
                 )}
+
                 {(showPopup === 'PrivacyPolicy') && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
                         {/* Header */}
@@ -522,6 +518,7 @@ function SignInUI({
                     </div>
                 </div>)}
 
+
                 <div className="bg-white rounded-md shadow-md p-8 w-[980px] max-w-md border">
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-1">Sign In</h2>
                     <p className="text-center text-sm py-2 mb-2 text-gray-600 ">
@@ -532,11 +529,6 @@ function SignInUI({
                             className="space-y-4"
                             onSubmit={methods.handleSubmit(handleSubmit)}
                         >
-                            {/* <input
-                                type="email"
-                                placeholder="* Email"
-                                className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            /> */}
                             <InputField
                                 label="Email"
                                 name="email"
@@ -545,11 +537,7 @@ function SignInUI({
                                 message={isError ? message : ""}
                                 isDisabled={isPending}
                             />
-                            {/* <input
-                                type="password"
-                                placeholder="* Password"
-                                className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            /> */}
+
                             <InputField
                                 type={visible.password ? "text" : "password"}
                                 name="password"
@@ -562,7 +550,6 @@ function SignInUI({
                             <div className="text-right">
                                 <button type="button" onClick={() => { setShowPopup('ForgetPassword'); setForgetEmailStep(1) }} className="text-sm text-orange-500 hover:underline">Forgot Password?</button>
                             </div>
-
 
                             <div className="flex items-start space-x-2 text-sm">
                                 <input
@@ -585,8 +572,8 @@ function SignInUI({
                             </div>
 
                             <Button
-                                isDisabled={isPending}
-                                className={`${isPending ? "sign-load" : "sign"} w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200`}
+                                isDisabled={isPending || !isTermsAccepted}
+                                className={`${(isPending || !isTermsAccepted) ? "bg-gray-500 hover:bg-gray-600" : "bg-blue-500 hover:bg-blue-600"} w-full text-white py-2 rounded transition duration-200`}
                                 type="submit"
                             >
                                 {isPending ? <ButtonLoader /> : "Sign In"}

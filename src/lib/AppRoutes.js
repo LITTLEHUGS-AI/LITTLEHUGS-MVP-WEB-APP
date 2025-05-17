@@ -18,11 +18,12 @@ import PersonalAssesment from "../components/dashboard/dashboardComponents/Perso
 import Plans from "../components/dashboard/dashboardComponents/Plans";
 import GoogleCallback from "../components/signin/GoogleCallback";
 import PartnerDashboardLayout from "../components/partner/PartnerDashboardLayout";
-import AssesmentConsent from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentConsent";
+import AssesmentWomen from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentWomen";
 import ProtectedRoute from "./ProtectedRoute";
 import OpenRoute from "./OpenRoute";
 import AcceptInviteUser from "../temp/AcceptInviteUser";
 import AcceptInviteTeam from "../temp/AcceptInviteTeam";
+import AssesmentChild from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentChild";
 
 function AppRoutes() {
   return (
@@ -98,10 +99,19 @@ function AppRoutes() {
             />
 
             <Route
-              path="/personal/asssesment-consent"
+              path="/personal/asssesment-women"
               element={
                 <ProtectedRoute>
-                  <AssesmentConsent />
+                  <AssesmentWomen />
+                </ProtectedRoute>
+              }
+            />
+
+               <Route
+              path="/personal/asssesment-child"
+              element={
+                <ProtectedRoute>
+                  <AssesmentChild />
                 </ProtectedRoute>
               }
             />

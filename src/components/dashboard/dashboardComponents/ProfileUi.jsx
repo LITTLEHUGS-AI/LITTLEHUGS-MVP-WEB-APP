@@ -8,7 +8,10 @@ import axios from "axios";
 
 const ProfileUi = () => {
 
-  const [selectedProfile, setSelectedProfile] = useState('women');
+  const dd = store.getData();
+
+
+  const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0)?dd.current: 'women');
   const [allCountries, setAllCountries] = useState([]);
 
   const [womenProfileData, setWomenProfileData] = useState({});
@@ -29,16 +32,19 @@ const ProfileUi = () => {
     }));
   };
 
+
+
+  useEffect(() => {
+  if ((Object.keys(dd).length !== 0)) {
+    setWomenProfileData(dd.women);
+  }
+  }, [dd])
+
+
+
   useEffect(() => {
     (async () => {
       try {
-        const dd = store.getData();
-        if (Object.keys(dd).length !== 0) {
-          setSelectedProfile(dd.current);
-          setWomenProfileData(dd.women);
-        }
-
-
         const res1 = await getWomenProfileDetails();
 
         const women = { ...res1.mother_profile };
@@ -51,9 +57,9 @@ const ProfileUi = () => {
 
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
-        store.setData({ current: selectedProfile, women, child: res2.profiles[0] });
+        store.setData({ current: selectedProfile, name: res1.name, women, child: res2.profiles[0] });
         if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
-      } catch (error) {
+        } catch (error) {
         toast.error(error)
       }
     })();
@@ -71,6 +77,8 @@ const ProfileUi = () => {
     })();
 
   }, [selectedProfile]);
+
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -144,7 +152,6 @@ const ProfileUi = () => {
 
     const completedKeys = keys.filter((key) => {
       const value = profile[key];
-      // Check for non-empty, non-null, non-undefined, non-empty-array/object
       if (value === null || value === undefined) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (Array.isArray(value) && value.length === 0) return false;
@@ -270,76 +277,91 @@ const ProfileUi = () => {
         centered
       >
         <div className="mx-auto p-6 bg-white rounded-lg">
-          <h1 className="text-4xl font-medium text-center text-gray-700 mb-8">
-            Profile
+          <h1 className="flex justify-center gap-2text-4xl font-medium text-center text-gray-700 mb-8">
+            Profile <span className="my-auto text-2xl">({completeProfile} %)</span>
           </h1>
 
 
           <div className="flex gap-8 justify-center items-center">
 
-            <div className="flex justify-center  mb-6">
-              <div className="relative flex flex-col items-center">
+            <div className="flex justify-center mb-10">
+              <div className="relative flex flex-col items-center space-y-3">
                 <div
-                  className={`${selectedProfile === 'women' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
+                  className={`${selectedProfile === "women" ? "w-28 h-28" : "w-20 h-20"
+                    } rounded-full overflow-hidden border-4 border-blue-400 shadow-md transition-all duration-300 transform hover:scale-105`}
                 >
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <img
-                      onClick={() => { setSelectedProfile('women'); getProfileCompletion(womenProfileData) }}
-                      alt="Women Profile"
-                      src={womenDP}
-                      className="w-full h-full object-cover cursor-pointer"
-                    />
-                  </div>
+                  <img
+                    onClick={() => {
+                      setSelectedProfile("women");
+                      getProfileCompletion(womenProfileData);
+                    }}
+                    alt="Women Profile"
+                    src={womenDP}
+                    className="w-full h-full object-cover cursor-pointer"
+                  />
                 </div>
-                {selectedProfile === 'women' && <input
-                  type="file"
-                  accept="image/jpeg"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setWomenDP(imageUrl);
-                      updateProfileDP(file)
-                    }
-                  }}
-                />}
 
+                {selectedProfile === "women" && (
+                  <label className="cursor-pointer bg-blue-400 hover:bg-blue-500 text-white text-sm font-semibold py-1 px-3 rounded shadow-md transition duration-200">
+                    Change Photo
+                    <input
+                      type="file"
+                      accept="image/jpeg"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const imageUrl = URL.createObjectURL(file);
+                          setWomenDP(imageUrl);
+                          updateProfileDP(file);
+                        }
+                      }}
+                    />
+                  </label>
+                )}
               </div>
             </div>
 
-            {childProfileData && Object.keys(childProfileData).length > 0 && <div className="flex justify-center mb-6">
-              <div className="relative flex flex-col items-center">
+            {childProfileData && Object.keys(childProfileData).length > 0 && <div className="flex justify-center mb-10">
+              <div className="relative flex flex-col items-center space-y-3">
                 <div
-                  className={`${selectedProfile === 'child' ? 'w-24 h-24' : 'w-16 h-16'} rounded-full overflow-hidden border-4 border-yellow-400 transition-all duration-200`}
+                  className={`${selectedProfile === "child" ? "w-28 h-28" : "w-20 h-20"} rounded-full overflow-hidden border-4 border-blue-400 shadow-md transition-all duration-300 transform hover:scale-105`}
                 >
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <img
-                      onClick={() => { setSelectedProfile('child'); getProfileCompletion(childProfileData) }}
-                      alt="Child Profile"
-                      src={childDP}
-                      className="w-full h-full object-cover cursor-pointer"
-                    />
-                  </div>
+                  <img
+                    onClick={() => {
+                      setSelectedProfile("child");
+                      getProfileCompletion(childProfileData);
+                    }}
+                    alt="Child Profile"
+                    src={childDP}
+                    className="w-full h-full object-cover cursor-pointer"
+                  />
                 </div>
-                {selectedProfile === 'child' && <input
-                  type="file"
-                  accept="image/jpeg"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const imageUrl = URL.createObjectURL(file);
-                      setChildDP(imageUrl);
-                      updateProfileDP(file)
-                    }
-                  }}
-                />}
-              </div>
-            </div>}
 
+                {selectedProfile === "child" && (
+                  <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded shadow-md transition duration-200">
+                    Change Photo
+                    <input
+                      type="file"
+                      accept="image/jpeg"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const imageUrl = URL.createObjectURL(file);
+                          setChildDP(imageUrl);
+                          updateProfileDP(file);
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+            </div>
+            }
           </div>
 
 
-          <div className="text-center mb-4">{completeProfile} %</div>
 
           {selectedProfile === 'women' &&
             <form >

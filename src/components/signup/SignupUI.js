@@ -56,6 +56,7 @@ function SignupUI({
 
   const womenFormRef = useRef(null);
   const childFormRef = useRef(null);
+  const partnerFormRef = useRef(null);
 
   const methods = useForm({
     defaultValues: INITIAL_VALUES,
@@ -71,8 +72,8 @@ function SignupUI({
   const handleSubmit = (data) => {
     data = {
       ...data,
-      is_personal: selected === "personal" ? true : false,
-      is_organization: selected === "personal" ? false : true,
+      is_personal: selectedUserType === "personal" ? true : false,
+      is_organization: selectedUserType === "personal" ? false : true,
     };
     onSubmit(data, invitee);
     setEmail(data.email);
@@ -113,15 +114,9 @@ function SignupUI({
   const otpdata = otpMutation?.data;
   const [resentOtp, setResentOtp] = useState(false);
 
-  const [selected, setSelected] = useState("personal");
+  const [selectedUserType, setSelectedUserType] = useState("personal");
 
-  const womenGoalOptions = [
-    "Sleep",
-    "Hormones",
-    "Fatigue",
-    "Anxiety",
-    "Self Care",
-  ];
+
   const [isWomenGoalOpen, setIsWomenGoalOpen] = useState(false);
   const [selectedWomenGoalOptions, setSelectedWomenGoalOptions] = useState([]);
   const toggleWomenGoalDropdown = () => setIsWomenGoalOpen(!isWomenGoalOpen);
@@ -156,6 +151,31 @@ function SignupUI({
       else return [...prevSelected, option];
     });
   };
+
+
+  const [isPartnerGoalOpen, setIsPartnerGoalOpen] = useState(false);
+  const [selectedPartnerGoalOptions, setSelectedPartnerGoalOptions] = useState([]);
+  const togglePartnerGoalDropdown = () => setIsPartnerGoalOpen(!isPartnerGoalOpen);
+  const togglePartnerGoalOption = (option) => {
+    setSelectedPartnerGoalOptions((prevSelected) => {
+      if (prevSelected.some((item) => item === option))
+        return prevSelected.filter((item) => item !== option);
+      else return [...prevSelected, option];
+    });
+  };
+
+
+  const [isPartnerServiceOpen, setIsPartnerServiceOpen] = useState(false);
+  const [selectedPartnerServiceOptions, setSelectedPartnerServiceOptions] = useState([]);
+  const togglePartnerServiceDropdown = () => setIsPartnerServiceOpen(!isPartnerServiceOpen);
+  const togglePartnerServiceOption = (option) => {
+    setSelectedPartnerServiceOptions((prevSelected) => {
+      if (prevSelected.some((item) => item === option))
+        return prevSelected.filter((item) => item !== option);
+      else return [...prevSelected, option];
+    });
+  };
+
 
   const [womenDP, setWomenDP] = useState("/images/women-demo.png");
   const [childDP, setChildDP] = useState("/images/child-demo.png");
@@ -221,11 +241,11 @@ function SignupUI({
         setAccessToken(`token ${otpdata.token}`);
         setIsOtp(false);
 
-        if (selected === "personal") setShowPopup(1);
-        if (selected === "partner") setShowPopup(2);
+        if (selectedUserType === "personal") setShowPopup(1);
+        if (selectedUserType === "partner") setShowPopup(2);
       }
     }
-  }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp, selected]);
+  }, [login, otpdata, otpMutation.isSuccess, setIsOtp, resentOtp, selectedUserType]);
 
   useEffect(() => {
     if (motherMutation.isSuccess) {
@@ -345,7 +365,7 @@ function SignupUI({
   async function handleProfile() {
     setupApiAccessToken(accessToken);
 
-    if (selected === "personal") {
+    if (selectedUserType === "personal") {
       const promises = [];
       try {
         if (showWomenPopup) {
@@ -403,7 +423,8 @@ function SignupUI({
         alert("Some Error Occured");
       }
     }
-    if (selected === "partner") {
+
+    if (selectedUserType === "partner") {
       apiClient
         .post("https://api.ourlittlehugs.com/v1/api/organisation-profile", {
           organisation_name: "My Org",
@@ -446,7 +467,7 @@ function SignupUI({
             methods.setValue('name', data.name);
             methods.setValue('email', data.email);
             methods.setValue('password', '');
-            setSelected('partner')
+            setSelectedUserType('partner')
           }
           console.log(data);
         } catch (error) {
@@ -480,7 +501,7 @@ function SignupUI({
             methods.setValue('name', data.name);
             methods.setValue('email', data.email);
             methods.setValue('password', '');
-            setSelected('personal')
+            setSelectedUserType('personal')
           }
           console.log(data);
         } catch (error) {
@@ -532,8 +553,8 @@ function SignupUI({
               <div className="flex items-center justify-center my-6">
                 <div className="inline-flex border border-gray-300 rounded-xl overflow-hidden">
                   <button
-                    onClick={() => setSelected("personal")}
-                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "personal"
+                    onClick={() => setSelectedUserType("personal")}
+                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selectedUserType === "personal"
                       ? "bg-blue-600 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-100"
                       }`}
@@ -541,8 +562,8 @@ function SignupUI({
                     Personal
                   </button>
                   <button
-                    onClick={() => setSelected("partner")}
-                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selected === "partner"
+                    onClick={() => setSelectedUserType("partner")}
+                    className={`px-6 py-2 font-medium text-sm transition-colors duration-200 ${selectedUserType === "partner"
                       ? "bg-blue-600 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-100"
                       }`}
@@ -557,7 +578,7 @@ function SignupUI({
             <FormProvider {...methods}>
               <form
                 className="space-y-4"
-                onSubmit={methods.handleSubmit(handleSubmit, invitee)}
+                onSubmit={methods.handleSubmit(handleSubmit)}
               >
                 <InputField
                   name="name"
@@ -863,28 +884,29 @@ function SignupUI({
                             {/* Dropdown menu */}
                             {isWomenGoalOpen && (
                               <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                                {womenGoalOptions.map((option) => (
-                                  <div
-                                    key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
-                                      (item) => item === option
-                                    )
-                                      ? "bg-blue-50"
-                                      : ""
-                                      }`}
-                                    onClick={() =>
-                                      toggleWomenGoalOption(option)
-                                    }
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedWomenGoalOptions.some((item) => item === option)}
-                                      readOnly
-                                      className="mr-2"
-                                    />
-                                    {option}
-                                  </div>
-                                ))}
+                                {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                                  .map((option) => (
+                                    <div
+                                      key={option}
+                                      className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                        (item) => item === option
+                                      )
+                                        ? "bg-blue-50"
+                                        : ""
+                                        }`}
+                                      onClick={() =>
+                                        toggleWomenGoalOption(option)
+                                      }
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedWomenGoalOptions.some((item) => item === option)}
+                                        readOnly
+                                        className="mr-2"
+                                      />
+                                      {option}
+                                    </div>
+                                  ))}
                               </div>
                             )}
                           </div>
@@ -1146,7 +1168,7 @@ function SignupUI({
               </div>
 
               {/* Form Fields */}
-              <form className="flex flex-col gap-4">
+              <form ref={partnerFormRef} className="flex flex-col gap-4">
                 <input
                   name="org_name"
                   type="text"
@@ -1187,7 +1209,7 @@ function SignupUI({
                     ))}
                   </select>
                   <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden selected>* Mother Tongue</option>
+                    <option value="" hidden selected>* Language</option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -1195,36 +1217,109 @@ function SignupUI({
                     ))}
                   </select>
 
-                  <select
-                    name="age_group"
-                    className="border p-2 rounded"
-                    required
-                  >
-                    <option value="" hidden selected>
-                      * Services you offer
-                    </option>
-                    <option>Developmental Screening</option>
-                    <option>Health Monitoring</option>
-                    <option>School Readiness</option>
-                    <option>Behavioral Therapy</option>
-                    <option>Parental Counseling</option>
-                  </select>
+                  <div>
+                    {/* Dropdown button */}
+                    <div
+                      className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                      onClick={togglePartnerServiceDropdown}
+                    >
+                      {selectedPartnerServiceOptions.length === 0 ? (
+                        <span className="text-gray-500">
+                          * Services you offer
+                        </span>
+                      ) : (
+                        selectedPartnerServiceOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                          >
+                            <span>{option}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
 
-                  <select name="gaol" className="border p-2 rounded" required>
-                    <option value="" hidden selected>
-                      * You want LittleHugs for
-                    </option>
-                    <option>Development & Emmotional Screening</option>
-                    <option>Assessment and Reporting</option>
-                    <option>Structured Early Interventions</option>
-                    <option>Progress Tracking & Team Collaboration</option>
-                    <option>Bulk Onboarding and Outreach</option>
-                    <option>Data Insights and Impact Reporting</option>
-                    <option>Smart Nudges for Caregivers</option>
-                    <option>Therapy Center Tools</option>
-                    <option>School & Counselor Tools</option>
-                    <option>NGO & Community Health Tools</option>
-                  </select>
+                    {/* Dropdown menu */}
+                    {isPartnerServiceOpen && (
+                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {["Developmental Screening", "Health Monitoring", "School Readiness", "Behavioral Therapy", "Parental Counseling"]
+                          .map((option) => (
+                            <div
+                              key={option}
+                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedPartnerServiceOptions.some(
+                                (item) => item === option
+                              )
+                                ? "bg-blue-50"
+                                : ""
+                                }`}
+                              onClick={() => togglePartnerServiceOption(option)}>
+                              <input
+                                type="checkbox"
+                                checked={selectedPartnerServiceOptions.some((item) => item === option)}
+                                readOnly
+                                className="mr-2"
+                              />
+                              {option}
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+
+
+                  <div>
+                    {/* Dropdown button */}
+                    <div
+                      className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                      onClick={togglePartnerGoalDropdown}
+                    >
+                      {selectedPartnerGoalOptions.length === 0 ? (
+                        <span className="text-gray-500">
+                          * You want LittleHugs for
+                        </span>
+                      ) : (
+                        selectedPartnerGoalOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                          >
+                            <span>{option}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Dropdown menu */}
+                    {isPartnerGoalOpen && (
+                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {["Development & Emmotional Screening", "Assessment and Reporting", "Structured Early Interventions", "Progress Tracking & Team Collaboration", "Bulk Onboarding and Outreach", "Data Insights and Impact Reporting", "Smart Nudges for Caregivers", "Therapy Center Tools", "School & Counselor Tools", "NGO & Community Health Tools"]
+                          .map((option) => (
+                            <div
+                              key={option}
+                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedPartnerGoalOptions.some(
+                                (item) => item === option
+                              )
+                                ? "bg-blue-50"
+                                : ""
+                                }`}
+                              onClick={() =>
+                                togglePartnerGoalOption(option)
+                              }
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedPartnerGoalOptions.some((item) => item === option)}
+                                readOnly
+                                className="mr-2"
+                              />
+                              {option}
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+
+
                 </div>
               </form>
 

@@ -57,7 +57,7 @@ export default function AssesmentChild() {
                 <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
                     <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-[20px] text-slate-500">
-                            You have not taken any assessment till date !
+                         You are taking Child Assessment
                         </p>
                     </div>
                     <div className="col-span-2">

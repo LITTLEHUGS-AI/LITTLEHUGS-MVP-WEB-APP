@@ -24,6 +24,7 @@ import OpenRoute from "./OpenRoute";
 import AcceptInviteUser from "../temp/AcceptInviteUser";
 import AcceptInviteTeam from "../temp/AcceptInviteTeam";
 import AssesmentChild from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentChild";
+import AssesmentSEL from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentSEL";
 
 function AppRoutes() {
   return (
@@ -112,6 +113,15 @@ function AppRoutes() {
               element={
                 <ProtectedRoute>
                   <AssesmentChild />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/personal/asssesment-sel"
+              element={
+                <ProtectedRoute>
+                  <AssesmentSEL />
                 </ProtectedRoute>
               }
             />

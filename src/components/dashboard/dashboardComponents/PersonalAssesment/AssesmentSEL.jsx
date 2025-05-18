@@ -4,10 +4,10 @@ import ProfileUi from "../ProfileUi";
 import useAssessmentQuestions from "../../../../api/personal-assessment";
 import GoalsQuestionnaire from './GoalAssessment';
 
-export default function AssesmentWomen() {
+export default function AssesmentSEL() {
 
-    const { questions: goalQuestions } = useAssessmentQuestions('goal', 1);
-    const { questions: intentQuestions } = useAssessmentQuestions('intent', 1);
+    const { questions: goalQuestions } = useAssessmentQuestions('goal', 3);
+    const { questions: intentQuestions } = useAssessmentQuestions('intent', 3);
 
 
     const [goalsQuestionnaire, setGoalsQuestionnaire] = useState([]);
@@ -57,7 +57,7 @@ export default function AssesmentWomen() {
                 <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
                     <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-[20px] text-slate-500">
-                            You are taking Women Assessment
+                            You are taking SEL Assessment
                         </p>
                     </div>
                     <div className="col-span-2">

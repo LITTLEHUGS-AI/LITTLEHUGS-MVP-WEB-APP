@@ -11,7 +11,7 @@ import useSignIn from "../signin/useSignIn";
 import { toastErrorMessage } from "../common/Constants";
 import { apiClient, setupApiAccessToken } from "../../api/api-client";
 import { toast } from "react-toastify";
-import { ColumnsSettingsIcon, Cross, X } from "lucide-react";
+import { X } from "lucide-react";
 
 const INITIAL_VALUES = {
   name: "",

@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import {
   getAssessmentData,
-  getShareAssessment,
   getWomenProfileDetails,
 } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import store from "../../../config/storeInstance";
 
 const Main = () => {
 
   const [isBlur, setIsBlur] = useState(true);
+  const [dataLoading, setIsDataLoading] = useState(true);
 
   const [data, setData] = useState({});
   const [latestdate, setLatestDate] = useState(null);
@@ -21,80 +21,384 @@ const Main = () => {
 
   const [profileData, setProfileData] = useState({});
   const [assessment, setAssessment] = useState({});
-  const [shareAssessmentData, setShareAssessmentData] = useState({});
+  // const [shareAssessmentData, setShareAssessmentData] = useState({});
 
   useEffect(() => {
 
     getData();
 
-    (async () => {
-      const res = await getWomenProfileDetails();
-      res && setProfileData(res);
-    })();
+
 
     (async () => {
       const res = await getAssessmentData();
       res && setAssessment(res);
     })();
 
-    (async () => {
-      const res = await getShareAssessment();
-      res && setShareAssessmentData(res);
-    })();
+    // (async () => {
+    //   const res = await getShareAssessment();
+    //   res && setShareAssessmentData(res);
+    // })();
     // (async () => {
     //   const res = await getInsightsData();
     //   res && setInsights(res);
     // })();
   }, []);
 
-  const downloadPDF = () => {
-    const doc = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("Assessment Report", 14, 20);
 
-    if (
-      shareAssessmentData &&
-      shareAssessmentData.results &&
-      shareAssessmentData.results.length > 0
-    ) {
-      let currentY = 30; // initial y position
 
-      shareAssessmentData.results.forEach((item, index) => {
-        doc.setFontSize(14);
-        doc.text(`Assessment #${index + 1}`, 14, currentY);
 
-        const summary = item.summary || {};
-        const output = item.assessment_output || {};
 
-        autoTable(doc, {
-          startY: currentY + 5,
-          margin: { left: 14 },
-          body: [
-            ["Assessment Name", output.assessment_name || "N/A"],
-            ["Assessment Status", output.assessment_status || "N/A"],
-            ["Wellness Score", output.wellness_score || "N/A"],
-            ["Personality Insights", output.persnality_insights || "N/A"],
-            ["Next Step Suggestions", output.next_step_suggestions || "N/A"],
-            ["Development Stage", summary.developmental_stage || "N/A"],
-            ["Emotional Tone", summary.emotional_tone || "N/A"],
-          ],
-          theme: "striped",
-          styles: {
-            fontSize: 11,
-            cellPadding: 4,
-          },
-          didDrawPage: function (data) {
-            currentY = data.cursor.y + 20; // add more vertical space after each table
-          },
-        });
-      });
-    } else {
-      doc.text("No assessment data available.", 14, 30);
-    }
 
-    doc.save("assessment-report.pdf");
+
+
+
+
+
+
+
+
+
+
+  const toBase64 = async (url) => {
+    const response = await fetch(url, { mode: 'cors' });
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   };
+
+  const userName = 'Ritesh Singh';
+  const [assessmentName, setAssessmentName] = useState({});
+  const assessmentDate = '09/05/2025';
+
+  // Domain data
+  const [domains] = [
+    { name: 'Emotional Regulation & Mood', score: 100, color: '#2e7d32', backgroundColor: '#e0f2f1' }, // green
+    { name: 'Sensory Processing & Preferences', score: 68.75, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
+    { name: 'Family & Environmental Stressors', score: 68.75, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
+    { name: 'Coping Skills & Resilience', score: 62.5, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
+    { name: 'Attention, Focus & Memory', score: 81.25, color: '#2e7d32', backgroundColor: '#e0f7fa' } // green
+  ];
+
+  // Outcome data
+  const outcomes = [
+    {
+      domain: 'Emotional Regulation & Mood',
+      status: 'Green',
+      insight: 'Your child rarely feels annoyed or grouchy and is able to manage their irritability well.'
+    },
+    {
+      domain: 'Sensory Processing & Preferences',
+      status: 'Yellow',
+      insight: 'Your child shows good ability to handle sensory inputs in busy or noisy places and responds to sounds, lights, or smells with minimal difficulty.'
+    },
+    {
+      domain: 'Family & Environmental Stressors',
+      status: 'Yellow',
+      insight: 'Your child demonstrates a good ability to show they feel safe or calm during tensions by effectively managing conflicts in ways appropriate for their age.'
+    },
+    {
+      domain: 'Coping Skills & Resilience',
+      status: 'Yellow',
+      insight: 'Your child demonstrates a good ability to manage stress by using appropriate coping strategies suitable for their age, reflecting minimal difficulty in handling feelings of being overwhelmed.'
+    },
+    {
+      domain: 'Attention, Focus & Memory',
+      status: 'Green',
+      insight: 'Your child shows a strong ability to remember and follow multi-step instructions with ease, managing tasks that involve several steps independently.'
+    }
+  ];
+
+  const downloadPDF = async () => {
+
+    // Create new PDF document (A4 size)
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      format: 'a4'
+    });
+
+
+    // Set background color (light cream)
+    doc.setFillColor(255, 248, 240);
+    doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+
+    // Add logo (circle with segments) - centered
+    const imgData = await toBase64('/images/logo.jpg',);
+    doc.addImage(imgData, 'JPEG', pageWidth / 2 - 20, 10, 10, 10);
+
+    doc.setFontSize(20);
+    doc.setTextColor(65, 105, 225);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`LittleHugs`, pageWidth / 2 + 9, 17, { align: 'center' });
+
+
+    // Add date text - centered
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Downloaded on : ${assessmentDate}`, pageWidth / 2 + 16, 21, { align: 'center' });
+
+    // Add user details - align left for label, proper spacing for value
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+
+    // User Name
+    doc.text('User Name', 26, 50);
+    doc.text(':', 70, 50);
+    doc.text(userName, 80, 50);
+
+    // Assessment Name
+    doc.text('Assessment Name', 26, 60);
+    doc.text(':', 70, 60);
+    doc.text(assessmentName?.assessment_output?.assessment_name || 'N/A', 80, 60);
+
+    // Assessment Date
+    doc.text('Assessment Date:', 26, 70);
+    doc.text(':', 70, 70);
+    doc.text(assessmentName?.created_at || 'N/A', 80, 70);
+
+    // Overall Wellness Score
+    doc.setFontSize(18);
+    doc.setTextColor(65, 105, 225);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Overall Wellness Score', pageWidth / 2, 90, { align: 'center' });
+
+    // Score
+    doc.setFontSize(36);
+    doc.setTextColor(80, 80, 80);
+    doc.text(`${assessmentName?.assessment_output?.overall_assessment?.score || 'N/A'}/100`, pageWidth / 2, 105, { align: 'center' });
+
+    // Top Five Domains
+    doc.setFontSize(18);
+    doc.setTextColor(65, 105, 225);
+    doc.text('Top Five Domains', pageWidth / 2, 130, { align: 'center' });
+
+    // Domain visualization (simplified with proper spacing)
+    const domainWidth = 30;
+    const domainSpacing = 8;
+    const totalWidth = (domainWidth * 5) + (domainSpacing * 4);
+    const domainStartX = (pageWidth - totalWidth) / 2;
+    const domainY = 135;
+
+    domains.forEach((domain, index) => {
+      const x = domainStartX + (index * (domainWidth + domainSpacing));
+
+      // Rectangle background
+      doc.setFillColor(hexToRgb(domain.backgroundColor).r, hexToRgb(domain.backgroundColor).g, hexToRgb(domain.backgroundColor).b);
+      doc.rect(x, domainY, domainWidth, 38, 'F');
+
+      // Domain name
+      doc.setFontSize(8);
+      doc.setTextColor(0, 0, 0);
+      doc.text(domain.name, x + domainWidth / 2, domainY + 10, { align: 'center' });
+
+      // Circle for score
+      doc.setDrawColor(hexToRgb(domain.color).r, hexToRgb(domain.color).g, hexToRgb(domain.color).b);
+      doc.setLineWidth(1.5);
+      doc.circle(x + domainWidth / 2, domainY + 22, 10, 'S');
+
+      // Score text
+      doc.setFontSize(8);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${domain.score}/10`, x + domainWidth / 2, domainY + 24, { align: 'center' });
+    });
+
+    // Outcome Overview
+    doc.setFontSize(18);
+    doc.setTextColor(65, 105, 225);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Outcome Overview', pageWidth / 2, 190, { align: 'center' });
+
+    // Table
+    const tableX = 10;
+    const tableY = 195;
+    const tableWidth = pageWidth - 20;
+
+    // Table headers
+    doc.setFillColor(255, 255, 255);
+    doc.rect(tableX, tableY, tableWidth, 10, 'F');
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Domain', tableX + 10, tableY + 7);
+    doc.text('Score', tableX + tableWidth / 2 - 20, tableY + 7);
+    doc.text('Insights', tableX + tableWidth / 2 + 20, tableY + 7);
+
+    // Table rows
+    outcomes.forEach((outcome, index) => {
+      const y = tableY + 12 + (index * 12);
+
+      // White background for rows
+      doc.setFillColor(255, 255, 255);
+      doc.rect(tableX, y, tableWidth, 10, 'F');
+
+      // Domain
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      doc.text(outcome.domain, tableX + 10, y + 7);
+
+      // Status indicator
+      const statusX = tableX + tableWidth / 2 - 20;
+      doc.setFillColor(getStatusColor(outcome.status));
+      doc.circle(statusX - 5, y + 5, 2, 'F');
+
+      // Status text
+      doc.text(outcome.status, statusX, y + 7);
+
+      // Insight
+      doc.text(outcome.insight, tableX + tableWidth / 2 + 20, y + 7);
+    });
+
+
+    doc.addPage();
+
+    // Set background color (light cream) for second page
+    doc.setFillColor(255, 248, 240);
+    doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
+
+    // Insight Cards heading
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Insight Cards', 20, 15);
+
+    // Insight Cards
+    const insightCards = [
+      "You're carrying emotional load without enough release",
+      "Your physical wellness is affecting your mood more than you realize",
+      "You're doing better than you think—but you deserve more ease"
+    ];
+
+    const cardY = 25;
+    const cardHeight = 25;
+    const cardSpacing = 8;
+    const cardWidth = pageWidth - 30;
+
+    insightCards.forEach((insight, index) => {
+      const y = cardY + (index * (cardHeight + cardSpacing));
+
+      // Card background (light lavender)
+      doc.setFillColor(230, 230, 250);
+      doc.roundedRect(20, y, cardWidth, cardHeight, 5, 5, 'F');
+
+      // Card text
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 90);
+      doc.setFont('helvetica', 'normal');
+
+      // Center text vertically and horizontally in the card
+      doc.text(insight, pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
+    });
+
+    // Next step suggestions heading
+    const nextStepY = cardY + (3 * (cardHeight + cardSpacing));
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Next step suggestions', 10, nextStepY);
+
+    // Next step suggestions list
+    const suggestions = [
+      "Self-nudge packs (affirmations, sleep ritual, mini-care planner)",
+      "Smart nudges activated for flagged domain",
+      "Next Check-In Reminder: 7 days or custom schedule",
+      "Journaling prompt",
+      "Talk to our therapist"
+    ];
+
+    doc.setFontSize(12);
+    doc.setTextColor(60, 60, 90);
+    doc.setFont('helvetica', 'normal');
+
+    suggestions.forEach((suggestion, index) => {
+      const y = nextStepY + 10 + (index * 10);
+
+      // Bullet point
+      doc.text('•', 35, y);
+
+      // Suggestion text
+      doc.text(suggestion, 45, y);
+    });
+
+    // Download App section
+    const appSectionY = doc.internal.pageSize.getHeight() - 70;
+    const buttonWidth = 130;
+    const buttonHeight = 40;
+    const buttonX = (pageWidth - buttonWidth) / 2;
+    const buttonY = appSectionY + 20;
+
+    // Button background
+    doc.setFillColor(80, 80, 100);
+    doc.roundedRect(buttonX - 30, buttonY - 10, buttonWidth + 60, buttonHeight + 20, 5, 5, 'F');
+
+    // Button text "Download Our Mobile App"
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Download Our Mobile App', pageWidth / 2, buttonY + 5, { align: 'center' });
+
+    // Download button
+    doc.setFillColor(65, 105, 225);
+    doc.roundedRect(buttonX, buttonY + 15, buttonWidth, buttonHeight - 15, 10, 10, 'F');
+
+    // Download button text
+    doc.setFontSize(14);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Download', pageWidth / 2, buttonY + 27, { align: 'center' });
+
+    // Save PDF
+    try {
+      doc.save(`${userName}-LittleHugs-Assessment.pdf`);
+    } catch (error) {
+      alert('Error saving PDF:');
+    }
+  };
+
+  function hexToRgb(hex) {
+    // Remove # if present
+    hex = hex.replace(/^#/, '');
+
+    // Parse the hex values
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    return { r, g, b };
+  }
+
+  // Helper function to get status color
+  function getStatusColor(status) {
+    switch (status) {
+      case 'Red': return '#d32f2f';
+      case 'Amber': return '#ff9800';
+      case 'Green': return '#2e7d32';
+      default: return '#000000';
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const getColorByScore = (score) => {
     if (score >= 80) return '#22c55e'; // green
@@ -157,7 +461,7 @@ const Main = () => {
   }
 
   async function getData() {
-
+    setIsDataLoading(true);
     fetch('https://api.ourlittlehugs.com/v1/api/share-assessment', {
       method: 'GET',
       headers: {
@@ -178,13 +482,15 @@ const Main = () => {
         }
         setIsBlur(false);
         setData(data);
+        setAssessmentName(data?.results?.[0])
         const domainInsights = data.results[0].assessment_output.domain_insights;
         const domainArray = Object.keys(domainInsights).map(key => domainInsights[key]);
         setDomainWellnessScore(domainArray);
         setLatestDate(data.results[0].assessment_output.created_at);
         console.log(domainArray[0].domain)
       })
-      .catch(err => toast.error(err.message));
+      .catch(err => toast.error(err.message))
+      .finally(() => setIsDataLoading(false));
   }
 
 
@@ -202,6 +508,28 @@ const Main = () => {
   // }, [data, assessment]);
 
 
+  useEffect(() => {
+    const dd = store.getData();
+    if ((Object.keys(dd).length !== 0)) {
+      if (dd.current === 'child') setProfileData(dd.child)
+      if (dd.current === 'women') setProfileData(dd.women)
+      debugger
+    } else {
+      (async () => {
+        const res = await getWomenProfileDetails();
+        res && setProfileData(res);
+      })();
+    }
+
+    const unsubscribe = store.subscribe((newData) => {
+      if (newData.current === 'child') setProfileData(newData.child);
+      if (newData.current === 'women') setProfileData(newData.women);
+    });
+
+    return () => unsubscribe(); 
+  }, [])
+
+
   return (
     <>
       {/* Welcome Banner */}
@@ -216,6 +544,16 @@ const Main = () => {
 
 
       <div className="w-full">
+
+
+        {dataLoading &&
+          <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+            <div className="flex flex-col items-center gap-4 bg-white px-6 py-6 rounded-lg shadow-md text-gray-700">
+              <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-lg font-medium">Your data is loading...</p>
+            </div>
+          </div>
+        }
 
         {isBlur &&
           <div className="flex justify-center items-center w-full">

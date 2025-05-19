@@ -73,7 +73,7 @@ export default function AssesmentWomen() {
 
     const submitAssessment = async () => {
         try {
-            const response = await fetch('http://localhost:8000/v1/api/pre-screenng-assesment-submission/', {
+            const response = await fetch('https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

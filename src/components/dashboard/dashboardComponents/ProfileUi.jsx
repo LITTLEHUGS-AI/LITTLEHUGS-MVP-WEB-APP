@@ -10,7 +10,6 @@ const ProfileUi = () => {
 
   const dd = store.getData();
 
-
   const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0)?dd.current: 'women');
   const [allCountries, setAllCountries] = useState([]);
 

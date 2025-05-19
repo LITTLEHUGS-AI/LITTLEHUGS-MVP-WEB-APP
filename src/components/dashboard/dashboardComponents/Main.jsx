@@ -513,7 +513,6 @@ const Main = () => {
     if ((Object.keys(dd).length !== 0)) {
       if (dd.current === 'child') setProfileData(dd.child)
       if (dd.current === 'women') setProfileData(dd.women)
-      debugger
     } else {
       (async () => {
         const res = await getWomenProfileDetails();

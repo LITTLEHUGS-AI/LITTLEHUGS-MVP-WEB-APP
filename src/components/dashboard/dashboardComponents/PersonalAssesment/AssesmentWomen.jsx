@@ -3,8 +3,14 @@ import Sidebar from "../Sidebar";
 import ProfileUi from "../ProfileUi";
 import useAssessmentQuestions from "../../../../api/personal-assessment";
 import GoalsQuestionnaire from './GoalAssessment';
+import { updateQuestionType } from "../../../../api/utilities";
+import store from "../../../../config/storeInstance";
 
 export default function AssesmentWomen() {
+    const dd = store.getData();
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 130000);
 
     const { questions: goalQuestions } = useAssessmentQuestions('goal', 1);
     const { questions: intentQuestions } = useAssessmentQuestions('intent', 1);
@@ -12,6 +18,8 @@ export default function AssesmentWomen() {
 
     const [goalsQuestionnaire, setGoalsQuestionnaire] = useState([]);
     const [intentQuestionnaire, setIntentQuestionnaire] = useState([]);
+
+    const [combinedAnswers, setCombinedAnswers] = useState([]);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [quesLoding, setQuesLoding] = useState(false);
@@ -36,12 +44,102 @@ export default function AssesmentWomen() {
 
 
     useEffect(() => {
-        if (goalQuestions?.results?.length > 0){ setGoalsQuestionnaire(goalQuestions.results); };
+        if (goalQuestions?.results?.length > 0) { setGoalsQuestionnaire(updateQuestionType(goalQuestions.results)); };
     }, [goalQuestions]);
 
     useEffect(() => {
-        if (intentQuestions?.results?.length > 0) {setIntentQuestionnaire(intentQuestions.results); };
+        if (intentQuestions?.results?.length > 0) { setIntentQuestionnaire(updateQuestionType(intentQuestions.results)); };
     }, [intentQuestions]);
+
+
+    const handleAnswersChange = (newAnswers) => {
+        setCombinedAnswers(prev => {
+            const updated = [...prev];
+
+            newAnswers.forEach(newQ => {
+                const existingIndex = updated.findIndex(q => q.question === newQ.question);
+                if (existingIndex !== -1) {
+                    updated[existingIndex] = newQ;
+                } else {
+                    updated.push(newQ);
+                }
+            });
+
+            return updated;
+        });
+    };
+
+
+
+    const submitAssessment = async () => {
+        try {
+            const response = await fetch('https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('accessToken')
+                },
+                signal: controller.signal,
+                body: JSON.stringify({
+                    assessment_type: "women-wellness-360",
+                    profile_id: dd.women.id,
+                    goal: [
+                        "Improve emotional regulation",
+                        "Encourage communication"
+                    ],
+                    responses: combinedAnswers,
+                    created_by_type: dd.current,
+                    created_by_id: dd.current === 'women' ? dd.women.id : dd.child.id,
+                })
+            });
+            clearTimeout(timeoutId);
+            if (!response.ok) alert('Server responded with an error');
+
+            const aiQues = await response.json();
+
+            // const aiQues = await import('../../../../res.json');
+
+            alert("Assessment Created");
+
+            const transformQuestions = async (questionsArray) => {
+                return questionsArray.map((item) => ({
+                    question: item.question,
+                    options: item.options,
+                    focus_area: item.focus_area || "String",
+                    domain: item.domain || "String",
+                    question_type: item.question_type || "String",
+                    answer: 0
+                }));
+            };
+
+
+            try {
+
+                const transformedQuestions = await transformQuestions(aiQues.assessment_data.questions);
+
+                const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${aiQues.assessment_data.id}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': localStorage.getItem('accessToken'),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ responses: transformedQuestions })
+                });
+
+                const result = await response.json();
+                console.log('Success:', result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+        } catch (error) {
+            alert('An Error Occured during Call');
+            console.log(error)
+        }
+    };
+
 
 
 
@@ -106,6 +204,7 @@ export default function AssesmentWomen() {
 
                         {/* Main Content */}
                         <main className="flex flex-1 flex-col max-w-3xl items-center px-6 gap-4 m-auto">
+
                             {currentStep === 1 && <>
                                 <div className="w-full ring-4 ring-blue-400 rounded-lg bg-white p-8 shadow-sm">
                                     <div className="space-y-4">
@@ -160,9 +259,7 @@ export default function AssesmentWomen() {
                                 <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
                                     What do you hope to gain from this check-in today? (Select all that applies) 2
                                 </h2>
-                                <GoalsQuestionnaire
-                                    ques={goalsQuestionnaire}
-                                />
+                                <GoalsQuestionnaire ques={goalsQuestionnaire} onAnswersChange={handleAnswersChange} />
                                 <div className="mb-8 flex gap-8 justify-between">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
@@ -185,9 +282,7 @@ export default function AssesmentWomen() {
                                 <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
                                     What do you hope to gain from this check-in today? (Select all that applies) 3
                                 </h2>
-                                <GoalsQuestionnaire
-                                    ques={intentQuestionnaire}
-                                />
+                                <GoalsQuestionnaire ques={intentQuestionnaire} onAnswersChange={handleAnswersChange} />
                                 <div className="mb-8 flex gap-8 justify-between">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
@@ -198,7 +293,7 @@ export default function AssesmentWomen() {
 
                                     <button
                                         className={`px-8 py-2 text-white rounded-full ${true ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
-                                        onClick={() => setQuesLoding(true)}
+                                        onClick={() => { setQuesLoding(true); submitAssessment() }}
                                     >
                                         Next
                                     </button>
@@ -247,7 +342,6 @@ export default function AssesmentWomen() {
                         </main>
                     </>
                 }
-
 
             </div>
 

@@ -10,7 +10,7 @@ export default function AssesmentWomen() {
     const dd = store.getData();
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 130000);
+    const timeoutId = setTimeout(() => controller.abort(), 300000);
 
     const { questions: goalQuestions } = useAssessmentQuestions('goal', 1);
     const { questions: intentQuestions } = useAssessmentQuestions('intent', 1);
@@ -244,11 +244,11 @@ export default function AssesmentWomen() {
                                 </div>
                                 <div className="w-full flex flex-col gap-2 ">
                                     <div>
-                                        <input type="checkbox" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
+                                        <input type="checkbox" className="mr-2" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
                                         <span>I understand this is a supportive tool, not medical advice</span>
                                     </div>
                                     <div>
-                                        <input type="checkbox" checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
+                                        <input type="checkbox" className="mr-2" checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
                                         <span>I consent to my anonymized data being used for personalization and insight generation</span>
                                     </div>
                                 </div>

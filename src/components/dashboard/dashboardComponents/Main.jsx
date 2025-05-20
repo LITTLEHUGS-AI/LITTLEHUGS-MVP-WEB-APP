@@ -482,7 +482,7 @@ const Main = () => {
         }
         setIsBlur(false);
         setData(data);
-        setAssessmentName(data?.results?.[0])
+        setAssessmentName(data?.results?.[0]);
         const domainInsights = data.results[0].assessment_output.domain_insights;
         const domainArray = Object.keys(domainInsights).map(key => domainInsights[key]);
         setDomainWellnessScore(domainArray);
@@ -535,6 +535,7 @@ const Main = () => {
       <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
         <h2 className="text-xl font-medium mb-2">
           Hi {profileData.name ? profileData.name : "UserName"}
+          {/* <p>{JSON.stringify(profileData)}</p> */}
         </h2>
         <p className="text-gray-700">
           In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be.

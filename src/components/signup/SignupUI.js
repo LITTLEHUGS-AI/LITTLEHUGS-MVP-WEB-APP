@@ -333,7 +333,8 @@ function SignupUI({
         data.forEach(country => {
           if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang));
         });
-        setAllLanguages([...languages]);
+        const sortedLanguages = [...languages].sort();
+        setAllLanguages(sortedLanguages);
       })
       .catch((error) => console.error('Error fetching countries:', error));
   }, []);

@@ -10,7 +10,7 @@ const ProfileUi = () => {
 
   const dd = store.getData();
 
-  const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0)?dd.current: 'women');
+  const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0) ? dd.current : 'women');
   const [allCountries, setAllCountries] = useState([]);
 
   const [womenProfileData, setWomenProfileData] = useState({});
@@ -20,9 +20,26 @@ const ProfileUi = () => {
 
   const [completeProfile, setCompleteProfile] = useState('Calculating')
 
+
+  const [isWomenGoalOpen, setIsWomenGoalOpen] = useState(false);
+  const [selectedWomenGoalOptions, setSelectedWomenGoalOptions] = useState([]);
+  const toggleWomenGoalDropdown = () => setIsWomenGoalOpen(!isWomenGoalOpen);
+  const toggleWomenGoalOption = (option) => {
+    setSelectedWomenGoalOptions((prevSelected) => {
+      if (prevSelected.some((item) => item === option))
+        return prevSelected.filter((item) => item !== option);
+      else return [...prevSelected, option];
+    });
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleWomenProfileChange = () => { };
+  const handleWomenProfileChange = (e) => {
+    setWomenProfileData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value
+    }));
+  };
 
   const handleChildProfileChange = (e) => {
     setChildProfileData((prevData) => ({
@@ -34,9 +51,9 @@ const ProfileUi = () => {
 
 
   useEffect(() => {
-  if ((Object.keys(dd).length !== 0)) {
-    setWomenProfileData(dd.women);
-  }
+    if ((Object.keys(dd).length !== 0)) {
+      setWomenProfileData(dd.women);
+    }
   }, [dd])
 
 
@@ -56,9 +73,10 @@ const ProfileUi = () => {
 
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
-        store.setData({ current: selectedProfile, name: res1.name, women, child: res2.profiles[0] });
+        store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0])  : getProfileCompletion(women ) , name: res1.name, women, child: res2.profiles[0]});
+
         if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
-        } catch (error) {
+      } catch (error) {
         toast.error(error)
       }
     })();
@@ -160,6 +178,7 @@ const ProfileUi = () => {
     });
 
     setCompleteProfile(Math.round((completedKeys.length / totalKeys) * 100));
+     return Math.round((completedKeys.length / totalKeys) * 100);
   };
 
 
@@ -389,7 +408,7 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.city}
-                      onChange={(e) => handleWomenProfileChange("city", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange(e)}
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
@@ -404,27 +423,29 @@ const ProfileUi = () => {
                       type="text"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.language}
-                      onChange={(e) => handleWomenProfileChange("language", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange(e)}
                     />
                     {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
                   </div>
                 </div>
+              </div>
 
+
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * Date Of Birth
                   </label>
                   <div className="flex items-center border rounded-md">
                     <input
-                      type="text"
+                      type="date"
+                      name="dob"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.dob}
-                      onChange={(e) =>
-                        handleWomenProfileChange("dateOfBirth", e.target.value)
-                      }
+                      onChange={(e) => handleWomenProfileChange(e)}
                       placeholder="YYYY-MM-DD"
                     />
-                    <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                   </div>
                 </div>
 
@@ -433,28 +454,38 @@ const ProfileUi = () => {
                     * Current life stage
                   </label>
                   <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.life_stage}
-                      onChange={(e) =>
-                        handleWomenProfileChange("currentLifeStage", e.target.value)
-                      }
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                    <select
+                      name="lifeStage"
+                      className="w-full border p-2 rounded border rounded-md"
+                      required
+                    >
+                      <option value="" disabled hidden>
+                        * Current life stage
+                      </option>
+                      <option>Early adulthood</option>
+                      <option>Adulthood</option>
+                      <option>Pregnancy</option>
+                      <option>Menopause</option>
+                      <option>Prefer not to say</option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
+
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * Weight
                   </label>
                   <div className="flex items-center border rounded-md">
                     <input
-                      type="text"
+                      type="number"
+                      name="weight"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.weight}
-                      onChange={(e) => handleWomenProfileChange("weight", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange(e)}
                     />
                     <span className="text-gray-400 mr-3">kg</span>
                   </div>
@@ -466,14 +497,19 @@ const ProfileUi = () => {
                   </label>
                   <div className="flex items-center border rounded-md">
                     <input
-                      type="text"
+                      type="nuumber"
+                      name="height"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.height}
-                      onChange={(e) => handleWomenProfileChange("height", e.target.value)}
+                      onChange={(e) => handleWomenProfileChange(e)}
                     />
                     <span className="text-gray-400 mr-3">cm</span>
                   </div>
                 </div>
+              </div>
+
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -481,9 +517,10 @@ const ProfileUi = () => {
                   </label>
                   <input
                     type="text"
+                    name="occupation"
                     className="w-full p-3 border rounded-md outline-none"
                     value={womenProfileData.occupation}
-                    onChange={(e) => handleWomenProfileChange("occupation", e.target.value)}
+                    onChange={(e) => handleWomenProfileChange(e)}
                   />
                 </div>
 
@@ -491,29 +528,90 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Lifestyle
                   </label>
-                  <input
-                    type="text"
-                    className="w-full p-3 border rounded-md outline-none"
-                    value={womenProfileData.life_style}
-                    onChange={(e) => handleWomenProfileChange("lifestyle", e.target.value)}
-                  />
+                  <select name="life_style" value={womenProfileData.life_style} className="w-full border p-2 rounded border rounded-md" onChange={(e) => handleWomenProfileChange(e)} required>
+                    <option value="" disabled hidden>
+                      * Life Style
+                    </option>
+                    <option>Nuclear Family</option>
+                    <option>Joint Family</option>
+                    <option>Single Parent</option>
+                    <option>Shared Accommodation / Hostel</option>
+                    <option>Urban / Metro City</option>
+                    <option>Suburban / Town</option>
+                    <option>Rural / Village</option>
+                  </select>
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * Goal is to work on
                   </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.intent}
-                      onChange={(e) => handleWomenProfileChange("goal", e.target.value)}
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                  </div>
-                </div>
+                  {/* <select name="intent" value={womenProfileData.intent} className="w-full border p-2 rounded border rounded-md" onChange={(e) => handleWomenProfileChange(e)} required>
+                    <option value="" disabled hidden>
+                      * Goal
+                    </option>
+                    <option>Nuclear Family</option>
+                    <option>Joint Family</option>
+                    <option>Single Parent</option>
+                    <option>Shared Accommodation / Hostel</option>
+                    <option>Urban / Metro City</option>
+                    <option>Suburban / Town</option>
+                    <option>Rural / Village</option>
+                  </select> */}
 
+                  <div>
+                    {/* Dropdown button */}
+                    <div
+                      className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
+                      onClick={toggleWomenGoalDropdown}
+                    >
+                      {selectedWomenGoalOptions.length === 0 ? (
+                        <span className="text-gray-500">
+                          * Goal is to work on
+                        </span>
+                      ) : (
+                        selectedWomenGoalOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                          >
+                            <span>{option}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {isWomenGoalOpen && (
+                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                          .map((option) => (
+                            <div
+                              key={option}
+                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                (item) => item === option
+                              )
+                                ? "bg-blue-50"
+                                : ""
+                                }`}
+                              onClick={() =>
+                                toggleWomenGoalOption(option)
+                              }
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedWomenGoalOptions.some((item) => item === option)}
+                                readOnly
+                                className="mr-2"
+                              />
+                              {option}
+                            </div>
+                          ))}
+                      </div>)}
+                  </div>
+
+                </div>
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * Tone Preference
@@ -524,7 +622,7 @@ const ProfileUi = () => {
                       className="flex-grow p-3 outline-none rounded-md"
                       value={womenProfileData.tone_prefrence}
                       onChange={(e) =>
-                        handleWomenProfileChange("tonePreference", e.target.value)
+                        handleWomenProfileChange(e)
                       }
                     />
                     <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />

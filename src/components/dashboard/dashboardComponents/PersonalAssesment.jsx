@@ -1,11 +1,28 @@
 import Sidebar from "./Sidebar";
 import ProfileUi from "./ProfileUi";
-import {  useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {  useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import store from "../../../config/storeInstance";
 
 const PersonalAssessment = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(null);
+  const [hideAssessment, setHideAssessment] = useState(0);
+
+
+  const dd = store.getData();
+  useEffect(() => {
+    if ((Object.keys(dd).length !== 0)) {
+      if (dd.completingPercentage != null) setHideAssessment(dd.completingPercentage);
+    }
+
+    const unsubscribe = store.subscribe((newData) => {
+      if (newData.completingPercentage != null)setHideAssessment(newData.completingPercentage);
+    });
+
+    return () => unsubscribe();
+  }, [dd])
+
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -137,7 +154,7 @@ const PersonalAssessment = () => {
 
             {/* Action Button */}
             <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
-            <button
+              <button
                 onClick={() => navigate("/personal/asssesment-child")}
                 className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
               >
@@ -198,7 +215,7 @@ const PersonalAssessment = () => {
 
             {/* Action Button */}
             <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
-            <button
+              <button
                 onClick={() => navigate("/personal/asssesment-sel")}
                 className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
               >
@@ -207,6 +224,22 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>}
+
+
+        {(hideAssessment < 100)  && (
+          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
+              <h2 className="text-xl font-bold mb-4">
+               Your Pofile is {hideAssessment}% Completed
+              </h2>
+              <p className="mb-6">
+                Please Complete your profile first
+              </p>
+              <Link to='/personal/dashboard'>Go to Dashboard</Link>
+            </div>
+          </div>
+        )}
+
 
         <div className="bg-purple-100 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
@@ -272,7 +305,8 @@ const PersonalAssessment = () => {
             </div>
           </div>
         </div>
-        
+
+        {/* completingPercentage */}
         <div className="border border-slate-500 rounded-md h-[320px] mt-5 mx-4 mb-4 flex items-center justify-center overflow-hidden">
           <img
             alt="Dashboard Collage"

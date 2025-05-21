@@ -5,6 +5,7 @@ import useAssessmentQuestions from "../../../../api/personal-assessment";
 import GoalsQuestionnaire from './GoalAssessment';
 import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
+import AIQuestings from "./AIQuestings";
 
 export default function AssesmentWomen() {
     const dd = store.getData();
@@ -20,13 +21,14 @@ export default function AssesmentWomen() {
     const [intentQuestionnaire, setIntentQuestionnaire] = useState([]);
 
     const [combinedAnswers, setCombinedAnswers] = useState([]);
+    const [ai, setAI] = useState({});
+    const [finalAnswers, setFinalAnswers] = useState({});
 
     const [currentStep, setCurrentStep] = useState(1);
     const [quesLoding, setQuesLoding] = useState(false);
 
 
     const [consentAccept, setConsentAccept] = useState([]);
-    const [selectedPurposes, setSelectedPurposes] = useState([]);
 
     const steps = ["Consent", "Goal", "Purpose", "Assessment"];
 
@@ -35,12 +37,6 @@ export default function AssesmentWomen() {
         if (consentAccept.includes(term)) setConsentAccept(prev => prev.filter(item => item !== term));
         else setConsentAccept(prev => [...prev, term]);
     }
-
-
-    const togglePurpose = (purpose) => {
-        if (selectedPurposes.includes(purpose)) setSelectedPurposes(prev => prev.filter(id => id !== purpose));
-        else setSelectedPurposes(prev => [...prev, purpose]);
-    };
 
 
     useEffect(() => {
@@ -70,6 +66,10 @@ export default function AssesmentWomen() {
     };
 
 
+    const handleAIAnswers = (answers) => {
+        setFinalAnswers(answers);
+    };
+
 
     const submitAssessment = async () => {
         try {
@@ -94,45 +94,32 @@ export default function AssesmentWomen() {
                 })
             });
             clearTimeout(timeoutId);
-            if (!response.ok) alert('Server responded with an error');
+            if (!response.ok) {
+                alert('Server responded with an error');
+                setQuesLoding(false);
+                return;
+            }
 
             const aiQues = await response.json();
 
-            // const aiQues = await import('../../../../res.json');
 
             alert("Assessment Created");
 
-            const transformQuestions = async (questionsArray) => {
-                return questionsArray.map((item) => ({
-                    question: item.question,
-                    options: item.options,
-                    focus_area: item.focus_area || "String",
-                    domain: item.domain || "String",
-                    question_type: item.question_type || "String",
-                    answer: 0
-                }));
-            };
+            // const transformQuestions = async (questionsArray) => {
+            //     return questionsArray.map((item) => ({
+            //         question: item.question,
+            //         options: item.options,
+            //         focus_area: item.focus_area || "String",
+            //         domain: item.domain || "String",
+            //         question_type: item.question_type || "String",
+            //         answer: 0
+            //     }));
+            // };
 
 
-            try {
-
-                const transformedQuestions = await transformQuestions(aiQues.assessment_data.questions);
-
-                const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${aiQues.assessment_data.id}/`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': localStorage.getItem('accessToken'),
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ responses: transformedQuestions })
-                });
-
-                const result = await response.json();
-                console.log('Success:', result);
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            setAI(aiQues);
+            setCurrentStep(4);
+            setQuesLoding(false);
 
         } catch (error) {
             alert('An Error Occured during Call');
@@ -141,7 +128,26 @@ export default function AssesmentWomen() {
     };
 
 
+    const finalSubmit = async () => {
+        try {
 
+            const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': localStorage.getItem('accessToken'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ responses: finalAnswers })
+            });
+
+            const result = await response.json();
+            console.log('Success:', result);
+            alert('Done')
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     return (
         <div className="flex h-screen bg-gray-50">
@@ -300,28 +306,10 @@ export default function AssesmentWomen() {
                                 </div>
                             </>}
 
-
                             {currentStep === 4 && <>
 
-                                <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
-                                    1. What brings you here today? (Select all that applies)
-                                </h2>
-
-                                <div className="space-y-4">
-                                    {["I’ve been feeling low, anxious, or burned out", "I want to check in on my emotional and mental well-being", "I’m struggling with sleep or fatigue", "I’m curious about how I’m really doing", "I’m curious about how I’m really doing"].map((ques1) => (
-                                        <button
-                                            key={ques1}
-                                            className={`w-full text-left p-6 rounded-lg border-2 ${selectedPurposes.includes(ques1)
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 bg-white hover:border-gray-300'
-                                                } transition-colors flex flex-col`}
-                                            onClick={() => togglePurpose(ques1)}
-                                        >
-                                            <span className="font-medium">{ques1}</span>
-                                        </button>
-                                    ))}
-                                </div>
-
+                                <AIQuestings questions={ai.assessment_data.questions} onAnswerSubmit={handleAIAnswers} />
+                                {/* {JSON.stringify(ai.assessment_data.questions)} */}
                                 <div className="mt-8 flex justify-between">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
@@ -330,12 +318,11 @@ export default function AssesmentWomen() {
                                         Back
                                     </button>
 
-                                    <button
-                                        className={`px-8 py-2 text-white rounded-full bg-blue-500 hover:bg-blue-600 transition-colors`}
-                                        onClick={() => { setCurrentStep(prevStep => Math.min(prevStep + 1, steps.length)); setQuesLoding(true) }}
-                                    >
-                                        Next
-                                    </button>
+                                    <div className="text-center">
+                                        <button onClick={() => { finalSubmit(); setQuesLoding(true); }} className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"  >
+                                            Submit
+                                        </button>
+                                    </div>
                                 </div>
                             </>}
 

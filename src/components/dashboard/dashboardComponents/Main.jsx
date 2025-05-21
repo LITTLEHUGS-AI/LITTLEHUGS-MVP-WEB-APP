@@ -8,6 +8,7 @@ import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
+import RightHandSide from "./RightHandSide";
 
 const Main = () => {
 
@@ -27,8 +28,6 @@ const Main = () => {
 
     getData();
 
-
-
     (async () => {
       const res = await getAssessmentData();
       res && setAssessment(res);
@@ -43,17 +42,6 @@ const Main = () => {
     //   res && setInsights(res);
     // })();
   }, []);
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -480,32 +468,29 @@ const Main = () => {
           setIsBlur(true);
           return;
         }
+        
+        let domainInsight = null;
+        let domainIndex = -1;
+
+        for (let i = 0; i < data.results.length; i++) {
+          const result = data.results[i];
+          if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
+            domainInsight = result.assessment_output.domain_insights;
+            domainIndex = i;
+            break; 
+          }
+        }
+
         setIsBlur(false);
         setData(data);
-        setAssessmentName(data?.results?.[0]);
-        const domainInsights = data.results[0].assessment_output.domain_insights;
-        const domainArray = Object.keys(domainInsights).map(key => domainInsights[key]);
+        setAssessmentName(data?.results?.[domainIndex]);
+        const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
         setDomainWellnessScore(domainArray);
-        setLatestDate(data.results[0].assessment_output.created_at);
-        console.log(domainArray[0].domain)
+        setLatestDate(data.results[domainIndex].assessment_output.created_at);
       })
       .catch(err => toast.error(err.message))
       .finally(() => setIsDataLoading(false));
   }
-
-
-  // useEffect(() => {
-  //   if (data && Object.keys(data).length > 0 && Array.isArray(data.results) && data.results.length > 0 && assessment && Object.keys(assessment).length > 0 && Array.isArray(assessment.results) && assessment.results.length > 0) {
-  //     console.log(data, assessment);
-  //     const a =       parseInt(data.count) ;
-  //     const b =  parseInt(assessment.results);
-
-  //    const c = typeof a;
-  //    const d =  typeof b;
-
-  //     debugger;
-  //   }
-  // }, [data, assessment]);
 
 
   useEffect(() => {
@@ -525,76 +510,79 @@ const Main = () => {
       if (newData.current === 'women') setProfileData(newData.women);
     });
 
-    return () => unsubscribe(); 
+    return () => unsubscribe();
   }, [])
 
 
   return (
-    <>
-      {/* Welcome Banner */}
-      <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
-        <h2 className="text-xl font-medium mb-2">
-          Hi {profileData.name ? profileData.name : "UserName"}
-          {/* <p>{JSON.stringify(profileData)}</p> */}
-        </h2>
-        <p className="text-gray-700">
-          In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be.
-        </p>
-      </div>
+
+    <div className="flex">
+
+      <div className="flex flex-col flex-1">
+        {/* Welcome Banner */}
+        <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
+          <h2 className="text-xl font-medium mb-2">
+            Hi {profileData.name ? profileData.name : "UserName"}
+            {/* <p>{JSON.stringify(profileData)}</p> */}
+          </h2>
+          <p className="text-gray-700">
+            In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be.
+          </p>
+        </div>
 
 
-      <div className="w-full">
+        <div className="w-full">
 
 
-        {dataLoading &&
-          <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
-            <div className="flex flex-col items-center gap-4 bg-white px-6 py-6 rounded-lg shadow-md text-gray-700">
-              <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-lg font-medium">Your data is loading...</p>
+          {dataLoading &&
+            <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
+              <div className="flex flex-col items-center gap-4 bg-white px-6 py-6 rounded-lg shadow-md text-gray-700">
+                <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-lg font-medium">Your data is loading...</p>
+              </div>
             </div>
-          </div>
-        }
+          }
 
-        {isBlur &&
-          <div className="flex justify-center items-center w-full">
-            <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-semibold">Please Take an Assessment to view your Dashboard</h2>
-              <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 rounded cursor-pointer"  >
-                Go to Assessment
-              </Link>
+          {isBlur &&
+            <div className="flex justify-center items-center w-full">
+              <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-semibold">Please Take an Assessment to view your Dashboard</h2>
+                <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 rounded cursor-pointer"  >
+                  Go to Assessment
+                </Link>
+              </div>
             </div>
-          </div>
-        }
+          }
 
-        {/* Dashboard Content */}
-        <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${isBlur && 'blur'}`}      >
-          <h2 className="text-xl font-medium mb-4">Dashboard</h2>
+          {/* Dashboard Content */}
+          <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${isBlur && 'blur'}`}      >
+            <h2 className="text-xl font-medium mb-4">Dashboard</h2>
 
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">
-            <div className="bg-blue-500 text-white p-4 rounded-lg">
-              <h3 className="text-sm font-medium">Total Assessments</h3>
-              <p className="text-5xl font-bold">
-                {data.count ? data.count : "0"}
-              </p>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">
+              <div className="bg-blue-500 text-white p-4 rounded-lg">
+                <h3 className="text-sm font-medium">Total Assessments</h3>
+                <p className="text-5xl font-bold">
+                  {data.count ? data.count : "0"}
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 p-4 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-600">Complete</h3>
+                <p className="text-5xl font-bold">
+                  {assessment.results ? assessment.results.length : "0"}
+                </p>
+              </div>
+              <div className="bg-white border border-gray-200 p-4 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-600">Incomplete</h3>
+                {Number.isFinite(parseInt(data.count))}
+                <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count))
+                  ? parseInt(data.count) - parseInt(assessment.count)
+                  : ''}</p>
+              </div>
             </div>
-            <div className="bg-white border border-gray-200 p-4 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-600">Complete</h3>
-              <p className="text-5xl font-bold">
-                {assessment.results ? assessment.results.length : "0"}
-              </p>
-            </div>
-            <div className="bg-white border border-gray-200 p-4 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-600">Incomplete</h3>
-              {Number.isFinite(parseInt(data.count))}
-              <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count))
-                ? parseInt(data.count) - parseInt(assessment.count)
-                : ''}</p>
-            </div>
-          </div>
 
-          {/* <div className="grid grid-cols-12 gap-4 w-full mb-6 items-center">
+            {/* <div className="grid grid-cols-12 gap-4 w-full mb-6 items-center">
             <div className="md:col-span-2 col-span-12">
               <div className="w-full cp" onClick={openCalendar}>
                 <input
@@ -617,100 +605,103 @@ const Main = () => {
             </div>
           </div> */}
 
-          <div className="flex justify-between">
-            <div className="my-4"><b>Lastest Assessment Name </b> : {assessment?.results?.[0]?.assessment_name ?? 'N/A'} </div>
-            <div className="my-4"><b>Lastest Assessment Date </b> : {latestdate && new Date(latestdate).toLocaleString()} </div>
-          </div>
-
-          {/* Domain Wellness Score */}
-          <div className="mb-6 p-6 bg-white rounded-lg border border-gray-200">
-            <h3 className="text-lg font-medium mb-4">Domain Wellness Score</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-
-              {domainWellnessScore.map((assessment, index) => (
-                <CircleScore
-                  key={index}
-                  title={assessment?.domain || 'fetching'}
-                  score={assessment?.score || '0'}
-                  color="#22c55e"
-                  index={index + 1}
-                />
-              ))}
-
-
+            <div className="flex justify-between">
+              <div className="my-4"><b>Lastest Assessment Name </b> : {assessment?.results?.[0]?.assessment_name ?? 'N/A'} </div>
+              <div className="my-4"><b>Lastest Assessment Date </b> : {latestdate && new Date(latestdate).toLocaleString()} </div>
             </div>
-          </div>
 
-          {/* Summary Section */}
-          <div className="w-fulll my-8">
-            <h2 className="text-xl font-bold mb-6">Wellness Scorecard</h2>
+            {/* Domain Wellness Score */}
+            <div className="mb-6 p-6 bg-white rounded-lg border border-gray-200">
+              <h3 className="text-lg font-medium mb-4">Domain Wellness Score</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-            <div className="overflow-hidden border border-gray-200 rounded-md">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Domain</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Score</th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Insight</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {domainWellnessScore.map((item, index) => (
-                    <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {item.domain}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <div className="flex items-center">
-                          <span
-                            className="inline-block w-4 h-4 rounded-full mr-2"
-                            style={{ backgroundColor: getColorByScore(item.score) }}
-                          />
-                          <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-700">
-                        <ul className="list-disc pl-5">
-                          {item.positive_summary && (
-                            <li>                           {item.positive_summary}                            </li>
-                          )}
-                          {item.negative_summary && (
-                            <li>{item.negative_summary}                            </li>
-                          )}
-                        </ul>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                {domainWellnessScore.map((assessment, index) => (
+                  <CircleScore
+                    key={index}
+                    title={assessment?.domain || 'fetching'}
+                    score={assessment?.score || '0'}
+                    color="#22c55e"
+                    index={index + 1}
+                  />
+                ))}
 
 
-          {/* PDF Report Section */}
-          <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-white rounded-lg border border-gray-200">
-            <div className="flex items-center mb-3 sm:mb-0">
-              <div className="bg-red-500 p-2 rounded">
-                <span className="text-white text-xs">PDF</span>
               </div>
-              <span className="ml-3">Here is your detailed summary</span>
             </div>
-            <div className="flex space-x-2">
-              <button
-                className="p-2 border border-gray-300 rounded-lg"
-                onClick={downloadPDF}
-              >
-                <Download size={20} />
-              </button>
+
+            {/* Summary Section */}
+            <div className="w-fulll my-8">
+              <h2 className="text-xl font-bold mb-6">Wellness Scorecard</h2>
+
+              <div className="overflow-hidden border border-gray-200 rounded-md">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Domain</th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Score</th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Insight</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {domainWellnessScore.map((item, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {item.domain}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <div className="flex items-center">
+                            <span
+                              className="inline-block w-4 h-4 rounded-full mr-2"
+                              style={{ backgroundColor: getColorByScore(item.score) }}
+                            />
+                            <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-700">
+                          <ul className="list-disc pl-5">
+                            {item.positive_summary && (
+                              <li>                           {item.positive_summary}                            </li>
+                            )}
+                            {item.negative_summary && (
+                              <li>{item.negative_summary}                            </li>
+                            )}
+                          </ul>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            {/* PDF Report Section */}
+            <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-white rounded-lg border border-gray-200">
+              <div className="flex items-center mb-3 sm:mb-0">
+                <div className="bg-red-500 p-2 rounded">
+                  <span className="text-white text-xs">PDF</span>
+                </div>
+                <span className="ml-3">Here is your detailed summary</span>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className="p-2 border border-gray-300 rounded-lg"
+                  onClick={downloadPDF}
+                >
+                  <Download size={20} />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
 
+      <div className="w-full mt-5 lg:mt-0 lg:w-72 border-t lg:border-l lg:border-t-0 border-gray-200 p-4 h-[100vh] overflow-auto scrollbar-thin">
+        <RightHandSide show={!isBlur} />
+      </div>
 
-
-    </>
+    </div>
   );
 };
 

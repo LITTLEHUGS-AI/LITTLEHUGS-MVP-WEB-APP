@@ -12,8 +12,10 @@ const ProfileUi = () => {
 
   const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0) ? dd.current : 'women');
   const [allCountries, setAllCountries] = useState([]);
-    const [allCities, setAllCities] = useState([]);
-  
+  const [allCities, setAllCities] = useState([]);
+
+  const [localMotherdDP, setLocalMotherDP] = useState(null);
+  const [localChildDP, setLocalChildDP] = useState(null);
 
   const [womenProfileData, setWomenProfileData] = useState({});
   const [womenDP, setWomenDP] = useState('/images/women-demo.png');
@@ -80,6 +82,7 @@ const ProfileUi = () => {
         if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`)
         setWomenProfileData({ ...women });
         getProfileCompletion(women);
+        setSelectedWomenGoalOptions([...women.intent])
 
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
@@ -106,23 +109,23 @@ const ProfileUi = () => {
   }, [selectedProfile]);
 
 
-    useEffect(() => {
-      fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country: 'india' })
+  useEffect(() => {
+    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country: 'india' })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.data) {
+          setAllCities(data.data);
+        } else {
+          setAllCities([]);
+        }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.data) {
-            setAllCities(data.data);
-          } else {
-            setAllCities([]);
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }, [])
 
 
@@ -144,7 +147,7 @@ const ProfileUi = () => {
     if (selectedProfile === 'women') {
       try {
         delete womenProfileData.image;
-        const response = await fetch('https://api.ourlittlehugs.com/v1/api/mother-profile', {
+        const response1 = await fetch('https://api.ourlittlehugs.com/v1/api/mother-profile', {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -154,12 +157,49 @@ const ProfileUi = () => {
           body: JSON.stringify(womenProfileData)
         });
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response1.ok) throw new Error(`HTTP error! Status: ${response1.status}`);
+
+        if (localMotherdDP !== null) {
+          const formData = new FormData();
+          formData.append('image', localMotherdDP);
+
+          try {
+            await axios.put(
+              'https://api.ourlittlehugs.com/v1/api/user-mother-profile-image',
+              formData,
+              {
+                headers: {
+                  'accept': 'application/json',
+                  'authorization': localStorage.getItem("accessToken"),
+                  'content-type': 'multipart/form-data'
+                }
+              }
+            )
+
+            toast.success('Women Image Chnaged Succesfull ');
+            getProfileCompletion(womenProfileData);;
+          } catch (error) {
+            console.error('Upload failed:', error);
+          }
+
+        }
+
+        // const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/mother-profile', {
+        //   method: 'PUT',
+        //   headers: {
+        //     'Accept': 'application/json',
+        //     'Authorization': localStorage.getItem("accessToken"),
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify(womenProfileData)
+        // });
+
+        // if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
 
         toast.success('Mother Profile Updated Succesfull');
         handleCancel();
       } catch (error) {
-        toast.error('Upload failed:')
+        toast.error('Saving Profile failed')
       }
 
     }
@@ -181,8 +221,28 @@ const ProfileUi = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
+
+        if (localChildDP !== null) {
+          const formData = new FormData();
+          formData.append('image', localChildDP);
+          formData.append('profile_id', childProfileData.id);
+
+          await axios.put(
+            'https://api.ourlittlehugs.com/v1/api/user-child-profile-image',
+            formData, {
+            headers: {
+              'accept': 'application/json',
+              'authorization': localStorage.getItem("accessToken"),
+              'content-type': 'multipart/form-data'
+            }
+          }
+          );
+        }
+
+
         toast.success('Child Profile Updated Succesfull');
         handleCancel();
+        getProfileCompletion(childProfileData);;
       } catch (error) {
         toast.error('Upload failed:')
       }
@@ -192,6 +252,9 @@ const ProfileUi = () => {
 
 
   const getProfileCompletion = (profile) => {
+    //Avoiding city for now
+    delete profile.city;
+
     const keys = Object.keys(profile);
     const totalKeys = keys.length;
 
@@ -211,49 +274,6 @@ const ProfileUi = () => {
     return Math.round((completedKeys.length / totalKeys) * 100);
   };
 
-
-  const updateProfileDP = async (file) => {
-    if (selectedProfile === 'women') {
-
-      const formData = new FormData();
-      formData.append('image', file);
-
-      try {
-        await axios.put(
-          'https://api.ourlittlehugs.com/v1/api/user-mother-profile-image',
-          formData,
-          {
-            headers: {
-              'accept': 'application/json',
-              'authorization': localStorage.getItem("accessToken"),
-              'content-type': 'multipart/form-data'
-            }
-          }
-        )
-
-        toast.success('Women Image Chnaged Succesfull ')
-      } catch (error) {
-        console.error('Upload failed:', error);
-      }
-    }
-
-    if (selectedProfile === 'child') {
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('profile_id', childProfileData.id);
-
-      await axios.put(
-        'https://api.ourlittlehugs.com/v1/api/user-child-profile-image',
-        formData, {
-        headers: {
-          'accept': 'application/json',
-          'authorization': localStorage.getItem("accessToken"),
-          'content-type': 'multipart/form-data'
-        }
-      }
-      )
-    }
-  }
 
 
   // const addChildProfile = async () => {
@@ -361,7 +381,7 @@ const ProfileUi = () => {
                         if (file) {
                           const imageUrl = URL.createObjectURL(file);
                           setWomenDP(imageUrl);
-                          updateProfileDP(file);
+                          setLocalMotherDP(file)
                         }
                       }}
                     />
@@ -398,7 +418,7 @@ const ProfileUi = () => {
                         if (file) {
                           const imageUrl = URL.createObjectURL(file);
                           setChildDP(imageUrl);
-                          updateProfileDP(file);
+                          setLocalChildDP(file)
                         }
                       }}
                     />
@@ -414,13 +434,12 @@ const ProfileUi = () => {
           {selectedProfile === 'women' &&
             <form >
 
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
-                    * Cuntry
+                    * Country
                   </label>
                   <select
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
@@ -438,19 +457,11 @@ const ProfileUi = () => {
                 </div>
 
 
-
-
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <select
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden selected>
-                      Select City
-                    </option>
+                  <select value={womenProfileData.city} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
                     {allCities.map((city, i) => (
                       <option key={i} value={city}>
                         {city}

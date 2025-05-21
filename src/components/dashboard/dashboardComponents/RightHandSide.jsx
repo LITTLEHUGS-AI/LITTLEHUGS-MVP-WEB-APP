@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getShareAssessment } from "../../../api/dashboard-api";
 import ProfileUi from "./ProfileUi";
 
-const RightHandSide = () => {
+const RightHandSide = ({show}) => {
   const [insight, setInsight] = useState('N/A');
   useEffect(() => {
     (async () => {
@@ -14,15 +14,14 @@ const RightHandSide = () => {
   return (
     <>
       <ProfileUi />
-
-      {/* Insight Cards */}
-      <div className="my-6">
+      {show && <div className="my-6">
         <h3 className="text-lg font-medium mb-4">Insight Cards</h3>
         <div className="space-y-4">
-
           <div className="p-4 bg-orange-50 rounded-lg">
             <p className="text-gray-800">
-              <div className="mb-2"><span className="font-semibold">Personality Insight:</span> {insight}</div>
+              <div className="mb-2">
+                <span className="font-semibold">Personality Insight:</span> {insight}
+              </div>
             </p>
             <p className="text-gray-800 mt-2">
               <span className="font-semibold">Next Step Suggestions :</span>
@@ -35,9 +34,9 @@ const RightHandSide = () => {
               </ul>
             </p>
           </div>
-
         </div>
-      </div>
+      </div>}
+
 
     </>
   );

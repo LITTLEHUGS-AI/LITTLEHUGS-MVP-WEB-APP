@@ -345,8 +345,8 @@ const ProfileUi = () => {
         centered
       >
         <div className="mx-auto p-6 bg-white rounded-lg">
-          <h1 className="flex justify-center gap-2text-4xl font-medium text-center text-gray-700 mb-8">
-            Profile <span className="my-auto text-2xl">({completeProfile} %)</span>
+          <h1 className="flex justify-center items-center gap-2 text-4xl font-medium text-center text-gray-700 mb-8">
+            <span>  Profile </span>  <span className="my-auto text-2xl">({completeProfile} %)</span>
           </h1>
 
 

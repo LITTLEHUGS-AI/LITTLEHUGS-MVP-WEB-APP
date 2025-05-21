@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import Sidebar from "./dashboardComponents/Sidebar";
 import Main from "./dashboardComponents/Main";
-import RightHandSide from "./dashboardComponents/RightHandSide";
 import { Menu } from "lucide-react";
 import { Drawer } from "antd";
 

@@ -12,6 +12,8 @@ const ProfileUi = () => {
 
   const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0) ? dd.current : 'women');
   const [allCountries, setAllCountries] = useState([]);
+    const [allCities, setAllCities] = useState([]);
+  
 
   const [womenProfileData, setWomenProfileData] = useState({});
   const [womenDP, setWomenDP] = useState('/images/women-demo.png');
@@ -20,19 +22,27 @@ const ProfileUi = () => {
 
   const [completeProfile, setCompleteProfile] = useState('Calculating')
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isWomenGoalOpen, setIsWomenGoalOpen] = useState(false);
   const [selectedWomenGoalOptions, setSelectedWomenGoalOptions] = useState([]);
   const toggleWomenGoalDropdown = () => setIsWomenGoalOpen(!isWomenGoalOpen);
   const toggleWomenGoalOption = (option) => {
-    setSelectedWomenGoalOptions((prevSelected) => {
-      if (prevSelected.some((item) => item === option))
-        return prevSelected.filter((item) => item !== option);
-      else return [...prevSelected, option];
-    });
+    let selected = [];
+    if (selectedWomenGoalOptions.some((item) => item === option))
+      selected = selectedWomenGoalOptions.filter((item) => item !== option);
+    else selected = [...selectedWomenGoalOptions, option];
+
+
+    setSelectedWomenGoalOptions((prev) => selected);
+
+    setWomenProfileData((prevData) => ({
+      ...prevData,
+      "intent": selected
+    }));
+
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleWomenProfileChange = (e) => {
     setWomenProfileData((prevData) => ({
@@ -73,7 +83,7 @@ const ProfileUi = () => {
 
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
-        store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0])  : getProfileCompletion(women ) , name: res1.name, women, child: res2.profiles[0]});
+        store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0]) : getProfileCompletion(women), name: res1.name, women, child: res2.profiles[0] });
 
         if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
       } catch (error) {
@@ -94,6 +104,26 @@ const ProfileUi = () => {
     })();
 
   }, [selectedProfile]);
+
+
+    useEffect(() => {
+      fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country: 'india' })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.data) {
+            setAllCities(data.data);
+          } else {
+            setAllCities([]);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+  }, [])
 
 
 
@@ -124,13 +154,12 @@ const ProfileUi = () => {
           body: JSON.stringify(womenProfileData)
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-        toast.success('Mother Profile Updated Succesfull ')
+        toast.success('Mother Profile Updated Succesfull');
+        handleCancel();
       } catch (error) {
-        toast.error('Upload failed:', error)
+        toast.error('Upload failed:')
       }
 
     }
@@ -152,9 +181,10 @@ const ProfileUi = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        toast.success('Child Profile Updated Succesfull ')
+        toast.success('Child Profile Updated Succesfull');
+        handleCancel();
       } catch (error) {
-        toast.error('Upload failed:', error)
+        toast.error('Upload failed:')
       }
     }
 
@@ -178,7 +208,7 @@ const ProfileUi = () => {
     });
 
     setCompleteProfile(Math.round((completedKeys.length / totalKeys) * 100));
-     return Math.round((completedKeys.length / totalKeys) * 100);
+    return Math.round((completedKeys.length / totalKeys) * 100);
   };
 
 
@@ -384,34 +414,49 @@ const ProfileUi = () => {
           {selectedProfile === 'women' &&
             <form >
 
-              <select
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                required
-              >
-                <option value="" hidden selected>
-                  * Country
-                </option>
-                {allCountries.map((country, i) => (
-                  <option key={i} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Cuntry
+                  </label>
+                  <select
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                    required
+                  >
+                    <option value="" hidden selected>
+                      Select Country
+                    </option>
+                    {allCountries.map((country, i) => (
+                      <option key={i} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+
+
+
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.city}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                  </div>
+                  <select
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                    required
+                  >
+                    <option value="" hidden selected>
+                      Select City
+                    </option>
+                    {allCities.map((city, i) => (
+                      <option key={i} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="relative">
@@ -595,9 +640,7 @@ const ProfileUi = () => {
                                 ? "bg-blue-50"
                                 : ""
                                 }`}
-                              onClick={() =>
-                                toggleWomenGoalOption(option)
-                              }
+                              onClick={() => toggleWomenGoalOption(option)}
                             >
                               <input
                                 type="checkbox"

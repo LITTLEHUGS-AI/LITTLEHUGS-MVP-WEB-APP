@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Sidebar from "../Sidebar";
 import ProfileUi from "../ProfileUi";
 import useAssessmentQuestions from "../../../../api/personal-assessment";
-import GoalsQuestionnaire from './GoalAssessment';
+import GoalsQuestionnaire from './AssessmentQuestions';
 import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
-import AIQuestings from "./AIQuestings";
+import AssessmentAIQuestings from "./AssessmentAIQuestings";
+import { toast } from "react-toastify";
 
-export default function AssesmentWomen() {
+export default function AssesmentHandler() {
+    const navigate = useNavigate();
+
+    const [searchParams] = useSearchParams();
+    const type = searchParams.get('type');
+    const no = searchParams.get('no');
+    if (!(type && no)) navigate('/personal/assessment');
+
     const dd = store.getData();
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 300000);
 
-    const { questions: goalQuestions } = useAssessmentQuestions('goal', 1);
-    const { questions: intentQuestions } = useAssessmentQuestions('intent', 1);
+    const { questions: goalQuestions } = useAssessmentQuestions('goal', no);
+    const { questions: intentQuestions } = useAssessmentQuestions('intent', no);
 
 
     const [goalsQuestionnaire, setGoalsQuestionnaire] = useState([]);
@@ -22,6 +31,7 @@ export default function AssesmentWomen() {
 
     const [combinedAnswers, setCombinedAnswers] = useState([]);
     const [ai, setAI] = useState({});
+
     const [finalAnswers, setFinalAnswers] = useState({});
 
     const [currentStep, setCurrentStep] = useState(1);
@@ -31,7 +41,6 @@ export default function AssesmentWomen() {
     const [consentAccept, setConsentAccept] = useState([]);
 
     const steps = ["Consent", "Goal", "Purpose", "Assessment"];
-
 
     function step1(term) {
         if (consentAccept.includes(term)) setConsentAccept(prev => prev.filter(item => item !== term));
@@ -82,8 +91,8 @@ export default function AssesmentWomen() {
                 },
                 signal: controller.signal,
                 body: JSON.stringify({
-                    assessment_type: "women-wellness-360",
-                    profile_id: dd.women.id,
+                    assessment_type: type,
+                    profile_id: dd.current === 'women' ? dd.women.id : dd.child.id,
                     goal: [
                         "Improve emotional regulation",
                         "Encourage communication"
@@ -102,24 +111,12 @@ export default function AssesmentWomen() {
 
             const aiQues = await response.json();
 
-
-            alert("Assessment Created");
-
-            // const transformQuestions = async (questionsArray) => {
-            //     return questionsArray.map((item) => ({
-            //         question: item.question,
-            //         options: item.options,
-            //         focus_area: item.focus_area || "String",
-            //         domain: item.domain || "String",
-            //         question_type: item.question_type || "String",
-            //         answer: 0
-            //     }));
-            // };
-
-
             setAI(aiQues);
             setCurrentStep(4);
             setQuesLoding(false);
+
+
+            toast.success("Assessment Created")
 
         } catch (error) {
             alert('An Error Occured during Call');
@@ -138,12 +135,13 @@ export default function AssesmentWomen() {
                     'Authorization': localStorage.getItem('accessToken'),
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ responses: finalAnswers })
+                body: JSON.stringify({ responses: finalAnswers, insights_for: type })
             });
 
-            const result = await response.json();
-            console.log('Success:', result);
-            alert('Done')
+            await response.json();
+            toast.success('Insights Generted');
+            navigate('/personal/dashboard')
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -158,13 +156,14 @@ export default function AssesmentWomen() {
 
             {/* Main content - scrollable */}
             <div className="flex flex-col flex-1 overflow-y-auto">
-                <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
-                    <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
-                        <p className="p-0 text-[20px] text-slate-500">
+
+                <div className="grid grid-cols-12 m-6 gap-4">
+                    <div className="col-span-10 flex items-center justify-center p-[14px] border border-gray-400 rounded-md">
+                        <p className="p-0 text-md lg:text-xl text-slate-500 font-medium">
                             You are taking Women Assessment
                         </p>
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-2 flex">
                         <ProfileUi />
                     </div>
                 </div>
@@ -176,8 +175,8 @@ export default function AssesmentWomen() {
                 </div> :
                     <>
                         {/* Progress Steps */}
-                        <div className="mt-16 mb-8 mx-auto w-full max-w-xl">
-                            <div className="flex justify-between items-center mb-2">
+                        <div className="mt-8 lg:mt-16 mb-8 mx-auto w-full max-w-xl">
+                            <div className="flex justify-between items-center mx-4 mb-2">
                                 {steps.map((step, index) => (
                                     <div key={index} className="flex flex-col items-center">
                                         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${index + 1 === currentStep ? 'bg-blue-500 text-white' :
@@ -193,7 +192,7 @@ export default function AssesmentWomen() {
                                 ))}
                             </div>
 
-                            <div className="relative h-1 w-full bg-gray-300">
+                            <div className="relative h-1 mx-10 bg-gray-300">
                                 <div className="absolute top-0 left-0 h-full bg-blue-500" style={{ width: `${(currentStep - 1) / (steps.length - 1) * 100}%` }}></div>
                                 {steps.map((_, index) => (
                                     <div
@@ -209,10 +208,10 @@ export default function AssesmentWomen() {
                         </div>
 
                         {/* Main Content */}
-                        <main className="flex flex-1 flex-col max-w-6xl items-center px-6 gap-4 m-auto">
+                        <main className="max-w-6xl items-center justify-center px-6 gap-4 mx-auto">
 
                             {currentStep === 1 && <>
-                                <div className="ring-4 ring-blue-400 rounded-lg bg-white p-8 shadow-sm">
+                                <div className="ring-4 ring-blue-500 rounded-3xl bg-white p-4 md:p-8 shadow-sm">
                                     <div className="space-y-4">
                                         <p className="text-gray-700">
                                             At LittleHugs, your emotional safety and self-awareness matter deeply.
@@ -237,33 +236,37 @@ export default function AssesmentWomen() {
                                             We're here to support—not to judge.
                                         </p>
 
-                                        <div className="mt-8 flex">
-                                            <button
-                                                className={`px-6 py-2 text-white rounded-full ${(!consentAccept.includes("understand") || !consentAccept.includes("consent")) ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"} transition-colors`}
-                                                disabled={!consentAccept.includes("understand") || !consentAccept.includes("consent")}
-                                                onClick={() => setCurrentStep(prevStep => Math.min(prevStep + 1, steps.length))}
-                                            >
-                                                Next
-                                            </button>
+                                        <div className="w-full flex flex-col gap-2 ">
+                                            <div>
+                                                <input type="checkbox" className="mr-2" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
+                                                <span>I understand this is a supportive tool, not medical advice</span>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" className="mr-2" checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
+                                                <span>I consent to my anonymized data being used for personalization and insight generation</span>
+                                            </div>
                                         </div>
+
+
                                     </div>
                                 </div>
-                                <div className="w-full flex flex-col gap-2 ">
-                                    <div>
-                                        <input type="checkbox" className="mr-2" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
-                                        <span>I understand this is a supportive tool, not medical advice</span>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" className="mr-2" checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
-                                        <span>I consent to my anonymized data being used for personalization and insight generation</span>
-                                    </div>
+
+                                <div className="my-8 flex gap-4 justify-center">
+                                    <button
+                                        className={`mr-auto px-6 py-2 text-white rounded-full ${(!consentAccept.includes("understand") || !consentAccept.includes("consent")) ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"} transition-colors`}
+                                        disabled={!consentAccept.includes("understand") || !consentAccept.includes("consent")}
+                                        onClick={() => setCurrentStep(prevStep => Math.min(prevStep + 1, steps.length))}
+                                    >
+                                        Next
+                                    </button>
                                 </div>
                             </>}
 
                             {currentStep === 2 && <>
 
                                 <GoalsQuestionnaire ques={goalsQuestionnaire} onAnswersChange={handleAnswersChange} />
-                                <div className="mb-8 flex gap-8 justify-between">
+
+                                <div className="my-8 flex gap-4 justify-center">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
                                         onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, steps.length))}
@@ -282,11 +285,9 @@ export default function AssesmentWomen() {
 
                             {currentStep === 3 && <>
 
-                                <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
-                                    What do you hope to gain from this check-in today? (Select all that applies) 3
-                                </h2>
                                 <GoalsQuestionnaire ques={intentQuestionnaire} onAnswersChange={handleAnswersChange} />
-                                <div className="mb-8 flex gap-8 justify-between">
+
+                                <div className="my-8 flex gap-4 justify-center">
                                     <button
                                         className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
                                         onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, steps.length))}
@@ -305,23 +306,17 @@ export default function AssesmentWomen() {
 
                             {currentStep === 4 && <>
 
-                                <AIQuestings questions={ai.assessment_data.questions} onAnswerSubmit={handleAIAnswers} />
-                                {/* {JSON.stringify(ai.assessment_data.questions)} */}
-                                <div className="mt-8 flex justify-between">
-                                    <button
-                                        className="px-8 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50 transition-colors"
-                                        onClick={() => setCurrentStep(prevStep => Math.min(prevStep - 1, steps.length))}
-                                    >
-                                        Back
-                                    </button>
+                                <AssessmentAIQuestings questions={ai.assessment_data.questions} onAnswerSubmit={handleAIAnswers} />
 
+                                <div className="my-8 flex gap-4 justify-center">
                                     <div className="text-center">
-                                        <button onClick={() => { finalSubmit(); setQuesLoding(true); }} className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"  >
-                                            Submit
+                                        <button onClick={() => { finalSubmit(); setQuesLoding(true); }} className="px-8 py-2 text-white rounded-full bg-blue-500 hover:bg-blue-800 transition-colors"  >
+                                            Next
                                         </button>
                                     </div>
                                 </div>
                             </>}
+
 
                         </main>
                     </>

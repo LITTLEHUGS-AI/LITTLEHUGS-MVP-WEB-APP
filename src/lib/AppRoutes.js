@@ -18,13 +18,11 @@ import PersonalAssesment from "../components/dashboard/dashboardComponents/Perso
 import Plans from "../components/dashboard/dashboardComponents/Plans";
 import GoogleCallback from "../components/signin/GoogleCallback";
 import PartnerDashboardLayout from "../components/partner/PartnerDashboardLayout";
-import AssesmentWomen from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentWomen";
+import AssesmentHandler from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentHandler";
 import ProtectedRoute from "./ProtectedRoute";
 import OpenRoute from "./OpenRoute";
 import AcceptInviteUser from "../temp/AcceptInviteUser";
 import AcceptInviteTeam from "../temp/AcceptInviteTeam";
-import AssesmentChild from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentChild";
-import AssesmentSEL from "../components/dashboard/dashboardComponents/PersonalAssesment/AssesmentSEL";
 
 function AppRoutes() {
   return (
@@ -100,35 +98,16 @@ function AppRoutes() {
             />
 
             <Route
-              path="/personal/asssesment-women"
+              path="/personal/assessment/start"
               element={
                 <ProtectedRoute>
-                  <AssesmentWomen />
-                </ProtectedRoute>
-              }
-            />
-
-               <Route
-              path="/personal/asssesment-child"
-              element={
-                <ProtectedRoute>
-                  <AssesmentChild />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/personal/asssesment-sel"
-              element={
-                <ProtectedRoute>
-                  <AssesmentSEL />
+                  <AssesmentHandler />
                 </ProtectedRoute>
               }
             />
 
             <Route path="/accept-invite-user/:inviteId" element={<AcceptInviteUser />} />
-            <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam/>} />
-
+            <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam />} />
 
           </Routes>
         </Suspense>

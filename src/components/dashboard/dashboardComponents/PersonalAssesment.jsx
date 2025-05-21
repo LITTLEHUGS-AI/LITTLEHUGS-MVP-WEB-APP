@@ -96,7 +96,7 @@ const PersonalAssessment = () => {
             {/* Action Button */}
             <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
               <button
-                onClick={() => navigate("/personal/asssesment-women")}
+                onClick={() => navigate(`/personal/assessment/start?type=women-wellness-360&no=1`)}
                 className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
               >
                 Take quick assessment
@@ -155,7 +155,7 @@ const PersonalAssessment = () => {
             {/* Action Button */}
             <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
               <button
-                onClick={() => navigate("/personal/asssesment-child")}
+                onClick={() => navigate("/personal/assessment/start?type=child-wellness-360&no=2")}
                 className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
               >
                 Take quick assessment
@@ -216,7 +216,7 @@ const PersonalAssessment = () => {
             {/* Action Button */}
             <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
               <button
-                onClick={() => navigate("/personal/asssesment-sel")}
+                onClick={() => navigate("/personal/assessment/start?type=sel-assessment-360&no=3")}
                 className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
               >
                 Take quick assessment

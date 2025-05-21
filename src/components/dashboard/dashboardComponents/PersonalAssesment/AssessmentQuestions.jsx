@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const GoalQuestionnaire = ({ ques, onAnswersChange }) => {
+const AssessmentQuestions = ({ ques, onAnswersChange }) => {
     const [answers, setAnswers] = useState([]);
     useEffect(() => {
         if (onAnswersChange) onAnswersChange(answers);
@@ -61,7 +61,7 @@ const GoalQuestionnaire = ({ ques, onAnswersChange }) => {
                                 return (
                                     <button
                                         key={idx}
-                                        className={`border rounded-full py-3 px-4 text-center ${isSelected
+                                        className={`border rounded-lg mt-2 py-3 px-4 text-center ${isSelected
                                             ? "bg-blue-100 border-blue-300 text-blue-800"
                                             : "border-gray-400 text-gray-600 hover:bg-gray-50"
                                             }`}
@@ -112,4 +112,4 @@ const GoalQuestionnaire = ({ ques, onAnswersChange }) => {
     );
 };
 
-export default GoalQuestionnaire;
+export default AssessmentQuestions;

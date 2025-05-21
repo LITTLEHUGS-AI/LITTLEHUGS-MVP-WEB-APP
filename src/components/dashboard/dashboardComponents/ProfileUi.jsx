@@ -310,17 +310,17 @@ const ProfileUi = () => {
     <>
       <div
         onClick={showModal}
-        className="lg:flex items-center justify-between hidden border p-3 rounded-md border-gray-400 cp"
+        className="lg:flex items-center justify-between border p-3 rounded-md border-gray-400 cp"
       >
         <div className="flex items-center">
           <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden">
             <img
               src={selectedProfile === 'women' ? womenDP : childDP}
               alt="Profile"
-              className="h-full w-full object-cover"
+              className="h-full w-auto object-cover"
             />
           </div>
-          <span className="ml-2 font-medium">
+          <span className="ml-2 hidden md:block font-medium">
             {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
           </span>
         </div>

@@ -209,10 +209,10 @@ export default function AssesmentWomen() {
                         </div>
 
                         {/* Main Content */}
-                        <main className="flex flex-1 flex-col max-w-3xl items-center px-6 gap-4 m-auto">
+                        <main className="flex flex-1 flex-col max-w-6xl items-center px-6 gap-4 m-auto">
 
                             {currentStep === 1 && <>
-                                <div className="w-full ring-4 ring-blue-400 rounded-lg bg-white p-8 shadow-sm">
+                                <div className="ring-4 ring-blue-400 rounded-lg bg-white p-8 shadow-sm">
                                     <div className="space-y-4">
                                         <p className="text-gray-700">
                                             At LittleHugs, your emotional safety and self-awareness matter deeply.
@@ -262,9 +262,6 @@ export default function AssesmentWomen() {
 
                             {currentStep === 2 && <>
 
-                                <h2 className="text-xl text-gray-800 font-medium mb-6 text-center">
-                                    What do you hope to gain from this check-in today? (Select all that applies) 2
-                                </h2>
                                 <GoalsQuestionnaire ques={goalsQuestionnaire} onAnswersChange={handleAnswersChange} />
                                 <div className="mb-8 flex gap-8 justify-between">
                                     <button

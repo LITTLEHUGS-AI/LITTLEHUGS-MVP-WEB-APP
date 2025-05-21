@@ -128,19 +128,19 @@ function SignupUI({
     });
   };
 
-  const toneOptions = ["Reassuring", "Motivational", "Calming", "Neutral"];
-  const [isToneOpen, setIsToneOpen] = useState(false);
-  const [selectedToneOptions, setSelectedToneOptions] = useState([]);
-  const toggleToneDropdown = () => setIsToneOpen(!isToneOpen);
-  const toggleToneOption = (option) => {
-    setSelectedToneOptions((prevSelected) => {
-      if (prevSelected.some((item) => item === option))
-        return prevSelected.filter((item) => item !== option);
-      else return [...prevSelected, option];
-    });
-  };
+  // const toneOptions = ["Reassuring", "Motivational", "Calming", "Neutral"];
+  // const [isToneOpen, setIsToneOpen] = useState(false);
+  const selectedToneOptions = [];
+  // const toggleToneDropdown = () => setIsToneOpen(!isToneOpen);
+  // const toggleToneOption = (option) => {
+  //   setSelectedToneOptions((prevSelected) => {
+  //     if (prevSelected.some((item) => item === option))
+  //       return prevSelected.filter((item) => item !== option);
+  //     else return [...prevSelected, option];
+  //   });
+  // };
 
-  const womenChildOptions = ["Growth", "Nutrition", "Activity"];
+  const childOptions = ["Growth", "Nutrition", "Activity"];
   const [isChildGoalOpen, setIsChildGoalOpen] = useState(false);
   const [selectedChildGoalOptions, setSelectedChildGoalOptions] = useState([]);
   const toggleChildGoalDropdown = () => setIsChildGoalOpen(!isChildGoalOpen);
@@ -195,9 +195,7 @@ function SignupUI({
       const updatedOtp = [...otp];
       updatedOtp[index] = value;
       setOtp(updatedOtp);
-      if (value && index < 5) {
-        inputsRef.current[index + 1].focus();
-      }
+      if (value && index < 5) inputsRef.current[index + 1].focus();
     }
   };
 
@@ -424,7 +422,7 @@ function SignupUI({
 
         navigate("/personal/dashboard");
       } catch (error) {
-         toast.error('Error', error);
+        toast.error('Error', error);
       }
     }
 
@@ -775,7 +773,7 @@ function SignupUI({
                   {/* for women */}
                   {showWomenPopup && (
                     <div className="min-w-[300px] mx-auto">
-                      <h2 className="font-bold text-center">Mother's Profile</h2>
+                      <h2 className="font-bold text-center">{showChildPopup ? "Mother's Profile" : "Women's Profile"}</h2>
                       <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
                         <label htmlFor="womenDPInput">
                           <img
@@ -1046,18 +1044,12 @@ function SignupUI({
                             {/* Dropdown menu */}
                             {isChildGoalOpen && (
                               <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                                {womenChildOptions.map((option) => (
+                                {childOptions.map((option) => (
                                   <div
                                     key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(
-                                      (item) => item === option
-                                    )
-                                      ? "bg-blue-50"
-                                      : ""
-                                      }`}
-                                    onClick={() =>
-                                      toggleChildGoalOption(option)
-                                    }
+                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some((item) => item === option)
+                                      ? "bg-blue-50" : ""}`}
+                                    onClick={() => toggleChildGoalOption(option)}
                                   >
                                     <input
                                       type="checkbox"

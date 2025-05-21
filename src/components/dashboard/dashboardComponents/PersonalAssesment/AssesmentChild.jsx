@@ -36,11 +36,11 @@ export default function AssesmentChild() {
 
 
     useEffect(() => {
-        if (goalQuestions?.results?.length > 0){ setGoalsQuestionnaire(goalQuestions.results); };
+        if (goalQuestions?.results?.length > 0) { setGoalsQuestionnaire(goalQuestions.results); };
     }, [goalQuestions]);
 
     useEffect(() => {
-        if (intentQuestions?.results?.length > 0) {setIntentQuestionnaire(intentQuestions.results); };
+        if (intentQuestions?.results?.length > 0) { setIntentQuestionnaire(intentQuestions.results); };
     }, [intentQuestions]);
 
 
@@ -57,7 +57,7 @@ export default function AssesmentChild() {
                 <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
                     <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-[20px] text-slate-500">
-                         You are taking Child Assessment
+                            You are taking Child Assessment
                         </p>
                     </div>
                     <div className="col-span-2">
@@ -132,7 +132,22 @@ export default function AssesmentChild() {
                                             We're here to support—not to judge.
                                         </p>
 
-                                        <div className="mt-8 flex">
+                                        <div className="w-full flex flex-col gap-2 ">
+                                            <div>
+                                                <input type="checkbox" className="mr-2" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
+                                                <span>I understand this is a supportive tool, not medical advice</span>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" className="mr-2" checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
+                                                <span>I consent to my anonymized data being used for personalization and insight generation</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                  <div className="mt-8 mr-auto">
                                             <button
                                                 className={`px-6 py-2 text-white rounded-full ${(!consentAccept.includes("understand") || !consentAccept.includes("consent")) ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"} transition-colors`}
                                                 disabled={!consentAccept.includes("understand") || !consentAccept.includes("consent")}
@@ -141,18 +156,7 @@ export default function AssesmentChild() {
                                                 Next
                                             </button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex flex-col gap-2 ">
-                                    <div>
-                                        <input type="checkbox" className="mr-2" checked={consentAccept.includes("understand")} onClick={() => step1("understand")} />
-                                        <span>I understand this is a supportive tool, not medical advice</span>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" className="mr-2"checked={consentAccept.includes("consent")} onClick={() => step1("consent")} />
-                                        <span>I consent to my anonymized data being used for personalization and insight generation</span>
-                                    </div>
-                                </div>
+
                             </>}
 
                             {currentStep === 2 && <>

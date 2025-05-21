@@ -43,10 +43,6 @@ const PersonalDashboard = () => {
             <Main />
           </div>
 
-          {/* Right Sidebar - full width on mobile, side column on desktop */}
-          <div className="w-full mt-5 lg:mt-0 lg:w-72 border-t lg:border-l lg:border-t-0 border-gray-200 p-4 h-[100vh] overflow-auto scrollbar-thin">
-            <RightHandSide />
-          </div>
         </div>
       </div>
       <Drawer
@@ -60,7 +56,7 @@ const PersonalDashboard = () => {
         headerStyle={{ display: "none" }}
       >
         <Sidebar />
-      </Drawer> 
+      </Drawer>
     </>
   );
 };

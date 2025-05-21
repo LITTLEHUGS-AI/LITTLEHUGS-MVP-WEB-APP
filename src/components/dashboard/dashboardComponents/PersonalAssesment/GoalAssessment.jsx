@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 const GoalQuestionnaire = ({ ques, onAnswersChange }) => {
     const [answers, setAnswers] = useState([]);
-
     useEffect(() => {
         if (onAnswersChange) onAnswersChange(answers);
     }, [answers, onAnswersChange]);

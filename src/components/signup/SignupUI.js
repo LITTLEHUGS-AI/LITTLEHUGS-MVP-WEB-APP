@@ -276,10 +276,11 @@ function SignupUI({
       //     message: otpMutation?.error?.data.error || "Unknown error occurred",
       // });
       toastErrorMessage({
-        content: "Unknown error occurred",
-        // content: otpMutation?.error?.data.error || "Unknown error occurred",
+        // content: "Unknown error occurred",
+        content: otpMutation?.error?.data.error || "Unknown error occurred",
         option: { type: "" },
       });
+      debugger
     }
   }, [otpMutation.isError, otpMutation?.error]);
 
@@ -381,7 +382,7 @@ function SignupUI({
               life_style: womenFormDataRaw.get("lifeStyle"),
               occupation: womenFormDataRaw.get("occupation"),
               intent: [...selectedWomenGoalOptions],
-              tone_prefrence: womenFormDataRaw.get("tone")
+              tone_prefrence: womenFormDataRaw.get("tone_prefrence")
             })
             .then((response) => {
               if (response.profile) {
@@ -403,7 +404,9 @@ function SignupUI({
               dob: childFormDataRaw.get("dob"),
               age_group: childFormDataRaw.get("ageGroup"),
               goal: [childFormDataRaw.get("goal")],
+              tone_prefrence: childFormDataRaw.get("tone_prefrence"),
               relation_with_child: childFormDataRaw.get("relationWithChild"),
+              occupation: childFormDataRaw.get("occupation"),
               weight: childFormDataRaw.get("weight"),
               height: childFormDataRaw.get("height"),
             })
@@ -421,13 +424,13 @@ function SignupUI({
 
         navigate("/personal/dashboard");
       } catch (error) {
-        alert("Some Error Occured");
+         toast.error('Error', error);
       }
     }
 
     if (selectedUserType === "partner") {
       apiClient
-        .post("https://api.ourlittlehugs.com/v1/api/organisation-profile", {
+        .post("https://api.ourlittdlehugs.com/v1/api/organisation-profile", {
           organisation_name: "My Org",
           description: "Default Description",
           org_offers: ["offer 1", "offer 2"],
@@ -701,8 +704,7 @@ function SignupUI({
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg max-w-[800px] mx-6">
 
-
-              <div className="flex items-center justify-between space-x-6">
+              <div className="flex items-center justify-between space-x-6 mb-4">
 
                 <div />
 
@@ -773,7 +775,7 @@ function SignupUI({
                   {/* for women */}
                   {showWomenPopup && (
                     <div className="min-w-[300px] mx-auto">
-                      <h2 className="font-bold text-center">Women Profile</h2>
+                      <h2 className="font-bold text-center">Mother's Profile</h2>
                       <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
                         <label htmlFor="womenDPInput">
                           <img
@@ -810,14 +812,12 @@ function SignupUI({
                             className="border p-2 rounded"
                             required
                           >
-                            <option value="" disabled hidden>
+                            <option value="" selected hidden>
                               * Current life stage
                             </option>
-                            <option>Early adulthood</option>
-                            <option>Adulthood</option>
-                            <option>Pregnancy</option>
-                            <option>Menopause</option>
-                            <option>Prefer not to say</option>
+                            {["Early adulthood", "Adulthood", "Pregnancy", "Menopause", "Prefer not to say"].map((tone, i) => {
+                              return (<option>{tone}</option>)
+                            })}
                           </select>
 
                           <div className="relative">
@@ -845,9 +845,8 @@ function SignupUI({
                             </span>
                           </div>
 
-
                           <select name="lifeStyle" className="border p-2 rounded" required>
-                            <option value="" disabled hidden>
+                            <option value="" selected hidden>
                               * Life Style
                             </option>
                             <option>Nuclear Family</option>
@@ -912,56 +911,26 @@ function SignupUI({
                             )}
                           </div>
 
-
                           <div>
-                            {/* Dropdown button */}
-                            <div
-                              className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
-                              onClick={toggleToneDropdown}
-                            >
-                              {selectedToneOptions.length === 0 ? (
-                                <span className="text-gray-500">
-                                  * Tone Preference
-                                </span>
-                              ) : (
-                                selectedToneOptions.map((option) => (
-                                  <div
-                                    key={option}
-                                    className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
-                                  >
-                                    <span>{option}</span>
-                                  </div>
-                                ))
-                              )}
-                            </div>
-
-                            {/* Dropdown menu */}
-                            {isToneOpen && (
-                              <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                                {toneOptions.map((option) => (
-                                  <div
-                                    key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some(
-                                      (item) => item === option
-                                    )
-                                      ? "bg-blue-50"
-                                      : ""
-                                      }`}
-                                    onClick={() => toggleToneOption(option)}
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedToneOptions.some(
-                                        (item) => item === option
-                                      )}
-                                      readOnly
-                                      className="mr-2"
-                                    />
-                                    {option}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
+                            <input
+                              type="text"
+                              placeholder="* Occupation"
+                              className="border p-2 rounded w-full pr-10"
+                              name="occupation"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <select name="tone_prefrence" className="w-full border p-2 rounded" required>
+                              <option value="" hidden selected>
+                                * Tone Prefrence
+                              </option>
+                              {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
+                                return (
+                                  <option>{tone}</option>
+                                )
+                              })}
+                            </select>
                           </div>
 
                         </div>
@@ -972,7 +941,7 @@ function SignupUI({
                   {/* for child */}
                   {showChildPopup && (
                     <div className="">
-                      <h2 className="font-bold text-center">Child Profile</h2>
+                      <h2 className="font-bold text-center">Child's Profile</h2>
                       {/* Profile */}
                       <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
                         <label htmlFor="childDPInput">

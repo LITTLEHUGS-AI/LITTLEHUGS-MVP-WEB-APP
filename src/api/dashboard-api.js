@@ -35,9 +35,7 @@ export const getAssessmentData = async () => {
     const response = await axios.get(
       `https://api.ourlittlehugs.com/v1/api/assessments/`,
       {
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-        },
+        headers: { Authorization: localStorage.getItem("accessToken") },
       }
     );
     return response.data;

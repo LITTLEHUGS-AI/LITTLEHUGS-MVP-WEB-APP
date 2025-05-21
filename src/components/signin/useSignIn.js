@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "../../api/api-client";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -22,6 +23,9 @@ function useSignIn() {
       }
       return apiClient.post(`${apiUrl}/${url}`, user);
     },
+     onError: (error)=>{
+      toast.error(error);
+     },
   });
 
   const motherMutation = useMutation({

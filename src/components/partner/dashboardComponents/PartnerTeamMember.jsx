@@ -6,18 +6,6 @@ import { getTeamMembers, inviteTeamMember } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
 
-// const teamMembers = [
-//   {
-//     name: "Sethu Lakshmi",
-//     email: "abcd@gmail.com",
-//     initials: "SL",
-//   },
-//   {
-//     name: "Sethu Lakshmi",
-//     email: "abcd@gmail.com",
-//     initials: "SL",
-//   },
-// ];
 
 const PartnerTeamMember = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

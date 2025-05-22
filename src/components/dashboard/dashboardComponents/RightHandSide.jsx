@@ -13,7 +13,12 @@ const RightHandSide = ({show}) => {
 
   return (
     <>
-      <ProfileUi />
+
+      <div className="flex items-center justify-start p-[14px] lg:p-1 border border-gray-400 rounded-md">
+            <ProfileUi />
+        </div>
+
+
       {show && <div className="my-6">
         <h3 className="text-lg font-medium mb-4">Insight Cards</h3>
         <div className="space-y-4">

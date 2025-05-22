@@ -1,8 +1,8 @@
 import Sidebar from "./Sidebar";
-import ProfileUi from "./ProfileUi";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
+import HeaderPersonal from "../HeaderPersonal";
 
 const PersonalAssessment = () => {
   const navigate = useNavigate();
@@ -28,25 +28,14 @@ const PersonalAssessment = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Fixed Sidebar - not scrollable */}
-      <div className="w-64 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden lg:block">
-        <Sidebar />
-      </div>
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+
+      <Sidebar />
 
       {/* Main content - scrollable */}
       <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
-          <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
-            <p className="p-0 text-[20px] text-slate-500">
-              In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
-            </p>
-          </div>
-          <div className="col-span-2">
-            <ProfileUi />
-          </div>
-        </div>
 
+        <HeaderPersonal />
 
         {showPopup === "Women" && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div
@@ -230,8 +219,8 @@ const PersonalAssessment = () => {
 
 
         {(hideAssessment < 100) && (
-          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
+          <div className="fixed inset-0 bg-opacity-50 bg-black flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4 text-center">
               <h2 className="text-xl font-bold mb-4">
                 Your Pofile is {hideAssessment}% Completed
               </h2>
@@ -313,12 +302,8 @@ const PersonalAssessment = () => {
         </div>
 
         {/* completingPercentage */}
-        <div className="flex flex-start border border-slate-500 rounded-md  mt-5 mx-4 mb-4 flex items-start justify-center overflow-hidden">
-          <img
-            alt="Dashboard Collage"
-            src="/images/dashboardCollageWeb.png"
-            className="w-full h-full"
-          />
+        <div className="flex flex-start rounded-md mt-5 mx-2 md:mx-4 mb-4 flex items-start justify-center overflow-hidden">
+          <img alt="Dashboard Collage" src="/images/dashboardCollageWeb.png" className="w-full h-full" />
         </div>
 
 

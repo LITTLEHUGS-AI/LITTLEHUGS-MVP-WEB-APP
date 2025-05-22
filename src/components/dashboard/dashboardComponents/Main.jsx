@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import {
-  getAssessmentData,
-  getWomenProfileDetails,
-} from "../../../api/dashboard-api";
+import { getWomenProfileDetails } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -21,7 +18,7 @@ const Main = () => {
   const [domainWellnessScore, setDomainWellnessScore] = useState([]);
 
   const [profileData, setProfileData] = useState({});
-  const [assessment, setAssessment] = useState({});
+  // const [assessment, setAssessment] = useState({});
   // const [shareAssessmentData, setShareAssessmentData] = useState({});
 
   useEffect(() => {
@@ -61,7 +58,6 @@ const Main = () => {
 
   const userName = 'Ritesh Singh';
   const [assessmentName, setAssessmentName] = useState({});
-  const assessmentDate = '09/05/2025';
 
 
   const downloadPDF = async () => {
@@ -201,7 +197,7 @@ const Main = () => {
       doc.text(outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1), statusX, y + 7);
 
       // Insight
-      doc.text(outcome.positive_summary, tableX + tableWidth / 2 , y + 7);
+      doc.text(outcome.positive_summary, tableX + tableWidth / 2, y + 7);
     });
 
 
@@ -217,12 +213,6 @@ const Main = () => {
     doc.setFont('helvetica', 'bold');
     doc.text('Insight Cards', 20, 15);
 
-    // Insight Cards
-    const insightCards = [
-      "You're carrying emotional load without enough release",
-      "Your physical wellness is affecting your mood more than you realize",
-      "You're doing better than you think—but you deserve more ease"
-    ];
 
     const cardY = 25;
     const cardHeight = 25;
@@ -503,15 +493,13 @@ const Main = () => {
               <div className="bg-white border border-gray-200 p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-gray-600">Complete</h3>
                 <p className="text-5xl font-bold">
-                  {assessment.results ? assessment.results.length : "0"}
+                  {/* {assessment.results ? assessment.results.length : "0"} */}
                 </p>
               </div>
               <div className="bg-white border border-gray-200 p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-gray-600">Incomplete</h3>
                 {Number.isFinite(parseInt(data.count))}
-                <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count))
-                  ? parseInt(data.count) - parseInt(assessment.count)
-                  : ''}</p>
+                {/* <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count)) ? parseInt(data.count) - parseInt(assessment.count) : ''}</p> */}
               </div>
             </div>
 

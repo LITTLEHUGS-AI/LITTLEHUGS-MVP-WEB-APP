@@ -147,7 +147,7 @@ const ProfileUi = () => {
       })
       .catch((error) => console.error('Error fetching countries:', error));
 
-  }, []);
+  }, [womenProfileData.country]);
 
 
   const showModal = () => {

@@ -176,9 +176,9 @@ export default function AssesmentHandler() {
                 <div className="grid grid-cols-12 m-6 gap-4">
                     <div className="col-span-10 flex items-center justify-center p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-md lg:text-xl text-slate-500 font-medium">
-                            {no == 1 && "You are taking Women Assessment"}
-                            {no == 2 && "You are taking Child Assessment"}
-                            {no == 3 && "You are taking SEL Assessment"}
+                            {no === "1" && "You are taking Women Assessment"}
+                            {no === "2" && "You are taking Child Assessment"}
+                            {no === "3" && "You are taking SEL Assessment"}
                         </p>
                     </div>
                     <div className="col-span-2 flex">

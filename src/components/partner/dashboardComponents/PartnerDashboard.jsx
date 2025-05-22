@@ -1,24 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import { Plus } from "lucide-react";
-import CommonModal from "./CommonModal";
-import { Input, Select, Spin } from "antd";
+import {  Spin } from "antd";
 import {
-  getTeamMembers,
-  inviteUser,
+  // getTeamMembers,
   getUserLists,
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
-import CommonLoader from "./CommonLoader";
 
 const PartnerDashboard = () => {
-  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [therapist, setTherapist] = useState("");
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [inviteLoading, setInviteLoading] = useState(false);
+  // const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  // const [teamMembers, setTeamMembers] = useState([]);
+  // const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
@@ -43,20 +36,20 @@ const PartnerDashboard = () => {
 
   const fetchTeamMembers = useCallback(async () => {
     try {
-      setLoading(true);
-      const response = await getTeamMembers();
-      const options = response.map((member) => ({
-        label: member.name,
-        value: member.name,
-      }));
-      setTeamMembers(options);
+      // setLoading(true);
+      // const response = await getTeamMembers();
+      // const options = response.map((member) => ({
+      //   label: member.name,
+      //   value: member.name,
+      // }));
+      // setTeamMembers(options);
     } catch (error) {
       console.error("Error fetching team members:", error);
       toast.error(
         error?.response?.data?.message || "Failed to fetch team members"
       );
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   }, []);
 
@@ -140,7 +133,7 @@ const PartnerDashboard = () => {
     }
   }, [fetchTeamMembers, fetchUsers]);
 
-  const handleOpenAddUser = () => setIsAddUserOpen(true);
+  // const handleOpenAddUser = () => setIsAddUserOpen(true);
  
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -278,13 +271,13 @@ const PartnerDashboard = () => {
                 <div className="flex items-center gap-1">
                   <button
                     className="flex items-center gap-1 text-white font-normal text-base px-1 py-1 rounded-[50%] bg-[#4F7DDD]"
-                    onClick={handleOpenAddUser}
+                    // onClick={handleOpenAddUser}
                   >
                     <Plus size={16} />
                   </button>
                   <p
                     className="text-base font-semibold text-[#4F7DDD] cursor-pointer"
-                    onClick={handleOpenAddUser}
+                    // onClick={handleOpenAddUser}
                   >
                     Add User
                   </p>

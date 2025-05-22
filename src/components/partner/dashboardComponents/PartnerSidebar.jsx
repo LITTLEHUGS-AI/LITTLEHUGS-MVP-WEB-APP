@@ -109,6 +109,15 @@ const PartnerSidebar = ({ onTabChange }) => {
               >
                 Team member
               </button>
+               <button
+                onClick={() => handleSubTabClick("users")}
+                className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "users"
+                    ? "font-bold text-gray-800"
+                    : "font-normal text-gray-700"
+                  }`}
+              >
+               Users
+              </button>
               <button
                 onClick={() => handleSubTabClick("firm")}
                 className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"

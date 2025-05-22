@@ -101,7 +101,6 @@ const PartnerDashboard = () => {
       };
     });
   }, []);
-  
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -169,7 +168,7 @@ const PartnerDashboard = () => {
     } catch (error) {
       toast.error(
         error?.response?.data?.detail ||
-        "Failed to invite user. Please try again."
+          "Failed to invite user. Please try again."
       );
     } finally {
       setInviteLoading(false);
@@ -204,8 +203,6 @@ const PartnerDashboard = () => {
               <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
                 Dashboard
               </span>
-
-
               {/* Stat Cards */}
               <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-4 w-full">
                 {/* mobile */}
@@ -217,7 +214,6 @@ const PartnerDashboard = () => {
                     {formatNumber(users?.count || 0)}
                   </span>
                 </div>
-
                 {/* Bottom mobile */}
                 <div className="flex flex-row gap-3 w-full md:hidden">
                   <div className="flex-1 border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-white">
@@ -252,55 +248,6 @@ const PartnerDashboard = () => {
                   </span>
                   <span className="text-5xl font-bold text-[#4A4B4F]">
                     {formatNumber(incompleteCount)}
-                  </span>
-                </div>
-              </div>
-
-
-              <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-4 w-full">
-                {/* mobile */}
-                <div className="border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-[#4F7DDD] w-full">
-                  <span className="text-base md:text-xl text-white font-normal mb-1">
-                    Unique Users
-                  </span>
-                  <span className="text-4xl md:text-5xl font-bold text-white">
-                   {formatNumber(users?.count || 0)}
-                  </span>
-                </div>
-                {/* Bottom mobile */}
-                <div className="flex flex-row gap-3 w-full md:hidden">
-                  <div className="flex-1 border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-white">
-                    <span className="text-base text-gray-700 font-normal mb-1">
-                      Users Completed Atleat 1 Assessment
-                    </span>
-                    <span className="text-4xl font-bold text-[#4A4B4F]">
-                      3
-                    </span>
-                  </div>
-                  <div className="flex-1 border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-white">
-                    <span className="text-base text-gray-700 font-normal mb-1">
-                      User has not completed Atleast 1 Assessment
-                    </span>
-                    <span className="text-4xl font-bold text-[#4A4B4F]">
-                      0
-                    </span>
-                  </div>
-                </div>
-                {/* Desktop */}
-                <div className="hidden md:flex border border-gray-300 rounded-[16px] p-4 flex-col items-start bg-white w-full md:w-auto">
-                  <span className="text-xl text-gray-700 font-normal mb-1">
-                    Users Completed Atleast 1 Assessment
-                  </span>
-                  <span className="text-5xl font-bold text-[#4A4B4F]">
-                    3
-                  </span>
-                </div>
-                <div className="hidden md:flex border border-gray-300 rounded-[16px] p-4 flex-col items-start bg-white w-full md:w-auto">
-                  <span className="text-xl text-gray-700 font-normal mb-1">
-                    Users did not Completed Atleat 1 Assessment
-                  </span>
-                  <span className="text-5xl font-bold text-[#4A4B4F]">
-                    0
                   </span>
                 </div>
               </div>
@@ -560,10 +507,11 @@ const PartnerDashboard = () => {
               loading={inviteLoading}
               disabled={!userName.trim() || !email.trim() || !therapist}
               onClick={handleInviteUser}
-              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !therapist
+              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${
+                !userName.trim() || !email.trim() || !therapist
                   ? "bg-[#4F7DDDBF] cursor-not-allowed"
                   : ""
-                }`}
+              }`}
               type="primary"
             >
               {inviteLoading ? "Inviting..." : "Invite User"}

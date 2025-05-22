@@ -7,6 +7,7 @@ import PartnerFirmSetting from "./dashboardComponents/PartnerFirmSetting";
 import { Menu } from "lucide-react";
 import { Drawer } from "antd";
 import { PartnerProvider } from "../../lib/PartnerContext";
+import PartnerUsers from "./dashboardComponents/Partnerusers";
 
 const PartnerDashboardLayout = () => {
   const [open, setOpen] = useState(false);
@@ -27,6 +28,8 @@ const PartnerDashboardLayout = () => {
     MainContent = <PartnerDashboard />;
   } else if (activeTab === "settings" && activeSubTab === "team") {
     MainContent = <PartnerTeamMember />;
+  } else if (activeTab === "settings" && activeSubTab === "users") {
+    MainContent = <PartnerUsers />;
   } else if (activeTab === "settings" && activeSubTab === "firm") {
     MainContent = <PartnerFirmSetting />;
   }

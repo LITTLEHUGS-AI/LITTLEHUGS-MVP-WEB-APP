@@ -486,7 +486,6 @@ const Main = () => {
         const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
         setDomainWellnessScore(domainArray);
         setLatestDate(data.results[domainIndex].assessment_output.created_at);
-        debugger
       })
       .catch(err => toast.error(err.message))
       .finally(() => setIsDataLoading(false));

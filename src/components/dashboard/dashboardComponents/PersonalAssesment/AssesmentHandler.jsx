@@ -128,19 +128,36 @@ export default function AssesmentHandler() {
     const finalSubmit = async () => {
         try {
 
-            const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}'`, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': localStorage.getItem('accessToken'),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ responses: finalAnswers})
-            });
 
-            await response.json();
-            toast.success('Insights Generted');
-            navigate('/personal/dashboard')
+
+
+
+            try {
+                const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': localStorage.getItem('accessToken'),
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ responses: finalAnswers })
+                    }
+                );
+
+                if (!response.ok) {
+                    toast.error('Got an Error, Please Retry');
+                    navigate('/personal/assessment')
+                    return;
+                }
+
+                await response.json();
+                toast.success('Insights Generated');
+                navigate('/personal/dashboard')
+            } catch (err) {
+                toast.error('Got an Error, Please Retry');
+                navigate('/personal/assessment')
+            }
 
         } catch (error) {
             console.error('Error:', error);
@@ -171,7 +188,8 @@ export default function AssesmentHandler() {
 
                 {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />
-                    <span className="text-xl font-bold">Tailoring the questions according to your history</span>
+                    <div className="text-xl font-bold">Tailoring the questions according to your Profile</div>
+                    <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
                 </div> :
                     <>
                         {/* Progress Steps */}

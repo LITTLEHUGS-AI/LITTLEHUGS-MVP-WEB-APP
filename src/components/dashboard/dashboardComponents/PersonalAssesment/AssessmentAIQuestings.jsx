@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 const AssessmentAIQuestings = ({ questions, onAnswerSubmit }) => {
 
   const [updatedQuestions, setUpdatedQuestions] = useState(questions);
+  const [answersCount, setAnswersCount] = useState(0);
+
 
   useEffect(() => { setUpdatedQuestions(questions) }, [questions]);
 
@@ -12,14 +14,13 @@ const AssessmentAIQuestings = ({ questions, onAnswerSubmit }) => {
 
     setUpdatedQuestions(updatedQuestionsArray);
     onAnswerSubmit(updatedQuestionsArray);
+    setAnswersCount(updatedQuestions.filter(question => 'answer' in question).length)
   };
-
-  const getQuestionsWithAnswerCount = () => updatedQuestions.filter(question => 'answer' in question).length;
 
 
   return (
     <>
-      <span className='bloxk text-right text-lg mb-4'>{getQuestionsWithAnswerCount}/{questions.length}</span>
+      <span className='block text-right text-lg font-semibold mb-4'>{answersCount}/{questions.length}</span>
       {updatedQuestions.map((questionObj, index) => (
         <div key={index} className="mb-6">
           <h2 className="text-xl font-medium text-gray-700 mb-4">{index + 1}. {questionObj.question}</h2>

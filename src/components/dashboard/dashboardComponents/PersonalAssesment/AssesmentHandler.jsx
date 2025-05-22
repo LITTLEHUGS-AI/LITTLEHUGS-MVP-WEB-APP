@@ -128,14 +128,14 @@ export default function AssesmentHandler() {
     const finalSubmit = async () => {
         try {
 
-            const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/`, {
+            const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}'`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Authorization': localStorage.getItem('accessToken'),
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ responses: finalAnswers, insights_for: type })
+                body: JSON.stringify({ responses: finalAnswers})
             });
 
             await response.json();

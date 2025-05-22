@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import ProfileUi from "./ProfileUi";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
 
@@ -17,7 +17,7 @@ const PersonalAssessment = () => {
     }
 
     const unsubscribe = store.subscribe((newData) => {
-      if (newData.completingPercentage != null)setHideAssessment(newData.completingPercentage);
+      if (newData.completingPercentage != null) setHideAssessment(newData.completingPercentage);
     });
 
     return () => unsubscribe();
@@ -226,11 +226,11 @@ const PersonalAssessment = () => {
         </div>}
 
 
-        {(hideAssessment < 100)  && (
+        {(hideAssessment < 100) && (
           <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
               <h2 className="text-xl font-bold mb-4">
-               Your Pofile is {hideAssessment}% Completed
+                Your Pofile is {hideAssessment}% Completed
               </h2>
               <p className="mb-6">
                 Please Complete your profile first
@@ -241,7 +241,7 @@ const PersonalAssessment = () => {
         )}
 
 
-        <div className="bg-purple-100 p-8">
+        <div className="flex flex-col flex-1 bg-purple-100 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
             Explore our assessments here
           </h1>
@@ -307,13 +307,14 @@ const PersonalAssessment = () => {
         </div>
 
         {/* completingPercentage */}
-        <div className="border border-slate-500 rounded-md h-[320px] mt-5 mx-4 mb-4 flex items-center justify-center overflow-hidden">
+        <div className="flex flex-start border border-slate-500 rounded-md  mt-5 mx-4 mb-4 flex items-start justify-center overflow-hidden">
           <img
             alt="Dashboard Collage"
             src="/images/dashboardCollageWeb.png"
-            className="w-full h-full object-cover"
+            className="w-full h-full"
           />
         </div>
+
 
       </div>
     </div>

@@ -8,16 +8,19 @@ const PersonalAssessment = () => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(null);
   const [hideAssessment, setHideAssessment] = useState(0);
+  const [type, setType] = useState('');
 
 
   const dd = store.getData();
   useEffect(() => {
     if ((Object.keys(dd).length !== 0)) {
       if (dd.completingPercentage != null) setHideAssessment(dd.completingPercentage);
+      setType(dd.current);
     }
 
     const unsubscribe = store.subscribe((newData) => {
       if (newData.completingPercentage != null) setHideAssessment(newData.completingPercentage);
+      setType(newData.current);
     });
 
     return () => unsubscribe();
@@ -247,8 +250,9 @@ const PersonalAssessment = () => {
           </h1>
 
           <div className="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto">
+
             {/* Women's Assessment Card */}
-            <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
+            {type === 'women' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
                 LittleHugs 360° Women's Wellness Assessment
               </h2>
@@ -264,10 +268,10 @@ const PersonalAssessment = () => {
                   Learn More
                 </button>
               </div>
-            </div>
+            </div>}
 
             {/* Children's Assessment Card */}
-            <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
+            {type === 'child' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
                 LittleHugs 360° Children's Wellness Assessment
               </h2>
@@ -283,7 +287,7 @@ const PersonalAssessment = () => {
                   Learn More
                 </button>
               </div>
-            </div>
+            </div>}
 
             {/* SEL Assessment Card */}
             <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
@@ -303,7 +307,9 @@ const PersonalAssessment = () => {
                 </button>
               </div>
             </div>
+
           </div>
+
         </div>
 
         {/* completingPercentage */}

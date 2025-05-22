@@ -45,7 +45,6 @@ const PersonalDashboard = () => {
         </div>
       </div>
       <Drawer
-        // title="Basic Drawer"
         closable={{ "aria-label": "Close Button" }}
         onClose={onClose}
         placement={"left"}

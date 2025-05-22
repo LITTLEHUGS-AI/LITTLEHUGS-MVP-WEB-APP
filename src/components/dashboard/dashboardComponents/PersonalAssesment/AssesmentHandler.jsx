@@ -35,7 +35,7 @@ export default function AssesmentHandler() {
     const [finalAnswers, setFinalAnswers] = useState({});
 
     const [currentStep, setCurrentStep] = useState(1);
-    const [quesLoding, setQuesLoding] = useState(false);
+    const [quesLoding, setQuesLoding] = useState(null);
 
 
     const [consentAccept, setConsentAccept] = useState([]);
@@ -105,7 +105,7 @@ export default function AssesmentHandler() {
             clearTimeout(timeoutId);
             if (!response.ok) {
                 alert('Server responded with an error');
-                setQuesLoding(false);
+                setQuesLoding(null);
                 return;
             }
 
@@ -113,8 +113,7 @@ export default function AssesmentHandler() {
 
             setAI(aiQues);
             setCurrentStep(4);
-            setQuesLoding(false);
-
+            setQuesLoding(null);
 
             toast.success("Assessment Created")
 
@@ -177,7 +176,9 @@ export default function AssesmentHandler() {
                 <div className="grid grid-cols-12 m-6 gap-4">
                     <div className="col-span-10 flex items-center justify-center p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-md lg:text-xl text-slate-500 font-medium">
-                            You are taking Women Assessment
+                            {no === "1" && "You are taking Women Assessment"}
+                            {no === "2" && "You are taking Child Assessment"}
+                            {no === "3" && "You are taking SEL Assessment"}
                         </p>
                     </div>
                     <div className="col-span-2 flex">
@@ -315,7 +316,7 @@ export default function AssesmentHandler() {
 
                                     <button
                                         className={`px-8 py-2 text-white rounded-full ${true ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} transition-colors`}
-                                        onClick={() => { setQuesLoding(true); submitAssessment() }}
+                                        onClick={() => { setQuesLoding("Tailoring the questions according to your Profile"); submitAssessment() }}
                                     >
                                         Next
                                     </button>
@@ -328,7 +329,7 @@ export default function AssesmentHandler() {
 
                                 <div className="my-8 flex gap-4 justify-center">
                                     <div className="text-center">
-                                        <button onClick={() => { finalSubmit(); setQuesLoding(true); }} className="px-8 py-2 text-white rounded-full bg-blue-500 hover:bg-blue-800 transition-colors"  >
+                                        <button onClick={() => { finalSubmit(); setQuesLoding("Generating your Insights"); }} className="px-8 py-2 text-white rounded-full bg-blue-500 hover:bg-blue-800 transition-colors"  >
                                             Next
                                         </button>
                                     </div>

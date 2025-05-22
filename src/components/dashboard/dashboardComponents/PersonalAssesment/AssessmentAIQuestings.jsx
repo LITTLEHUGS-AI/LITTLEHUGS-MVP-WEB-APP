@@ -32,8 +32,8 @@ const AssessmentAIQuestings = ({ questions, onAnswerSubmit }) => {
                   type="button"
                   onClick={() => handleAnswerChange(index, optionIndex)}
                   className={`w-full py-3 px-4 border rounded-xl ${updatedQuestions[index].answer === optionIndex
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
                     } focus:outline-none`}
                 >
                   {option}

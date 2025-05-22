@@ -13,6 +13,7 @@ const ProfileUi = () => {
   const [selectedProfile, setSelectedProfile] = useState((Object.keys(dd).length !== 0) ? dd.current : 'women');
   const [allCountries, setAllCountries] = useState([]);
   const [allCities, setAllCities] = useState([]);
+  const [allLanguages, setAllLanguages] = useState([]);
 
   const [localMotherdDP, setLocalMotherDP] = useState(null);
   const [localChildDP, setLocalChildDP] = useState(null);
@@ -51,6 +52,7 @@ const ProfileUi = () => {
       ...prevData,
       [e.target.name]: e.target.value
     }));
+    if (e.target.name === 'country') fetchCities(e.target.value);
   };
 
   const handleChildProfileChange = (e) => {
@@ -110,25 +112,42 @@ const ProfileUi = () => {
   }, [selectedProfile]);
 
 
-  useEffect(() => {
+
+
+
+  function fetchCities(country) {
     fetch('https://countriesnow.space/api/v0.1/countries/cities', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country: 'india' })
+      body: JSON.stringify({ country: (country || 'India') })
     })
       .then(response => response.json())
       .then(data => {
-        if (data && data.data) {
-          setAllCities(data.data);
-        } else {
-          setAllCities([]);
-        }
+        if (data && data.data) setAllCities(data.data);
+        else setAllCities([]);
       })
       .catch(error => {
         console.error('Error:', error);
       });
-  }, [])
+  }
 
+
+
+  useEffect(() => {
+
+    fetchCities(womenProfileData.country);
+
+    fetch('https://restcountries.com/v3.1/all')
+      .then((res) => res.json())
+      .then((data) => {
+        const languages = new Set();
+        data.forEach(country => { if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang)) });
+        const sortedLanguages = [...languages].sort();
+        setAllLanguages(sortedLanguages);
+      })
+      .catch((error) => console.error('Error fetching countries:', error));
+
+  }, [womenProfileData.country]);
 
 
   const showModal = () => {
@@ -185,17 +204,17 @@ const ProfileUi = () => {
 
         }
 
-        // const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/mother-profile', {
-        //   method: 'PUT',
-        //   headers: {
-        //     'Accept': 'application/json',
-        //     'Authorization': localStorage.getItem("accessToken"),
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify(womenProfileData)
-        // });
+        const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/user-profiles', {
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': localStorage.getItem("accessToken"),
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(womenProfileData)
+        });
 
-        // if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
+        if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
 
         toast.success('Mother Profile Updated Succesfull');
         handleCancel();
@@ -443,7 +462,9 @@ const ProfileUi = () => {
                     * Country
                   </label>
                   <select
-                  value={womenProfileData.country}
+                    name="country"
+                    value={womenProfileData.country}
+                    onChange={handleWomenProfileChange}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                     required
                   >
@@ -463,7 +484,7 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <select value={womenProfileData.city} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                  <select name="city" value={womenProfileData.city} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
                     {allCities.map((city, i) => (
                       <option key={i} value={city}>
                         {city}
@@ -476,15 +497,13 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Language
                   </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.language}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                    />
-                    {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
-                  </div>
+                  <select name="language" value={womenProfileData.languge} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                    {allLanguages.map((language, i) => (
+                      <option key={i} value={language}>
+                        {language}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

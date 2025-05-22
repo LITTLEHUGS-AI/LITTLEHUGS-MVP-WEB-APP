@@ -78,6 +78,7 @@ const ProfileUi = () => {
         const women = { ...res1.mother_profile };
         women.name = res1.name;
         women.city = res1.city;
+        women.country = res1.country;
         women.language = res1.language;
         if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`)
         setWomenProfileData({ ...women });
@@ -442,6 +443,7 @@ const ProfileUi = () => {
                     * Country
                   </label>
                   <select
+                  value={womenProfileData.country}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                     required
                   >
@@ -576,7 +578,7 @@ const ProfileUi = () => {
                     name="occupation"
                     className="w-full p-3 border rounded-md outline-none"
                     value={womenProfileData.occupation}
-                    onChange={(e) => handleWomenProfileChange(e)}
+                    onChange={handleWomenProfileChange}
                   />
                 </div>
 
@@ -671,15 +673,18 @@ const ProfileUi = () => {
                     * Tone Preference
                   </label>
                   <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.tone_prefrence}
-                      onChange={(e) =>
-                        handleWomenProfileChange(e)
-                      }
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+
+                    <select name="tone_prefrence" value={womenProfileData.tone_prefrence} onChange={(e) => handleWomenProfileChange(e)} className="w-full border p-2 rounded" required>
+                      <option value="" hidden selected>
+                        * Tone Prefrence
+                      </option>
+                      {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
+                        return (
+                          <option>{tone}</option>
+                        )
+                      })}
+                    </select>
+
                   </div>
                 </div>
               </div>

@@ -278,7 +278,6 @@ function SignupUI({
         content: otpMutation?.error?.data.error || "Unknown error occurred",
         option: { type: "" },
       });
-      debugger
     }
   }, [otpMutation.isError, otpMutation?.error]);
 

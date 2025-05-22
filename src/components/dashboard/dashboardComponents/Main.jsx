@@ -458,9 +458,8 @@ const Main = () => {
       }
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
+
         return response.json();
       })
       .then(data => {
@@ -468,7 +467,7 @@ const Main = () => {
           setIsBlur(true);
           return;
         }
-        
+
         let domainInsight = null;
         let domainIndex = -1;
 
@@ -477,7 +476,7 @@ const Main = () => {
           if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
             domainInsight = result.assessment_output.domain_insights;
             domainIndex = i;
-            break; 
+            break;
           }
         }
 
@@ -606,7 +605,7 @@ const Main = () => {
           </div> */}
 
             <div className="flex justify-between">
-              <div className="my-4"><b>Lastest Assessment Name </b> : {assessment?.results?.[0]?.assessment_name ?? 'N/A'} </div>
+              <div className="my-4"><b>Lastest Assessment Name </b> : {assessmentName?.assessment_output?.assessment_name ?? 'N/A'} </div>
               <div className="my-4"><b>Lastest Assessment Date </b> : {latestdate && new Date(latestdate).toLocaleString()} </div>
             </div>
 

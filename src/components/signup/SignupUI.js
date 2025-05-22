@@ -328,9 +328,7 @@ function SignupUI({
       .then((res) => res.json())
       .then((data) => {
         const languages = new Set();
-        data.forEach(country => {
-          if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang));
-        });
+        data.forEach(country => { if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang)) });
         const sortedLanguages = [...languages].sort();
         setAllLanguages(sortedLanguages);
       })
@@ -575,7 +573,6 @@ function SignupUI({
               </div>
             }
 
-
             <FormProvider {...methods}>
               <form
                 className="space-y-4"
@@ -584,11 +581,14 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
+                  isReadOnly={true}
                   placeHolder="Enter your Name"
+                  readOnly
                 />
                 <InputField
                   label="Email"
                   name="email"
+                  isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}

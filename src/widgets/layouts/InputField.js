@@ -14,6 +14,7 @@ function InputField({
   visible = false,
   showIcon = false,
   handleChange,
+  isReadOnly = false,
   labelLeft = false,
   placeHolder = " ",
   input_type = "text",
@@ -60,6 +61,7 @@ function InputField({
               clearErrors(filedName);
               setValue(filedName, e.target.value);
             }}
+            readOnly={isReadOnly}
             id={fieldId}
           />
           {visible && (
@@ -75,9 +77,9 @@ function InputField({
         {(error || message) && (
           <div
             className={`bg-transparent flex items-center gap-2 rounded-md mt-2 ${message === "Unknown error occurred" ||
-                message === "Incorrect password"
-                ? "hidden"
-                : ""
+              message === "Incorrect password"
+              ? "hidden"
+              : ""
               }`}
           >
             <img

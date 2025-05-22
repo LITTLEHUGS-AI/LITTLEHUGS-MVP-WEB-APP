@@ -28,10 +28,10 @@ const Main = () => {
 
     getData();
 
-    (async () => {
-      const res = await getAssessmentData();
-      res && setAssessment(res);
-    })();
+    // (async () => {
+    //   const res = await getAssessmentData();
+    //   res && setAssessment(res);
+    // })();
 
     // (async () => {
     //   const res = await getShareAssessment();
@@ -63,47 +63,9 @@ const Main = () => {
   const [assessmentName, setAssessmentName] = useState({});
   const assessmentDate = '09/05/2025';
 
-  // Domain data
-  const [domains] = [
-    { name: 'Emotional Regulation & Mood', score: 100, color: '#2e7d32', backgroundColor: '#e0f2f1' }, // green
-    { name: 'Sensory Processing & Preferences', score: 68.75, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
-    { name: 'Family & Environmental Stressors', score: 68.75, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
-    { name: 'Coping Skills & Resilience', score: 62.5, color: '#fbc02d', backgroundColor: '#fff9c4' }, // yellow
-    { name: 'Attention, Focus & Memory', score: 81.25, color: '#2e7d32', backgroundColor: '#e0f7fa' } // green
-  ];
-
-  // Outcome data
-  const outcomes = [
-    {
-      domain: 'Emotional Regulation & Mood',
-      status: 'Green',
-      insight: 'Your child rarely feels annoyed or grouchy and is able to manage their irritability well.'
-    },
-    {
-      domain: 'Sensory Processing & Preferences',
-      status: 'Yellow',
-      insight: 'Your child shows good ability to handle sensory inputs in busy or noisy places and responds to sounds, lights, or smells with minimal difficulty.'
-    },
-    {
-      domain: 'Family & Environmental Stressors',
-      status: 'Yellow',
-      insight: 'Your child demonstrates a good ability to show they feel safe or calm during tensions by effectively managing conflicts in ways appropriate for their age.'
-    },
-    {
-      domain: 'Coping Skills & Resilience',
-      status: 'Yellow',
-      insight: 'Your child demonstrates a good ability to manage stress by using appropriate coping strategies suitable for their age, reflecting minimal difficulty in handling feelings of being overwhelmed.'
-    },
-    {
-      domain: 'Attention, Focus & Memory',
-      status: 'Green',
-      insight: 'Your child shows a strong ability to remember and follow multi-step instructions with ease, managing tasks that involve several steps independently.'
-    }
-  ];
 
   const downloadPDF = async () => {
 
-    // Create new PDF document (A4 size)
     const doc = new jsPDF({
       orientation: 'portrait',
       format: 'a4'
@@ -130,7 +92,7 @@ const Main = () => {
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Downloaded on : ${assessmentDate}`, pageWidth / 2 + 16, 21, { align: 'center' });
+    doc.text(`Downloaded on : ${data.created_at}`, pageWidth / 2 + 16, 21, { align: 'center' });
 
     // Add user details - align left for label, proper spacing for value
     doc.setFontSize(12);
@@ -174,20 +136,20 @@ const Main = () => {
     const domainStartX = (pageWidth - totalWidth) / 2;
     const domainY = 135;
 
-    domains.forEach((domain, index) => {
+    domainWellnessScore.forEach((domain, index) => {
       const x = domainStartX + (index * (domainWidth + domainSpacing));
 
       // Rectangle background
-      doc.setFillColor(hexToRgb(domain.backgroundColor).r, hexToRgb(domain.backgroundColor).g, hexToRgb(domain.backgroundColor).b);
+      doc.setFillColor(...hexToRgb(domain.flag));
       doc.rect(x, domainY, domainWidth, 38, 'F');
 
       // Domain name
       doc.setFontSize(8);
       doc.setTextColor(0, 0, 0);
-      doc.text(domain.name, x + domainWidth / 2, domainY + 10, { align: 'center' });
+      doc.text(domain?.domain, x + domainWidth / 2, domainY + 10, { align: 'center' });
 
       // Circle for score
-      doc.setDrawColor(hexToRgb(domain.color).r, hexToRgb(domain.color).g, hexToRgb(domain.color).b);
+      doc.setDrawColor(...hexToRgb(domain.flag));
       doc.setLineWidth(1.5);
       doc.circle(x + domainWidth / 2, domainY + 22, 10, 'S');
 
@@ -215,10 +177,10 @@ const Main = () => {
     doc.setTextColor(0, 0, 0);
     doc.text('Domain', tableX + 10, tableY + 7);
     doc.text('Score', tableX + tableWidth / 2 - 20, tableY + 7);
-    doc.text('Insights', tableX + tableWidth / 2 + 20, tableY + 7);
+    doc.text('Insights', tableX + tableWidth / 2 + 10, tableY + 7);
 
     // Table rows
-    outcomes.forEach((outcome, index) => {
+    domainWellnessScore.forEach((outcome, index) => {
       const y = tableY + 12 + (index * 12);
 
       // White background for rows
@@ -232,14 +194,14 @@ const Main = () => {
 
       // Status indicator
       const statusX = tableX + tableWidth / 2 - 20;
-      doc.setFillColor(getStatusColor(outcome.status));
+      doc.setFillColor(...hexToRgb(outcome.flag));
       doc.circle(statusX - 5, y + 5, 2, 'F');
 
       // Status text
-      doc.text(outcome.status, statusX, y + 7);
+      doc.text(outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1), statusX, y + 7);
 
       // Insight
-      doc.text(outcome.insight, tableX + tableWidth / 2 + 20, y + 7);
+      doc.text(outcome.positive_summary, tableX + tableWidth / 2 , y + 7);
     });
 
 
@@ -267,7 +229,7 @@ const Main = () => {
     const cardSpacing = 8;
     const cardWidth = pageWidth - 30;
 
-    insightCards.forEach((insight, index) => {
+    assessmentName.forEach((insight, index) => {
       const y = cardY + (index * (cardHeight + cardSpacing));
 
       // Card background (light lavender)
@@ -347,43 +309,15 @@ const Main = () => {
     }
   };
 
-  function hexToRgb(hex) {
-    // Remove # if present
-    hex = hex.replace(/^#/, '');
 
-    // Parse the hex values
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
+  const colorMap = {
+    green: [0, 128, 0],
+    red: [255, 0, 0],
+    yellow: [255, 255, 0],
+    blue: [0, 0, 255],
+  };
 
-    return { r, g, b };
-  }
-
-  // Helper function to get status color
-  function getStatusColor(status) {
-    switch (status) {
-      case 'Red': return '#d32f2f';
-      case 'Amber': return '#ff9800';
-      case 'Green': return '#2e7d32';
-      default: return '#000000';
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  function hexToRgb(inputColor) { return colorMap[inputColor.toLowerCase()] || [0, 0, 0]; }
 
 
 
@@ -650,8 +584,8 @@ const Main = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           <div className="flex items-center">
                             <span
-                              className="inline-block w-4 h-4 rounded-full mr-2"
-                              style={{ backgroundColor: getColorByScore(item.score) }}
+                              className="inline-block ring ring-1 w-4 h-4 rounded-full mr-2"
+                              style={{ backgroundColor: item.flag }}
                             />
                             <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
                           </div>
@@ -659,7 +593,7 @@ const Main = () => {
                         <td className="px-6 py-4 text-sm text-gray-700">
                           <ul className="list-disc pl-5">
                             {item.positive_summary && (
-                              <li>                           {item.positive_summary}                            </li>
+                              <li>{item.positive_summary}</li>
                             )}
                             {item.negative_summary && (
                               <li>{item.negative_summary}                            </li>

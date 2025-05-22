@@ -1,15 +1,39 @@
 import React from "react";
+import { useState } from "react";
 import Sidebar from "./dashboardComponents/Sidebar";
 import Main from "./dashboardComponents/Main";
+import { Menu } from "lucide-react";
+import { Drawer } from "antd";
 
 const PersonalDashboard = () => {
-
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   return (
     <>
-       <div className="flex flex-col md:flex-row h-screen bg-gray-50">
-      
+      <div className="flex flex-col lg:flex-row items-start justify-center min-h-screen bg-gray-50">
+        {/* Header for mobile */}
+        <div className="lg:hidden grid grid-cols-2 items-center justify-between w-full">
+          <div className="justify-self-start">
+            <Menu size={30} className="ms-3 cp" onClick={showDrawer} />
+          </div>
+          <div className="flex items-center p-4 border-gray-200 justify-self-end">
+            {/* <img src={logo} alt="" /> */}
+            <img src="/images/logo.jpg" alt="" />
+            <span className="ml-2 text-xl font-semibold text-blue-600">
+              LittleHugs
+            </span>
+          </div>
+        </div>
+
         {/* Left Sidebar - hidden on mobile */}
+        <div className="w-64 border-r border-gray-200 bg-white h-[100vh] hidden lg:block">
           <Sidebar />
+        </div>
 
         {/* Main Content and Right Sidebar Container */}
         <div className="flex flex-col lg:flex-row flex-1 w-full">
@@ -20,6 +44,17 @@ const PersonalDashboard = () => {
 
         </div>
       </div>
+      <Drawer
+        closable={{ "aria-label": "Close Button" }}
+        onClose={onClose}
+        placement={"left"}
+        width={300}
+        open={open}
+        title={null}
+        headerStyle={{ display: "none" }}
+      >
+        <Sidebar />
+      </Drawer>
     </>
   );
 };

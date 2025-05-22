@@ -330,31 +330,30 @@ const ProfileUi = () => {
     <>
       <div
         onClick={showModal}
-        className="w-full flex flex-col lg:flex-row gap-2 items-center justify-between rounded-md border-gray-400 cp"
+        className="lg:flex items-center justify-between border p-3 rounded-md border-gray-400 cp"
       >
-        <div className="aspect-square w-full max-w-10 rounded-full bg-gray-300 overflow-hidden">
-          <img
-            src={selectedProfile === 'women' ? womenDP : childDP}
-            alt="Profile"
-            className="w-full h-full object-cover"
-          />
+        <div className="flex items-center">
+          <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden">
+            <img
+              src={selectedProfile === 'women' ? womenDP : childDP}
+              alt="Profile"
+              className="h-full w-auto object-cover"
+            />
+          </div>
+          <span className="ml-2 hidden md:block font-medium">
+            {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
+          </span>
         </div>
-        
-        <span className="ml-2 hidden md:block font-medium">
-          {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
-        </span>
-
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8"
+            className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
           </svg>
         </button>
-        
       </div>
       <Modal
         title="LittleHuges"

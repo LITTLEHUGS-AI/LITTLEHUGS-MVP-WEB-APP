@@ -1,23 +1,31 @@
-import HeaderPersonal from "../HeaderPersonal";
+import ProfileUi from "./ProfileUi";
 import Sidebar from "./Sidebar";
 
 const Plans = () => {
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+    <>
+      <div className="flex h-screen bg-gray-50">
+        {/* Fixed Sidebar - not scrollable */}
+        <div className="w-64 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden lg:block">
+          <Sidebar />
+        </div>
 
-      <Sidebar />
-
-      {/* Main content - scrollable */}
-      <div className="flex-1 overflow-y-auto">
-
-        <HeaderPersonal />
-
-        <div className="max-w-6xl mx-auto">
+        {/* Main content - scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
+            <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
+              <p className="p-0 text-[20px] text-slate-500">
+            In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
+              </p>
+            </div>
+            <div className="col-span-2">
+              <ProfileUi />
+            </div>
+          </div>
 
           {/* Plans Card */}
-          <div className="flex flex-col md:flex-row gap-6 mx-4">
-
+          <div className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto">
             {/* Wellness Starter Plan */}
             <div className="bg-white rounded-lg border-2 border-blue-400 p-8 flex flex-col items-center text-center flex-1">
               <h2 className="text-2xl font-semibold text-gray-700 mb-4">
@@ -335,11 +343,9 @@ const Plans = () => {
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
-    </div>
+    </>
   );
 };
 

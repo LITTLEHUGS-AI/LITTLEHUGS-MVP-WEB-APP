@@ -19,9 +19,9 @@ const Sidebar = () => {
   };
 
   return (
-    <>
+    <div className="bg-white z-50">
       {/* Mobile Top Bar */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b shadow-sm">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b shadow-sm ">
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -41,17 +41,17 @@ const Sidebar = () => {
           md:translate-x-0 md:static md:block`}
       >
         {/* Logo */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-  <div className="flex items-center">
-    <img src="/images/logo.jpg" alt="Logo" className="h-8 w-8" />
-    <span className="ml-2 text-xl font-semibold text-blue-600">
-      LittleHugs
-    </span>
-  </div>
-  <div>
-    <ProfileUi />
-  </div>
-</div>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center">
+            <img src="/images/logo.jpg" alt="Logo" className="h-8 w-8" />
+            <span className="ml-2 text-xl font-semibold text-blue-600">
+              LittleHugs
+            </span>
+          </div>
+          <div>
+            <ProfileUi />
+          </div>
+        </div>
 
         {/* Menu Categories */}
         <div className="p-4">
@@ -130,7 +130,7 @@ const Sidebar = () => {
           className="fixed inset-0 bg-black bg-opacity-30 md:hidden z-40"
         />
       )}
-    </>
+    </div>
   );
 };
 

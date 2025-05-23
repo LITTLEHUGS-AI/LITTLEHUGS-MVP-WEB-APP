@@ -28,11 +28,8 @@ const PersonalAssessment = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Fixed Sidebar - not scrollable */}
-      <div className="w-64 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden lg:block">
+   <div className="flex flex-col md:flex-row h-screen bg-gray-50">
         <Sidebar />
-      </div>
 
       {/* Main content - scrollable */}
       <div className="flex-1 overflow-y-auto">

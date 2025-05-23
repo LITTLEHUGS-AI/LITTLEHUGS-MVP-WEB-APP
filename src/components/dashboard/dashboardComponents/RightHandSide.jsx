@@ -13,7 +13,10 @@ const RightHandSide = ({show}) => {
 
   return (
     <>
-      <ProfileUi />
+    <div className="hidden md:block">
+      <ProfileUi  />
+    </div>
+    
       {show && <div className="my-6">
         <h3 className="text-lg font-medium mb-4">Insight Cards</h3>
         <div className="space-y-4">

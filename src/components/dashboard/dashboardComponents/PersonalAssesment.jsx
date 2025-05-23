@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 import ProfileUi from "./ProfileUi";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
 
 const PersonalAssessment = () => {
@@ -28,8 +28,8 @@ const PersonalAssessment = () => {
 
 
   return (
-   <div className="flex flex-col md:flex-row h-screen bg-gray-50">
-        <Sidebar />
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+      <Sidebar />
 
       {/* Main content - scrollable */}
       <div className="flex-1 overflow-y-auto">
@@ -227,7 +227,7 @@ const PersonalAssessment = () => {
 
 
         {(hideAssessment < 100) && (
-          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-opacity-50 bg-black flex items-center justify-center px-4">
             <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
               <h2 className="text-xl font-bold mb-4">
                 Your Pofile is {hideAssessment}% Completed
@@ -235,7 +235,7 @@ const PersonalAssessment = () => {
               <p className="mb-6">
                 Please Complete your profile first
               </p>
-              <Link to='/personal/dashboard'>Go to Dashboard</Link>
+              <div onClick={() => { const profile = document.getElementById('profile'); if (profile) profile.click() }}>Complete Profile</div>
             </div>
           </div>
         )}

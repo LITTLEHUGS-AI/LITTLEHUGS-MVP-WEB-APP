@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import ProfileUi from "./ProfileUi";
 
 const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -30,6 +31,7 @@ const Sidebar = () => {
             LittleHugs
           </span>
         </div>
+
       </div>
 
       {/* Sidebar */}
@@ -39,12 +41,17 @@ const Sidebar = () => {
           md:translate-x-0 md:static md:block`}
       >
         {/* Logo */}
-        <div className="flex items-center p-4 border-b border-gray-200">
-          <img src="/images/logo.jpg" alt="Logo" className="h-8 w-8" />
-          <span className="ml-2 text-xl font-semibold text-blue-600">
-            LittleHugs
-          </span>
-        </div>
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+  <div className="flex items-center">
+    <img src="/images/logo.jpg" alt="Logo" className="h-8 w-8" />
+    <span className="ml-2 text-xl font-semibold text-blue-600">
+      LittleHugs
+    </span>
+  </div>
+  <div>
+    <ProfileUi />
+  </div>
+</div>
 
         {/* Menu Categories */}
         <div className="p-4">

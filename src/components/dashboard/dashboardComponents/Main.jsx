@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import { getWomenProfileDetails } from "../../../api/dashboard-api";
+import {  getWomenProfileDetails } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -20,6 +20,7 @@ const Main = () => {
   const [profileData, setProfileData] = useState({});
   // const [assessment, setAssessment] = useState({});
   // const [shareAssessmentData, setShareAssessmentData] = useState({});
+
 
   useEffect(() => {
 
@@ -439,7 +440,7 @@ const Main = () => {
 
   return (
 
-    <div className="flex">
+    <div className="flex flex-col md: flex-row">
 
       <div className="flex flex-col flex-1">
         {/* Welcome Banner */}

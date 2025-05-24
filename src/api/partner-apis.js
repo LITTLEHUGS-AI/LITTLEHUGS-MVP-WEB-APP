@@ -59,19 +59,64 @@ export const updateLogo = (file) => {
 
 export const getUniqueUsers = () => {
   return apiService.get("/partner-users/assessments/");
-} 
+}
 
 
 
 
 export function getUniqueEmails(data) {
-    const emailSet = new Set();
-    if (Array.isArray(data.results)) {
-        data.results.forEach(item => {
-            if (item.email) {
-                emailSet.add(item.email);
-            }
-        });
-    }
-    return Array.from(emailSet);
+  let uniqueEmails = [];
+  if (Array.isArray(data)) {
+    data.forEach(item => {
+      if (item.email && !uniqueEmails.includes(item.email)) {
+        uniqueEmails.push(item.email);
+      }
+    });
+  }
+  return Array.from(uniqueEmails);
 }
+
+
+
+export function getUserAssessmentCounts(data) {
+     if (!Array.isArray(data)) {
+        return {
+            completed: 0,
+            notCompleted: 0
+        };
+    }
+
+    const userStatusMap = {};
+
+    data.forEach(record => {
+        const user = record.email;
+        const status = record.status;
+
+        if (!user) return; 
+
+        if (!userStatusMap[user]) {
+            userStatusMap[user] = false;
+        }
+
+        if (status === "completed") {
+            userStatusMap[user] = true;
+        }
+    });
+
+    let completedCount = 0;
+    let notCompletedCount = 0;
+
+    for (const user in userStatusMap) {
+        if (userStatusMap[user]) {
+            completedCount++;
+        } else {
+            notCompletedCount++;
+        }
+    }
+
+    return {
+        completed: completedCount,
+        notCompleted: notCompletedCount
+    };
+}
+

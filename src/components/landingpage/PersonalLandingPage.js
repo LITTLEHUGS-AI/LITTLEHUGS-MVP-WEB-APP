@@ -10,18 +10,18 @@ import DocumentHead from '../common/DocumentHead';
 
 function PersonalLandingPage() {
     const cards = [
-        {
-            title: "LittleHugs 360° Women’s Wellness Assessment",
+      {
+            title: "LittleHugs 360° Women's Wellness Program",
             description:
-                "A high-level mind-body-social scan that gives a complete picture of a woman’s mental health, emotional resilience, self-care capacity, and support system.",
+                "A high-level mind-body-social scan that gives a complete picture of a woman's mental health, emotional resilience, self-care capacity, and support system.",
         },
         {
-            title: "LittleHugs 360° Children’s Wellness Assessment",
+            title: "LittleHugs 360° Children's Wellness Program",
             description:
                 "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
         },
         {
-            title: "Universal SEL Assessment",
+            title: "Universal Coporate Program",
             description:
                 "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
         },
@@ -125,7 +125,7 @@ function PersonalLandingPage() {
                             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-none">
                                 <Link to="/signup" className="w-full sm:w-auto">
                                     <button className="bg-[#283036] text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#1f252b] transition w-full">
-                                        Take the free test
+                                        Explore our Programs
                                     </button>
                                 </Link>
                                 <Link to="/partner#book-a-demoe check in where most sys" className="w-full sm:w-auto">

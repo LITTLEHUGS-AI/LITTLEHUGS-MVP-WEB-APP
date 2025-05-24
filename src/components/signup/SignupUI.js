@@ -54,6 +54,8 @@ function SignupUI({
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
 
+  const [orgType, setorgType] = useState("");
+
   const womenFormRef = useRef(null);
   const childFormRef = useRef(null);
   const partnerFormRef = useRef(null);
@@ -75,6 +77,9 @@ function SignupUI({
       is_personal: selectedUserType === "personal" ? true : false,
       is_organization: selectedUserType === "personal" ? false : true,
     };
+
+    if (selectedUserType === 'partner') data = { ...data, organisation_type: orgType }
+
     onSubmit(data, invitee);
     setEmail(data.email);
   };
@@ -428,6 +433,7 @@ function SignupUI({
         .post("https://api.ourlittdlehugs.com/v1/api/organisation-profile", {
           organisation_name: "My Org",
           description: "Default Description",
+          organisation_type: orgType,
           org_offers: ["offer 1", "offer 2"],
           littlehug_for: ["for 1 ", "for 2"],
         })
@@ -578,13 +584,32 @@ function SignupUI({
                 className="space-y-4"
                 onSubmit={methods.handleSubmit(handleSubmit)}
               >
+
+                {(selectedUserType === 'partner') &&
+                  <select
+                    {...methods.register("organisation_type")}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                    onChange={(e) => { setorgType(e.target.value) }}
+                    required
+                  >
+                    <option value="" hidden selected>
+                      * Organisation Type
+                    </option>
+                    {['Clinics', 'Schools', 'NGO', 'Therapy Centers', 'Corporate'].map((type, i) => (
+                      <option key={i} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                }
+
                 <InputField
                   name="name"
                   fieldId="name"
                   isReadOnly={true}
                   placeHolder="Enter your Name"
-                  readOnly
                 />
+
                 <InputField
                   label="Email"
                   name="email"

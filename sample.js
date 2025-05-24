@@ -265,7 +265,7 @@ function About() {
                     {/* Buttons */}
                     <div className="flex justify-center gap-6">
                         <button className="px-6 py-3 bg-[#29303b] text-white rounded-full text-sm font-medium hover:bg-[#111827] transition">
-                            Take the free test
+                            Explore our Programs
                         </button>
                         <button className="px-6 py-3 border border-[#29303b] text-[#29303b] rounded-full text-sm font-medium hover:bg-gray-100 transition">
                             Partner with us

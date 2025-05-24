@@ -13,10 +13,12 @@ function handleSubmitApi(mutate, data, invite) {
         password: data.password,
         country: data.country,
         language: data.language,
+        organisation_type: data.organisation_type,
         is_personal: data.is_personal,
         is_organization: data.is_organization,
         invite
     };
+    debugger
     return mutate(payload);
 }
 

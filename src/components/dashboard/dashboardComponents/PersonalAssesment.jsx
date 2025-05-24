@@ -67,12 +67,12 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs 360° Women's Wellness Assessment
+              LittleHugs 360° Women's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Mood & emotional balance</li>
                 <li>Anxiety, overthinking</li>
@@ -126,12 +126,12 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs 360° Children's Wellness Assessment
+              LittleHugs 360° Children's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Developmental milestones (motor, speech, cognitive, social)</li>
                 <li>learning, autism signs, behavioral regulation</li>
@@ -186,12 +186,12 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              Universal SEL Assessment
+              Universal Corporate Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Self-Awareness: Emotions, triggers, strengths</li>
                 <li>Self-Regulation: Stress management, impulse control</li>
@@ -246,7 +246,7 @@ const PersonalAssessment = () => {
 
         <div className="flex flex-col flex-1 bg-purple-100 mt-2 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
-            Explore our assessments here
+            Explore Our Programs here
           </h1>
 
           <div className="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto">
@@ -254,7 +254,7 @@ const PersonalAssessment = () => {
             {/* Women's Assessment Card */}
             {type === 'women' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                LittleHugs 360° Women's Wellness Assessment
+                LittleHugs 360° Women's Wellness Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">
@@ -273,7 +273,7 @@ const PersonalAssessment = () => {
             {/* Children's Assessment Card */}
             {type === 'child' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                LittleHugs 360° Children's Wellness Assessment
+                LittleHugs 360° Children's Wellness Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">
@@ -292,7 +292,7 @@ const PersonalAssessment = () => {
             {/* SEL Assessment Card */}
             <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                Universal SEL Assessment
+                Universal Corporate Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">

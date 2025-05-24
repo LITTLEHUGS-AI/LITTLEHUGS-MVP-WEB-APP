@@ -145,7 +145,7 @@ function ForThis() {
                         onClick={() => { navigate("/signup") }}
                         className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-full text-sm sm:text-base"
                     >
-                        Explore Our Assessments
+                        Explore Our Programs
                     </button>
                 </div>
             </div>

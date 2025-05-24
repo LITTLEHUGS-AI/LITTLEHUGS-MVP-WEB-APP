@@ -86,6 +86,7 @@ const ProfileUi = () => {
         getProfileCompletion(women);
         setSelectedWomenGoalOptions([...women.intent])
 
+        fetchCities(res1.country);
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
         store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0]) : getProfileCompletion(women), name: res1.name, women, child: res2.profiles[0] });
@@ -131,11 +132,7 @@ const ProfileUi = () => {
   }
 
 
-
   useEffect(() => {
-
-    fetchCities(womenProfileData.country);
-
     fetch('https://restcountries.com/v3.1/all')
       .then((res) => res.json())
       .then((data) => {
@@ -145,7 +142,12 @@ const ProfileUi = () => {
         setAllLanguages(sortedLanguages);
       })
       .catch((error) => console.error('Error fetching countries:', error));
+  }, [])
 
+
+
+  useEffect(() => {
+    if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
   }, [womenProfileData.country]);
 
 
@@ -483,8 +485,6 @@ const ProfileUi = () => {
                   </select>
                 </div>
 
-<button onClick={()=>console.log(womenProfileData)}>WOmen</button>
-
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
@@ -502,7 +502,10 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Language
                   </label>
-                  <select name="language" value={womenProfileData.languge} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                  <select name="language" value={womenProfileData.language} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                    <option value="" hidden selected>
+                      * Select Language
+                    </option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -703,9 +706,7 @@ const ProfileUi = () => {
                         * Tone Prefrence
                       </option>
                       {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
-                        return (
-                          <option>{tone}</option>
-                        )
+                        return <option key={i}>{tone}</option>;
                       })}
                     </select>
 

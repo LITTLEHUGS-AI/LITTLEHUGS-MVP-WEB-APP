@@ -8,6 +8,7 @@ import {
   getUserLists,
   getUniqueUsers,
   getUniqueEmails,
+  getUserAssessmentCounts,
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
@@ -18,6 +19,9 @@ const PartnerDashboard = () => {
   const [email, setEmail] = useState("");
   const [therapist, setTherapist] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
+  // const [completedUsers, setCompletedUsers] = useState(0);
+  // const [incompleteUsers, setInCompleteUsers] = useState(0);
+
   const [loading, setLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -50,8 +54,10 @@ const PartnerDashboard = () => {
       const options = response.map((member) => ({
         label: member.name,
         value: member.name,
+        email: member.email
       }));
       setTeamMembers(options);
+      setUniqueUsers(getUniqueEmails(response));
     } catch (error) {
       console.error("Error fetching team members:", error);
       toast.error(
@@ -137,7 +143,7 @@ const PartnerDashboard = () => {
     try {
       // setUsersLoading(true);
       const response = await getUniqueUsers();
-      setUniqueUsers(getUniqueEmails(response));
+      // setUniqueUsers(getUniqueEmails(response));
       console.log(uniqueUsers);
 
       if (response.results.length > 0) {
@@ -207,6 +213,15 @@ const PartnerDashboard = () => {
   };
 
 
+
+
+  // useEffect(() => {
+  //   const a = getUserAssessmentCounts(users.results);
+  //   setCompletedUsers(a.completed);
+  //   setInCompleteUsers(a.notCompleted);
+  // }, [users])
+
+
   const formatNumber = (num) => {
     if (num === 0) return "0";
     return num < 10 ? `0${num}` : num;
@@ -227,7 +242,7 @@ const PartnerDashboard = () => {
                 Dashboard
               </span>
               {/* Stat Cards */}
-              <div className="flex flex-col gap-3 md:grid md:grid-cols-3 md:gap-4 w-full">
+              <div className="flex flex-col gap-3 md:grid md:grid-cols-4 md:gap-4 w-full">
                 {/* mobile */}
                 <div className="border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-[#4F7DDD] w-full">
                   <span className="text-base md:text-xl text-white font-normal mb-1">
@@ -273,121 +288,74 @@ const PartnerDashboard = () => {
                     {formatNumber(incompleteCount)}
                   </span>
                 </div>
-              </div>
 
+                <div className="flex flex-col lg:flex-row border border-gray-300 rounded-[16px] p-2">
+                  <div className="flex flex-col flex-start gap-1">
+                    <span className="text-xl text-gray-700 font-normal mb-1">
+                      Completed Assessments
+                    </span>
 
-
-              {/* Unique Users Desktop */}
-              {/* <div className="bg-white">
-                <h1 className="text-2xl font-medium text-gray-800 mb-6 border-b border-gray-300 pb-2">
-                  Overview
-                </h1>
-
-                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                  <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="flex flex-col lg:flex-row items-center gap-8">
+                    <div className="flex items-center gap-1">
                       <div className="relative">
-                        <svg width="200" height="200" viewBox="0 0 200 200" className="transform -rotate-90">
+
+                        <svg width="120" height="120" viewBox="0 0 200 200" class="transform -rotate-90">
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
-                            stroke="#e5e7eb"
-                            strokeWidth="40"
+                            stroke="#DDBEBE"
+                            stroke-width="20"
                           />
+
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
-                            stroke="#8b9dc3"
-                            strokeWidth="40"
-                            strokeDasharray={`0 ${2 * Math.PI * 80}`}
-                            strokeDashoffset="0"
-                          />
-                          <circle
-                            cx="100"
-                            cy="100"
-                            r="80"
-                            fill="none"
-                            stroke="#a8b56b"
-                            strokeWidth="40"
-                            strokeDasharray={`${2 * Math.PI * 80} ${2 * Math.PI * 80}`}
-                            strokeDashoffset="0"
+                            stroke="#D3D3A5"
+                            stroke-width="20"
+                            stroke-dasharray="125.66 376.99"
+                            stroke-dashoffset="0"
                           />
                         </svg>
 
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-3xl font-bold text-gray-800">{uniqueUsers.length }</div>
+                          <div className="text-3xl font-bold text-gray-800">{uniqueUsers.length}</div>
                           <div className="text-sm text-gray-600 text-center">
                             <div>Unique</div>
                             <div>Users</div>
                           </div>
                         </div>
-                      </div>
 
+                      </div>
                       <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-4 h-4 rounded-full bg-[#a8b56b]"></div>
+                          <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
+                            {completedCount}
+                          </div>
                           <span className="text-gray-700 text-sm">
-                            Those who have not completed<br />
-                            atleast 1 assessment
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-4 h-4 rounded-full bg-[#8b9dc3]"></div>
-                          <span className="text-gray-700 text-sm">
-                            Those who completed atleast 1<br />
+                            Users who completed 1<br />
                             assessment
                           </span>
                         </div>
-                      </div>
-                    </div>
-
-                    <div className="flex-1 space-y-4">
-                      <div className="bg-[#a8b56b] rounded-lg p-6 text-white">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="text-sm opacity-90 mb-1">
-                              No of Users have completed
-                            </div>
-                            <div className="text-sm opacity-90">
-                              atleast 1 assessment
-                            </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
+                            {incompleteCount}
                           </div>
-                          <div className="text-5xl font-bold">
-                            03
-                          </div>
+                          <span className="text-gray-700 text-sm">
+                            Users who did not<br />
+                            complete 1 assessment
+                          </span>
                         </div>
                       </div>
 
-                      <div className="bg-[#8b9dc3] rounded-lg p-6 text-white">
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <div className="text-sm opacity-90 mb-1">
-                              No of Users who has/have not
-                            </div>
-                            <div className="text-sm opacity-90">
-                              completed atleast 1 assessment
-                            </div>
-                          </div>
-                          <div className="text-5xl font-bold">
-                            0
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
+
                 </div>
-              </div> */}
 
-
-
-
-
-
-
+              </div>
 
             </div>
           </div>

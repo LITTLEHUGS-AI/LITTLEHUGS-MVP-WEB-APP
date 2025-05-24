@@ -40,7 +40,7 @@ const Navbar = () => {
           <Link to="/partner">For Partners</Link>
         </li>
         <li className={isActive("/assesment") ? "font-bold" : ""}>
-          <Link to="/assesment">Assessments</Link>
+          <Link to="/assesment">Programs</Link>
         </li>
         <li className={isActive("/pricingplans") ? "font-bold" : ""}>
           <Link to="/pricingplans">Pricing</Link>
@@ -54,18 +54,14 @@ const Navbar = () => {
       </ul>
 
       {/* CTA Button */}
-      <div className="hidden sm:block z-20">
-        {isActive("/contact") ? (
-          <div className="w-[120px] h-[42px]"></div>
-        ) : (
+     
           <button
             onClick={() => navigate('/signup')}
             className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
           >
             Try For Free
           </button>
-        )}
-      </div>
+      
 
       {/* Mobile Menu Button */}
       <button
@@ -99,7 +95,7 @@ const Navbar = () => {
             <Link to="/partner" onClick={closeMenu}>For Partners</Link>
           </li>
           <li className={isActive("/assesment") ? "font-bold" : ""}>
-            <Link to="/assesment" onClick={closeMenu}>Assessments</Link>
+            <Link to="/assesment" onClick={closeMenu}>Programs</Link>
           </li>
           <li className={isActive("/pricingplans") ? "font-bold" : ""}>
             <Link to="/pricingplans" onClick={closeMenu}>Pricing</Link>

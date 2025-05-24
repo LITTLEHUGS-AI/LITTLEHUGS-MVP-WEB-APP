@@ -3,10 +3,16 @@ import {
   LayoutDashboard,
   IndianRupee,
   ChartColumnIncreasing,
+  X,
+  Menu,
 } from "lucide-react";
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import ProfileUi from "./ProfileUi";
 
 const Sidebar = () => {
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
     localStorage.clear('accessToken');
@@ -45,50 +51,50 @@ const Sidebar = () => {
 
         </div>
 
-      {/* Menu Categories */}
-      <div className="p-4">
-        <p className="text-xs font-medium text-gray-500 mb-4">MENU</p>
-        <div className="space-y-2">
-          <NavLink
-            to="/personal/dashboard"
-            className={({ isActive }) =>
-              `flex items-center p-2 rounded ${isActive
-                ? "bg-blue-100 text-blue-600"
-                : "text-gray-600 hover:bg-gray-100"
-              }`
-            }
-          >
-            <LayoutDashboard size={20} />
-            <span className="ml-3 font-semibold">Dashboard</span>
-          </NavLink>
+        {/* Menu Categories */}
+        <div className="p-4">
+          <p className="text-xs font-medium text-gray-500 mb-4">MENU</p>
+          <div className="space-y-2">
+            <NavLink
+              to="/personal/dashboard"
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded ${isActive
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-100"
+                }`
+              }
+            >
+              <LayoutDashboard size={20} />
+              <span className="ml-3 font-semibold">Dashboard</span>
+            </NavLink>
 
-          <NavLink
-            to="/personal/plans"
-            className={({ isActive }) =>
-              `flex items-center p-2 rounded ${isActive
-                ? "bg-blue-100 text-blue-600"
-                : "text-gray-600 hover:bg-gray-100"
-              }`
-            }
-          >
-            <IndianRupee size={20} />
-            <span className="ml-3 font-semibold">Plans</span>
-          </NavLink>
+            <NavLink
+              to="/personal/plans"
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded ${isActive
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-100"
+                }`
+              }
+            >
+              <IndianRupee size={20} />
+              <span className="ml-3 font-semibold">Plans</span>
+            </NavLink>
 
-          <NavLink
-            to="/personal/assessment"
-            className={({ isActive }) =>
-              `flex items-center p-2 rounded ${isActive
-                ? "bg-blue-100 text-blue-600"
-                : "text-gray-600 hover:bg-gray-100"
-              }`
-            }
-          >
-            <ChartColumnIncreasing size={20} />
-            <span className="ml-3 font-semibold">Assessment</span>
-          </NavLink>
+            <NavLink
+              to="/personal/assessment"
+              className={({ isActive }) =>
+                `flex items-center p-2 rounded ${isActive
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-100"
+                }`
+              }
+            >
+              <ChartColumnIncreasing size={20} />
+              <span className="ml-3 font-semibold">Assessment</span>
+            </NavLink>
+          </div>
         </div>
-      </div>
 
 
 
@@ -107,7 +113,6 @@ const Sidebar = () => {
               <span className="ml-3 font-semibold">Logout</span>
             </Link>
           </div>
-        </div>
 
           {/* Download App Banner */}
           <div className="mt-2 bg-gray-800 rounded-lg p-4 text-white">
@@ -121,9 +126,12 @@ const Sidebar = () => {
         </div>
 
 
+
       </div>
 
-    </>
+
+    </div>
+
   );
 };
 

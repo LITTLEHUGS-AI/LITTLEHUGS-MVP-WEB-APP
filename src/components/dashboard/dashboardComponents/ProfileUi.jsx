@@ -277,7 +277,6 @@ const ProfileUi = () => {
   const getProfileCompletion = (profile) => {
     //Avoiding city for now
     delete profile.city;
-    delete profile.life_stage;
 
     const keys = Object.keys(profile);
     const totalKeys = keys.length;
@@ -333,7 +332,6 @@ const ProfileUi = () => {
   return (
     <>
       <div
-        id="profile"
         onClick={showModal}
         className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
       >
@@ -352,14 +350,13 @@ const ProfileUi = () => {
         <button className="hidden md:block p-2 text-gray-500 hover:bg-gray-100 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8"
+            className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
           </svg>
         </button>
-
       </div>
       <Modal
         title="LittleHuges"
@@ -372,7 +369,7 @@ const ProfileUi = () => {
       >
         <div className="mx-auto p-6 bg-white rounded-lg">
           <h1 className="flex justify-center items-center gap-2 text-4xl font-medium text-center text-gray-700 mb-8">
-            <span>Profile</span>  <span className="my-auto text-2xl">({completeProfile} %)</span>
+            <span>  Profile </span>  <span className="my-auto text-2xl">({completeProfile} %)</span>
           </h1>
 
 

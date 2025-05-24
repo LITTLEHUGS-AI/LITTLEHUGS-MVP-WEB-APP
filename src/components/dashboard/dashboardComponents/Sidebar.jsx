@@ -36,7 +36,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed z-50 top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out 
+        className={`fixed h-screen  z-50 top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
           md:translate-x-0 md:static md:block`}
       >
@@ -127,11 +127,7 @@ const Sidebar = () => {
             </button>
           </div>
 
-
         </div>
-
-
-
 
 
       </div>

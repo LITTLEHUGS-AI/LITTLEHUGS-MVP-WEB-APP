@@ -8,7 +8,6 @@ import {
   getUserLists,
   getUniqueUsers,
   getUniqueEmails,
-  getUserAssessmentCounts,
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";

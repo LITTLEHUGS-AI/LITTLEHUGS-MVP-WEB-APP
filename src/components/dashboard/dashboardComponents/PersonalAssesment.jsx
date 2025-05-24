@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import ProfileUi from "./ProfileUi";
 
@@ -29,6 +29,7 @@ const PersonalAssessment = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+
       <Sidebar />
 
       {/* Main content - scrollable */}
@@ -186,18 +187,17 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              Universal Corporate Program
+              LittleHugs Corporate Partnership Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Provides:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Self-Awareness: Emotions, triggers, strengths</li>
-                <li>Self-Regulation: Stress management, impulse control</li>
-                <li>Social Awareness: Empathy, inclusion, perspective-taking</li>
-                <li>Relationship Skills: Communication, boundaries, conflict resolution</li>
-                <li>Responsible Decision-Making: Ethics, reflection, choices</li>
+                <li><b>Digital Screening Tools : </b>Developmental, emotional, and behavioral assessments (ASQ, M-CHAT, SDQ, EPDS, GAD-7)</li>
+                <li><b>Smart Dashboards : </b>Risk-flag overviews (Red/Amber/Green), outcome summaries, referral tracking</li>
+                <li><b>Multirole Access & User Management : </b>Admins, therapists, educators, caregivers—all with tailored UX</li>
+                <li><b>Integrated Reports : </b>Auto-generated PDF summaries for caregivers, pediatricians, or therapists</li>
               </ul>
             </div>
 
@@ -230,7 +230,7 @@ const PersonalAssessment = () => {
 
 
         {(hideAssessment < 100) && (
-          <div className="fixed inset-0 bg-opacity-50 bg-black flex items-center justify-center px-4">
+          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
               <h2 className="text-xl font-bold mb-4">
                 Your Pofile is {hideAssessment}% Completed
@@ -238,7 +238,7 @@ const PersonalAssessment = () => {
               <p className="mb-6">
                 Please Complete your profile first
               </p>
-              <div onClick={() => { const profile = document.getElementById('profile'); if (profile) profile.click() }}>Complete Profile</div>
+              <Link to='/personal/dashboard'>Go to Dashboard</Link>
             </div>
           </div>
         )}
@@ -292,7 +292,7 @@ const PersonalAssessment = () => {
             {/* SEL Assessment Card */}
             <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                Universal Corporate Program
+                LittleHugs Corporate Partnership Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">

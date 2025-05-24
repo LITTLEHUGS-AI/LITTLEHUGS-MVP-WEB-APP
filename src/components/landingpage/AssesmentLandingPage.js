@@ -24,7 +24,7 @@ function AssesmentLandingPage() {
                 "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
         },
         {
-            title: "Universal Coporate Program",
+            title: "LittleHugs Corporate Partnership Program",
             description:
                 "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
         },

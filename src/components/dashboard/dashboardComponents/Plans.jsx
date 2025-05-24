@@ -1,3 +1,4 @@
+import ProfileUi from "./ProfileUi";
 import Sidebar from "./Sidebar";
 
 const Plans = () => {
@@ -344,7 +345,9 @@ const Plans = () => {
         
       </div>
     </>
+    </>
   );
 };
 
 export default Plans;
+

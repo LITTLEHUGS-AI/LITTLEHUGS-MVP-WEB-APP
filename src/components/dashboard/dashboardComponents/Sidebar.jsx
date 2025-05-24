@@ -3,21 +3,15 @@ import {
   LayoutDashboard,
   IndianRupee,
   ChartColumnIncreasing,
-  Menu,
-  X,
 } from "lucide-react";
-import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import ProfileUi from "./ProfileUi";
 
 const Sidebar = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
-    localStorage.clear("accessToken");
-    localStorage.clear("userType");
-  };
-
+    localStorage.clear('accessToken');
+    localStorage.clear('userType');
+  }
   return (
     <div className="bg-white z-50">
       {/* Mobile Top Bar */}
@@ -51,50 +45,50 @@ const Sidebar = () => {
 
         </div>
 
-        {/* Menu Categories */}
-        <div className="p-4">
-          <p className="text-xs font-medium text-gray-500 mb-4">MENU</p>
-          <div className="space-y-2">
-            <NavLink
-              to="/personal/dashboard"
-              className={({ isActive }) =>
-                `flex items-center p-2 rounded ${isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
-                }`
-              }
-            >
-              <LayoutDashboard size={20} />
-              <span className="ml-3 font-semibold">Dashboard</span>
-            </NavLink>
+      {/* Menu Categories */}
+      <div className="p-4">
+        <p className="text-xs font-medium text-gray-500 mb-4">MENU</p>
+        <div className="space-y-2">
+          <NavLink
+            to="/personal/dashboard"
+            className={({ isActive }) =>
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
+          >
+            <LayoutDashboard size={20} />
+            <span className="ml-3 font-semibold">Dashboard</span>
+          </NavLink>
 
-            <NavLink
-              to="/personal/plans"
-              className={({ isActive }) =>
-                `flex items-center p-2 rounded ${isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
-                }`
-              }
-            >
-              <IndianRupee size={20} />
-              <span className="ml-3 font-semibold">Plans</span>
-            </NavLink>
+          <NavLink
+            to="/personal/plans"
+            className={({ isActive }) =>
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
+          >
+            <IndianRupee size={20} />
+            <span className="ml-3 font-semibold">Plans</span>
+          </NavLink>
 
-            <NavLink
-              to="/personal/assessment"
-              className={({ isActive }) =>
-                `flex items-center p-2 rounded ${isActive
-                  ? "bg-blue-100 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-100"
-                }`
-              }
-            >
-              <ChartColumnIncreasing size={20} />
-              <span className="ml-3 font-semibold">Assessment</span>
-            </NavLink>
-          </div>
+          <NavLink
+            to="/personal/assessment"
+            className={({ isActive }) =>
+              `flex items-center p-2 rounded ${isActive
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-gray-100"
+              }`
+            }
+          >
+            <ChartColumnIncreasing size={20} />
+            <span className="ml-3 font-semibold">Assessment</span>
+          </NavLink>
         </div>
+      </div>
 
 
 
@@ -108,15 +102,12 @@ const Sidebar = () => {
 
           <p className="text-xs font-medium text-gray-500 mb-1">GENERAL</p>
           <div className="space-y-2">
-            <Link
-              to="/signin"
-              onClick={handleLogout}
-              className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded"
-            >
+            <Link to="/signin" onClick={handleLogout} className="flex items-center p-2 text-gray-600 hover:bg-gray-100 rounded">
               <LogOut size={20} />
               <span className="ml-3 font-semibold">Logout</span>
             </Link>
           </div>
+        </div>
 
           {/* Download App Banner */}
           <div className="mt-2 bg-gray-800 rounded-lg p-4 text-white">
@@ -132,14 +123,7 @@ const Sidebar = () => {
 
       </div>
 
-      {/* Overlay for mobile when sidebar is open */}
-      {sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-30 md:hidden z-40"
-        />
-      )}
-    </div>
+    </>
   );
 };
 

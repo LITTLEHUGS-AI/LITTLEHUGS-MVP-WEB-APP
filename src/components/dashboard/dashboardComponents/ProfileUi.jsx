@@ -330,8 +330,9 @@ const ProfileUi = () => {
 
 
   return (
-    <div id="profile">
+    <div >
       <div
+      id="profile"
         onClick={showModal}
         className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
       >

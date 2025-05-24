@@ -230,7 +230,7 @@ const PersonalAssessment = () => {
 
 
         {(hideAssessment < 100) && (
-          <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-opacity-50 bg-black flex items-center justify-center px-2">
             <div className="bg-white p-6 rounded-lg max-w-md w-full text-center">
               <h2 className="text-xl font-bold mb-4">
                 Your Pofile is {hideAssessment}% Completed
@@ -239,7 +239,7 @@ const PersonalAssessment = () => {
                 Please Complete your profile first
               </p>
               <div onClick={()=>{
-                const profile = document.getElementById('Profile');
+                const profile = document.getElementById('profile');
                 if(profile) profile.click();
               }}>Complete Profile</div>
             </div>

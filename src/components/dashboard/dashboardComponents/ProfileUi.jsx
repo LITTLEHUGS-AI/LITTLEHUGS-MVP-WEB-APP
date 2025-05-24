@@ -330,12 +330,12 @@ const ProfileUi = () => {
 
 
   return (
-    <>
+    <div id="profile">
       <div
         onClick={showModal}
         className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
       >
-        <div className="aspect-square w-full min-w-6 max-w-10 rounded-full bg-gray-300 overflow-hidden">
+        <div className="aspect-square w-full max-w-10 rounded-full bg-gray-300 overflow-hidden">
           <img
             src={selectedProfile === 'women' ? womenDP : childDP}
             alt="Profile"
@@ -350,7 +350,6 @@ const ProfileUi = () => {
         <button className="hidden md:block p-2 text-gray-500 hover:bg-gray-100 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
             className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -822,7 +821,7 @@ const ProfileUi = () => {
 
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 

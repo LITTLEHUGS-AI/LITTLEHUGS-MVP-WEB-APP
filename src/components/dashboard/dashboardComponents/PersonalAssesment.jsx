@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import ProfileUi from "./ProfileUi";
 
@@ -238,7 +238,10 @@ const PersonalAssessment = () => {
               <p className="mb-6">
                 Please Complete your profile first
               </p>
-              <Link to='/personal/dashboard'>Go to Dashboard</Link>
+              <div onClick={()=>{
+                const profile = document.getElementById('Profile');
+                if(profile) profile.click();
+              }}>Complete Profile</div>
             </div>
           </div>
         )}

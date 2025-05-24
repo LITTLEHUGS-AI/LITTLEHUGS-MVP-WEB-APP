@@ -29,7 +29,7 @@ function LandingHeader({ image, bg_color, title, description, sub_title, button_
                 <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
                     <Link to={link != null ? link : "/signup"}>
                         <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                            {button_text ? button_text : "Take the free test"}
+                            {button_text ? button_text : "Explore our Programs"}
                         </button>
                     </Link>
                 </div>

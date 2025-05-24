@@ -24,7 +24,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
               <Link to="/signup" className="w-full sm:w-auto">
                 <button className="w-full sm:w-auto bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                  Take the free test
+                  Explore our Programs
                 </button>
               </Link>
               <Link to="/partner#book-a-demo" className="w-full sm:w-auto">

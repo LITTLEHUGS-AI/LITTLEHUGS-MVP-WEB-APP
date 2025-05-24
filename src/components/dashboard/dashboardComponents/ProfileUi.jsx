@@ -36,7 +36,6 @@ const ProfileUi = () => {
       selected = selectedWomenGoalOptions.filter((item) => item !== option);
     else selected = [...selectedWomenGoalOptions, option];
 
-
     setSelectedWomenGoalOptions((prev) => selected);
 
     setWomenProfileData((prevData) => ({
@@ -87,6 +86,7 @@ const ProfileUi = () => {
         getProfileCompletion(women);
         setSelectedWomenGoalOptions([...women.intent])
 
+        fetchCities(res1.country);
         const res2 = await getChildProfileDetails();
         res2 && setChildProfileData(res2.profiles[0]);
         store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0]) : getProfileCompletion(women), name: res1.name, women, child: res2.profiles[0] });
@@ -132,11 +132,7 @@ const ProfileUi = () => {
   }
 
 
-
   useEffect(() => {
-
-    fetchCities(womenProfileData.country);
-
     fetch('https://restcountries.com/v3.1/all')
       .then((res) => res.json())
       .then((data) => {
@@ -146,7 +142,12 @@ const ProfileUi = () => {
         setAllLanguages(sortedLanguages);
       })
       .catch((error) => console.error('Error fetching countries:', error));
+  }, [])
 
+
+
+  useEffect(() => {
+    if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
   }, [womenProfileData.country]);
 
 
@@ -204,6 +205,8 @@ const ProfileUi = () => {
 
         }
 
+        delete womenProfileData.id;
+        delete womenProfileData.name;
         const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/user-profiles', {
           method: 'PUT',
           headers: {
@@ -330,23 +333,24 @@ const ProfileUi = () => {
     <>
       <div
         onClick={showModal}
-        className="lg:flex items-center justify-between border p-3 rounded-md border-gray-400 cp"
+        className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
       >
-        <div className="flex items-center">
-          <div className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden">
-            <img
-              src={selectedProfile === 'women' ? womenDP : childDP}
-              alt="Profile"
-              className="h-full w-auto object-cover"
-            />
-          </div>
-          <span className="ml-2 hidden md:block font-medium">
-            {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
-          </span>
+        <div className="aspect-square w-full min-w-6 max-w-10 rounded-full bg-gray-300 overflow-hidden">
+          <img
+            src={selectedProfile === 'women' ? womenDP : childDP}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
         </div>
-        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+
+        <span className="ml-2 font-medium">
+          {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
+        </span>
+
+        <button className="hidden md:block p-2 text-gray-500 hover:bg-gray-100 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
             className="h-5 w-5"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -479,7 +483,6 @@ const ProfileUi = () => {
                   </select>
                 </div>
 
-
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
@@ -497,7 +500,10 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Language
                   </label>
-                  <select name="language" value={womenProfileData.languge} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                  <select name="language" value={womenProfileData.language} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                    <option value="" hidden selected>
+                      * Select Language
+                    </option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -698,9 +704,7 @@ const ProfileUi = () => {
                         * Tone Prefrence
                       </option>
                       {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
-                        return (
-                          <option>{tone}</option>
-                        )
+                        return <option key={i}>{tone}</option>;
                       })}
                     </select>
 

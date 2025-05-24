@@ -45,10 +45,10 @@ export const getAssessmentData = async () => {
   }
 };
 
-export const getShareAssessment = async () => {
+export const getShareAssessment = async (userType) => {
   try {
     const response = await axios.get(
-      `https://api.ourlittlehugs.com/v1/api/share-assessment/`,
+      `https://api.ourlittlehugs.com/v1/api/share-assessment/?_type=${userType}`,
       {
         headers: {
           Authorization: localStorage.getItem("accessToken"),

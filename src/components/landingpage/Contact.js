@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Navbar from '../common/Navbar';
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
-import { Link } from 'react-router-dom';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -83,7 +82,7 @@ const Contact = () => {
                     email: '',
                     needFor: ''
                 });
-            console.log(formData);
+                console.log(formData);
             } else {
                 setSubmitStatus({
                     success: false,
@@ -114,12 +113,12 @@ const Contact = () => {
 
                 <div
                     className="flex-grow bg-[#FFF7F2] flex items-center justify-center relative py-8 sm:py-10 md:py-12"
-                    // style={{
-                    //     backgroundImage: "url('/images/waitlist.png'), url('/images/littlehugs-bg.png')",
-                    //     backgroundRepeat: 'no-repeat, no-repeat',
-                    //     backgroundPosition: 'center, bottom left',
-                    //     backgroundSize: 'cover, contain',
-                    // }}
+                // style={{
+                //     backgroundImage: "url('/images/waitlist.png'), url('/images/littlehugs-bg.png')",
+                //     backgroundRepeat: 'no-repeat, no-repeat',
+                //     backgroundPosition: 'center, bottom left',
+                //     backgroundSize: 'cover, contain',
+                // }}
                 >
                     <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 text-center">
                         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium font-quicksand text-[#4A4B4F] mb-3 sm:mb-4 text-center">
@@ -177,12 +176,11 @@ const Contact = () => {
                                     <option value="Personal">Personal</option>
                                 </select>
 
-                                <Link
-                                    to="/signup"
+                                <button type='submit'
                                     className="block bg-[#1D1D1D] text-white px-4 mt-8 sm:px-6 py-2.5 sm:py-3 rounded-full hover:bg-[#333] transition disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base"
                                 >
                                     {isSubmitting ? 'Processing...' : 'Sign Up'}
-                                </Link>
+                                </button>
                             </form>
                         </div>
                     </div>

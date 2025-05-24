@@ -1,8 +1,8 @@
 import Sidebar from "./Sidebar";
-import ProfileUi from "./ProfileUi";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
+import ProfileUi from "./ProfileUi";
 
 const PersonalAssessment = () => {
   const navigate = useNavigate();
@@ -28,24 +28,25 @@ const PersonalAssessment = () => {
 
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Fixed Sidebar - not scrollable */}
-      <div className="w-64 h-screen bg-white border-r border-gray-200 flex-shrink-0 hidden lg:block">
-        <Sidebar />
-      </div>
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+
+      <Sidebar />
 
       {/* Main content - scrollable */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
-          <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
+      <div className="flex-1 m-2 overflow-y-auto">
+
+
+        <div className="flex">
+          <div className="flex-1 flex-grow flex items-center justify-start p-2 border border-gray-400 rounded-md">
             <p className="p-0 text-[20px] text-slate-500">
               In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
             </p>
           </div>
-          <div className="col-span-2">
+          <div className="hidden md:block">
             <ProfileUi />
           </div>
         </div>
+
 
 
         {showPopup === "Women" && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -67,12 +68,12 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs 360° Women's Wellness Assessment
+              LittleHugs 360° Women's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Mood & emotional balance</li>
                 <li>Anxiety, overthinking</li>
@@ -126,12 +127,12 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs 360° Children's Wellness Assessment
+              LittleHugs 360° Children's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Developmental milestones (motor, speech, cognitive, social)</li>
                 <li>learning, autism signs, behavioral regulation</li>
@@ -186,18 +187,17 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              Universal SEL Assessment
+              LittleHugs Corporate Partnership Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Provides:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Self-Awareness: Emotions, triggers, strengths</li>
-                <li>Self-Regulation: Stress management, impulse control</li>
-                <li>Social Awareness: Empathy, inclusion, perspective-taking</li>
-                <li>Relationship Skills: Communication, boundaries, conflict resolution</li>
-                <li>Responsible Decision-Making: Ethics, reflection, choices</li>
+                <li><b>Digital Screening Tools : </b>Developmental, emotional, and behavioral assessments (ASQ, M-CHAT, SDQ, EPDS, GAD-7)</li>
+                <li><b>Smart Dashboards : </b>Risk-flag overviews (Red/Amber/Green), outcome summaries, referral tracking</li>
+                <li><b>Multirole Access & User Management : </b>Admins, therapists, educators, caregivers—all with tailored UX</li>
+                <li><b>Integrated Reports : </b>Auto-generated PDF summaries for caregivers, pediatricians, or therapists</li>
               </ul>
             </div>
 
@@ -244,9 +244,9 @@ const PersonalAssessment = () => {
         )}
 
 
-        <div className="flex flex-col flex-1 bg-purple-100 p-8">
+        <div className="flex flex-col flex-1 bg-purple-100 mt-2 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
-            Explore our assessments here
+            Explore Our Programs here
           </h1>
 
           <div className="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto">
@@ -254,7 +254,7 @@ const PersonalAssessment = () => {
             {/* Women's Assessment Card */}
             {type === 'women' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                LittleHugs 360° Women's Wellness Assessment
+                LittleHugs 360° Women's Wellness Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">
@@ -273,7 +273,7 @@ const PersonalAssessment = () => {
             {/* Children's Assessment Card */}
             {type === 'child' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                LittleHugs 360° Children's Wellness Assessment
+                LittleHugs 360° Children's Wellness Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">
@@ -292,7 +292,7 @@ const PersonalAssessment = () => {
             {/* SEL Assessment Card */}
             <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                Universal SEL Assessment
+                LittleHugs Corporate Partnership Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">
@@ -313,7 +313,7 @@ const PersonalAssessment = () => {
         </div>
 
         {/* completingPercentage */}
-        <div className="flex flex-start border border-slate-500 rounded-md  mt-5 mx-4 mb-4 flex items-start justify-center overflow-hidden">
+        <div className="flex flex-start border border-slate-500 rounded-md mt-5 mx-1 md:mx-4 mb-4 flex items-start justify-center overflow-hidden">
           <img
             alt="Dashboard Collage"
             src="/images/dashboardCollageWeb.png"

@@ -18,7 +18,7 @@ const MainHeader = () => {
                 <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 sm:gap-4">
                     <Link to="/signup" className="w-full sm:w-auto">
                         <button className="bg-gray-800 text-white px-4 sm:px-6 py-2 rounded-full hover:bg-gray-700 transition w-full sm:w-auto text-sm sm:text-base">
-                            Take the free test
+                            Explore our Programs
                         </button>
                     </Link>
                     <Link to="/partner#book-a-demo" className="w-full sm:w-auto mt-3 sm:mt-0">

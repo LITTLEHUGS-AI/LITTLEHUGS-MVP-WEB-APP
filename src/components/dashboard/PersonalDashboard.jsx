@@ -12,7 +12,7 @@ const PersonalDashboard = () => {
         {/* Main Content and Right Sidebar Container */}
         <div className="flex flex-col lg:flex-row flex-1 w-full">
           {/* Main Content */}
-          <div className="flex-1 overflow-auto h-screen scrollbar-thin scrollbar">
+          <div className="flex-1 h-screen">
             <Main />
           </div>
 

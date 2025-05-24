@@ -36,7 +36,6 @@ const ProfileUi = () => {
       selected = selectedWomenGoalOptions.filter((item) => item !== option);
     else selected = [...selectedWomenGoalOptions, option];
 
-
     setSelectedWomenGoalOptions((prev) => selected);
 
     setWomenProfileData((prevData) => ({
@@ -204,6 +203,8 @@ const ProfileUi = () => {
 
         }
 
+        delete womenProfileData.id;
+        delete womenProfileData.name;
         const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/user-profiles', {
           method: 'PUT',
           headers: {
@@ -332,9 +333,9 @@ const ProfileUi = () => {
       <div
         id="profile"
         onClick={showModal}
-        className="w-full flex flex-col lg:flex-row gap-2 items-center justify-between rounded-md border-gray-400 cp"
+        className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
       >
-        <div className="aspect-square w-full max-w-10 rounded-full bg-gray-300 overflow-hidden">
+        <div className="aspect-square w-full min-w-6 max-w-10 rounded-full bg-gray-300 overflow-hidden">
           <img
             src={selectedProfile === 'women' ? womenDP : childDP}
             alt="Profile"
@@ -342,7 +343,7 @@ const ProfileUi = () => {
           />
         </div>
 
-        <span className="ml-2 hidden md:block font-medium">
+        <span className="ml-2 font-medium">
           {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
         </span>
 
@@ -482,6 +483,7 @@ const ProfileUi = () => {
                   </select>
                 </div>
 
+<button onClick={()=>console.log(womenProfileData)}>WOmen</button>
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">

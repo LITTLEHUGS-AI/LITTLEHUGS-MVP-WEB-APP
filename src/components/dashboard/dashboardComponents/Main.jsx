@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import {  getWomenProfileDetails } from "../../../api/dashboard-api";
+import { getWomenProfileDetails } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -18,28 +18,10 @@ const Main = () => {
   const [domainWellnessScore, setDomainWellnessScore] = useState([]);
 
   const [profileData, setProfileData] = useState({});
+  const [IncompletedAssessments, setIncompleteAssessments] = useState(0);
   // const [assessment, setAssessment] = useState({});
   // const [shareAssessmentData, setShareAssessmentData] = useState({});
 
-
-  useEffect(() => {
-
-    getData();
-
-    // (async () => {
-    //   const res = await getAssessmentData();
-    //   res && setAssessment(res);
-    // })();
-
-    // (async () => {
-    //   const res = await getShareAssessment();
-    //   res && setShareAssessmentData(res);
-    // })();
-    // (async () => {
-    //   const res = await getInsightsData();
-    //   res && setInsights(res);
-    // })();
-  }, []);
 
 
 
@@ -108,7 +90,7 @@ const Main = () => {
     // Assessment Date
     doc.text('Assessment Date:', 26, 70);
     doc.text(':', 70, 70);
-    doc.text(assessmentName?.created_at || 'N/A', 80, 70);
+    doc.text((latestdate && new Date(latestdate).toLocaleString()) || 'N/A', 80, 70);
 
     // Overall Wellness Score
     doc.setFontSize(18);
@@ -177,29 +159,32 @@ const Main = () => {
     doc.text('Insights', tableX + tableWidth / 2 + 10, tableY + 7);
 
     // Table rows
-    domainWellnessScore.forEach((outcome, index) => {
-      const y = tableY + 12 + (index * 12);
+    if (domainWellnessScore.length > 0) {
+      domainWellnessScore.forEach((outcome, index) => {
+        const y = tableY + 12 + (index * 12);
 
-      // White background for rows
-      doc.setFillColor(255, 255, 255);
-      doc.rect(tableX, y, tableWidth, 10, 'F');
+        // White background for rows
+        doc.setFillColor(255, 255, 255);
+        doc.rect(tableX, y, tableWidth, 10, 'F');
 
-      // Domain
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      doc.text(outcome.domain, tableX + 10, y + 7);
+        // Domain
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text(outcome.domain, tableX + 10, y + 7);
 
-      // Status indicator
-      const statusX = tableX + tableWidth / 2 - 20;
-      doc.setFillColor(...hexToRgb(outcome.flag));
-      doc.circle(statusX - 5, y + 5, 2, 'F');
+        // Status indicator
+        const statusX = tableX + tableWidth / 2 - 20;
+        doc.setFillColor(...hexToRgb(outcome.flag));
+        doc.circle(statusX - 5, y + 5, 2, 'F');
 
-      // Status text
-      doc.text(outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1), statusX, y + 7);
+        // Status text
+        doc.text(outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1), statusX, y + 7);
 
-      // Insight
-      doc.text(outcome.positive_summary, tableX + tableWidth / 2, y + 7);
-    });
+        // Insight
+        if (outcome.positive_summary)
+          doc.text(outcome.positive_summary, tableX + tableWidth / 2, y + 7);
+      });
+    }
 
 
     doc.addPage();
@@ -220,21 +205,24 @@ const Main = () => {
     const cardSpacing = 8;
     const cardWidth = pageWidth - 30;
 
-    assessmentName.forEach((insight, index) => {
-      const y = cardY + (index * (cardHeight + cardSpacing));
+    if (domainWellnessScore.length > 0) {
+      domainWellnessScore.forEach((insight, index) => {
+        const y = cardY + (index * (cardHeight + cardSpacing));
 
-      // Card background (light lavender)
-      doc.setFillColor(230, 230, 250);
-      doc.roundedRect(20, y, cardWidth, cardHeight, 5, 5, 'F');
+        // Card background (light lavender)
+        doc.setFillColor(230, 230, 250);
+        doc.roundedRect(20, y, cardWidth, cardHeight, 5, 5, 'F');
 
-      // Card text
-      doc.setFontSize(12);
-      doc.setTextColor(60, 60, 90);
-      doc.setFont('helvetica', 'normal');
+        // Card text
+        doc.setFontSize(12);
+        doc.setTextColor(60, 60, 90);
+        doc.setFont('helvetica', 'normal');
 
-      // Center text vertically and horizontally in the card
-      doc.text(insight, pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
-    });
+        // Center text vertically and horizontally in the card
+        doc.text(insight?.domain || 'N/A', pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
+      });
+    }
+
 
     // Next step suggestions heading
     const nextStepY = cardY + (3 * (cardHeight + cardSpacing));
@@ -373,55 +361,77 @@ const Main = () => {
       </div>);
   }
 
-  async function getData() {
-    setIsDataLoading(true);
-    fetch('https://api.ourlittlehugs.com/v1/api/share-assessment', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': localStorage.getItem('accessToken'),
-      }
-    })
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
 
-        return response.json();
-      })
-      .then(data => {
-        if (data.count === 0) {
-          setIsBlur(true);
-          return;
-        }
 
-        let domainInsight = null;
-        let domainIndex = -1;
+  function countMissingKey(jsonArray, keyName) {
+    if (!Array.isArray(jsonArray)) { return 0 }
 
-        for (let i = 0; i < data.results.length; i++) {
-          const result = data.results[i];
-          if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
-            domainInsight = result.assessment_output.domain_insights;
-            domainIndex = i;
-            break;
-          }
-        }
+    let count = 0;
 
-        setIsBlur(false);
-        setData(data);
-        setAssessmentName(data?.results?.[domainIndex]);
-        const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
-        setDomainWellnessScore(domainArray);
-        setLatestDate(data.results[domainIndex].assessment_output.created_at);
-      })
-      .catch(err => toast.error(err.message))
-      .finally(() => setIsDataLoading(false));
+    for (const obj of jsonArray) {
+      if (!obj.hasOwnProperty(keyName) || obj[keyName] === undefined || obj[keyName] === null)
+        count++;
+    }
+
+    return count;
   }
 
 
+
   useEffect(() => {
+
+    const getData = async (current) => {
+      setIsDataLoading(true);
+      fetch(`https://api.ourlittlehugs.com/v1/api/share-assessment?_type=${current}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': localStorage.getItem('accessToken'),
+        }
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          return response.json();
+        })
+        .then(data => {
+          if (data.count === 0) {
+            setIsBlur(true);
+            return;
+          }
+
+          let domainInsight = null;
+          let domainIndex = -1;
+
+          for (let i = 0; i < data.length; i++) {
+            const result = data[i];
+            if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
+              domainInsight = result.assessment_output.domain_insights;
+              domainIndex = i;
+              break;
+            }
+          }
+
+          setIsBlur(false);
+          setData(data);
+          setAssessmentName(data?.[domainIndex]);
+          const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
+          setDomainWellnessScore(domainArray);
+          setLatestDate(data[domainIndex].assessment_output.created_at);
+
+          const incomplete = countMissingKey(data, "assessment_output");
+          setIncompleteAssessments(incomplete);
+        })
+        .catch(err => toast.error(err.message))
+        .finally(() => setIsDataLoading(false));
+    }
+
+
     const dd = store.getData();
     if ((Object.keys(dd).length !== 0)) {
-      if (dd.current === 'child') setProfileData(dd.child)
-      if (dd.current === 'women') setProfileData(dd.women)
+      if (dd.current === 'child') setProfileData(dd.child);
+      if (dd.current === 'women') setProfileData(dd.women);
+      if (dd.current !== undefined) getData(dd.current);
     } else {
       (async () => {
         const res = await getWomenProfileDetails();
@@ -432,6 +442,7 @@ const Main = () => {
     const unsubscribe = store.subscribe((newData) => {
       if (newData.current === 'child') setProfileData(newData.child);
       if (newData.current === 'women') setProfileData(newData.women);
+      if (newData.current !== undefined) getData(newData.current);
     });
 
     return () => unsubscribe();
@@ -440,11 +451,11 @@ const Main = () => {
 
   return (
 
-    <div className="flex flex-col md: flex-row">
+    <div className="flex flex-col md:flex-row">
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 mx-1">
         {/* Welcome Banner */}
-        <div className="bg-blue-100 p-6 mx-4 my-4 rounded-lg">
+        <div className="bg-blue-100 p-6 my-4 rounded-lg">
           <h2 className="text-xl font-medium mb-2">
             Hi {profileData.name ? profileData.name : "UserName"}
             {/* <p>{JSON.stringify(profileData)}</p> */}
@@ -488,44 +499,23 @@ const Main = () => {
               <div className="bg-blue-500 text-white p-4 rounded-lg">
                 <h3 className="text-sm font-medium">Total Assessments</h3>
                 <p className="text-5xl font-bold">
-                  {data.count ? data.count : "0"}
+                  {data.length ? data.length : "0"}
                 </p>
               </div>
               <div className="bg-white border border-gray-200 p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-gray-600">Complete</h3>
                 <p className="text-5xl font-bold">
-                  {/* {assessment.results ? assessment.results.length : "0"} */}
+                  {(data.length - IncompletedAssessments) || "0"}
                 </p>
               </div>
               <div className="bg-white border border-gray-200 p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-gray-600">Incomplete</h3>
-                {Number.isFinite(parseInt(data.count))}
-                {/* <p className="text-5xl font-bold">   {Number.isFinite(parseInt(data.count)) && Number.isFinite(parseInt(assessment.count)) ? parseInt(data.count) - parseInt(assessment.count) : ''}</p> */}
+                <p className="text-5xl font-bold">
+                  {IncompletedAssessments || "0"}
+                </p>
               </div>
             </div>
 
-            {/* <div className="grid grid-cols-12 gap-4 w-full mb-6 items-center">
-            <div className="md:col-span-2 col-span-12">
-              <div className="w-full cp" onClick={openCalendar}>
-                <input
-                  ref={inputRef}
-                  type="date"
-                  className="w-full cp px-4 py-3 text-sm border border-gray-200 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value="2025-09-05"
-                  onChange={(e) => console.log(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="md:col-span-10 col-span-12 p-3 flex-1 flex items-center justify-start gap-4 rounded-md border overflow-x-auto whitespace-nowrap scrollbar-thin">
-              {assessment.results && assessment.results.map((asses, i) => {
-                return (
-                  <div className={`border p-2 rounded-md ${i === 0 ? 'border-blue-400' : 'border-gray-600'} inline-block`}>
-                    <p className="text-blue-400">{asses.assessment_name} </p>
-                  </div>
-                )
-              })}
-            </div>
-          </div> */}
 
             <div className="flex justify-between">
               <div className="my-4"><b>Lastest Assessment Name </b> : {assessmentName?.assessment_output?.assessment_name ?? 'N/A'} </div>

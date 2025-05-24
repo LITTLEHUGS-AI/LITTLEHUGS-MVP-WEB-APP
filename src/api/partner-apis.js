@@ -55,3 +55,23 @@ export const updateLogo = (file) => {
     },
   });
 };
+
+
+export const getUniqueUsers = () => {
+  return apiService.get("/partner-users/assessments/");
+} 
+
+
+
+
+export function getUniqueEmails(data) {
+    const emailSet = new Set();
+    if (Array.isArray(data.results)) {
+        data.results.forEach(item => {
+            if (item.email) {
+                emailSet.add(item.email);
+            }
+        });
+    }
+    return Array.from(emailSet);
+}

@@ -1,8 +1,8 @@
 import Sidebar from "./Sidebar";
-import ProfileUi from "./ProfileUi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import store from "../../../config/storeInstance";
+import ProfileUi from "./ProfileUi";
 
 const PersonalAssessment = () => {
   const navigate = useNavigate();
@@ -32,17 +32,20 @@ const PersonalAssessment = () => {
       <Sidebar />
 
       {/* Main content - scrollable */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-12 items-center justify-center p-4 gap-4">
-          <div className="col-span-10 flex items-center justify-start p-[14px] border border-gray-400 rounded-md">
+      <div className="flex-1 m-2 overflow-y-auto">
+
+
+        <div className="flex">
+          <div className="flex-1 flex-grow flex items-center justify-start p-2 border border-gray-400 rounded-md">
             <p className="p-0 text-[20px] text-slate-500">
               In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
             </p>
           </div>
-          <div className="col-span-2">
+          <div className="hidden md:block">
             <ProfileUi />
           </div>
         </div>
+
 
 
         {showPopup === "Women" && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -241,7 +244,7 @@ const PersonalAssessment = () => {
         )}
 
 
-        <div className="flex flex-col flex-1 bg-purple-100 p-8">
+        <div className="flex flex-col flex-1 bg-purple-100 mt-2 p-8">
           <h1 className="text-3xl text-center text-gray-700 font-medium mb-8">
             Explore our assessments here
           </h1>
@@ -310,7 +313,7 @@ const PersonalAssessment = () => {
         </div>
 
         {/* completingPercentage */}
-        <div className="flex flex-start border border-slate-500 rounded-md  mt-5 mx-4 mb-4 flex items-start justify-center overflow-hidden">
+        <div className="flex flex-start border border-slate-500 rounded-md mt-5 mx-1 md:mx-4 mb-4 flex items-start justify-center overflow-hidden">
           <img
             alt="Dashboard Collage"
             src="/images/dashboardCollageWeb.png"

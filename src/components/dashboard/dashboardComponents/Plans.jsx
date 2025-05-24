@@ -1,4 +1,3 @@
-import HeaderPersonal from "../HeaderPersonal";
 import Sidebar from "./Sidebar";
 
 const Plans = () => {
@@ -11,7 +10,12 @@ const Plans = () => {
       {/* Main content - scrollable */}
       <div className="flex-1 overflow-y-auto">
 
-        <HeaderPersonal />
+      <div className="flex-1 flex-grow flex items-center justify-start p-2 m-4 border border-gray-400 rounded-md">
+            <p className="p-0 text-[20px] text-slate-500">
+                In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be
+            </p>
+        </div>
+
 
         <div className="max-w-6xl mx-auto">
 

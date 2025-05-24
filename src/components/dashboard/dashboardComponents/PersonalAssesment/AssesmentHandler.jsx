@@ -172,14 +172,14 @@ export default function AssesmentHandler() {
             <div className="flex flex-col flex-1 overflow-y-auto">
 
                 <div className="grid grid-cols-12 m-6 gap-4">
-                    <div className="col-span-10 flex items-center justify-center p-[14px] border border-gray-400 rounded-md">
+                    <div className="col-span-12 flex items-center justify-center p-[14px] border border-gray-400 rounded-md">
                         <p className="p-0 text-md lg:text-xl text-slate-500 font-medium">
                             {no === "1" && "You are taking Women Assessment"}
                             {no === "2" && "You are taking Child Assessment"}
                             {no === "3" && "You are taking SEL Assessment"}
                         </p>
                     </div>
-                    <div className="col-span-2 flex">
+                    <div className="hidden col-span-2 flex">
                         <ProfileUi />
                     </div>
                 </div>
@@ -187,7 +187,7 @@ export default function AssesmentHandler() {
 
                 {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />
-                    <div className="text-xl font-bold">Tailoring the questions according to your Profile</div>
+                    <div className="text-xl font-bold">{quesLoding}</div>
                     <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
                 </div> :
                     <>

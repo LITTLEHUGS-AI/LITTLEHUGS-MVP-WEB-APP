@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { PieChart, Pie, Cell } from "recharts";
-import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
 import { Input, Select, Spin } from "antd";
 import {
   getTeamMembers,
   inviteUser,
   getUserLists,
+  getUniqueUsers,
+  getUniqueEmails,
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
@@ -20,6 +21,7 @@ const PartnerDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [uniqueUsers, setUniqueUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
@@ -131,16 +133,45 @@ const PartnerDashboard = () => {
     }
   }, [calculateAssessmentData, calculateDomainData]);
 
+  const fetchUniqueUsers = useCallback(async () => {
+    try {
+      // setUsersLoading(true);
+      const response = await getUniqueUsers();
+      setUniqueUsers(getUniqueEmails(response));
+      console.log(uniqueUsers);
+
+      if (response.results.length > 0) {
+        const completed = response.results.filter(
+          (user) => user.status.toLowerCase() === "completed"
+        ).length;
+        const incomplete = response.count - completed;
+
+        setCompletedCount(completed);
+        setIncompleteCount(incomplete);
+
+        const assessmentChartData = calculateAssessmentData(response.results);
+        setAssessmentData(assessmentChartData);
+
+        const domainChartData = calculateDomainData(response.results);
+        setDomainData(domainChartData);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      toast.error(error?.response?.data?.message || "Failed to fetch users");
+    } finally {
+      setUsersLoading(false);
+    }
+  }, [calculateAssessmentData, calculateDomainData, uniqueUsers]);
+
   useEffect(() => {
     if (!initialFetchDone.current) {
       fetchTeamMembers();
       fetchUsers();
+      fetchUniqueUsers();
       initialFetchDone.current = true;
     }
-  }, [fetchTeamMembers, fetchUsers]);
+  }, [fetchTeamMembers, fetchUsers, fetchUniqueUsers]);
 
-  const handleOpenAddUser = () => setIsAddUserOpen(true);
-  const handleCloseAddUser = () => setIsAddUserOpen(false);
   const handleInviteUser = async () => {
     if (!userName.trim() || !email.trim() || !therapist) {
       toast.error("Please fill in all required fields");
@@ -168,21 +199,13 @@ const PartnerDashboard = () => {
     } catch (error) {
       toast.error(
         error?.response?.data?.detail ||
-          "Failed to invite user. Please try again."
+        "Failed to invite user. Please try again."
       );
     } finally {
       setInviteLoading(false);
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
 
   const formatNumber = (num) => {
     if (num === 0) return "0";
@@ -252,112 +275,120 @@ const PartnerDashboard = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center px-2 md:px-4 p-1">
-                <span className="font-normal text-[16px] md:text-2xl text-gray-700">
-                  Users
-                </span>
-                <div className="flex items-center gap-1">
-                  <button
-                    className="flex items-center gap-1 text-white font-normal text-base px-1 py-1 rounded-[50%] bg-[#4F7DDD]"
-                    onClick={handleOpenAddUser}
-                  >
-                    <Plus size={16} />
-                  </button>
-                  <p
-                    className="text-base font-semibold text-[#4F7DDD] cursor-pointer"
-                    onClick={handleOpenAddUser}
-                  >
-                    Add User
-                  </p>
-                </div>
-              </div>
-              {/* mobile */}
-              <div className="flex flex-col gap-3 md:hidden">
-                {users?.results?.map((u, i) => (
-                  <div
-                    key={i}
-                    className="border border-gray-300 rounded-[12px] bg-white p-3 flex flex-col gap-1"
-                  >
-                    <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                      <span>User Name</span>
-                      <span>{u?.user_name}</span>
+
+
+              {/* Unique Users Desktop */}
+              {/* <div className="bg-white">
+                <h1 className="text-2xl font-medium text-gray-800 mb-6 border-b border-gray-300 pb-2">
+                  Overview
+                </h1>
+
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                  <div className="flex flex-col lg:flex-row gap-8">
+                    <div className="flex flex-col lg:flex-row items-center gap-8">
+                      <div className="relative">
+                        <svg width="200" height="200" viewBox="0 0 200 200" className="transform -rotate-90">
+                          <circle
+                            cx="100"
+                            cy="100"
+                            r="80"
+                            fill="none"
+                            stroke="#e5e7eb"
+                            strokeWidth="40"
+                          />
+                          <circle
+                            cx="100"
+                            cy="100"
+                            r="80"
+                            fill="none"
+                            stroke="#8b9dc3"
+                            strokeWidth="40"
+                            strokeDasharray={`0 ${2 * Math.PI * 80}`}
+                            strokeDashoffset="0"
+                          />
+                          <circle
+                            cx="100"
+                            cy="100"
+                            r="80"
+                            fill="none"
+                            stroke="#a8b56b"
+                            strokeWidth="40"
+                            strokeDasharray={`${2 * Math.PI * 80} ${2 * Math.PI * 80}`}
+                            strokeDashoffset="0"
+                          />
+                        </svg>
+
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <div className="text-3xl font-bold text-gray-800">{uniqueUsers.length }</div>
+                          <div className="text-sm text-gray-600 text-center">
+                            <div>Unique</div>
+                            <div>Users</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-4 h-4 rounded-full bg-[#a8b56b]"></div>
+                          <span className="text-gray-700 text-sm">
+                            Those who have not completed<br />
+                            atleast 1 assessment
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-4 h-4 rounded-full bg-[#8b9dc3]"></div>
+                          <span className="text-gray-700 text-sm">
+                            Those who completed atleast 1<br />
+                            assessment
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                      <span>Assigned therapist</span>
-                      <span>{u?.partner_name}</span>
-                    </div>
-                    <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                      <span>Assessment</span>
-                      <span className="max-w-[120px] truncate">
-                        {u?.assessment_type}
-                      </span>
-                    </div>
-                    <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                      <span>Date</span>
-                      <span>{formatDate(u?.created_date)}</span>
-                    </div>
-                    <div className="flex flex-row justify-between text-xs text-gray-500">
-                      <span>Status</span>
-                      <span>{u?.status}</span>
+
+                    <div className="flex-1 space-y-4">
+                      <div className="bg-[#a8b56b] rounded-lg p-6 text-white">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="text-sm opacity-90 mb-1">
+                              No of Users have completed
+                            </div>
+                            <div className="text-sm opacity-90">
+                              atleast 1 assessment
+                            </div>
+                          </div>
+                          <div className="text-5xl font-bold">
+                            03
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-[#8b9dc3] rounded-lg p-6 text-white">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <div className="text-sm opacity-90 mb-1">
+                              No of Users who has/have not
+                            </div>
+                            <div className="text-sm opacity-90">
+                              completed atleast 1 assessment
+                            </div>
+                          </div>
+                          <div className="text-5xl font-bold">
+                            0
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              {/* desktop */}
-              <div className="hidden md:block border border-gray-300 rounded-[8px] bg-white p-0">
-                <div className="overflow-x-auto px-4 pb-1">
-                  <table className="min-w-full">
-                    <thead className="text-base">
-                      <tr className="text-gray-600 bg-white">
-                        <th className="px-3 py-2 text-left font-normal">
-                          User Name
-                        </th>
-                        <th className="px-3 py-2 text-left font-normal">
-                          Assigned Therapist
-                        </th>
-                        <th className="px-3 py-2 text-left font-normal">
-                          Assessment
-                        </th>
-                        <th className="px-3 py-2 text-left font-normal">
-                          Date
-                        </th>
-                        <th className="px-3 py-2 text-left font-normal">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-base">
-                      {usersLoading ? (
-                        <tr>
-                          <td colSpan="5" className="px-3 py-2 text-center">
-                            <CommonLoader loading={true} />
-                          </td>
-                        </tr>
-                      ) : (
-                        users?.results?.map((u, i) => (
-                          <tr key={i}>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {u?.user_name}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {u?.partner_name}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
-                              {u?.assessment_type}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              {formatDate(u?.created_date)}
-                            </td>
-                            <td className="px-3 py-2 whitespace-nowrap">
-                              <span className="font-normal">{u?.status}</span>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
                 </div>
-              </div>
+              </div> */}
+
+
+
+
+
+
+
+
             </div>
           </div>
 
@@ -457,7 +488,7 @@ const PartnerDashboard = () => {
       {/* Add User Modal */}
       <CommonModal
         open={isAddUserOpen}
-        onCancel={handleCloseAddUser}
+        // onCancel={handleCloseAddUser}
         title={
           <div className="w-full text-center font-semibold text-lg">
             Add User
@@ -507,11 +538,10 @@ const PartnerDashboard = () => {
               loading={inviteLoading}
               disabled={!userName.trim() || !email.trim() || !therapist}
               onClick={handleInviteUser}
-              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${
-                !userName.trim() || !email.trim() || !therapist
-                  ? "bg-[#4F7DDDBF] cursor-not-allowed"
-                  : ""
-              }`}
+              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !therapist
+                ? "bg-[#4F7DDDBF] cursor-not-allowed"
+                : ""
+                }`}
               type="primary"
             >
               {inviteLoading ? "Inviting..." : "Invite User"}

@@ -856,7 +856,7 @@ const   ProfileUi = () => {
                   </label>
                   <div className="flex items-center border rounded-md">
                     <input
-                      type="text"
+                      type="number"
                       name="height"
                       className="flex-grow p-3 outline-none rounded-md"
                       value={childProfileData.height}

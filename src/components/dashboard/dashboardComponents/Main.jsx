@@ -423,7 +423,7 @@ const Main = () => {
           setIncompleteAssessments(incomplete);
         })
         .catch(err => { toast.error(err.message); setStep('blur') })
-        .finally(() => { if (step === 'loading') setStep('blur') });
+        // .finally(() => { if (step === 'loading'){ debugger; setStep('blur')} });
     }
 
 

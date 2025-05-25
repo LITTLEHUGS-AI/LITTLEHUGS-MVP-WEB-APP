@@ -5,6 +5,7 @@ import useSignUp from './useSignup';
 import { signUpValidationSchema } from './ValidationSchema'
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
+import { toast } from 'react-toastify';
 
 function handleSubmitApi(mutate, data, invite) {
     const payload = {
@@ -18,7 +19,6 @@ function handleSubmitApi(mutate, data, invite) {
         is_organization: data.is_organization,
         invite
     };
-    debugger
     return mutate(payload);
 }
 
@@ -48,8 +48,23 @@ function Signup() {
                 navigate('/partner/dashboard')
             }
             if (inviteType.type === 'user') {
-                localStorage.setItem('userType', 'user');
-                navigate('/personal/dashboard')
+
+                fetch("https://api.ourlittlehugs.com/v1/api/mother-profile", {
+                    method: 'POST',
+                    body: JSON.stringify({}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `token ${res.token}`
+                    }
+                }).then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
+                    return response.json();
+                }).then(() => {
+                    localStorage.setItem('userType', 'user');
+                    navigate('/personal/dashboard')
+                }).catch(error => {
+                    toast.error(error.message);
+                });
             }
         }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getChildProfileDetails, getWomenProfileDetails } from "../../../api/dashboard-api";
 import { Modal } from "antd";
 import { Calendar, ChevronDown } from "lucide-react";
@@ -63,39 +63,112 @@ const ProfileUi = () => {
 
 
 
+
+
+  const getProfileCompletion = useCallback((profile) => {
+    // Avoid mutating the original profile object
+    const profileCopy = { ...profile };
+    delete profileCopy.city;
+    delete profileCopy.life_stage;
+
+    const keys = Object.keys(profileCopy);
+    const totalKeys = keys.length;
+
+    if (totalKeys === 0) return 0;
+
+    const completedKeys = keys.filter((key) => {
+      const value = profileCopy[key];
+      if (value === null || value === undefined) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return false;
+      return true;
+    });
+
+    const percentage = Math.round((completedKeys.length / totalKeys) * 100);
+    setCompleteProfile(percentage);
+    return percentage;
+  }, [setCompleteProfile]);
+
+
+
+  const fetchCities = useCallback((country) => {
+    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country: country || 'India' }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.data) {
+          setAllCities(data.data);
+        } else {
+          setAllCities([]);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, [setAllCities]);
+
+
+
+
   useEffect(() => {
     if ((Object.keys(dd).length !== 0)) {
       setWomenProfileData(dd.women);
     }
   }, [dd])
 
+  const initialData = useCallback(async () => {
+    try {
+      const res1 = await getWomenProfileDetails();
 
+      const women = { ...res1.mother_profile };
+      women.name = res1.name;
+      women.city = res1.city;
+      women.country = res1.country;
+      women.language = res1.language;
+
+      if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`);
+      setWomenProfileData({ ...women });
+      getProfileCompletion(women);
+      setSelectedWomenGoalOptions([...women.intent]);
+
+      fetchCities(res1.country);
+
+      const res2 = await getChildProfileDetails();
+      if (res2) setChildProfileData(res2.profiles[0]);
+
+      store.setData({
+        current: selectedProfile,
+        completingPercentage: selectedProfile === 'child'
+          ? getProfileCompletion(res2.profiles[0])
+          : getProfileCompletion(women),
+        name: res1.name,
+        women,
+        child: res2.profiles[0]
+      });
+
+      if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`);
+    } catch (error) {
+      toast.error(error);
+    }
+  }, [
+    setWomenDP,
+    setWomenProfileData,
+    getProfileCompletion,
+    setSelectedWomenGoalOptions,
+    fetchCities,
+    setChildProfileData,
+    setChildDP,
+    selectedProfile,
+  ]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res1 = await getWomenProfileDetails();
 
-        const women = { ...res1.mother_profile };
-        women.name = res1.name;
-        women.city = res1.city;
-        women.country = res1.country;
-        women.language = res1.language;
-        if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`)
-        setWomenProfileData({ ...women });
-        getProfileCompletion(women);
-        setSelectedWomenGoalOptions([...women.intent])
 
-        fetchCities(res1.country);
-        const res2 = await getChildProfileDetails();
-        res2 && setChildProfileData(res2.profiles[0]);
-        store.setData({ current: selectedProfile, completingPercentage: selectedProfile === 'child' ? getProfileCompletion(res2.profiles[0]) : getProfileCompletion(women), name: res1.name, women, child: res2.profiles[0] });
-
-        if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`)
-      } catch (error) {
-        toast.error(error)
-      }
-    })();
+    initialData();
 
     (async () => {
       fetch('https://countriesnow.space/api/v0.1/countries')
@@ -109,27 +182,13 @@ const ProfileUi = () => {
         })
     })();
 
-  }, [selectedProfile]);
+  }, [selectedProfile, initialData]);
 
 
 
 
 
-  function fetchCities(country) {
-    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country: (country || 'India') })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.data) setAllCities(data.data);
-        else setAllCities([]);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }
+
 
 
   useEffect(() => {
@@ -148,7 +207,7 @@ const ProfileUi = () => {
 
   useEffect(() => {
     if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
-  }, [womenProfileData.country]);
+  }, [womenProfileData.country, fetchCities]);
 
 
   const showModal = () => {
@@ -198,7 +257,7 @@ const ProfileUi = () => {
             )
 
             toast.success('Women Image Chnaged Succesfull ');
-            getProfileCompletion(womenProfileData);;
+            window.location.reload();
           } catch (error) {
             console.error('Upload failed:', error);
           }
@@ -221,6 +280,7 @@ const ProfileUi = () => {
 
         toast.success('Mother Profile Updated Succesfull');
         handleCancel();
+        initialData();
       } catch (error) {
         toast.error('Saving Profile failed')
       }
@@ -274,30 +334,6 @@ const ProfileUi = () => {
   };
 
 
-  const getProfileCompletion = (profile) => {
-    //Avoiding city for now
-    delete profile.city;
-
-    const keys = Object.keys(profile);
-    const totalKeys = keys.length;
-
-    if (totalKeys === 0) return 0;
-
-    const completedKeys = keys.filter((key) => {
-      const value = profile[key];
-      if (value === null || value === undefined) return false;
-      if (typeof value === 'string' && value.trim() === '') return false;
-      if (Array.isArray(value) && value.length === 0) return false;
-      if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return false;
-
-      return true;
-    });
-
-    setCompleteProfile(Math.round((completedKeys.length / totalKeys) * 100));
-    return Math.round((completedKeys.length / totalKeys) * 100);
-  };
-
-
 
   // const addChildProfile = async () => {
   //   try {
@@ -332,21 +368,24 @@ const ProfileUi = () => {
   return (
     <div >
       <div
-      id="profile"
+        id="profile"
         onClick={showModal}
-        className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 cp"
+        className="w-full flex gap-2 items-center bg-gray-100 p-1 rounded-md border-gray-400 z-50 cp"
       >
-        <div className="aspect-square w-full max-w-10 rounded-full bg-gray-300 overflow-hidden">
-          <img
-            src={selectedProfile === 'women' ? womenDP : childDP}
-            alt="Profile"
-            className="w-full h-full object-cover"
-          />
-        </div>
 
-        <span className="ml-2 font-medium">
-          {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
-        </span>
+        <div className="flex w-full items-center">
+          <div className="aspect-square w-full max-w-10 rounded-full bg-gray-300 overflow-hidden">
+            <img
+              src={selectedProfile === 'women' ? womenDP : childDP}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <span className="ml-2 font-medium">
+            {selectedProfile === 'women' ? womenProfileData.name : childProfileData.name}
+          </span>
+        </div>
 
         <button className="hidden md:block p-2 text-gray-500 hover:bg-gray-100 rounded-full">
           <svg

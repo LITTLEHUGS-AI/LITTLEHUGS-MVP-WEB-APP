@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import store from "../../../config/storeInstance";
 import axios from "axios";
 
-const ProfileUi = () => {
+const   ProfileUi = () => {
 
   const dd = store.getData();
 
@@ -93,22 +93,36 @@ const ProfileUi = () => {
 
 
   const fetchCities = useCallback((country) => {
-    fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country: country || 'India' }),
+    fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data && data.data) {
-          setAllCities(data.data);
-        } else {
-          setAllCities([]);
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0].name)) {
+          const cities = data[0].name;
+          if (cities.length < 1) toast.error('Got Zero Cities Names');
+          else setAllCities([...cities]);
         }
+        else toast.error('Please Check Cities');
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      .catch(error => { console.error('Error:', error); });
+
+    fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0].name)) {
+          const languages = data[0].name;
+          if (languages.length < 1) toast.error('Got Zero Languages Names');
+          else setAllLanguages([...languages]);
+        }
+        else toast.error('Please Check Languages');
+      })
+      .catch(error => { console.error('Error:', error); });
+
   }, [setAllCities]);
 
 
@@ -171,11 +185,14 @@ const ProfileUi = () => {
     initialData();
 
     (async () => {
-      fetch('https://countriesnow.space/api/v0.1/countries')
+      fetch('https://api.ourlittlehugs.com/v1/api/country')
         .then(response => response.json())
         .then(result => {
-          const countryNames = result.data.map(item => item.country);
-          setAllCountries([...countryNames]);
+          if (Array.isArray(result)) {
+            setAllCountries(result);
+          } else {
+            setAllCountries([]);
+          }
         })
         .catch(error => {
           console.error('Error fetching countries:', error);
@@ -189,19 +206,21 @@ const ProfileUi = () => {
 
 
 
-
-
+  // Fetch Countries
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all')
-      .then((res) => res.json())
-      .then((data) => {
-        const languages = new Set();
-        data.forEach(country => { if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang)) });
-        const sortedLanguages = [...languages].sort();
-        setAllLanguages(sortedLanguages);
+    fetch('https://api.ourlittlehugs.com/v1/api/country/')
+      .then(response => response.json())
+      .then(result => {
+        if (Array.isArray(result)) {
+          setAllCountries(result);
+        } else {
+          setAllCountries([]);
+        }
       })
-      .catch((error) => console.error('Error fetching countries:', error));
-  }, [])
+      .catch(error => {
+        console.error('Error fetching countries:', error);
+      });
+  }, []);
 
 
 
@@ -507,16 +526,15 @@ const ProfileUi = () => {
                   <select
                     name="country"
                     value={womenProfileData.country}
+                    defaultValue=""
                     onChange={handleWomenProfileChange}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                     required
                   >
-                    <option value="" hidden selected>
-                      Select Country
-                    </option>
+                    <option value="" hidden>Select Country</option>
                     {allCountries.map((country, i) => (
-                      <option key={i} value={country}>
-                        {country}
+                      <option key={i} value={country.code}>
+                        {country.name}
                       </option>
                     ))}
                   </select>

@@ -13,12 +13,14 @@ function handleSubmitApi(mutate, data, invite) {
         email: data.email,
         password: data.password,
         country: data.country,
+        city:data.city,
         language: data.language,
         organisation_type: data.organisation_type,
         is_personal: data.is_personal,
         is_organization: data.is_organization,
         invite
     };
+    
     return mutate(payload);
 }
 

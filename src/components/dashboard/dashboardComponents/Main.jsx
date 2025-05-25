@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
-import { getWomenProfileDetails } from "../../../api/dashboard-api";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -9,8 +8,7 @@ import RightHandSide from "./RightHandSide";
 
 const Main = () => {
 
-  const [isBlur, setIsBlur] = useState(true);
-  const [dataLoading, setIsDataLoading] = useState(true);
+  const [step, setStep] = useState('loading');
 
   const [data, setData] = useState({});
   const [latestdate, setLatestDate] = useState(null);
@@ -39,7 +37,9 @@ const Main = () => {
     });
   };
 
-  const userName = 'Ritesh Singh';
+  let userName = "UserName";
+  if (profileData.name !== undefined) userName = profileData.name;
+
   const [assessmentName, setAssessmentName] = useState({});
 
 
@@ -381,7 +381,7 @@ const Main = () => {
   useEffect(() => {
 
     const getData = async (current) => {
-      setIsDataLoading(true);
+      setStep('loading');
       fetch(`https://api.ourlittlehugs.com/v1/api/share-assessment?_type=${current}`, {
         method: 'GET',
         headers: {
@@ -395,8 +395,8 @@ const Main = () => {
           return response.json();
         })
         .then(data => {
-          if (data.count === 0) {
-            setIsBlur(true);
+          if (data.length === 0) {
+            setStep('blur');
             return;
           }
 
@@ -412,7 +412,7 @@ const Main = () => {
             }
           }
 
-          setIsBlur(false);
+          setStep('');
           setData(data);
           setAssessmentName(data?.[domainIndex]);
           const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
@@ -422,22 +422,24 @@ const Main = () => {
           const incomplete = countMissingKey(data, "assessment_output");
           setIncompleteAssessments(incomplete);
         })
-        .catch(err => toast.error(err.message))
-        .finally(() => setIsDataLoading(false));
+        .catch(err => { toast.error(err.message); setStep('blur') })
+        .finally(() => { if (step === 'loading') setStep('blur') });
     }
 
 
-    const dd = store.getData();
-    if ((Object.keys(dd).length !== 0)) {
-      if (dd.current === 'child') setProfileData(dd.child);
-      if (dd.current === 'women') setProfileData(dd.women);
-      if (dd.current !== undefined) getData(dd.current);
-    } else {
-      (async () => {
-        const res = await getWomenProfileDetails();
-        res && setProfileData(res);
-      })();
-    }
+    // const dd = store.getData();
+    // if ((Object.keys(dd).length !== 0)) {
+    //   // if (dd.current === 'child') setProfileData(dd.child);
+    //   // if (dd.current === 'women') setProfileData(dd.women);
+    //   // if (dd.current !== undefined) getData(dd.current);
+    //   // debugger
+    // } else {
+    //   (async () => {
+    //     const res = await getWomenProfileDetails();
+    //     res && setProfileData(res);
+    //     getData('women');
+    //   })();
+    // }
 
     const unsubscribe = store.subscribe((newData) => {
       if (newData.current === 'child') setProfileData(newData.child);
@@ -446,19 +448,18 @@ const Main = () => {
     });
 
     return () => unsubscribe();
-  }, [])
+  }, [step])
 
 
   return (
 
     <div className="flex flex-col md:flex-row">
 
-      <div className="flex flex-col flex-1 mx-1">
+      <div className="flex flex-col flex-1 mx-3">
         {/* Welcome Banner */}
         <div className="bg-blue-100 p-6 my-4 rounded-lg">
           <h2 className="text-xl font-medium mb-2">
             Hi {profileData.name ? profileData.name : "UserName"}
-            {/* <p>{JSON.stringify(profileData)}</p> */}
           </h2>
           <p className="text-gray-700">
             In this moment, nothing is asked of you. You are allowed to pause. To rest. To simply be.
@@ -469,28 +470,30 @@ const Main = () => {
         <div className="w-full">
 
 
-          {dataLoading &&
-            <div className="flex items-center justify-center w-full min-h-screen bg-gray-50">
-              <div className="flex flex-col items-center gap-4 bg-white px-6 py-6 rounded-lg shadow-md text-gray-700">
-                <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-lg font-medium">Your data is loading...</p>
+          {(step === 'loading') &&
+            <div className="fixed inset-0 flex items-center justify-center z-10 px-2">
+              <div className="flex items-center justify-center bg-gray-50">
+                <div className="flex flex-col items-center gap-4 bg-white px-6 py-6 rounded-lg shadow-md text-gray-700">
+                  <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-lg font-medium">Your data is loading...</p>
+                </div>
               </div>
             </div>
           }
 
-          {isBlur &&
-            <div className="flex justify-center items-center w-full">
-              <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
+          {(step === 'blur') && (
+            <div className="fixed inset-0 flex items-center justify-center z-10 px-2">
+              <div className="bg-white p-6 rounded-lg max-w-md w-full ring-2 text-center">
                 <h2 className="text-xl font-semibold">Please Take an Assessment to view your Dashboard</h2>
-                <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 rounded cursor-pointer"  >
+                <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 mx-auto rounded cursor-pointer"  >
                   Go to Assessment
                 </Link>
               </div>
             </div>
-          }
+          )}
 
           {/* Dashboard Content */}
-          <div className={`mx-4 p-6 bg-white rounded-lg border border-gray-200 ${isBlur && 'blur'}`}      >
+          <div className={`p-6 bg-white rounded-lg border border-gray-200 ${(step === 'blur' || step === 'loading') && 'blur'}`}      >
             <h2 className="text-xl font-medium mb-4">Dashboard</h2>
 
 
@@ -610,7 +613,7 @@ const Main = () => {
       </div>
 
       <div className="w-full mt-5 lg:mt-0 lg:w-72 border-t lg:border-l lg:border-t-0 border-gray-200 p-4 h-[100vh] overflow-auto scrollbar-thin">
-        <RightHandSide show={!isBlur} />
+        <RightHandSide show={!!(step === '')} />
       </div>
 
     </div>

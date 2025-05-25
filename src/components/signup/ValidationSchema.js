@@ -49,6 +49,7 @@ const signUpValidationSchema = z
         "Password must include at least one special character."
       ),
     country: z.string().min(1, "Country is required."),
+    city: z.string().min(1, "City is required."),
     language: z.string().min(1, "Mother tongue is required."),
   });
 

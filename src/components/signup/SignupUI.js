@@ -18,9 +18,10 @@ const INITIAL_VALUES = {
   email: "",
   password: "",
   country: "",
+  city:"",
+  language: "",
   organisation_type: "",
   is_organization: false,
-  language: "",
 };
 
 function SignupUI({
@@ -84,11 +85,6 @@ function SignupUI({
     setEmail(data.email);
   };
 
-  // useEffect(() => {
-  //     if (hasAuthenticated) {
-  //         navigate("/personal/dashboard");
-  //     }
-  // }, [hasAuthenticated, navigate]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -317,48 +313,54 @@ function SignupUI({
   }, [childMutation.isError, childMutation?.error]);
 
 
-  // Fetch Countries & Languages Data
+  // Fetch Countries
   useEffect(() => {
-    fetch('https://countriesnow.space/api/v0.1/countries')
+    fetch('https://api.ourlittlehugs.com/v1/api/country/')
       .then(response => response.json())
       .then(result => {
-        const countryNames = result.data.map(item => item.country);
-        setAllCountries([...countryNames]);
+        if (Array.isArray(result)) {
+          setAllCountries(result);
+        } else {
+          setAllCountries([]);
+        }
       })
       .catch(error => {
         console.error('Error fetching countries:', error);
       });
-
-    fetch('https://restcountries.com/v3.1/all')
-      .then((res) => res.json())
-      .then((data) => {
-        const languages = new Set();
-        data.forEach(country => { if (country.languages) Object.values(country.languages).forEach(lang => languages.add(lang)) });
-        const sortedLanguages = [...languages].sort();
-        setAllLanguages(sortedLanguages);
-      })
-      .catch((error) => console.error('Error fetching countries:', error));
   }, []);
 
 
   useEffect(() => {
     if (formData.country) {
-      fetch('https://countriesnow.space/api/v0.1/countries/cities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country: formData.country })
+      fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${formData.country}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
       })
         .then(response => response.json())
         .then(data => {
-          if (data && data.data) {
-            setAllCities(data.data);
-          } else {
-            setAllCities([]);
+          if (Array.isArray(data) && Array.isArray(data[0].name)) {
+            const cities = data[0].name;
+            if (cities.length < 1) toast.error('Got Zero Cities Names');
+            else setAllCities([...cities]);
           }
+          else toast.error('Please Check Cities');
         })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+        .catch(error => { console.error('Error:', error); });
+
+      fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${formData.country}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && Array.isArray(data[0].name)) {
+            const languages = data[0].name;
+            if (languages.length < 1) toast.error('Got Zero Languages Names');
+            else setAllLanguages([...languages]);
+          }
+          else toast.error('Please Check Languages');
+        })
+        .catch(error => { console.error('Error:', error); });
     }
   }, [formData.country])
 
@@ -640,23 +642,23 @@ function SignupUI({
                     * Country
                   </option>
                   {allCountries.map((country, i) => (
-                    <option key={i} value={country}>
-                      {country}
+                    <option key={i} value={country.code}>
+                      {country.name}
                     </option>
                   ))}
                 </select>
 
                 <div className="flex gap-4">
-                  <select {...methods.register("city")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden selected>* City</option>
+                  <select {...methods.register("city")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden>* City</option>
                     {allCities.map((city, i) => (
                       <option key={i} value={city}>
                         {city}
                       </option>
                     ))}
                   </select>
-                  <select  {...methods.register("language")} className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden selected>* Mother Tongue</option>
+                  <select  {...methods.register("language")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
+                    <option value="" hidden>* Mother Tongue</option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}

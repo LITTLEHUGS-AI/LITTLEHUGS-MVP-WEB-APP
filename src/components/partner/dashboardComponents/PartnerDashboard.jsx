@@ -18,8 +18,6 @@ const PartnerDashboard = () => {
   const [email, setEmail] = useState("");
   const [therapist, setTherapist] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
-  // const [completedUsers, setCompletedUsers] = useState(0);
-  // const [incompleteUsers, setInCompleteUsers] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
@@ -288,70 +286,71 @@ const PartnerDashboard = () => {
                   </span>
                 </div>
 
-                <div className="flex flex-col lg:flex-row border border-gray-300 rounded-[16px] p-2">
-                  <div className="flex flex-col flex-start gap-1">
-                    <span className="text-xl text-gray-700 font-normal mb-1">
+                <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
+                  <div className="flex flex-col gap-3 w-full">
+                    <span className="text-lg sm:text-xl text-gray-700 font-normal">
                       Completed Assessments
                     </span>
 
-                    <div className="flex items-center gap-1">
-                      <div className="relative">
-
-                        <svg width="120" height="120" viewBox="0 0 200 200" class="transform -rotate-90">
+                    <div className="flex flex-row items-center gap-4 sm:gap-6 overflow-scroll">
+                      <div className="relative w-[120px] h-[120px]">
+                        <svg
+                          width="120"
+                          height="120"
+                          viewBox="0 0 200 200"
+                          className="transform -rotate-90"
+                        >
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
                             stroke="#DDBEBE"
-                            stroke-width="20"
+                            strokeWidth="20"
                           />
-
                           <circle
                             cx="100"
                             cy="100"
                             r="80"
                             fill="none"
                             stroke="#D3D3A5"
-                            stroke-width="20"
-                            stroke-dasharray="125.66 376.99"
-                            stroke-dashoffset="0"
+                            strokeWidth="20"
+                            strokeDasharray="125.66 376.99"
+                            strokeDashoffset="0"
                           />
                         </svg>
-
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-3xl font-bold text-gray-800">{uniqueUsers.length}</div>
-                          <div className="text-sm text-gray-600 text-center">
+                          <div className="text-2xl sm:text-3xl font-bold text-gray-800">
+                            {uniqueUsers.length}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-600 text-center">
                             <div>Unique</div>
                             <div>Users</div>
                           </div>
                         </div>
-
                       </div>
+
                       <div className="space-y-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
                             {completedCount}
                           </div>
-                          <span className="text-gray-700 text-sm">
-                            Users who completed 1<br />
-                            assessment
+                          <span className="text-gray-700 text-sm leading-tight">
+                            Users who completed 1<br />assessment
                           </span>
                         </div>
+
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
                             {incompleteCount}
                           </div>
-                          <span className="text-gray-700 text-sm">
-                            Users who did not<br />
-                            complete 1 assessment
+                          <span className="text-gray-700 text-sm leading-tight">
+                            Users who did not<br />complete 1 assessment
                           </span>
                         </div>
                       </div>
-
                     </div>
                   </div>
-
                 </div>
 
               </div>

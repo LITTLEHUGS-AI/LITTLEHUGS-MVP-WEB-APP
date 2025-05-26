@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import RightHandSide from "./RightHandSide";
+import { getWomenProfileDetails } from "../../../api/dashboard-api";
 
 const Main = () => {
 
-  const [step, setStep] = useState('loading');
+  const [step, setStep] = useState('');
 
   const [data, setData] = useState({});
   const [latestdate, setLatestDate] = useState(null);
@@ -427,28 +428,29 @@ const Main = () => {
     }
 
 
-    // const dd = store.getData();
-    // if ((Object.keys(dd).length !== 0)) {
-    //   // if (dd.current === 'child') setProfileData(dd.child);
-    //   // if (dd.current === 'women') setProfileData(dd.women);
-    //   // if (dd.current !== undefined) getData(dd.current);
-    //   // debugger
-    // } else {
-    //   (async () => {
-    //     const res = await getWomenProfileDetails();
-    //     res && setProfileData(res);
-    //     getData('women');
-    //   })();
-    // }
+    const dd = store.getData();
+    if ((Object.keys(dd).length !== 0)) {
+      // if (dd.current === 'child') setProfileData(dd.child);
+      // if (dd.current === 'women') setProfileData(dd.women);
+      // if (dd.current !== undefined) getData(dd.current);
+      debugger
+    } else {
+      (async () => {
+        const res = await getWomenProfileDetails();
+        res && setProfileData(res);
+        getData('women');
+      })();
+    }
 
     const unsubscribe = store.subscribe((newData) => {
       if (newData.current === 'child') setProfileData(newData.child);
       if (newData.current === 'women') setProfileData(newData.women);
       if (newData.current !== undefined) getData(newData.current);
+      debugger
     });
 
     return () => unsubscribe();
-  }, [step])
+  }, [])
 
 
   return (

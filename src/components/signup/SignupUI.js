@@ -71,6 +71,21 @@ function SignupUI({
   const [invitee, setInvite] = useState({});
 
 
+  const childGoalDropdownRef = useRef(null);
+  const womenGoalDropdownRef = useRef(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
+      if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
   const handleSubmit = (data) => {
     data = {
       ...data,
@@ -908,7 +923,7 @@ function SignupUI({
 
                             {/* Dropdown menu */}
                             {isWomenGoalOpen && (
-                              <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                              <div ref={womenGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                                 {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
                                   .map((option) => (
                                     <div
@@ -1048,9 +1063,11 @@ function SignupUI({
                             <option>6-12 years</option>
                           </select>
 
+
                           <div>
                             {/* Dropdown button */}
                             <div
+                              
                               className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
                               onClick={toggleChildGoalDropdown}
                             >
@@ -1070,7 +1087,7 @@ function SignupUI({
 
                             {/* Dropdown menu */}
                             {isChildGoalOpen && (
-                              <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                              <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                                 {childOptions.map((option) => (
                                   <div
                                     key={option}
@@ -1092,6 +1109,8 @@ function SignupUI({
                               </div>
                             )}
                           </div>
+
+
                         </div>
                       </form>
                     </div>

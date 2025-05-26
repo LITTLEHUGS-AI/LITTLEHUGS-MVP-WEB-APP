@@ -33,7 +33,7 @@ const Footer = () => {
               gives you a smarter way to care
             </h1>
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/assesment" className="w-full sm:w-auto">
                 <button className="w-full sm:w-auto bg-[#263238] text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
                   Explore our Programs
                 </button>

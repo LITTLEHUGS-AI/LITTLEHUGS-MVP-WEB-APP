@@ -31,7 +31,7 @@ function Signup() {
     const { signUpMutation, visible, handleShowPassword, handleShowConfirmPassword, handleSsoLogin } = useSignUp();
 
     useEffect(() => {
-        if (signUpMutation.isSuccess) {
+        if (signUpMutation.isSuccess && signUpMutation.variables && signUpMutation.variables.invite) {
             if (signUpMutation.variables.invite && Object.keys(signUpMutation.variables.invite).length > 0 && signUpMutation.variables.invite.constructor === Object && signUpMutation.variables.invite.token != null) {
                 localStorage.setItem('accessToken', `token ${signUpMutation.data.token}`);
                 localStorage.setItem('userType', signUpMutation.variables.invite.type);
@@ -39,7 +39,7 @@ function Signup() {
             }
             else setIsOtp(true);
         }
-    }, [navigate, signUpMutation.isSuccess,signUpMutation.variables.invite, isOtp, signUpMutation.data]);
+    }, [navigate, signUpMutation.isSuccess,signUpMutation.variables, isOtp, signUpMutation.data]);
 
     const onSubmit = async (data, inviteType) => {
         await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);

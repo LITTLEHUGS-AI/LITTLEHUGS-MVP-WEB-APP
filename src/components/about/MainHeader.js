@@ -16,7 +16,7 @@ const MainHeader = () => {
                     From the first nudge to the final insight, we're here to make care simpler, stigma-free, and deeply human.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 sm:gap-4">
-                    <Link to="/signup" className="w-full sm:w-auto">
+                    <Link to="/assesment" className="w-full sm:w-auto">
                         <button className="bg-gray-800 text-white px-4 sm:px-6 py-2 rounded-full hover:bg-gray-700 transition w-full sm:w-auto text-sm sm:text-base">
                             Explore our Programs
                         </button>

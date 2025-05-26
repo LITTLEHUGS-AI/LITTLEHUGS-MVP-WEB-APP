@@ -238,10 +238,10 @@ const PersonalAssessment = () => {
               <p className="mb-6">
                 Please Complete your profile first
               </p>
-              <div onClick={()=>{
+              <span className="bg-blue-500 text-white rounded-lg mx-auto p-2 hover:bg-blue-700" onClick={()=>{
                 const profile = document.getElementById('profile');
                 if(profile) profile.click();
-              }}>Complete Profile</div>
+              }}>Complete Profile</span>
             </div>
           </div>
         )}

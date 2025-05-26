@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getChildProfileDetails, getWomenProfileDetails } from "../../../api/dashboard-api";
 import { Modal } from "antd";
 import { Calendar, ChevronDown } from "lucide-react";
@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import store from "../../../config/storeInstance";
 import axios from "axios";
 
-const   ProfileUi = () => {
+const ProfileUi = () => {
 
   const dd = store.getData();
 
@@ -29,20 +29,35 @@ const   ProfileUi = () => {
 
   const [isWomenGoalOpen, setIsWomenGoalOpen] = useState(false);
   const [selectedWomenGoalOptions, setSelectedWomenGoalOptions] = useState([]);
+  const womenGoalDropdownRef = useRef(null);
   const toggleWomenGoalDropdown = () => setIsWomenGoalOpen(!isWomenGoalOpen);
   const toggleWomenGoalOption = (option) => {
     let selected = [];
     if (selectedWomenGoalOptions.some((item) => item === option))
       selected = selectedWomenGoalOptions.filter((item) => item !== option);
     else selected = [...selectedWomenGoalOptions, option];
-
     setSelectedWomenGoalOptions((prev) => selected);
-
     setWomenProfileData((prevData) => ({
       ...prevData,
       "intent": selected
     }));
+  };
 
+
+  const [isChildGoalOpen, setIsChildGoalOpen] = useState(false);
+  const [selectedChildGoalOptions, setSelectedChildGoalOptions] = useState([]);
+  const childGoalDropdownRef = useRef(null);
+  const toggleChildGoalDropdown = () => setIsChildGoalOpen(!isChildGoalOpen);
+  const toggleChildGoalOption = (option) => {
+    let selected = [];
+    if (selectedChildGoalOptions.some((item) => item === option))
+      selected = selectedChildGoalOptions.filter((item) => item !== option);
+    else selected = [...selectedChildGoalOptions, option];
+    setSelectedChildGoalOptions((prev) => selected);
+    setChildProfileData((prevData) => ({
+      ...prevData,
+      "goal": selected
+    }));
   };
 
 
@@ -66,10 +81,8 @@ const   ProfileUi = () => {
 
 
   const getProfileCompletion = useCallback((profile) => {
-    // Avoid mutating the original profile object
+    delete profile.relation_with_child;
     const profileCopy = { ...profile };
-    delete profileCopy.city;
-    delete profileCopy.life_stage;
 
     const keys = Object.keys(profileCopy);
     const totalKeys = keys.length;
@@ -104,7 +117,7 @@ const   ProfileUi = () => {
           if (cities.length < 1) toast.error('Got Zero Cities Names');
           else setAllCities([...cities]);
         }
-        else toast.error('Please Check Cities');
+        // else toast.error('Please Check Cities');
       })
       .catch(error => { console.error('Error:', error); });
 
@@ -119,7 +132,7 @@ const   ProfileUi = () => {
           if (languages.length < 1) toast.error('Got Zero Languages Names');
           else setAllLanguages([...languages]);
         }
-        else toast.error('Please Check Languages');
+        // else toast.error('Please Check Languages');
       })
       .catch(error => { console.error('Error:', error); });
 
@@ -152,7 +165,10 @@ const   ProfileUi = () => {
       fetchCities(res1.country);
 
       const res2 = await getChildProfileDetails();
-      if (res2) setChildProfileData(res2.profiles[0]);
+      if (res2) {
+        setChildProfileData(res2.profiles[0]);
+        setSelectedChildGoalOptions([...res2.profiles[0].goal]);
+      }
 
       store.setData({
         current: selectedProfile,
@@ -203,6 +219,11 @@ const   ProfileUi = () => {
 
 
 
+  useEffect(() => {
+    const handleClickOutsideGoal = (event) => { if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false); };
+    document.addEventListener("mousedown", handleClickOutsideGoal);
+    return () => document.removeEventListener("mousedown", handleClickOutsideGoal);
+  }, []);
 
 
 
@@ -298,8 +319,6 @@ const   ProfileUi = () => {
         if (!response2.ok) throw new Error(`HTTP error! Status: ${response2.status}`);
 
         toast.success('Mother Profile Updated Succesfull');
-        handleCancel();
-        initialData();
       } catch (error) {
         toast.error('Saving Profile failed')
       }
@@ -319,10 +338,7 @@ const   ProfileUi = () => {
           body: JSON.stringify(childProfileData)
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         if (localChildDP !== null) {
           const formData = new FormData();
@@ -341,47 +357,17 @@ const   ProfileUi = () => {
           );
         }
 
-
         toast.success('Child Profile Updated Succesfull');
-        handleCancel();
         getProfileCompletion(childProfileData);;
       } catch (error) {
         toast.error('Upload failed:')
       }
     }
 
+    handleCancel();
+    initialData();
   };
 
-
-
-  // const addChildProfile = async () => {
-  //   try {
-  //     const response = await fetch('https://api.ourlittlehugs.com/v1/api/child-profile', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Authorization':  localStorage.getItem("accessToken"),
-  //       },
-  //       body: JSON.stringify({
-  //     name: 'string',
-  //     dob: '2025-05-16',
-  //     age_group: 'string',
-  //     goal: {},
-  //     relation_with_child: 'string',
-  //     weight: 0,
-  //     height: 0
-  //   })
-  //     });
-
-  //     if (response.ok) {
-  //       const responseData = await response.json();
-  //     } else {
-  //       const errorData = await response.json();
-  //     }
-  //   } catch (err) {
-  //     toast.error(err.message);
-  //   }
-  // };
 
 
   return (
@@ -568,6 +554,9 @@ const   ProfileUi = () => {
                     ))}
                   </select>
                 </div>
+
+
+
               </div>
 
 
@@ -595,8 +584,10 @@ const   ProfileUi = () => {
                   </label>
                   <div className="flex items-center border rounded-md">
                     <select
-                      name="lifeStage"
+                      name="life_stage"
                       className="w-full border p-2 rounded border rounded-md"
+                      value={womenProfileData.life_stage}
+                      onChange={(e) => handleWomenProfileChange(e)}
                       required
                     >
                       <option value="" disabled hidden>
@@ -646,8 +637,8 @@ const   ProfileUi = () => {
                     <span className="text-gray-400 mr-3">cm</span>
                   </div>
                 </div>
-              </div>
 
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
@@ -684,25 +675,11 @@ const   ProfileUi = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="relative">
+                <div className="relative" ref={womenGoalDropdownRef}>
                   <label className="block text-sm text-gray-500 mb-1">
                     * Goal is to work on
                   </label>
-                  {/* <select name="intent" value={womenProfileData.intent} className="w-full border p-2 rounded border rounded-md" onChange={(e) => handleWomenProfileChange(e)} required>
-                    <option value="" disabled hidden>
-                      * Goal
-                    </option>
-                    <option>Nuclear Family</option>
-                    <option>Joint Family</option>
-                    <option>Single Parent</option>
-                    <option>Shared Accommodation / Hostel</option>
-                    <option>Urban / Metro City</option>
-                    <option>Suburban / Town</option>
-                    <option>Rural / Village</option>
-                  </select> */}
-
                   <div>
-                    {/* Dropdown button */}
                     <div
                       className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
                       onClick={toggleWomenGoalDropdown}
@@ -782,7 +759,6 @@ const   ProfileUi = () => {
 
           {selectedProfile === 'child' &&
             <form >
-              <button type="button" onClick={() => console.table(childProfileData)} >Child</button>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -863,6 +839,59 @@ const   ProfileUi = () => {
                       onChange={handleChildProfileChange}
                     />
                     <span className="text-gray-400 mr-3`">cm</span>
+                  </div>
+                </div>
+
+
+                <div className="relative" ref={childGoalDropdownRef}>
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Goal is to work on
+                  </label>
+                  <div>
+                    <div
+                      className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
+                      onClick={toggleChildGoalDropdown}
+                    >
+                      {selectedChildGoalOptions.length === 0 ? (
+                        <span className="text-gray-500">
+                          * Goal is to work on
+                        </span>
+                      ) : (
+                        selectedChildGoalOptions.map((option) => (
+                          <div
+                            key={option}
+                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                          >
+                            <span>{option}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {isChildGoalOpen && (
+                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                        {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                          .map((option) => (
+                            <div
+                              key={option}
+                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                (item) => item === option
+                              )
+                                ? "bg-blue-50"
+                                : ""
+                                }`}
+                              onClick={() => toggleChildGoalOption(option)}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedChildGoalOptions.some((item) => item === option)}
+                                readOnly
+                                className="mr-2"
+                              />
+                              {option}
+                            </div>
+                          ))}
+                      </div>)}
                   </div>
                 </div>
 

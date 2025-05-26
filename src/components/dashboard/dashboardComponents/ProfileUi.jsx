@@ -77,10 +77,8 @@ const ProfileUi = () => {
   };
 
 
-
-
-
   const getProfileCompletion = useCallback((profile) => {
+    delete profile.image;
     delete profile.relation_with_child;
     const profileCopy = { ...profile };
 
@@ -147,6 +145,18 @@ const ProfileUi = () => {
     }
   }, [dd])
 
+
+  // [
+  //   setWomenDP,
+  //   setWomenProfileData,
+  //   getProfileCompletion,
+  //   setSelectedWomenGoalOptions,
+  //   setChildProfileData,
+  //   setChildDP,
+  //   selectedProfile,
+  // ]
+
+
   const initialData = useCallback(async () => {
     try {
       const res1 = await getWomenProfileDetails();
@@ -184,22 +194,14 @@ const ProfileUi = () => {
     } catch (error) {
       toast.error(error);
     }
-  }, [
-    setWomenDP,
-    setWomenProfileData,
-    getProfileCompletion,
-    setSelectedWomenGoalOptions,
-    fetchCities,
-    setChildProfileData,
-    setChildDP,
-    selectedProfile,
-  ]);
+  }, [fetchCities, getProfileCompletion, selectedProfile]);
+
+
+
+  useEffect(() => { initialData(); }, [initialData]);
+
 
   useEffect(() => {
-
-
-    initialData();
-
     (async () => {
       fetch('https://api.ourlittlehugs.com/v1/api/country')
         .then(response => response.json())
@@ -214,13 +216,15 @@ const ProfileUi = () => {
           console.error('Error fetching countries:', error);
         })
     })();
-
-  }, [selectedProfile, initialData]);
+  }, []);
 
 
 
   useEffect(() => {
-    const handleClickOutsideGoal = (event) => { if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false); };
+    const handleClickOutsideGoal = (event) => {
+      if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
+      if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
+    };
     document.addEventListener("mousedown", handleClickOutsideGoal);
     return () => document.removeEventListener("mousedown", handleClickOutsideGoal);
   }, []);
@@ -245,9 +249,9 @@ const ProfileUi = () => {
 
 
 
-  useEffect(() => {
-    if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
-  }, [womenProfileData.country, fetchCities]);
+  // useEffect(() => {
+  //   if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
+  // }, [womenProfileData.country, fetchCities]);
 
 
   const showModal = () => {
@@ -322,8 +326,8 @@ const ProfileUi = () => {
       } catch (error) {
         toast.error('Saving Profile failed')
       }
-
     }
+
 
     if (selectedProfile === 'child') {
       try {
@@ -358,7 +362,7 @@ const ProfileUi = () => {
         }
 
         toast.success('Child Profile Updated Succesfull');
-        getProfileCompletion(childProfileData);;
+        getProfileCompletion(childProfileData);
       } catch (error) {
         toast.error('Upload failed:')
       }
@@ -430,6 +434,11 @@ const ProfileUi = () => {
                     onClick={() => {
                       setSelectedProfile("women");
                       getProfileCompletion(womenProfileData);
+                      store.setData({
+                        current: "women",
+                        completingPercentage: getProfileCompletion(womenProfileData),
+                        name: womenProfileData.name,
+                      });
                     }}
                     alt="Women Profile"
                     src={womenDP}
@@ -467,6 +476,11 @@ const ProfileUi = () => {
                     onClick={() => {
                       setSelectedProfile("child");
                       getProfileCompletion(childProfileData);
+                      store.setData({
+                        current: "child",
+                        completingPercentage: getProfileCompletion(childProfileData),
+                        name: childProfileData.name,
+                      });
                     }}
                     alt="Child Profile"
                     src={childDP}
@@ -843,7 +857,7 @@ const ProfileUi = () => {
                 </div>
 
 
-                <div className="relative" ref={childGoalDropdownRef}>
+                <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * Goal is to work on
                   </label>
@@ -869,7 +883,7 @@ const ProfileUi = () => {
                     </div>
 
                     {isChildGoalOpen && (
-                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                      <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                         {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
                           .map((option) => (
                             <div

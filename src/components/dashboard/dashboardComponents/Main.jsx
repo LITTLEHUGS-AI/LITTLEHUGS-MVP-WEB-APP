@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import RightHandSide from "./RightHandSide";
-import { getWomenProfileDetails } from "../../../api/dashboard-api";
 
 const Main = () => {
 
-  const [step, setStep] = useState('');
+  const [step, setStep] = useState('loading');
 
   const [data, setData] = useState({});
   const [latestdate, setLatestDate] = useState(null);
@@ -490,54 +489,59 @@ const Main = () => {
 
 
 
-  useEffect(() => {
 
-    const getData = async (current) => {
-      setStep('loading');
-      fetch(`https://api.ourlittlehugs.com/v1/api/share-assessment?_type=${current}`, {
+
+  const getData = useCallback(async (current) => {
+    setStep('loading');
+
+    try {
+      const response = await fetch(`https://api.ourlittlehugs.com/v1/api/share-assessment?_type=${current}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Authorization': localStorage.getItem('accessToken'),
         }
-      })
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
+      });
 
-          return response.json();
-        })
-        .then(data => {
-          if (data.length === 0) {
-            setStep('blur');
-            return;
-          }
+      if (!response.ok) throw new Error('Network response was not ok');
 
-          let domainInsight = null;
-          let domainIndex = -1;
+      const data = await response.json();
 
-          for (let i = 0; i < data.length; i++) {
-            const result = data[i];
-            if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
-              domainInsight = result.assessment_output.domain_insights;
-              domainIndex = i;
-              break;
-            }
-          }
+      if (data.length === 0) {
+        setStep('blur');
+        return;
+      }
 
-          setStep('');
-          setData(data);
-          setAssessmentName(data?.[domainIndex]);
-          const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
-          setDomainWellnessScore(domainArray);
-          setLatestDate(data[domainIndex].assessment_output.created_at);
+      let domainInsight = null;
+      let domainIndex = -1;
 
-          const incomplete = countMissingKey(data, "assessment_output");
-          setIncompleteAssessments(incomplete);
-        })
-        .catch(err => { toast.error(err.message); setStep('blur') })
-      // .finally(() => { if (step === 'loading'){ debugger; setStep('blur')} });
+      for (let i = 0; i < data.length; i++) {
+        const result = data[i];
+        if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
+          domainInsight = result.assessment_output.domain_insights;
+          domainIndex = i;
+          break;
+        }
+      }
+
+      setStep('');
+      setData(data);
+      setAssessmentName(data?.[domainIndex]);
+      const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
+      setDomainWellnessScore(domainArray);
+      setLatestDate(data[domainIndex].assessment_output.created_at);
+
+      const incomplete = countMissingKey(data, "assessment_output");
+      setIncompleteAssessments(incomplete);
+    } catch (err) {
+      toast.error(err.message);
+      setStep('blur');
     }
+  }, [setStep, setData, setAssessmentName, setDomainWellnessScore, setLatestDate, setIncompleteAssessments]);
 
+
+
+  useEffect(() => {
 
     const dd = store.getData();
     if ((Object.keys(dd).length !== 0)) {
@@ -545,21 +549,21 @@ const Main = () => {
       // if (dd.current === 'women') setProfileData(dd.women);
       // if (dd.current !== undefined) getData(dd.current);
     } else {
-      (async () => {
-        const res = await getWomenProfileDetails();
-        res && setProfileData(res);
-        getData('women');
-      })();
+      // (async () => {
+      //   const res = await getWomenProfileDetails();
+      //   res && setProfileData(res);
+      //   getData('women');
+      // })();
     }
 
     const unsubscribe = store.subscribe((newData) => {
       if (newData.current === 'child') setProfileData(newData.child);
       if (newData.current === 'women') setProfileData(newData.women);
-      if (newData.current !== undefined) getData(newData.current);
+      if (newData.current !== undefined) { getData(newData.current) };
     });
 
     return () => unsubscribe();
-  }, [])
+  }, [getData])
 
 
   return (
@@ -723,7 +727,7 @@ const Main = () => {
         </div>
       </div>
 
-      <div className="w-full mt-5 lg:mt-0 lg:w-72 border-t lg:border-l lg:border-t-0 border-gray-200 p-4 h-[100vh] overflow-auto scrollbar-thin">
+      <div className="w-full mt-5 lg:mt-0 lg:w-72 border-t lg:border-l lg:border-t-0 border-gray-200 p-4 h-[100vh] z-50 overflow-auto scrollbar-thin">
         <RightHandSide show={!!(step === '')} />
       </div>
 

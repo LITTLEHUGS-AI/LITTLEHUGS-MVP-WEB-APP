@@ -18,7 +18,7 @@ const INITIAL_VALUES = {
   email: "",
   password: "",
   country: "",
-  city:"",
+  city: "",
   language: "",
   organisation_type: "",
   is_organization: false,
@@ -71,7 +71,6 @@ function SignupUI({
   const [invitee, setInvite] = useState({});
 
 
-
   const handleSubmit = (data) => {
     data = {
       ...data,
@@ -85,12 +84,14 @@ function SignupUI({
     setEmail(data.email);
   };
 
-
   useEffect(() => {
     if (isSuccess) {
       methods.reset(INITIAL_VALUES);
+      if (isOtp === false && invitee && Object.keys(invitee).length > 0) {
+        setShowPopup(1);
+      }
     }
-  }, [isSuccess, methods, invitee, navigate]);
+  }, [isSuccess, methods, invitee, isOtp, navigate]);
 
   const handleLogin = (logintype) => {
     let redirect_url = "";
@@ -343,7 +344,7 @@ function SignupUI({
             if (cities.length < 1) toast.error('Got Zero Cities Names');
             else setAllCities([...cities]);
           }
-          else toast.error('Please Check Cities');
+          // else toast.error('Please Check Cities');
         })
         .catch(error => { console.error('Error:', error); });
 
@@ -358,7 +359,7 @@ function SignupUI({
             if (languages.length < 1) toast.error('Got Zero Languages Names');
             else setAllLanguages([...languages]);
           }
-          else toast.error('Please Check Languages');
+          // else toast.error('Please Check Languages');
         })
         .catch(error => { console.error('Error:', error); });
     }

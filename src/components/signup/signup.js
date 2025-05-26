@@ -5,7 +5,7 @@ import useSignUp from './useSignup';
 import { signUpValidationSchema } from './ValidationSchema'
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
-import { toast } from 'react-toastify';
+import { setupApiAccessToken } from '../../api/api-client';
 
 function handleSubmitApi(mutate, data, invite) {
     const payload = {
@@ -13,14 +13,14 @@ function handleSubmitApi(mutate, data, invite) {
         email: data.email,
         password: data.password,
         country: data.country,
-        city:data.city,
+        city: data.city,
         language: data.language,
         organisation_type: data.organisation_type,
         is_personal: data.is_personal,
         is_organization: data.is_organization,
         invite
     };
-    
+
     return mutate(payload);
 }
 
@@ -32,43 +32,45 @@ function Signup() {
 
     useEffect(() => {
         if (signUpMutation.isSuccess) {
-            //Check if it a Invite or Gernal Signup
-            if (signUpMutation.data.organization);
-
+            if (signUpMutation.variables.invite && Object.keys(signUpMutation.variables.invite).length > 0 && signUpMutation.variables.invite.constructor === Object && signUpMutation.variables.invite.token != null) {
+                localStorage.setItem('accessToken', `token ${signUpMutation.data.token}`);
+                localStorage.setItem('userType', signUpMutation.variables.invite.type);
+                setupApiAccessToken(`token ${signUpMutation.data.token}`)
+            }
             else setIsOtp(true);
         }
-    }, [navigate, signUpMutation.isSuccess, signUpMutation.data]);
+    }, [navigate, signUpMutation.isSuccess,signUpMutation.variables.invite, isOtp, signUpMutation.data]);
 
     const onSubmit = async (data, inviteType) => {
-        const res = await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);
+        await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);
 
-        if (inviteType.token) {
-            // toast.success('Registration Successfull');
-            localStorage.setItem('accessToken', `token ${res.token}`);
-            if (inviteType.type === 'team') {
-                localStorage.setItem('userType', 'partner');
-                navigate('/partner/dashboard')
-            }
-            if (inviteType.type === 'user') {
+        // if (inviteType.token) {
+        //     // toast.success('Registration Successfull');
+        //     localStorage.setItem('accessToken', `token ${res.token}`);
+        //     if (inviteType.type === 'team') {
+        //         localStorage.setItem('userType', 'partner');
+        //         navigate('/partner/dashboard')
+        //     }
+        //     if (inviteType.type === 'user') {
 
-                fetch("https://api.ourlittlehugs.com/v1/api/mother-profile", {
-                    method: 'POST',
-                    body: JSON.stringify({}),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `token ${res.token}`
-                    }
-                }).then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
-                    return response.json();
-                }).then(() => {
-                    localStorage.setItem('userType', 'user');
-                    navigate('/personal/dashboard')
-                }).catch(error => {
-                    toast.error(error.message);
-                });
-            }
-        }
+        //         fetch("https://api.ourlittlehugs.com/v1/api/mother-profile", {
+        //             method: 'POST',
+        //             body: JSON.stringify({}),
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Authorization': `token ${res.token}`
+        //             }
+        //         }).then(response => {
+        //             if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
+        //             return response.json();
+        //         }).then(() => {
+        //             localStorage.setItem('userType', 'user');
+        //             navigate('/personal/dashboard')
+        //         }).catch(error => {
+        //             toast.error(error.message);
+        //         });
+        //     }
+        // }
 
     }
 

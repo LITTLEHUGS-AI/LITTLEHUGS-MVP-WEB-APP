@@ -72,83 +72,145 @@ const Main = () => {
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Downloaded on : ${data.created_at}`, pageWidth / 2 + 16, 21, { align: 'center' });
+    doc.text(`Downloaded on : ${assessmentName.created_at}`, pageWidth / 2 + 16, 23, { align: 'center' });
 
     // Add user details - align left for label, proper spacing for value
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
 
     // User Name
-    doc.text('User Name', 26, 50);
-    doc.text(':', 70, 50);
-    doc.text(userName, 80, 50);
+    doc.text('User Name', 26, 40);
+    doc.text(':', 70, 40);
+    doc.text(userName, 80, 40);
 
     // Assessment Name
-    doc.text('Assessment Name', 26, 60);
-    doc.text(':', 70, 60);
-    doc.text(assessmentName?.assessment_output?.assessment_name || 'N/A', 80, 60);
+    doc.text('Assessment Name', 26, 50);
+    doc.text(':', 70, 50);
+    doc.text(assessmentName?.assessment_output?.assessment_name || 'N/A', 80, 50);
 
     // Assessment Date
-    doc.text('Assessment Date:', 26, 70);
-    doc.text(':', 70, 70);
-    doc.text((latestdate && new Date(latestdate).toLocaleString()) || 'N/A', 80, 70);
+    doc.text('Assessment Date:', 26, 60);
+    doc.text(':', 70, 60);
+    doc.text((latestdate && new Date(latestdate).toLocaleString()) || 'N/A', 80, 60);
 
     // Overall Wellness Score
     doc.setFontSize(18);
-    doc.setTextColor(65, 105, 225);
+    doc.setTextColor(65, 105, 215);
     doc.setFont('helvetica', 'bold');
     doc.text('Overall Wellness Score', pageWidth / 2, 90, { align: 'center' });
 
     // Score
     doc.setFontSize(36);
-    doc.setTextColor(80, 80, 80);
+    doc.setTextColor(80, 80, 70);
     doc.text(`${assessmentName?.assessment_output?.overall_assessment?.score || 'N/A'}/100`, pageWidth / 2, 105, { align: 'center' });
 
     // Top Five Domains
     doc.setFontSize(18);
     doc.setTextColor(65, 105, 225);
-    doc.text('Top Five Domains', pageWidth / 2, 130, { align: 'center' });
+    doc.text('Top Five Domains', pageWidth / 2, 120, { align: 'center' });
 
     // Domain visualization (simplified with proper spacing)
     const domainWidth = 30;
     const domainSpacing = 8;
     const totalWidth = (domainWidth * 5) + (domainSpacing * 4);
     const domainStartX = (pageWidth - totalWidth) / 2;
-    const domainY = 135;
+    const domainY = 125;
+
+
+
+
+
+
+
+
+
+
+
+    //     const domainStartX = 20; // Start further from edge
+    // const domainY = 50; // Adjust vertical position
+    // const domainWidth = 35;
+    // const domainSpacing = 2; // Reduced spacing for better fit
+    const rectHeight = 40; // Slightly taller rectangles
 
     domainWellnessScore.forEach((domain, index) => {
       const x = domainStartX + (index * (domainWidth + domainSpacing));
 
-      // Rectangle background
+      // Enhanced rectangle with rounded corners effect
       doc.setFillColor(...hexToRgb(domain.flag));
-      doc.rect(x, domainY, domainWidth, 38, 'F');
+      doc.roundedRect(x, domainY, domainWidth, rectHeight, 2, 2, 'F');
 
-      // Domain name
-      doc.setFontSize(8);
+      // Add subtle border for definition
+      doc.setDrawColor(0, 0, 0, 0.1);
+      doc.setLineWidth(0.2);
+      doc.roundedRect(x, domainY, domainWidth, rectHeight, 2, 2, 'S');
+
+      // Domain name with better text wrapping
+      doc.setFontSize(7);
       doc.setTextColor(0, 0, 0);
-      doc.text(domain?.domain, x + domainWidth / 2, domainY + 10, { align: 'center' });
+      doc.setFont('helvetica', 'bold');
 
-      // Circle for score
+      // Split long domain names into multiple lines
+      const domainText = domain?.domain || '';
+      const words = domainText.split(' ');
+      const maxWidth = domainWidth - 4;
+
+      if (words.length > 2) {
+        // Multi-line text for long domains
+        const line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ');
+        const line2 = words.slice(Math.ceil(words.length / 2)).join(' ');
+
+        doc.text(line1, x + domainWidth / 2, domainY + 8, {
+          align: 'center',
+          maxWidth: maxWidth
+        });
+        doc.text(line2, x + domainWidth / 2, domainY + 14, {
+          align: 'center',
+          maxWidth: maxWidth
+        });
+      } else {
+        // Single line for shorter domains
+        doc.text(domainText, x + domainWidth / 2, domainY + 12, {
+          align: 'center',
+          maxWidth: maxWidth
+        });
+      }
+
+      // Enhanced circle design
+      const circleY = domainY + 26;
+      const circleRadius = 7;
+
+      // White background circle
+      doc.setFillColor(255, 255, 255);
+      doc.circle(x + domainWidth / 2, circleY, circleRadius, 'F');
+
+      // Colored border
       doc.setDrawColor(...hexToRgb(domain.flag));
-      doc.setLineWidth(1.5);
-      doc.circle(x + domainWidth / 2, domainY + 22, 10, 'S');
+      doc.setLineWidth(2);
+      doc.circle(x + domainWidth / 2, circleY, circleRadius, 'S');
 
-      // Score text
-      doc.setFontSize(8);
+      // Score text with enhanced styling
+      doc.setFontSize(9);
       doc.setTextColor(0, 0, 0);
-      doc.text(`${domain.score}/10`, x + domainWidth / 2, domainY + 24, { align: 'center' });
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${domain.score}/10`, x + domainWidth / 2, circleY + 1, {
+        align: 'center'
+      });
+
+
     });
 
     // Outcome Overview
     doc.setFontSize(18);
-    doc.setTextColor(65, 105, 225);
+    doc.setTextColor(65, 105, 215);
     doc.setFont('helvetica', 'bold');
     doc.text('Outcome Overview', pageWidth / 2, 190, { align: 'center' });
 
+
     // Table
-    const tableX = 10;
-    const tableY = 195;
+    const tableX = 6;
+    const tableY = 185;
     const tableWidth = pageWidth - 20;
+    const rowHeight = 15; // Increased for wrapped text
 
     // Table headers
     doc.setFillColor(255, 255, 255);
@@ -159,31 +221,79 @@ const Main = () => {
     doc.text('Score', tableX + tableWidth / 2 - 20, tableY + 7);
     doc.text('Insights', tableX + tableWidth / 2 + 10, tableY + 7);
 
+    // Text wrapping helper function
+    function wrapText(text, maxWidth, fontSize = 10) {
+      doc.setFontSize(fontSize);
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      words.forEach(word => {
+        const testLine = currentLine + (currentLine ? ' ' : '') + word;
+        const testWidth = doc.getTextWidth(testLine);
+
+        if (testWidth > maxWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      });
+
+      if (currentLine) lines.push(currentLine);
+      return lines;
+    }
+
     // Table rows
     if (domainWellnessScore.length > 0) {
+      let currentY = tableY + 12;
+
       domainWellnessScore.forEach((outcome, index) => {
-        const y = tableY + 12 + (index * 12);
+        // Calculate insight text lines
+        const insightWidth = tableWidth / 2 - 20;
+        const insightLines = outcome.positive_summary ?
+          wrapText(outcome.positive_summary, insightWidth, 10) : [];
+
+        // Calculate row height based on text lines
+        const actualRowHeight = Math.max(rowHeight, (insightLines.length * 4) + 8);
 
         // White background for rows
         doc.setFillColor(255, 255, 255);
-        doc.rect(tableX, y, tableWidth, 10, 'F');
+        doc.rect(tableX, currentY, tableWidth, actualRowHeight, 'F');
 
-        // Domain
+        // Domain - wrap if needed
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
-        doc.text(outcome.domain, tableX + 10, y + 7);
+        const domainWidth = tableWidth / 2 - 40;
+        const domainLines = wrapText(outcome.domain, domainWidth, 10);
+
+        domainLines.forEach((line, lineIndex) => {
+          doc.text(line, tableX + 10, currentY + 7 + (lineIndex * 4));
+        });
 
         // Status indicator
         const statusX = tableX + tableWidth / 2 - 20;
         doc.setFillColor(...hexToRgb(outcome.flag));
-        doc.circle(statusX - 5, y + 5, 2, 'F');
+        doc.circle(statusX - 5, currentY + 5, 2, 'F');
 
         // Status text
-        doc.text(outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1), statusX, y + 7);
+        const statusText = outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1);
+        doc.text(statusText, statusX, currentY + 7);
 
-        // Insight
-        if (outcome.positive_summary)
-          doc.text(outcome.positive_summary, tableX + tableWidth / 2, y + 7);
+        // Insight - wrapped text
+        doc.setFontSize(10);
+
+        insightLines.forEach((line, lineIndex) => {
+          if (lineIndex === 0) {
+            // Add bullet point to first line only
+            doc.text('• ' + line, tableX + tableWidth / 2, currentY + 7 + (lineIndex * 4));
+          } else {
+            // Indent continuation lines to align with text after bullet
+            doc.text(line, tableX + tableWidth / 2 + 8, currentY + 7 + (lineIndex * 4));
+          }
+        });
+
+        currentY += actualRowHeight + 2; // Add small gap between rows
       });
     }
 
@@ -206,8 +316,9 @@ const Main = () => {
     const cardSpacing = 8;
     const cardWidth = pageWidth - 30;
 
-    if (domainWellnessScore.length > 0) {
-      domainWellnessScore.forEach((insight, index) => {
+    if (assessmentName?.assessment_output?.personality_insight) {
+      assessmentName.assessment_output.personality_insight.split('.').forEach((insight, index) => {
+        if (insight.trim().length === 0) return;
         const y = cardY + (index * (cardHeight + cardSpacing));
 
         // Card background (light lavender)
@@ -220,13 +331,13 @@ const Main = () => {
         doc.setFont('helvetica', 'normal');
 
         // Center text vertically and horizontally in the card
-        doc.text(insight?.domain || 'N/A', pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
+        doc.text(insight || 'N/A', pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
       });
     }
 
 
     // Next step suggestions heading
-    const nextStepY = cardY + (3 * (cardHeight + cardSpacing));
+    const nextStepY = cardY + (5 * (cardHeight + cardSpacing));
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
@@ -291,9 +402,9 @@ const Main = () => {
 
 
   const colorMap = {
-    green: [0, 128, 0],
+    green: [0, 255, 0],
     red: [255, 0, 0],
-    yellow: [255, 255, 0],
+    yellow: [220, 220, 0],
     blue: [0, 0, 255],
   };
 
@@ -424,7 +535,7 @@ const Main = () => {
           setIncompleteAssessments(incomplete);
         })
         .catch(err => { toast.error(err.message); setStep('blur') })
-        // .finally(() => { if (step === 'loading'){ debugger; setStep('blur')} });
+      // .finally(() => { if (step === 'loading'){ debugger; setStep('blur')} });
     }
 
 
@@ -433,7 +544,6 @@ const Main = () => {
       // if (dd.current === 'child') setProfileData(dd.child);
       // if (dd.current === 'women') setProfileData(dd.women);
       // if (dd.current !== undefined) getData(dd.current);
-      debugger
     } else {
       (async () => {
         const res = await getWomenProfileDetails();
@@ -446,7 +556,6 @@ const Main = () => {
       if (newData.current === 'child') setProfileData(newData.child);
       if (newData.current === 'women') setProfileData(newData.women);
       if (newData.current !== undefined) getData(newData.current);
-      debugger
     });
 
     return () => unsubscribe();

@@ -41,7 +41,7 @@ const PartnerTeamMember = () => {
     } catch (error) {
       console.error("Error fetching team members:", error);
       toast.error(
-        error?.response?.data?.message || "Failed to fetch team members"
+        error?.response?.data?.detail || "Failed to fetch team members"
       );
     } finally {
       setFetchLoading(false);

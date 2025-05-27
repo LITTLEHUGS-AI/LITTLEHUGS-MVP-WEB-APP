@@ -69,42 +69,40 @@ const PartnerUsers = () => {
       setTeamMembers(options);
     } catch (error) {
       console.error("Error fetching team members:", error);
-      toast.error(
-        error?.response?.data?.message || "Failed to fetch team members"
-      );
+      toast.error(error?.response?.data?.detail || "Failed to fetch team members");
     } finally {
       setLoading(false);
     }
   }, []);
 
-    const fetchUsers = useCallback(async () => {
-      try {
-        setUsersLoading(true);
-        const response = await getUserLists();
-        setUsers(response);
-  
-        if (response.results.length > 0) {
-          // const completed = response.results.filter(
-          //   (user) => user.status.toLowerCase() === "completed"
-          // ).length;
-          // const incomplete = response.count - completed;
-  
-          // setCompletedCount(completed);
-          // setIncompleteCount(incomplete);
-  
-          // const assessmentChartData = calculateAssessmentData(response.results);
-          // setAssessmentData(assessmentChartData);
-  
-          // const domainChartData = calculateDomainData(response.results);
-          // setDomainData(domainChartData);
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        toast.error(error?.response?.data?.message || "Failed to fetch users");
-      } finally {
-        setUsersLoading(false);
+  const fetchUsers = useCallback(async () => {
+    try {
+      setUsersLoading(true);
+      const response = await getUserLists();
+      setUsers(response);
+
+      if (response.results.length > 0) {
+        // const completed = response.results.filter(
+        //   (user) => user.status.toLowerCase() === "completed"
+        // ).length;
+        // const incomplete = response.count - completed;
+
+        // setCompletedCount(completed);
+        // setIncompleteCount(incomplete);
+
+        // const assessmentChartData = calculateAssessmentData(response.results);
+        // setAssessmentData(assessmentChartData);
+
+        // const domainChartData = calculateDomainData(response.results);
+        // setDomainData(domainChartData);
       }
-    }, []);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      toast.error(error?.response?.data?.message || "Failed to fetch users");
+    } finally {
+      setUsersLoading(false);
+    }
+  }, []);
 
 
 

@@ -140,21 +140,9 @@ const ProfileUi = () => {
 
 
   useEffect(() => {
-    if ((Object.keys(dd).length !== 0)) {
-      setWomenProfileData(dd.women);
-    }
+    if ((Object.keys(dd).length !== 0)) setWomenProfileData(dd.women);
   }, [dd])
 
-
-  // [
-  //   setWomenDP,
-  //   setWomenProfileData,
-  //   getProfileCompletion,
-  //   setSelectedWomenGoalOptions,
-  //   setChildProfileData,
-  //   setChildDP,
-  //   selectedProfile,
-  // ]
 
 
   const initialData = useCallback(async () => {
@@ -175,7 +163,7 @@ const ProfileUi = () => {
       fetchCities(res1.country);
 
       const res2 = await getChildProfileDetails();
-      if (res2) {
+      if (res2 && res2.profiles && res2.profiles.length > 0) {
         setChildProfileData(res2.profiles[0]);
         setSelectedChildGoalOptions([...res2.profiles[0].goal]);
       }
@@ -187,7 +175,7 @@ const ProfileUi = () => {
           : getProfileCompletion(women),
         name: res1.name,
         women,
-        child: res2.profiles[0]
+        child: (res2 && res2.profiles && res2.profiles.length > 0) ? res2.profiles[0] : null
       });
 
       if (res2.profiles[0].image != null) setChildDP(`${res2.profiles[0].image}`);
@@ -247,11 +235,6 @@ const ProfileUi = () => {
       });
   }, []);
 
-
-
-  // useEffect(() => {
-  //   if (womenProfileData.country !== undefined) fetchCities(womenProfileData.country);
-  // }, [womenProfileData.country, fetchCities]);
 
 
   const showModal = () => {

@@ -15,18 +15,15 @@ function AssesmentLandingPage() {
     const cards = [
         {
             title: "LittleHugs 360° Women's Wellness Program",
-            description:
-                "A high-level mind-body-social scan that gives a complete picture of a woman's mental health, emotional resilience, self-care capacity, and support system.",
+            description: "A high-level mind-body-social scan that gives a complete picture of a woman's mental health, emotional resilience, self-care capacity, and support system.",
         },
         {
             title: "LittleHugs 360° Children's Wellness Program",
-            description:
-                "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
+            description: "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
         },
         {
             title: "LittleHugs Corporate Partnership Program",
-            description:
-                "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
+            description: "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
         },
     ];
 

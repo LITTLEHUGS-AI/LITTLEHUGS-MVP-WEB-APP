@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
@@ -103,7 +103,8 @@ function SignupUI({
     if (isSuccess) {
       methods.reset(INITIAL_VALUES);
       if (isOtp === false && invitee && Object.keys(invitee).length > 0) {
-        setShowPopup(1);
+        if (invitee.type && invitee.type === 'user') setShowPopup(1);
+        if (invitee.type && invitee.type === 'team') setShowPopup(2);
       }
     }
   }, [isSuccess, methods, invitee, isOtp, navigate]);
@@ -346,39 +347,47 @@ function SignupUI({
   }, []);
 
 
-  useEffect(() => {
-    if (formData.country) {
-      fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${formData.country}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (Array.isArray(data) && Array.isArray(data[0].name)) {
-            const cities = data[0].name;
-            if (cities.length < 1) toast.error('Got Zero Cities Names');
-            else setAllCities([...cities]);
-          }
-          // else toast.error('Please Check Cities');
-        })
-        .catch(error => { console.error('Error:', error); });
 
-      fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${formData.country}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+
+
+  const fetchCityLanguage = useCallback((country) => {
+    fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0]?.name)) {
+          const cities = data[0].name;
+          if (cities.length < 1) toast.error('Got Zero Cities Names');
+          else setAllCities([...cities]);
+        }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (Array.isArray(data) && Array.isArray(data[0].name)) {
-            const languages = data[0].name;
-            if (languages.length < 1) toast.error('Got Zero Languages Names');
-            else setAllLanguages([...languages]);
-          }
-          // else toast.error('Please Check Languages');
-        })
-        .catch(error => { console.error('Error:', error); });
-    }
-  }, [formData.country])
+      .catch(error => {
+        console.error('City fetch error:', error);
+      });
+
+    fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0]?.name)) {
+          const languages = data[0].name;
+          if (languages.length < 1) toast.error('Got Zero Languages Names');
+          else setAllLanguages([...languages]);
+        }
+      })
+      .catch(error => {
+        console.error('Language fetch error:', error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    if (formData.country) fetchCityLanguage(formData.country);
+  }, [formData.country, fetchCityLanguage, partnerFormRef])
 
 
 
@@ -447,13 +456,15 @@ function SignupUI({
     }
 
     if (selectedUserType === "partner") {
+      const partnerFormDataRaw = new FormData(partnerFormRef.current);
+
       apiClient
-        .post("https://api.ourlittdlehugs.com/v1/api/organisation-profile", {
-          organisation_name: "My Org",
-          description: "Default Description",
+        .post("https://api.ourlittlehugs.com/v1/api/organisation-profile", {
+          organisation_name: partnerFormDataRaw.get("org_name"),
+          description: partnerFormDataRaw.get("description"),
           organisation_type: orgType,
-          org_offers: ["offer 1", "offer 2"],
-          littlehug_for: ["for 1 ", "for 2"],
+          org_offers: [...selectedPartnerServiceOptions],
+          littlehug_for: [...selectedPartnerGoalOptions],
         })
         .then((response) => {
           if (response) {
@@ -624,14 +635,14 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   placeHolder="Enter your Name"
                 />
 
                 <InputField
                   label="Email"
                   name="email"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}
@@ -1067,7 +1078,7 @@ function SignupUI({
                           <div>
                             {/* Dropdown button */}
                             <div
-                              
+
                               className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
                               onClick={toggleChildGoalDropdown}
                             >
@@ -1165,6 +1176,9 @@ function SignupUI({
         {showPopup === 2 && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
+              <button className="ml-auto" onClick={() => { setShowPopup(null) }}>
+                <X className="w-5 h-5 text-red-600" />
+              </button>
               <div className="flex flex-col items-center mb-6">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
                   <img
@@ -1196,13 +1210,14 @@ function SignupUI({
                 <select
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                   required
+                  onChange={() => { }}
                 >
                   <option value="" hidden selected>
                     * Country
                   </option>
                   {allCountries.map((country, i) => (
-                    <option key={i} value={country}>
-                      {country}
+                    <option key={i} value={country.code}>
+                      {country.name}
                     </option>
                   ))}
                 </select>
@@ -1535,6 +1550,7 @@ function SignupUI({
             </div>
           </div>
         )}
+
         {showPopup === "PrivacyPolicy" && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

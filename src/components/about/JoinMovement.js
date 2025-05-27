@@ -19,7 +19,7 @@ function JoinMovement() {
                         Explore our Programs
                     </button>
                 </Link>
-                <Link to="/assesment" className="w-full sm:w-auto mt-3 sm:mt-0">
+                <Link to="/partner" className="w-full sm:w-auto mt-3 sm:mt-0">
                     <button className="border border-[#283036] text-[#283036] px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition w-full sm:w-auto">
                         Partner with us
                     </button>

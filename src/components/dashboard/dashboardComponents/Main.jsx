@@ -17,13 +17,6 @@ const Main = () => {
 
   const [profileData, setProfileData] = useState({});
   const [IncompletedAssessments, setIncompleteAssessments] = useState(0);
-  // const [assessment, setAssessment] = useState({});
-  // const [shareAssessmentData, setShareAssessmentData] = useState({});
-
-
-
-
-
 
 
   const toBase64 = async (url) => {

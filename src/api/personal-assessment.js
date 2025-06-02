@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 const personalDashboardAPI = axios.create({
-  baseURL: 'https://api.ourlittlehugs.com/v1/api',
+  baseURL: `${process.env.REACT_APP_API_URL}/v1/api`,
   headers: {
     Accept: 'application/json',
     Authorization: localStorage.getItem("accessToken")

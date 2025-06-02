@@ -220,12 +220,12 @@ const PricingPlans = () => {
               We're building more than a platform — we're building a world where every child feels seen early, and every caregiver feels supported. Whether you're a school, clinic, parent, or simply someone who believes in early care, we'd love to build with you.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full sm:w-auto">
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/assesment" className="w-full sm:w-auto">
                 <button className="w-full bg-[#283036] text-white px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#1f252b] transition">
                   Explore our Programs
                 </button>
               </Link>
-              <Link to="/signup" className="w-full sm:w-auto">
+              <Link to="/partner" className="w-full sm:w-auto">
                 <button className="w-full border border-[#283036] text-[#283036] px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
                   Partner with us
                 </button>

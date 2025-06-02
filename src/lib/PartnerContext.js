@@ -43,7 +43,7 @@ export const PartnerProvider = ({ children }) => {
       setUserProfile(response);
       setError(null);
     } catch (err) {
-      setError(err.message || "Failed to fetch user profile");
+      // setError(err.message || "Failed to fetch user profile");
       console.error("Error fetching user profile:", err);
     } finally {
       setLoading(false);

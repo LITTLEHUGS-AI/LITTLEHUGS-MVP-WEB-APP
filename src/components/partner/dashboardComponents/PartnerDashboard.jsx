@@ -7,7 +7,7 @@ import {
   inviteUser,
   getUserLists,
   getUniqueUsers,
-  getUniqueEmails,
+  analyzeAssessmentData,
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
@@ -18,33 +18,19 @@ const PartnerDashboard = () => {
   const [email, setEmail] = useState("");
   const [therapist, setTherapist] = useState("");
   const [teamMembers, setTeamMembers] = useState([]);
-  // const [completedUsers, setCompletedUsers] = useState(0);
-  // const [incompleteUsers, setInCompleteUsers] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [inviteLoading, setInviteLoading] = useState(false);
   const [users, setUsers] = useState([]);
-  const [uniqueUsers, setUniqueUsers] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
+  const [uniqueUsers, setUniqueUsers] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
+  const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [totalAssess, setTotalAssess] = useState(0);
   const initialFetchDone = useRef(false);
-  const [assessmentData, setAssessmentData] = useState([
-    { name: "women-wellness-360", value: 0, color: "#A5B4FC" },
-    { name: "child-wellness-360", value: 0, color: "#FDE68A" },
-    { name: "sel-assessment-360", value: 0, color: "#FCA5A5" },
-  ]);
-  const [domainData, setDomainData] = useState([
-    { name: "Emotional Well-being", value: 0, color: "#B1A4E7" },
-    {
-      name: "Social Support & Relationship Health",
-      value: 0,
-      color: "#D3CBA5",
-    },
-    { name: "Self-Care & Routine Habits", value: 0, color: "#D9E4FC" },
-    { name: "Stress & Burnout Risk", value: 0, color: "#69A664" },
-    { name: "Mental Clarity & Cognitive Load", value: 0, color: "#FFC655" },
-  ]);
+  const [assessmentData, setAssessmentData] = useState([]);
+  const [domainData, setDomainData] = useState([]);
 
   const fetchTeamMembers = useCallback(async () => {
     try {
@@ -56,40 +42,47 @@ const PartnerDashboard = () => {
         email: member.email
       }));
       setTeamMembers(options);
-      setUniqueUsers(getUniqueEmails(response));
     } catch (error) {
       console.error("Error fetching team members:", error);
       toast.error(
-        error?.response?.data?.message || "Failed to fetch team members"
+        error?.response?.data?.detail || "Failed to fetch team members"
       );
     } finally {
       setLoading(false);
     }
   }, []);
 
+
   const calculateDomainData = useCallback((results) => {
-    const domainStructure = [
-      { name: "Emotional Well-being", value: 0, color: "#B1A4E7" },
-      {
-        name: "Social Support & Relationship Health",
-        value: 0,
-        color: "#D3CBA5",
-      },
-      { name: "Self-Care & Routine Habits", value: 0, color: "#D9E4FC" },
-      { name: "Stress & Burnout Risk", value: 0, color: "#69A664" },
-      { name: "Mental Clarity & Cognitive Load", value: 0, color: "#FFC655" },
+    const colorPalette = [
+      "#B1A4E7", "#D3CBA5", "#D9E4FC", "#69A664", "#FFC655",
+      "#FF7F50", "#87CEFA", "#98FB98", "#FFD700", "#E9967A",
+      "#20B2AA", "#FFB6C1", "#8A2BE2", "#00CED1", "#FF6347"
     ];
 
-    return domainStructure.map((domain) => {
-      const count = results.filter((user) =>
-        user.domains.includes(domain.name)
-      ).length;
-      return {
-        ...domain,
-        value: count,
-      };
+    const domainCounts = {};
+
+    results.forEach(user => {
+      user.domains.forEach(domain => {
+        if (!domainCounts[domain]) {
+          domainCounts[domain] = 0;
+        }
+        domainCounts[domain]++;
+      });
     });
+
+    const domainStructure = Object.entries(domainCounts)
+      .map(([name, value], index) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5)
+      .map((domain, index) => ({
+        ...domain,
+        color: colorPalette[index % colorPalette.length] // Assign colors
+      }));
+
+    return domainStructure;
   }, []);
+
 
   const calculateAssessmentData = useCallback((results) => {
     const assessmentStructure = [
@@ -98,15 +91,17 @@ const PartnerDashboard = () => {
       { name: "sel-assessment-360", value: 0, color: "#FCA5A5" },
     ];
 
-    return assessmentStructure.map((assessment) => {
-      const count = results.filter(
-        (user) => user.assessment_type === assessment.name
-      ).length;
-      return {
-        ...assessment,
-        value: count,
-      };
-    });
+    return assessmentStructure
+      .map((assessment) => {
+        const count = results.filter(
+          (user) => user.assessment_type === assessment.name
+        ).length;
+        return {
+          ...assessment,
+          value: count,
+        };
+      })
+      .filter((assessment) => assessment.value !== 0);
   }, []);
 
   const fetchUsers = useCallback(async () => {
@@ -116,13 +111,6 @@ const PartnerDashboard = () => {
       setUsers(response);
 
       if (response.results.length > 0) {
-        const completed = response.results.filter(
-          (user) => user.status.toLowerCase() === "completed"
-        ).length;
-        const incomplete = response.count - completed;
-
-        setCompletedCount(completed);
-        setIncompleteCount(incomplete);
 
         const assessmentChartData = calculateAssessmentData(response.results);
         setAssessmentData(assessmentChartData);
@@ -132,7 +120,7 @@ const PartnerDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch users");
+      // toast.error(error?.response?.data?.message || "Failed to fetch users");
     } finally {
       setUsersLoading(false);
     }
@@ -140,19 +128,17 @@ const PartnerDashboard = () => {
 
   const fetchUniqueUsers = useCallback(async () => {
     try {
-      // setUsersLoading(true);
+      console.log(users);
+
       const response = await getUniqueUsers();
-      // setUniqueUsers(getUniqueEmails(response));
-      console.log(uniqueUsers);
 
       if (response.results.length > 0) {
-        const completed = response.results.filter(
-          (user) => user.status.toLowerCase() === "completed"
-        ).length;
-        const incomplete = response.count - completed;
-
-        setCompletedCount(completed);
-        setIncompleteCount(incomplete);
+        const { uniqueUsers, completedAtLeastOneAssessment, didNotCompleteAnyAssessment, totalCompletedAssessments } = analyzeAssessmentData(response.results);
+        setUniqueUsers(uniqueUsers);
+        setCompletedCount(completedAtLeastOneAssessment);
+        setIncompleteCount(didNotCompleteAnyAssessment);
+        setCompletedAssesCount(totalCompletedAssessments);
+        setTotalAssess(response?.count || 0);
 
         const assessmentChartData = calculateAssessmentData(response.results);
         setAssessmentData(assessmentChartData);
@@ -162,11 +148,11 @@ const PartnerDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch users");
+      // toast.error(error?.response?.data?.message || "Failed to fetch users");
     } finally {
       setUsersLoading(false);
     }
-  }, [calculateAssessmentData, calculateDomainData, uniqueUsers]);
+  }, [calculateAssessmentData, calculateDomainData, users]);
 
   useEffect(() => {
     if (!initialFetchDone.current) {
@@ -214,13 +200,6 @@ const PartnerDashboard = () => {
 
 
 
-  // useEffect(() => {
-  //   const a = getUserAssessmentCounts(users.results);
-  //   setCompletedUsers(a.completed);
-  //   setInCompleteUsers(a.notCompleted);
-  // }, [users])
-
-
   const formatNumber = (num) => {
     if (num === 0) return "0";
     return num < 10 ? `0${num}` : num;
@@ -234,221 +213,246 @@ const PartnerDashboard = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-4">
-            <div className="col-span-4 flex flex-col gap-3">
-              {/* Mobile Title */}
-              <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
-                Dashboard
-              </span>
-              {/* Stat Cards */}
-              <div className="flex flex-col gap-3 md:grid md:grid-cols-4 md:gap-4 w-full">
-                {/* mobile */}
-                <div className="border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-[#4F7DDD] w-full">
-                  <span className="text-base md:text-xl text-white font-normal mb-1">
-                    Total Assessments
-                  </span>
-                  <span className="text-4xl md:text-5xl font-bold text-white">
-                    {formatNumber(users?.count || 0)}
-                  </span>
-                </div>
-                {/* Bottom mobile */}
-                <div className="flex flex-row gap-3 w-full md:hidden">
-                  <div className="flex-1 border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-white">
-                    <span className="text-base text-gray-700 font-normal mb-1">
-                      Completed
-                    </span>
-                    <span className="text-4xl font-bold text-[#4A4B4F]">
-                      {formatNumber(completedCount)}
-                    </span>
-                  </div>
-                  <div className="flex-1 border border-gray-300 rounded-[16px] p-4 flex flex-col items-start bg-white">
-                    <span className="text-base text-gray-700 font-normal mb-1">
-                      Incomplete
-                    </span>
-                    <span className="text-4xl font-bold text-[#4A4B4F]">
-                      {formatNumber(incompleteCount)}
-                    </span>
-                  </div>
-                </div>
-                {/* Desktop */}
-                <div className="hidden md:flex border border-gray-300 rounded-[16px] p-4 flex-col items-start bg-white w-full md:w-auto">
-                  <span className="text-xl text-gray-700 font-normal mb-1">
-                    Completed Assessments
-                  </span>
-                  <span className="text-5xl font-bold text-[#4A4B4F]">
-                    {formatNumber(completedCount)}
-                  </span>
-                </div>
-                <div className="hidden md:flex border border-gray-300 rounded-[16px] p-4 flex-col items-start bg-white w-full md:w-auto">
-                  <span className="text-xl text-gray-700 font-normal mb-1">
-                    Incomplete Assessments
-                  </span>
-                  <span className="text-5xl font-bold text-[#4A4B4F]">
-                    {formatNumber(incompleteCount)}
-                  </span>
-                </div>
+          <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
+            Dashboard
+          </span>
+          <div className="grid grid-cols-2 gap-4">
 
-                <div className="flex flex-col lg:flex-row border border-gray-300 rounded-[16px] p-2">
-                  <div className="flex flex-col flex-start gap-1">
-                    <span className="text-xl text-gray-700 font-normal mb-1">
-                      Completed Assessments
-                    </span>
 
-                    <div className="flex items-center gap-1">
-                      <div className="relative">
 
-                        <svg width="120" height="120" viewBox="0 0 200 200" class="transform -rotate-90">
-                          <circle
-                            cx="100"
-                            cy="100"
-                            r="80"
-                            fill="none"
-                            stroke="#DDBEBE"
-                            stroke-width="20"
-                          />
+            <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
+              <div className="flex flex-col gap-3 w-full">
+                <span className="text-lg sm:text-xl font-semibold text-gray-700 font-normal">
+                  Assessments
+                </span>
 
-                          <circle
-                            cx="100"
-                            cy="100"
-                            r="80"
-                            fill="none"
-                            stroke="#D3D3A5"
-                            stroke-width="20"
-                            stroke-dasharray="125.66 376.99"
-                            stroke-dashoffset="0"
-                          />
-                        </svg>
-
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <div className="text-3xl font-bold text-gray-800">{uniqueUsers.length}</div>
-                          <div className="text-sm text-gray-600 text-center">
-                            <div>Unique</div>
-                            <div>Users</div>
-                          </div>
-                        </div>
-
+                <div className="flex flex-row items-center gap-4 sm:gap-6">
+                  <div className="relative w-[160px] h-[160px]">
+                    <svg
+                      width="160"
+                      height="160"
+                      viewBox="0 0 200 200"
+                      className="transform -rotate-90"
+                    >
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="80"
+                        fill="none"
+                        stroke="#DDBEBE"
+                        strokeWidth="20"
+                      />
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="80"
+                        fill="none"
+                        stroke="#D3D3A5"
+                        strokeWidth="20"
+                        strokeDasharray="125.66 376.99"
+                        strokeDashoffset="0"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-gray-800">
+                        {formatNumber(totalAssess)}
                       </div>
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
-                            {completedCount}
-                          </div>
-                          <span className="text-gray-700 text-sm">
-                            Users who completed 1<br />
-                            assessment
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
-                            {incompleteCount}
-                          </div>
-                          <span className="text-gray-700 text-sm">
-                            Users who did not<br />
-                            complete 1 assessment
-                          </span>
-                        </div>
+                      <div className="text-xs sm:text-sm text-gray-600 text-center">
+                        <div>Assessments</div>
                       </div>
-
                     </div>
                   </div>
 
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
+                        {formatNumber(completedAssesCount)}
+                      </div>
+                      <span className="text-gray-700 text-lg leading-tight">
+                        Completed <br />Assessments
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
+                        {formatNumber(incompleteCount)}
+                      </div>
+                      <span className="text-gray-700 text-lg leading-tight">
+                        Incomplete<br />Assessments
+                      </span>
+                    </div>
+                  </div>
                 </div>
-
               </div>
-
             </div>
+
+            <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
+              <div className="flex flex-col gap-3 w-full">
+                <span className="text-lg sm:text-xl font-semibold text-gray-700 font-normal">
+                  Users
+                </span>
+
+                <div className="flex flex-row items-center gap-4 sm:gap-6">
+                  <div className="relative w-[160px] h-[160px]">
+                    <svg
+                      width="160"
+                      height="160"
+                      viewBox="0 0 200 200"
+                      className="transform -rotate-90"
+                    >
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="80"
+                        fill="none"
+                        stroke="#DDBEBE"
+                        strokeWidth="20"
+                      />
+                      <circle
+                        cx="100"
+                        cy="100"
+                        r="80"
+                        fill="none"
+                        stroke="#D3D3A5"
+                        strokeWidth="20"
+                        strokeDasharray="125.66 376.99"
+                        strokeDashoffset="0"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="text-2xl sm:text-3xl font-bold text-gray-800">
+                        {uniqueUsers}
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-600 text-center">
+                        <div>Unique</div>
+                        <div>Users</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
+                        {completedCount}
+                      </div>
+                      <span className="text-gray-700 text-lg leading-tight">
+                        Users who completed 1<br />assessment
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
+                        {incompleteCount}
+                      </div>
+                      <span className="text-gray-700 text-lg leading-tight">
+                        Users who did not<br />complete 1 assessment
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
           </div>
 
           {/* Charts below both main and insight cards */}
           <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-8">
             {/* Assessments Chart */}
-            <div className="flex flex-col gap-2 w-full">
-              <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
-                Assessments
-              </span>
-              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
-                <div className="flex flex-row items-center h-full">
-                  <div className="w-[60%] flex items-center justify-center">
-                    <PieChart width={180} height={180}>
-                      <Pie
-                        data={assessmentData}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={35}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        paddingAngle={3}
-                      >
-                        {assessmentData.map((entry, idx) => (
-                          <Cell key={`cell2-${idx}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </div>
-                  <div className="w-[40%] flex flex-col justify-center gap-2">
-                    {assessmentData.map((d, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 text-xs md:text-base text-gray-600"
-                      >
-                        <span
-                          className="inline-block w-4 h-4 rounded-full"
-                          style={{ background: d.color }}
-                        ></span>
-                        {d.name}
-                      </div>
-                    ))}
+
+            {assessmentData.length < 1 ? <div>No Assessments taken yet</div> :
+              <div className="flex flex-col gap-2 w-full">
+                <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
+                  Assessments
+                </span>
+                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
+                  <div className="flex flex-row items-center h-full">
+                    <div className="w-[60%] flex items-center justify-center">
+                      <PieChart width={180} height={180}>
+                        <Pie
+                          data={assessmentData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={35}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          paddingAngle={3}
+                        >
+                          {assessmentData.map((entry, idx) => (
+                            <Cell key={`cell2-${idx}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </div>
+                    <div className="w-[40%] flex flex-col justify-center gap-2">
+                      {assessmentData.map((d, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 text-xs md:text-base text-gray-600"
+                        >
+                          <span
+                            className="inline-block w-4 h-4 rounded-full"
+                            style={{ background: d.color }}
+                          ></span>
+                          {d.name}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            }
+
 
             {/* Domains Chart */}
-            <div className="flex flex-col gap-2 w-full">
-              <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
-                Domains
-              </span>
-              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
-                <div className="flex flex-row items-center h-full">
-                  <div className="w-[60%] flex items-center justify-center">
-                    <PieChart width={180} height={180}>
-                      <Pie
-                        data={domainData}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={35}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        paddingAngle={3}
-                      >
-                        {domainData.map((entry, idx) => (
-                          <Cell key={`cell-${idx}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </div>
-                  <div className="w-[40%] flex flex-col justify-center gap-2">
-                    {domainData.map((d, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 text-xs md:text-[0.95rem] text-gray-600"
-                      >
-                        <span
-                          className="inline-block w-4 h-4 rounded-full"
-                          style={{ background: d.color }}
-                        ></span>
-                        {d.name}
-                      </div>
-                    ))}
+            {domainData.length < 1 ? <div>No Domains Generated yet</div> :
+              <div className="flex flex-col gap-2 w-full">
+                <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
+                  Domains
+                </span>
+                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
+                  <div className="flex flex-row items-center h-full">
+                    <div className="w-[60%] flex items-center justify-center">
+                      <PieChart width={180} height={180}>
+                        <Pie
+                          data={domainData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={35}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          paddingAngle={3}
+                        >
+                          {domainData.map((entry, idx) => (
+                            <Cell key={`cell-${idx}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </div>
+                    <div className="w-[40%] flex flex-col justify-center gap-2">
+                      {domainData.map((d, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 text-xs md:text-[0.95rem] text-gray-600"
+                        >
+                          <span
+                            className="inline-block w-4 h-4 rounded-full"
+                            style={{ background: d.color }}
+                          ></span>
+                          {d.name}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            }
           </div>
+
         </>
       )}
 

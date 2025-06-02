@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
@@ -48,6 +48,10 @@ function SignupUI({
   const [allCities, setAllCities] = useState([]);
   const [showWomenPopup, setshowWomenPopup] = useState(false);
   const [showChildPopup, setshowChildPopup] = useState(false);
+  const [showMenPopup, setshowMenPopup] = useState(false);
+
+  const [programmeLock, setProgramLock] = useState(false);
+
   const { otpMutation, motherMutation, childMutation } = useSignIn();
   const { login } = useAuth();
   // const { login, hasAuthenticated } = useAuth();
@@ -59,6 +63,8 @@ function SignupUI({
 
   const womenFormRef = useRef(null);
   const childFormRef = useRef(null);
+  const menFormRef = useRef(null);
+
   const partnerFormRef = useRef(null);
 
   const methods = useForm({
@@ -71,7 +77,61 @@ function SignupUI({
   const [invitee, setInvite] = useState({});
 
 
-  const handleSubmit = (data) => {
+  const childGoalDropdownRef = useRef(null);
+  const womenGoalDropdownRef = useRef(null);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
+      if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
+  const handleSubmit = async (data) => {
+
+    if (invitee && invitee.type === 'partner') {
+
+      const url = `${process.env.REACT_APP_API_URL}/v1/api/register-invited-partner`;
+      const payload = {
+        organisation_type: methods.getValues('organisation_type'),
+        email: methods.getValues('email'),
+        name: methods.getValues('name'),
+        password: methods.getValues('password'),
+        country: methods.getValues('country'),
+        city: methods.getValues('city'),
+        language: methods.getValues('language'),
+        token: invitee.token,
+      };
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+        const data = await response.json();
+
+        localStorage.setItem('accessToken', `token ${data.token}`)
+        localStorage.setItem('userType', 'partner');
+        setAccessToken(`token ${data.token}`)
+        // setShowPopup(2);
+        navigate("/partner/dashboard");
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+      return;
+    }
+
     data = {
       ...data,
       is_personal: selectedUserType === "personal" ? true : false,
@@ -88,7 +148,10 @@ function SignupUI({
     if (isSuccess) {
       methods.reset(INITIAL_VALUES);
       if (isOtp === false && invitee && Object.keys(invitee).length > 0) {
-        setShowPopup(1);
+        if (invitee.type && invitee.type === 'user') {
+          setShowPopup(1);
+        }
+        if (invitee.type && invitee.type === 'team') navigate("/partner/dashboard");
       }
     }
   }, [isSuccess, methods, invitee, isOtp, navigate]);
@@ -142,7 +205,7 @@ function SignupUI({
   //   });
   // };
 
-  const childOptions = ["Growth", "Nutrition", "Activity"];
+  const childOptions = ["Growth", "Nutrition", "Activity", "Developmental", "Wellness"];
   const [isChildGoalOpen, setIsChildGoalOpen] = useState(false);
   const [selectedChildGoalOptions, setSelectedChildGoalOptions] = useState([]);
   const toggleChildGoalDropdown = () => setIsChildGoalOpen(!isChildGoalOpen);
@@ -181,6 +244,8 @@ function SignupUI({
 
   const [womenDP, setWomenDP] = useState("/images/women-demo.png");
   const [childDP, setChildDP] = useState("/images/child-demo.png");
+  const [menDP, setMenDP] = useState("/images/men-demo.jpg");
+
 
   useEffect(() => {
     if (timer > 0) {
@@ -316,7 +381,7 @@ function SignupUI({
 
   // Fetch Countries
   useEffect(() => {
-    fetch('https://api.ourlittlehugs.com/v1/api/country/')
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/country/`)
       .then(response => response.json())
       .then(result => {
         if (Array.isArray(result)) {
@@ -331,39 +396,47 @@ function SignupUI({
   }, []);
 
 
-  useEffect(() => {
-    if (formData.country) {
-      fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${formData.country}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (Array.isArray(data) && Array.isArray(data[0].name)) {
-            const cities = data[0].name;
-            if (cities.length < 1) toast.error('Got Zero Cities Names');
-            else setAllCities([...cities]);
-          }
-          // else toast.error('Please Check Cities');
-        })
-        .catch(error => { console.error('Error:', error); });
 
-      fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${formData.country}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+
+
+  const fetchCityLanguage = useCallback((country) => {
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0]?.name)) {
+          const cities = data[0].name;
+          if (cities.length < 1) toast.error('Got Zero Cities Names');
+          else setAllCities([...cities]);
+        }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (Array.isArray(data) && Array.isArray(data[0].name)) {
-            const languages = data[0].name;
-            if (languages.length < 1) toast.error('Got Zero Languages Names');
-            else setAllLanguages([...languages]);
-          }
-          // else toast.error('Please Check Languages');
-        })
-        .catch(error => { console.error('Error:', error); });
-    }
-  }, [formData.country])
+      .catch(error => {
+        console.error('City fetch error:', error);
+      });
+
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/language/?country_code=${country}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data) && Array.isArray(data[0]?.name)) {
+          const languages = data[0].name;
+          if (languages.length < 1) toast.error('Got Zero Languages Names');
+          else setAllLanguages([...languages]);
+        }
+      })
+      .catch(error => {
+        console.error('Language fetch error:', error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    if (formData.country) fetchCityLanguage(formData.country);
+  }, [formData.country, fetchCityLanguage, partnerFormRef])
 
 
 
@@ -377,7 +450,7 @@ function SignupUI({
           const womenFormDataRaw = new FormData(womenFormRef.current);
 
           const womenProfilePromise = apiClient
-            .post("https://api.ourlittlehugs.com/v1/api/mother-profile", {
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/mother-profile`, {
               dob: womenFormDataRaw.get("dob"),
               life_stage: womenFormDataRaw.get("lifeStage"),
               weight: womenFormDataRaw.get("weight"),
@@ -398,11 +471,12 @@ function SignupUI({
           promises.push(womenProfilePromise);
         }
 
+
         if (showChildPopup) {
           const childFormDataRaw = new FormData(childFormRef.current);
 
           const childProfilePromise = apiClient
-            .post("https://api.ourlittlehugs.com/v1/api/child-profile", {
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/child-profile`, {
               name: childFormDataRaw.get("name"),
               dob: childFormDataRaw.get("dob"),
               age_group: childFormDataRaw.get("ageGroup"),
@@ -423,6 +497,33 @@ function SignupUI({
 
           promises.push(childProfilePromise);
         }
+
+        if (showMenPopup) {
+          const menFormDataRaw = new FormData(menFormRef.current);
+
+          const menProfilePromise = apiClient
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/men-profile`, {
+              name: menFormDataRaw.get("name"),
+              dob: menFormDataRaw.get("dob"),
+              age_group: menFormDataRaw.get("ageGroup"),
+              goal: [menFormDataRaw.get("goal")],
+              tone_prefrence: menFormDataRaw.get("tone_prefrence"),
+              relation_with_child: menFormDataRaw.get("relationWithChild"),
+              occupation: menFormDataRaw.get("occupation"),
+              weight: menFormDataRaw.get("weight"),
+              height: menFormDataRaw.get("height"),
+            })
+            .then((response) => {
+              if (response.profile) {
+                console.log("Men profile data successfully sent");
+              } else {
+                toast.error('Error in Men Profile');
+              }
+            });
+
+          promises.push(menProfilePromise);
+        }
+
         await Promise.all(promises);
 
         navigate("/personal/dashboard");
@@ -432,13 +533,15 @@ function SignupUI({
     }
 
     if (selectedUserType === "partner") {
+      const partnerFormDataRaw = new FormData(partnerFormRef.current);
+
       apiClient
-        .post("https://api.ourlittdlehugs.com/v1/api/organisation-profile", {
-          organisation_name: "My Org",
-          description: "Default Description",
+        .post(`${process.env.REACT_APP_API_URL}/v1/api/organisation-profile`, {
+          organisation_name: partnerFormDataRaw.get("org_name"),
+          description: partnerFormDataRaw.get("description"),
           organisation_type: orgType,
-          org_offers: ["offer 1", "offer 2"],
-          littlehug_for: ["for 1 ", "for 2"],
+          org_offers: [...selectedPartnerServiceOptions],
+          littlehug_for: [...selectedPartnerGoalOptions],
         })
         .then((response) => {
           if (response) {
@@ -460,18 +563,84 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/member-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/member-invite/${token}`, {
             method: 'GET',
             headers: {
               'accept': 'application/json',
-              'X-CSRFTOKEN': 'CgwkMP2tAkAZ0XirxsWPFQNMpOi8T8lSpGbWOQwgXxQYhkSzmwSIq2mQzUWHniq8'
             }
           });
 
           if (!response.ok) throw new Error('Network response was not ok');
 
           const data = await response.json();
-          if (data.name && data.email && data.organisation) {
+          if (data.name && data.email) {
+            methods.setValue('password', '');
+            methods.setValue('name', data.name);
+            methods.setValue('email', data.email);
+            if (data.organisation_type) methods.setValue('organisation_type', data.organisation_type);
+            setSelectedUserType('partner')
+          }
+          console.log(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchUserData();
+    }
+
+
+    if ((queryParams.get('invite-type') === 'partner-user') && token) {
+
+      setInvite({ type: 'user', token });
+
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invite/${token}`, {
+            method: 'GET',
+            headers: { 'accept': 'application/json' }
+          });
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const data = await response.json();
+          if (data.name && data.email) {
+            methods.setValue('name', data.name);
+            methods.setValue('email', data.email);
+            methods.setValue('password', '');
+            setSelectedUserType('personal');
+            if (data.programme) {
+              setProgramLock(true);
+              if (data.programme.includes("Women Wellness 360")) setshowWomenPopup(true);
+              if (data.programme.includes("Child Wellness 360")) setshowChildPopup(true);
+              if (data.programme.includes("SEL Assessment 360")) setshowMenPopup(true);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchUserData();
+    }
+
+
+    if ((queryParams.get('invite-type') === 'partner') && token) {
+
+      setInvite({ type: 'partner', token });
+
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/partner-invite/${token}`, {
+            method: 'GET',
+            headers: { 'accept': 'application/json' }
+          });
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+          const data = await response.json();
+          if (data.name && data.email && data.partner_type) {
+            methods.setValue('organisation_type', data.partner_type);
             methods.setValue('name', data.name);
             methods.setValue('email', data.email);
             methods.setValue('password', '');
@@ -485,41 +654,6 @@ function SignupUI({
 
       fetchUserData();
     }
-
-
-
-    if ((queryParams.get('invite-type') === 'partner-user') && token) {
-
-      setInvite({ type: 'user', token });
-
-      const fetchUserData = async () => {
-        try {
-          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/user-invite/${token}`, {
-            method: 'GET',
-            headers: {
-              'accept': 'application/json',
-              'X-CSRFTOKEN': 'CgwkMP2tAkAZ0XirxsWPFQNMpOi8T8lSpGbWOQwgXxQYhkSzmwSIq2mQzUWHniq8'
-            }
-          });
-
-          if (!response.ok) throw new Error('Network response was not ok');
-
-          const data = await response.json();
-          if (data.name && data.email && data.organisation) {
-            methods.setValue('name', data.name);
-            methods.setValue('email', data.email);
-            methods.setValue('password', '');
-            setSelectedUserType('personal')
-          }
-          console.log(data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-
-      fetchUserData();
-    }
-
 
 
   }, [location, methods]);
@@ -593,12 +727,13 @@ function SignupUI({
                     {...methods.register("organisation_type")}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                     onChange={(e) => { setorgType(e.target.value) }}
+                    disabled={invitee.token}
                     required
                   >
                     <option value="" hidden selected>
                       * Organisation Type
                     </option>
-                    {['Clinics', 'Schools', 'NGO', 'Therapy Centers', 'Corporate'].map((type, i) => (
+                    {['Clinics', 'Schools', 'NGO', 'Therapy Center', 'Corporate'].map((type, i) => (
                       <option key={i} value={type}>
                         {type}
                       </option>
@@ -727,7 +862,7 @@ function SignupUI({
         {/* Popup Modal */}
         {showPopup === 1 && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-            <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg max-w-[800px] mx-6">
+            <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg max-w-[950px] mx-6">
 
               <div className="flex items-center justify-between space-x-6 mb-4">
 
@@ -772,10 +907,12 @@ function SignupUI({
                     I need LittleHugs for
                   </h3>
                   <div className="space-y-3 text-sm text-gray-700">
+
                     <label className="flex items-start gap-2">
                       <input
                         className="mt-1"
                         type="checkbox"
+                        disabled={programmeLock}
                         checked={showWomenPopup}
                         onChange={(e) => setshowWomenPopup((prev) => !prev)}
                       />
@@ -786,11 +923,24 @@ function SignupUI({
                       <input
                         type="checkbox"
                         className="mt-1"
+                        disabled={programmeLock}
                         checked={showChildPopup}
                         onChange={(e) => setshowChildPopup((prev) => !prev)}
                       />
                       <span>Child’s Development & Growth Plan</span>
                     </label>
+
+                    <label className="flex items-start gap-2">
+                      <input
+                        className="mt-1"
+                        type="checkbox"
+                        disabled={programmeLock}
+                        checked={showMenPopup}
+                        onChange={(e) => setshowMenPopup((prev) => !prev)}
+                      />
+                      <span>SEL Plan</span>
+                    </label>
+
                   </div>
                 </>
               )}
@@ -908,7 +1058,7 @@ function SignupUI({
 
                             {/* Dropdown menu */}
                             {isWomenGoalOpen && (
-                              <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                              <div ref={womenGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                                 {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
                                   .map((option) => (
                                     <div
@@ -1048,9 +1198,11 @@ function SignupUI({
                             <option>6-12 years</option>
                           </select>
 
+
                           <div>
                             {/* Dropdown button */}
                             <div
+
                               className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
                               onClick={toggleChildGoalDropdown}
                             >
@@ -1070,7 +1222,7 @@ function SignupUI({
 
                             {/* Dropdown menu */}
                             {isChildGoalOpen && (
-                              <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                              <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                                 {childOptions.map((option) => (
                                   <div
                                     key={option}
@@ -1092,6 +1244,174 @@ function SignupUI({
                               </div>
                             )}
                           </div>
+
+
+                        </div>
+                      </form>
+                    </div>
+                  )}
+
+                  {/* for Men */}
+                  {showMenPopup && (
+                    <div className="min-w-[300px] mx-auto">
+                      <h2 className="font-bold text-center">Men Profile</h2>
+                      <div className="mx-auto w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-md mb-2">
+                        <label htmlFor="menDPInput">
+                          <img
+                            src={menDP}
+                            alt="Profile"
+                            className="w-full h-full object-cover cursor-pointer"
+                          />
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="menDPInput"
+                          style={{ display: "none" }}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const imageUrl = URL.createObjectURL(file);
+                              setMenDP(imageUrl);
+                            }
+                          }}
+                        />
+                      </div>
+
+                      <form ref={menFormRef} >
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <input
+                            name="dob"
+                            type="date"
+                            placeholder="Date Of Birth"
+                            className="border p-2 rounded"
+                          />
+                          <select
+                            name="lifeStage"
+                            className="border p-2 rounded"
+                            required
+                          >
+                            <option value="" selected hidden>
+                              * Current life stage
+                            </option>
+                            {['Teenager', 'Early Adulthood', 'Adulthood'].map((tone, i) => {
+                              return (<option>{tone}</option>)
+                            })}
+                          </select>
+
+                          <div className="relative">
+                            <input
+                              name="weight"
+                              type="text"
+                              placeholder="Weight"
+                              className="border p-2 rounded w-full"
+                              required
+                            />
+                            <span className="absolute right-2 top-2.5 text-gray-500">
+                              kg
+                            </span>
+                          </div>
+                          <div className="relative">
+                            <input
+                              name="height"
+                              type="text"
+                              placeholder="Height"
+                              className="border p-2 rounded w-full"
+                              required
+                            />
+                            <span className="absolute right-2 top-2.5 text-gray-500">
+                              cm
+                            </span>
+                          </div>
+
+                          <select name="lifeStyle" className="border p-2 rounded" required>
+                            <option value="" selected hidden>
+                              * Life Style
+                            </option>
+                            <option>Nuclear Family</option>
+                            <option>Joint Family</option>
+                            <option>Single Parent</option>
+                            <option>Shared Accommodation / Hostel</option>
+                            <option>Urban / Metro City</option>
+                            <option>Suburban / Town</option>
+                            <option>Rural / Village</option>
+                          </select>
+
+
+                          <div>
+                            {/* Dropdown button */}
+                            <div
+                              className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
+                              onClick={toggleWomenGoalDropdown}
+                            >
+                              {selectedWomenGoalOptions.length === 0 ? (
+                                <span className="text-gray-500">
+                                  * Goal is to work on
+                                </span>
+                              ) : (
+                                selectedWomenGoalOptions.map((option) => (
+                                  <div
+                                    key={option}
+                                    className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                                  >
+                                    <span>{option}</span>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+
+                            {/* Dropdown menu */}
+                            {isWomenGoalOpen && (
+                              <div ref={womenGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                                {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                                  .map((option) => (
+                                    <div
+                                      key={option}
+                                      className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                        (item) => item === option
+                                      )
+                                        ? "bg-blue-50"
+                                        : ""
+                                        }`}
+                                      onClick={() =>
+                                        toggleWomenGoalOption(option)
+                                      }
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedWomenGoalOptions.some((item) => item === option)}
+                                        readOnly
+                                        className="mr-2"
+                                      />
+                                      {option}
+                                    </div>
+                                  ))}
+                              </div>
+                            )}
+                          </div>
+
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="* Occupation"
+                              className="border p-2 rounded w-full pr-10"
+                              name="occupation"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <select name="tone_prefrence" className="w-full border p-2 rounded" required>
+                              <option value="" hidden selected>
+                                * Tone Prefrence
+                              </option>
+                              {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
+                                return (
+                                  <option>{tone}</option>
+                                )
+                              })}
+                            </select>
+                          </div>
+
                         </div>
                       </form>
                     </div>
@@ -1116,15 +1436,13 @@ function SignupUI({
                 )}
                 {currentStep === 1 && (
                   <button
-                    className={`px-8 py-2 text-white rounded-full ${showWomenPopup || showChildPopup
-                      ? "bg-blue-500 hover:bg-blue-600"
-                      : "bg-gray-400"
-                      } transition-colors`}
+                    className={`px-8 py-2 text-white rounded-full ${showWomenPopup || showChildPopup || showMenPopup
+                      ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400"} transition-colors`}
                     onClick={() =>
                       setCurrentStep((prevStep) => Math.min(prevStep + 1, 2))
                     }
                     disabled={
-                      currentStep >= 2 || (!showWomenPopup && !showChildPopup)
+                      currentStep >= 2 || (!showWomenPopup && !showChildPopup && !showMenPopup)
                     }
                   >
                     Next
@@ -1146,6 +1464,9 @@ function SignupUI({
         {showPopup === 2 && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div className="bg-[#FFF9E8] p-6 rounded-md shadow-lg w-[600px] mx-6">
+              <button className="ml-auto" onClick={() => { setShowPopup(null) }}>
+                <X className="w-5 h-5 text-red-600" />
+              </button>
               <div className="flex flex-col items-center mb-6">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow mb-2">
                   <img
@@ -1177,13 +1498,14 @@ function SignupUI({
                 <select
                   className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                   required
+                  onChange={() => { }}
                 >
                   <option value="" hidden selected>
                     * Country
                   </option>
                   {allCountries.map((country, i) => (
-                    <option key={i} value={country}>
-                      {country}
+                    <option key={i} value={country.code}>
+                      {country.name}
                     </option>
                   ))}
                 </select>
@@ -1516,6 +1838,7 @@ function SignupUI({
             </div>
           </div>
         )}
+
         {showPopup === "PrivacyPolicy" && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

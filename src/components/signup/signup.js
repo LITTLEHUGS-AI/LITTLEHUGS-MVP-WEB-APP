@@ -24,6 +24,7 @@ function handleSubmitApi(mutate, data, invite) {
     return mutate(payload);
 }
 
+
 function Signup() {
     const navigate = useNavigate();
     const [isOtp, setIsOtp] = useState(false);
@@ -31,7 +32,7 @@ function Signup() {
     const { signUpMutation, visible, handleShowPassword, handleShowConfirmPassword, handleSsoLogin } = useSignUp();
 
     useEffect(() => {
-        if (signUpMutation.isSuccess) {
+        if (signUpMutation.isSuccess && signUpMutation.variables && signUpMutation.variables.invite) {
             if (signUpMutation.variables.invite && Object.keys(signUpMutation.variables.invite).length > 0 && signUpMutation.variables.invite.constructor === Object && signUpMutation.variables.invite.token != null) {
                 localStorage.setItem('accessToken', `token ${signUpMutation.data.token}`);
                 localStorage.setItem('userType', signUpMutation.variables.invite.type);
@@ -39,41 +40,9 @@ function Signup() {
             }
             else setIsOtp(true);
         }
-    }, [navigate, signUpMutation.isSuccess,signUpMutation.variables.invite, isOtp, signUpMutation.data]);
+    }, [navigate, signUpMutation.isSuccess, signUpMutation.variables, signUpMutation.data]);
 
-    const onSubmit = async (data, inviteType) => {
-        await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);
-
-        // if (inviteType.token) {
-        //     // toast.success('Registration Successfull');
-        //     localStorage.setItem('accessToken', `token ${res.token}`);
-        //     if (inviteType.type === 'team') {
-        //         localStorage.setItem('userType', 'partner');
-        //         navigate('/partner/dashboard')
-        //     }
-        //     if (inviteType.type === 'user') {
-
-        //         fetch("https://api.ourlittlehugs.com/v1/api/mother-profile", {
-        //             method: 'POST',
-        //             body: JSON.stringify({}),
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'Authorization': `token ${res.token}`
-        //             }
-        //         }).then(response => {
-        //             if (!response.ok) throw new Error('Network response was not ok ' + response.statusText);
-        //             return response.json();
-        //         }).then(() => {
-        //             localStorage.setItem('userType', 'user');
-        //             navigate('/personal/dashboard')
-        //         }).catch(error => {
-        //             toast.error(error.message);
-        //         });
-        //     }
-        // }
-
-    }
-
+    const onSubmit = async (data, inviteType) => await handleSubmitApi(signUpMutation.mutateAsync, data, inviteType);
 
     const { title, description } = routesConfig.signUp;
 

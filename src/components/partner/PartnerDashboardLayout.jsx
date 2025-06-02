@@ -60,7 +60,7 @@ const PartnerDashboardLayout = () => {
 
         <div className="w-full flex flex-row pt-14 md:pt-0">
           {/* Desktop Sidebar */}
-          <div className="hidden md:flex md:h-screen bg-white min-w-[250px] max-w-xs w-64 flex-shrink-0 flex-col border border-gray-300 rounded-[10px] mx-2 my-4">
+          <div className="hidden md:flex md:h-screen bg-white min-w-[250px] max-w-xs w-64 flex-shrink-0 flex-col border border-gray-300 rounded-[10px]">
             <PartnerSidebar onTabChange={handleTabChange} />
           </div>
 

@@ -13,12 +13,20 @@ import {
 const { TextArea } = Input;
 
 // Options for the dropdowns
-const SERVICES_OFFERED_OPTIONS = [
+const SERVICES_OFFERED_OPTIONS_All = [
   { label: "Developmental Screening", value: "Developmental Screening" },
-  { label: "Health Monitoring", value: "Health Monitoring" },
-  { label: "School Readiness", value: "School Readiness" },
-  { label: "Behavioral Therapy", value: "Behavioral Therapy" },
-  { label: "Parental Counseling", value: "Parental Counseling" },
+  { label: "Wellness Screening", value: "Wellness Screening" },
+  { label: "Social, Emotional Language Screening", value: "Social, Emotional Language Screening" },
+  { label: "Behavioural Screening", value: "Behavioural Screening" }
+];
+
+const SERVICES_OFFERED_OPTIONS_Therepy = [
+  { label: "Developmental Screening", value: "Developmental Screening" },
+  { label: "Wellness Screening", value: "Wellness Screening" },
+  { label: "Social, Emotional Language Screening", value: "Social, Emotional Language Screening" },
+  { label: "Behavioural Screening", value: "Behavioural Screening" },
+  { label: "Parental Counsiling", value: "Parental Counsiling" },
+  { label: "Health Monetering", value: "Health Monetering" }
 ];
 
 const LITTLEHUGS_FOR_OPTIONS = [
@@ -65,16 +73,15 @@ const CustomMultiSelectDropdown = ({
         tabIndex={0}
       >
         <span
-          className={`select-none ${
-            selected.length === 0 ? "text-gray-400" : "text-gray-700"
-          }`}
+          className={`select-none ${selected.length === 0 ? "text-gray-400" : "text-gray-700"
+            }`}
         >
           {selected.length === 0
             ? placeholder
             : options
-                .filter((opt) => selected.includes(opt.value))
-                .map((opt) => opt.label)
-                .join(", ")}
+              .filter((opt) => selected.includes(opt.value))
+              .map((opt) => opt.label)
+              .join(", ")}
         </span>
         <span className="text-lg text-gray-400">&#x25BC;</span>
       </div>
@@ -128,9 +135,8 @@ const CustomSingleSelectDropdown = ({
         tabIndex={0}
       >
         <span
-          className={`select-none ${
-            !selected ? "text-gray-400" : "text-gray-700"
-          }`}
+          className={`select-none ${!selected ? "text-gray-400" : "text-gray-700"
+            }`}
         >
           {selected ? selected : placeholder}
         </span>
@@ -166,7 +172,7 @@ const getInitialDescRows = () =>
   typeof window !== "undefined" && window.innerWidth < 768 ? 4 : 7;
 
 const PartnerFirmSetting = () => {
-  const { setLogo } = usePartner();
+  const { setLogo, userProfile } = usePartner();
 
   const [logo, setLogoLocal] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
@@ -206,7 +212,7 @@ const PartnerFirmSetting = () => {
       } catch (error) {
         toast.error(
           error?.response?.data?.message ||
-            "Failed to fetch organization profile"
+          "Failed to fetch organization profile"
         );
       } finally {
         if (showLoader) setProfileLoading(false);
@@ -222,6 +228,14 @@ const PartnerFirmSetting = () => {
   const handleLogoChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
+      const maxSize = 2 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert('File size exceeds 2MB. Please upload a smaller file.');
+        return;
+      }
+
+
       setLogoLocal(file);
       setLogoFile(file);
       const reader = new FileReader();
@@ -288,7 +302,7 @@ const PartnerFirmSetting = () => {
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
-          "Failed to update profile. Please try again."
+        "Failed to update profile. Please try again."
       );
     } finally {
       setLoading(false);
@@ -393,6 +407,9 @@ const PartnerFirmSetting = () => {
                     )}
                   </div>
                 </label>
+                <span className="text-[#979FA8] text-xs md:text-base font-quicksand">
+                  (Max. Size 2 MB)
+                </span>
                 <span className="text-[#979FA8] text-xs md:text-base mb-2 font-quicksand">
                   Drag/Drop files here
                 </span>
@@ -435,7 +452,7 @@ const PartnerFirmSetting = () => {
             {/* Services you offer */}
             <CustomMultiSelectDropdown
               placeholder="* Services you offer"
-              options={SERVICES_OFFERED_OPTIONS}
+              options={userProfile.partner_type === "Therapy Center" ? SERVICES_OFFERED_OPTIONS_Therepy : SERVICES_OFFERED_OPTIONS_All}
               selected={servicesOffered}
               setSelected={setServicesOffered}
             />
@@ -458,11 +475,10 @@ const PartnerFirmSetting = () => {
                   key={option}
                   type="button"
                   onClick={() => setNumEmployees(option)}
-                  className={`border rounded-full px-2 py-1 md:px-4 md:py-2 text-xs md:text-base font-quicksand transition-colors duration-150 ${
-                    numEmployees === option
-                      ? "border-[#4F7DDD] text-[#4F7DDD] bg-[#F4F8FF]"
-                      : "border-[#26323866] text-gray-700 bg-white"
-                  }`}
+                  className={`border rounded-full px-2 py-1 md:px-4 md:py-2 text-xs md:text-base font-quicksand transition-colors duration-150 ${numEmployees === option
+                    ? "border-[#4F7DDD] text-[#4F7DDD] bg-[#F4F8FF]"
+                    : "border-[#26323866] text-gray-700 bg-white"
+                    }`}
                 >
                   {option}
                 </button>
@@ -476,9 +492,8 @@ const PartnerFirmSetting = () => {
           loading={loading}
           disabled={!isFormValid || loading}
           onClick={handleSave}
-          className={`w-full md:w-[30rem] text-white text-[16px] md:text-lg font-normal rounded-full px-4 md:px-16 py-2 h-auto font-quicksand ${
-            isFormValid ? "bg-[#4F7DDD]" : "bg-[#4F7DDDBF] cursor-not-allowed"
-          }`}
+          className={`w-full md:w-[30rem] text-white text-[16px] md:text-lg font-normal rounded-full px-4 md:px-16 py-2 h-auto font-quicksand ${isFormValid ? "bg-[#4F7DDD]" : "bg-[#4F7DDDBF] cursor-not-allowed"
+            }`}
           type="primary"
         >
           {loading ? "Saving..." : "Save"}

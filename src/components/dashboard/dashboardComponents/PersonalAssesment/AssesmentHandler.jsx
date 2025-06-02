@@ -82,7 +82,7 @@ export default function AssesmentHandler() {
 
     const submitAssessment = async () => {
         try {
-            const response = await fetch('https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -125,48 +125,39 @@ export default function AssesmentHandler() {
 
 
     const finalSubmit = async () => {
+
         try {
-
-
-
-
-
-            try {
-                const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Authorization': localStorage.getItem('accessToken'),
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ responses: finalAnswers })
-                    }
-                );
-
-                if (!response.ok) {
-                    toast.error('Got an Error, Please Retry');
-                    navigate('/personal/assessment')
-                    return;
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': localStorage.getItem('accessToken'),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ responses: finalAnswers })
                 }
+            );
 
-                await response.json();
-                toast.success('Insights Generated');
-                navigate('/personal/dashboard')
-            } catch (err) {
+            if (!response.ok) {
                 toast.error('Got an Error, Please Retry');
                 navigate('/personal/assessment')
+                return;
             }
 
-        } catch (error) {
-            console.error('Error:', error);
+            await response.json();
+            toast.success('Insights Generated');
+            navigate('/personal/dashboard')
+        } catch (err) {
+            toast.error('Got an Error, Please Retry');
+            navigate('/personal/assessment')
         }
     }
 
     return (
         <div className="flex flex-col md:flex-row h-screen bg-gray-50">
 
-      <Sidebar />
+            <Sidebar />
 
             {/* Main content - scrollable */}
             <div className="flex flex-col flex-1 overflow-y-auto">

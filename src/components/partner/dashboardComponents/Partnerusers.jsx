@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
 import { Input, Select, Spin } from "antd";
-import { getLatestAssessmentsByUser, getUserMembers, getTeamMembers, inviteUser } from "../../../api/partner-apis";
+import { getLatestAssessmentsByUser, getUserMembers, getTeamMembers, inviteUser, deleteUserMembers } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import { usePartner } from "../../../lib/PartnerContext";
 import CommonLoader from "./CommonLoader";
@@ -14,9 +14,7 @@ const PartnerUsers = () => {
   const { userProfile } = usePartner();
 
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
-
 
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [userName, setUserName] = useState("");
@@ -75,7 +73,7 @@ const PartnerUsers = () => {
 
   const fetchTeamMembers = useCallback(async () => {
     try {
-      setLoading(true);
+      setUsersLoading(true);
       const response = await getTeamMembers();
       const options = response.map((member) => ({
         label: member.name,
@@ -86,58 +84,41 @@ const PartnerUsers = () => {
       console.error("Error fetching team members:", error);
       toast.error(error?.response?.data?.detail || "Failed to fetch team members");
     } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchUsers = useCallback(async () => {
-    try {
-      setUsersLoading(true);
-      // const response = await getUserLists();
-
-      // setUsers(response);
-
-      // if (response.results.length > 0) {
-
-      // const usersData = getLatestAssessmentsByUser(response.results);
-      // setUsers(usersData);
-      // debugger
-      // const completed = response.results.filter(
-      //   (user) => user.status.toLowerCase() === "completed"
-      // ).length;
-      // const incomplete = response.count - completed;
-
-      // setCompletedCount(completed);
-      // setIncompleteCount(incomplete);
-
-      // const assessmentChartData = calculateAssessmentData(response.results);
-      // setAssessmentData(assessmentChartData);
-
-      // const domainChartData = calculateDomainData(response.results);
-      // setDomainData(domainChartData);
-      // }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      // toast.error(error?.response?.data?.message || "Failed to fetch users");
-    } finally {
       setUsersLoading(false);
     }
   }, []);
 
 
+  async function fetchUsers() {
+    const response = await getUserMembers();
+    const usersData = getLatestAssessmentsByUser(response.results);
+    setUsers({ count: usersData.length, results: usersData });
+  }
 
   // Fetch team members on component mount
   useEffect(() => {
     fetchTeamMembers();
-    async function a() {
-      const response = await getUserMembers();
-      const usersData = getLatestAssessmentsByUser(response.results);
-      setUsers({ count: usersData.length, results: usersData });
-    }
-    a();
     fetchUsers();
-  }, [fetchTeamMembers, fetchUsers]);
+  }, [fetchTeamMembers]);
 
+
+
+  async function deleteUser(user) {
+    const confirmed = window.confirm('Are you sure you want to delete this user?');
+    if (!confirmed) return;
+    
+    try {
+      setInviteLoading(true)
+      await deleteUserMembers(user.id);
+      fetchUsers();
+    }
+    catch {
+      toast.error('Failed to Delete User')
+    }
+    finally {
+      setInviteLoading(false);
+    }
+  }
 
 
 
@@ -246,16 +227,20 @@ const PartnerUsers = () => {
                       Assigned Program
                     </th>
 
-                    {/* <th className="px-3 py-2 text-left font-normal">
-                      Latest Assessment
-                    </th> */}
                     <th className="px-3 py-2 text-left font-normal">
-                     Joined Date
+                      Latest Assessment
                     </th>
-                    {/* <th className="px-3 py-2 text-left font-normal">
+                    <th className="px-3 py-2 text-left font-normal">
+                      Joined Date
+                    </th>
+                    <th className="px-3 py-2 text-left font-normal">
                       Onboarding Status
-                    </th> */}
+                    </th>
+                    <th className="px-3 py-2 text-left font-normal">
+                      Action
+                    </th>
                   </tr>
+
                 </thead>
                 <tbody className="text-base">
                   {usersLoading ? (
@@ -286,15 +271,21 @@ const PartnerUsers = () => {
                           ))}
                         </td>
 
-                        {/* <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
+                        <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
                           {u?.assessment_type}
-                        </td> */}
+                        </td>
+
                         <td className="px-3 py-2 whitespace-nowrap">
                           {formatDate(u?.date_joined)}
                         </td>
-                        {/* <td className="px-3 py-2 whitespace-nowrap">
+
+                        <td className="px-3 py-2 whitespace-nowrap">
                           <span className="font-normal">{u?.status}</span>
-                        </td> */}
+                        </td>
+
+                        <td className="px-3  py-2 whitespace-nowrap">
+                          <button onClick={() => deleteUser(u)} className="p-2 bg-red-500 font-semibold text-white rounded-lg">Delete</button>
+                        </td>
                       </tr>
                     ))
                   )}
@@ -349,7 +340,7 @@ const PartnerUsers = () => {
                   value={therapist}
                   onChange={setTherapist}
                   options={teamMembers}
-                  loading={loading}
+                  loading={usersLoading}
                   className="h-[2.5rem]"
                 />
               </div>

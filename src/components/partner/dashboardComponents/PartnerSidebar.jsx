@@ -115,7 +115,7 @@ const PartnerSidebar = ({ onTabChange }) => {
 
           {activeTab === "settings" && settingsOpen && (
             <div className="flex flex-col ml-10 mt-1 space-y-1">
-              {userProfile.is_member === false &&
+              {/* {userProfile.is_member === false && */}
                 <button
                   onClick={() => handleSubTabClick("team")}
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
@@ -123,7 +123,7 @@ const PartnerSidebar = ({ onTabChange }) => {
                 >
                   Team member
                 </button>
-              }
+              {/* } */}
               <button
                 onClick={() => handleSubTabClick("users")}
                 className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "users"
@@ -133,7 +133,7 @@ const PartnerSidebar = ({ onTabChange }) => {
               >
                 Users
               </button>
-              {userProfile?.is_member === false &&
+              {/* {userProfile?.is_member === false && */}
                 <button
                   onClick={() => handleSubTabClick("firm")}
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
@@ -141,7 +141,7 @@ const PartnerSidebar = ({ onTabChange }) => {
                 >
                   Firm Setting
                 </button>
-              }
+              {/* } */}
             </div>
           )}
         </div>

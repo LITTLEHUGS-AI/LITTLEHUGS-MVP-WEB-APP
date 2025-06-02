@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import RightHandSide from "./RightHandSide";
-import './Poppins-Regular-normal';
+// import './Poppins-Regular-normal';
 
 const Main = () => {
 
@@ -50,7 +50,7 @@ const Main = () => {
     const pageWidth = doc.internal.pageSize.getWidth();
 
 
-    doc.setFont("Poppins-Regular");
+    // doc.setFont("Poppins-Regular");
 
     // Add logo (circle with segments) - centered
     const imgData = await toBase64('/images/logo.jpg',);

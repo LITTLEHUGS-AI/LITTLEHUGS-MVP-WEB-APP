@@ -129,6 +129,8 @@ const PartnerDashboard = () => {
 
   const fetchUniqueUsers = useCallback(async () => {
     try {
+      console.log(users);
+
       // setUsersLoading(true);
       const response = await getUniqueUsers();
 

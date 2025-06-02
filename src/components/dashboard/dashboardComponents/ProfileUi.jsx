@@ -5,7 +5,7 @@ import { Calendar, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 import store from "../../../config/storeInstance";
 import axios from "axios";
-import AddChildProfile from "./AddChildProifle";
+// import AddChildProfile from "./AddChildProifle";
 
 const ProfileUi = () => {
 
@@ -70,6 +70,7 @@ const ProfileUi = () => {
       [e.target.name]: e.target.value
     }));
     if (e.target.name === 'country') fetchCities(e.target.value);
+    if(false) setShowAddProfile(null);
   };
 
   const handleChildProfileChange = (e) => {
@@ -503,7 +504,7 @@ const ProfileUi = () => {
           </div>
 
 
-          {showAddProifle === 'childProfile' && <AddChildProfile />}
+          {/* {showAddProifle === 'childProfile' && <AddChildProfile />} */}
 
 
           {showAddProifle === null &&
@@ -797,7 +798,6 @@ const ProfileUi = () => {
                           value={childProfileData.dob}
                           onChange={handleChildProfileChange}
                         />
-                        {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
                       </div>
                     </div>
 

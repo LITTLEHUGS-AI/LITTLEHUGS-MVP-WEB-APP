@@ -43,7 +43,7 @@ function PartenerLandingPage() {
     e.preventDefault();
     setLoadingdDmo(true);
     try {
-      const result = await apiClient.post('https://api.ourlittlehugs.com/v1/api/demo/', {
+      const result = await apiClient.post(`${process.env.REACT_APP_API_URL}/v1/api/demo/`, {
         organization_type: formData.organization_type,
         name: formData.name,
         email: formData.email,

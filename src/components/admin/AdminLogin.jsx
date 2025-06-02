@@ -14,7 +14,7 @@ export default function AdminLogin() {
         e.preventDefault();
         setResponseMessage(null);
         try {
-            const response = await fetch('https://api.ourlittlehugs.com/v1/api/admin-login', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/admin-login`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',

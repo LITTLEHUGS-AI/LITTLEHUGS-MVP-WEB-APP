@@ -2,7 +2,7 @@ import axios from "axios";
 
 // API Configuration
 const API_CONFIG = {
-  baseURL: "https://api.ourlittlehugs.com/v1/api",
+  baseURL: `${process.env.REACT_APP_API_URL}/v1/api`,
   timeout: 30000, // 30 seconds
   headers: {
     "Content-Type": "application/json",

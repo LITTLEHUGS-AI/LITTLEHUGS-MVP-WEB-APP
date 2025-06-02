@@ -56,9 +56,9 @@ const Contact = () => {
             const origin = window.location.origin;
             let url = ""
             if (origin === "https://www.ourlittlehugs.com") {
-                url = "https://api.ourlittlehugs.com/v1/api/contact-us/"
+                url = `${process.env.REACT_APP_API_URL}/v1/api/contact-us/`
             } else {
-                url = "https://api.ourlittlehugs.com/v1/api/contact-us/"
+                url = `${process.env.REACT_APP_API_URL}/v1/api/contact-us/`
             }
 
             const response = await fetch(url, {

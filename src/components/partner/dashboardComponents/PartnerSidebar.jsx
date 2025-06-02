@@ -74,7 +74,7 @@ const PartnerSidebar = ({ onTabChange }) => {
           <img
             src={logo}
             alt="Logo"
-            className="w-full h-full object-cover rounded-full"
+            className="max-w-full max-h-full object-contain rounded-full"
           />
         ) : (
           <svg width="32" height="32" fill="#979FA8" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ const PartnerSidebar = ({ onTabChange }) => {
 
           {activeTab === "settings" && settingsOpen && (
             <div className="flex flex-col ml-10 mt-1 space-y-1">
-              {/* {userProfile.is_member === false && */}
+              {userProfile?.is_team_member === false &&
                 <button
                   onClick={() => handleSubTabClick("team")}
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
@@ -123,7 +123,7 @@ const PartnerSidebar = ({ onTabChange }) => {
                 >
                   Team member
                 </button>
-              {/* } */}
+              }
               <button
                 onClick={() => handleSubTabClick("users")}
                 className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "users"
@@ -133,7 +133,7 @@ const PartnerSidebar = ({ onTabChange }) => {
               >
                 Users
               </button>
-              {/* {userProfile?.is_member === false && */}
+              {userProfile?.is_team_member === false &&
                 <button
                   onClick={() => handleSubTabClick("firm")}
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
@@ -141,7 +141,7 @@ const PartnerSidebar = ({ onTabChange }) => {
                 >
                   Firm Setting
                 </button>
-              {/* } */}
+              }
             </div>
           )}
         </div>
@@ -149,7 +149,7 @@ const PartnerSidebar = ({ onTabChange }) => {
 
       <div className="mt-auto flex items-center gap-3 px-6 py-2 border-t border-gray-300">
         <img
-          src="/images/user.jpg"
+          src={logo}
           alt="User Avatar"
           className="w-10 h-10 rounded-full border"
         />

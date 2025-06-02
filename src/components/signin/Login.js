@@ -60,7 +60,7 @@ function SignInUI({
 
     async function handleForgetEmailSubmit() {
         try {
-            const res = await fetch('https://api.ourlittlehugs.com/v1/api/password-reset/request', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/password-reset/request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ "email": forgetEmail })
@@ -79,7 +79,7 @@ function SignInUI({
     async function handleForgetOtpSubmit() {
 
         try {
-            const res = await fetch('https://api.ourlittlehugs.com/v1/api/password-reset/reset', {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/password-reset/reset`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

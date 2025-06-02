@@ -480,7 +480,7 @@ const Main = () => {
     setStep('loading');
 
     try {
-      const response = await fetch(`https://api.ourlittlehugs.com/v1/api/share-assessment?_type=${current}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/share-assessment?_type=${current}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

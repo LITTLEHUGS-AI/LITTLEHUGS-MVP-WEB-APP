@@ -37,7 +37,7 @@ export default function AdminPartners() {
 
 
     useEffect(() => {
-        fetch('https://api.ourlittlehugs.com/v1/api/invite-partner/', {
+        fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/`, {
             method: 'GET',
             headers: {
                 'accept': 'application/json',
@@ -56,7 +56,7 @@ export default function AdminPartners() {
     }, []);
 
     const invitePartner = () => {
-        fetch('https://api.ourlittlehugs.com/v1/api/invite-partner/', {
+        fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/`, {
             method: 'POST',
             body: JSON.stringify({ name: newPartner.name, email: newPartner.email, partner_type: newPartner.partnerType }),
             headers: {

@@ -240,22 +240,21 @@ const PartnerUsers = () => {
                     {userProfile.partner_type === 'Therapy Center' &&
                       <th className="px-3 py-2 text-left font-normal">
                         Assigned Therapist
-                      </th>
-                    }
+                      </th>}
 
                     <th className="px-3 py-2 text-left font-normal">
                       Assigned Program
                     </th>
 
+                    {/* <th className="px-3 py-2 text-left font-normal">
+                      Latest Assessment
+                    </th> */}
                     <th className="px-3 py-2 text-left font-normal">
-                      Assessment
+                     Joined Date
                     </th>
-                    <th className="px-3 py-2 text-left font-normal">
-                      Date
-                    </th>
-                    <th className="px-3 py-2 text-left font-normal">
-                      Status
-                    </th>
+                    {/* <th className="px-3 py-2 text-left font-normal">
+                      Onboarding Status
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="text-base">
@@ -267,7 +266,7 @@ const PartnerUsers = () => {
                     </tr>
                   ) : (
                     users?.results?.map((u, i) => (
-                      <tr className={`${i%2===0 ? 'bg-gray-100':''}`} key={i}>
+                      <tr className={`${i % 2 === 0 ? 'bg-gray-100' : ''}`} key={i}>
                         <td className="px-3 py-2 whitespace-nowrap">
                           {u?.username}
                         </td>
@@ -287,15 +286,15 @@ const PartnerUsers = () => {
                           ))}
                         </td>
 
-                        <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
+                        {/* <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
                           {u?.assessment_type}
-                        </td>
+                        </td> */}
                         <td className="px-3 py-2 whitespace-nowrap">
                           {formatDate(u?.date_joined)}
                         </td>
-                        <td className="px-3 py-2 whitespace-nowrap">
+                        {/* <td className="px-3 py-2 whitespace-nowrap">
                           <span className="font-normal">{u?.status}</span>
-                        </td>
+                        </td> */}
                       </tr>
                     ))
                   )}

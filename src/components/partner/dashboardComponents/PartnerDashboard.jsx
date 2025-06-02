@@ -116,7 +116,6 @@ const PartnerDashboard = () => {
         setAssessmentData(assessmentChartData);
 
         const domainChartData = calculateDomainData(response.results);
-        // debugger
         setDomainData(domainChartData);
       }
     } catch (error) {
@@ -131,18 +130,15 @@ const PartnerDashboard = () => {
     try {
       console.log(users);
 
-      // setUsersLoading(true);
       const response = await getUniqueUsers();
 
-
       if (response.results.length > 0) {
-        const { uniqueUsers, completedAtLeastOneAssessment, didNotCompleteAnyAssessment, totalCompletedAssessments, totalIncompleteAssessments } = analyzeAssessmentData(response.results);
+        const { uniqueUsers, completedAtLeastOneAssessment, didNotCompleteAnyAssessment, totalCompletedAssessments } = analyzeAssessmentData(response.results);
         setUniqueUsers(uniqueUsers);
         setCompletedCount(completedAtLeastOneAssessment);
         setIncompleteCount(didNotCompleteAnyAssessment);
         setCompletedAssesCount(totalCompletedAssessments);
-        completedAssesCount(totalIncompleteAssessments);
-        setTotalAssess(response.results.length);
+        setTotalAssess(response?.count || 0);
 
         const assessmentChartData = calculateAssessmentData(response.results);
         setAssessmentData(assessmentChartData);
@@ -156,7 +152,7 @@ const PartnerDashboard = () => {
     } finally {
       setUsersLoading(false);
     }
-  }, [calculateAssessmentData, calculateDomainData, completedAssesCount, users]);
+  }, [calculateAssessmentData, calculateDomainData, users]);
 
   useEffect(() => {
     if (!initialFetchDone.current) {
@@ -202,13 +198,6 @@ const PartnerDashboard = () => {
   };
 
 
-
-
-  // useEffect(() => {
-  //   const a = getUserAssessmentCounts(users.results);
-  //   setCompletedUsers(a.completed);
-  //   setInCompleteUsers(a.notCompleted);
-  // }, [users])
 
 
   const formatNumber = (num) => {

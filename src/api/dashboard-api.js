@@ -3,7 +3,7 @@ import axios from "axios";
 export const getWomenProfileDetails = async () => {
   try {
     const response = await axios.get(
-      `https://${process.env.REACT_APP_API_URL}/v1/api/user-profiles`,
+      `${process.env.REACT_APP_API_URL}/v1/api/user-profiles`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
       }
@@ -17,7 +17,7 @@ export const getWomenProfileDetails = async () => {
 export const getChildProfileDetails = async () => {
   try {
     const response = await axios.get(
-      `https://${process.env.REACT_APP_API_URL}/v1/api/child-profile`,
+      `${process.env.REACT_APP_API_URL}/v1/api/child-profile`,
       {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
@@ -33,7 +33,7 @@ export const getChildProfileDetails = async () => {
 export const getAssessmentData = async () => {
   try {
     const response = await axios.get(
-      `https://${process.env.REACT_APP_API_URL}/v1/api/assessments/`,
+      `${process.env.REACT_APP_API_URL}/v1/api/assessments/`,
       {
         headers: { Authorization: localStorage.getItem("accessToken") },
       }
@@ -48,7 +48,7 @@ export const getAssessmentData = async () => {
 export const getShareAssessment = async (userType) => {
   try {
     const response = await axios.get(
-      `https://${process.env.REACT_APP_API_URL}/v1/api/share-assessment/?_type=${userType}`,
+      `${process.env.REACT_APP_API_URL}/v1/api/share-assessment/?_type=${userType}`,
       {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
@@ -64,7 +64,7 @@ export const getShareAssessment = async (userType) => {
 export const getInsightsData = async () => {
   try {
     const response = await axios.get(
-      `https://${process.env.REACT_APP_API_URL}/v1/api/insights/`,
+      `${process.env.REACT_APP_API_URL}/v1/api/insights/`,
       {
         headers: {
           Authorization: localStorage.getItem("accessToken"),

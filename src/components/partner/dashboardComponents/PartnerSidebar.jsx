@@ -115,15 +115,15 @@ const PartnerSidebar = ({ onTabChange }) => {
 
           {activeTab === "settings" && settingsOpen && (
             <div className="flex flex-col ml-10 mt-1 space-y-1">
-              {/* {userProfile.is_member === false && */}
-              <button
-                onClick={() => handleSubTabClick("team")}
-                className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
-                  ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
-              >
-                Team member
-              </button>
-              {/* } */}
+              {userProfile?.is_team_member === false &&
+                <button
+                  onClick={() => handleSubTabClick("team")}
+                  className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
+                    ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
+                >
+                  Team member
+                </button>
+              }
               <button
                 onClick={() => handleSubTabClick("users")}
                 className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "users"
@@ -133,26 +133,26 @@ const PartnerSidebar = ({ onTabChange }) => {
               >
                 Users
               </button>
-              {/* {userProfile?.is_member === false && */}
-              <button
-                onClick={() => handleSubTabClick("firm")}
-                className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
-                  ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
-              >
-                Firm Setting
-              </button>
-              {/* } */}
+              {userProfile?.is_team_member === false &&
+                <button
+                  onClick={() => handleSubTabClick("firm")}
+                  className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
+                    ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
+                >
+                  Firm Setting
+                </button>
+              }
             </div>
           )}
         </div>
       </nav>
 
       <div className="mt-auto flex items-center gap-3 px-6 py-2 border-t border-gray-300">
-         <img
-            src={logo}
-            alt="User Avatar"
-            className="w-10 h-10 rounded-full border"
-          />
+        <img
+          src={logo}
+          alt="User Avatar"
+          className="w-10 h-10 rounded-full border"
+        />
         <div className="flex flex-col">
           <Tooltip title={userProfile?.email || "amitsingh@gm..."}>
             <span className="text-sm font-normal text-gray-900">

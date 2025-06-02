@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
 import { Input, Select, Spin } from "antd";
-import { getLatestAssessmentsByUser, getUserMembers, getTeamMembers, getUserLists, inviteUser } from "../../../api/partner-apis";
+import { getLatestAssessmentsByUser, getUserMembers, getTeamMembers, inviteUser } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import { usePartner } from "../../../lib/PartnerContext";
 import CommonLoader from "./CommonLoader";
@@ -118,7 +118,7 @@ const PartnerUsers = () => {
       // }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch users");
+      // toast.error(error?.response?.data?.message || "Failed to fetch users");
     } finally {
       setUsersLoading(false);
     }

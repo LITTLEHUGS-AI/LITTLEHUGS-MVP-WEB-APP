@@ -1,0 +1,84 @@
+import { useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../lib/AuthContext";
+import { Loader } from "../common/Loader";
+import axios from "axios";
+
+const GoogleCallback = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasFetched = useRef(false);
+  const { login, hasAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+    const fetchUser = async () => {
+      const queryParams = new URLSearchParams(location.search);
+      const code = queryParams.get("code");
+      const token = queryParams.get("token");
+      const type = queryParams.get("type");
+
+      if (!type) {
+        if (code) {
+          try {
+            const response = await axios.post(
+              `${apiUrl}/v1/api/google/callback`,
+              { access_token: code, is_mobile: false }
+            );
+            const access_token = response?.data;
+            localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("userType", 'personal');
+
+            login(access_token);
+            window.location.href = "/personal/dashboard";
+          } catch (error) {
+            console.error("Error during authentication", error);
+          }
+        } else {
+          console.log("Code is not present");
+        }
+      } else {
+        if (token) {
+          try {
+            let payload = {
+              token: token,
+            };
+            const response = await axios.post(`${apiUrl}/auth/v2/login`, payload);
+            const access_token = response?.data?.access_token;
+            localStorage.setItem("accessToken", access_token);
+            localStorage.setItem("userType", 'personal');
+
+            login(access_token);
+            navigate('/personal/dashboard');
+
+            // getWomenProfileDetails().then((res) => {
+            //   if (res.is_personal)
+            //     navigate('/personal/dashboard');
+            //   if (res.is_organization)
+            //     navigate('/partner/dashboard');
+            // });
+
+          } catch (error) {
+            console.error("Error during authentication", error);
+          }
+        } else {
+          console.log("Token is not present");
+        }
+      }
+    };
+
+    fetchUser();
+  }, [apiUrl, navigate, location.search, login]);
+
+  useEffect(() => {
+    if (hasAuthenticated);
+  }, [hasAuthenticated]);
+
+  <div>
+    <Loader />
+  </div>;
+};
+
+export default GoogleCallback;

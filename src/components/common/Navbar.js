@@ -36,11 +36,11 @@ const Navbar = () => {
         <li className={isActive("/personal") ? "font-bold" : ""}>
           <Link to="/personal">For You</Link>
         </li>
-        <li className={isActive("/partener") ? "font-bold" : ""}>
-          <Link to="/partener">For Partners</Link>
+        <li className={isActive("/partner") ? "font-bold" : ""}>
+          <Link to="/partner">For Partners</Link>
         </li>
         <li className={isActive("/assesment") ? "font-bold" : ""}>
-          <Link to="/assesment">Assessments</Link>
+          <Link to="/assesment">Programs</Link>
         </li>
         <li className={isActive("/pricingplans") ? "font-bold" : ""}>
           <Link to="/pricingplans">Pricing</Link>
@@ -54,18 +54,14 @@ const Navbar = () => {
       </ul>
 
       {/* CTA Button */}
-      <div className="hidden sm:block z-20">
-        {isActive("/contact") ? (
-          <div className="w-[120px] h-[42px]"></div>
-        ) : (
+     
           <button
-            onClick={() => navigate('/contact')}
+            onClick={() => navigate('/signup')}
             className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
           >
             Try For Free
           </button>
-        )}
-      </div>
+      
 
       {/* Mobile Menu Button */}
       <button
@@ -95,11 +91,11 @@ const Navbar = () => {
           <li className={isActive("/personal") ? "font-bold" : ""}>
             <Link to="/personal" onClick={closeMenu}>For You</Link>
           </li>
-          <li className={isActive("/partener") ? "font-bold" : ""}>
-            <Link to="/partener" onClick={closeMenu}>For Partners</Link>
+          <li className={isActive("/partner") ? "font-bold" : ""}>
+            <Link to="/partner" onClick={closeMenu}>For Partners</Link>
           </li>
           <li className={isActive("/assesment") ? "font-bold" : ""}>
-            <Link to="/assesment" onClick={closeMenu}>Assessments</Link>
+            <Link to="/assesment" onClick={closeMenu}>Programs</Link>
           </li>
           <li className={isActive("/pricingplans") ? "font-bold" : ""}>
             <Link to="/pricingplans" onClick={closeMenu}>Pricing</Link>
@@ -117,7 +113,7 @@ const Navbar = () => {
           {!isActive("/contact") && (
             <button
               onClick={() => {
-                navigate('/contact');
+                navigate('/signup');
                 closeMenu();
               }}
               className="w-full max-w-xs h-12 bg-[#4F7DDD] hover:bg-blue-700 text-white text-base font-medium px-4 py-2 rounded-[10px]"

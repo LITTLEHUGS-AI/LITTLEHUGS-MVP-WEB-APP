@@ -5,6 +5,7 @@ import AppRoutes from "./lib/AppRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "./lib/useToastContext";
+import "react-toastify/dist/ReactToastify.css";
 // import TestToastContainer from "./components/common/TestToastContainer.js";
 
 const App = () => {
@@ -20,7 +21,18 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>

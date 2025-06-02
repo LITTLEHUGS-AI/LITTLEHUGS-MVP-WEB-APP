@@ -16,12 +16,12 @@ const MainHeader = () => {
                     From the first nudge to the final insight, we're here to make care simpler, stigma-free, and deeply human.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 sm:gap-4">
-                    <Link to="/assesment-landing" className="w-full sm:w-auto">
+                    <Link to="/assesment" className="w-full sm:w-auto">
                         <button className="bg-gray-800 text-white px-4 sm:px-6 py-2 rounded-full hover:bg-gray-700 transition w-full sm:w-auto text-sm sm:text-base">
-                            Take the free test
+                            Explore our Programs
                         </button>
                     </Link>
-                    <Link to="/partener-landing" className="w-full sm:w-auto mt-3 sm:mt-0">
+                    <Link to="/partner#book-a-demo" className="w-full sm:w-auto mt-3 sm:mt-0">
                         <button className="px-4 sm:px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition w-full sm:w-auto text-sm sm:text-base">
                             Partner with us
                         </button>

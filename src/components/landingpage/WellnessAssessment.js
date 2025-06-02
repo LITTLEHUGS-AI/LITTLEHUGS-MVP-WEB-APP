@@ -35,12 +35,12 @@ const WellnessAssessment = ({ onClose, heading }) => {
         {heading === 1 ? (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            LittleHugs 360° Women's Wellness Assessment
+            LittleHugs 360° Women's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Mood & emotional balance</li>
                 <li>Anxiety, overthinking</li>
@@ -64,15 +64,15 @@ const WellnessAssessment = ({ onClose, heading }) => {
         ) : heading === 2 ? (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            LittleHugs 360° Children's Wellness Assessment
+            LittleHugs 360° Children's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Developmental milestones (motor, speech, cognitive, social)</li>
-                <li>data[heading].input_l1Attention, learning, autism signs, behavioral regulation</li>
+                <li>learning, autism signs, behavioral regulation</li>
                 <li>Mood, anxiety, social-emotional health</li>
                 <li>Growth, nutrition, sensory function, immunizations</li>
               </ul>
@@ -84,7 +84,7 @@ const WellnessAssessment = ({ onClose, heading }) => {
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>RAG status (Red/Amber/Green) for each domain</li>
                 <li>Risk flags and severity scores</li>
-                <li>data[heading].input_l1Personalized insights, home strategies, and referral guidance</li>
+                <li>Personalized insights, home strategies, and referral guidance</li>
                 <li>Shareable caregiver summary (optional PDF)</li>
               </ul>
             </div>
@@ -92,12 +92,12 @@ const WellnessAssessment = ({ onClose, heading }) => {
         ) : (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            Universal SEL Assessment
+            LittleHugs Corporate Partnership Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Assesses:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
                 <li>Self-Awareness: Emotions, triggers, strengths</li>
                 <li>Self-Regulation: Stress management, impulse control</li>
@@ -128,7 +128,7 @@ const WellnessAssessment = ({ onClose, heading }) => {
         {/* Action Button */}
         <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
           <button
-            onClick={() => navigate("/contact")}
+            onClick={() => navigate("/signup")}
             className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
           >
             Take quick assessment

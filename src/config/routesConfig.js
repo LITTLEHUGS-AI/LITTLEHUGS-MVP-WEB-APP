@@ -26,7 +26,7 @@ const routesConfig = {
         description: 'A digital wellbeing app with science-backed wellness tests. Personalized care for moms, parents & women.'
     },
     partenerLanding: {
-        path: '/partener',
+        path: '/partner',
         title: 'Employee & Wellness Platform for Businesses',
         description: 'Boost well at work with early care tools for moms, kids & parents. Mass pre-screening, instant results, zero hassle.'
     },

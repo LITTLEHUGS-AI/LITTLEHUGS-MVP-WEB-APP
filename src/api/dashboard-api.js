@@ -1,0 +1,79 @@
+import axios from "axios";
+
+export const getWomenProfileDetails = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/user-profiles`,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getChildProfileDetails = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/child-profile`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAssessmentData = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/assessments/`,
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getShareAssessment = async (userType) => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/share-assessment/?_type=${userType}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getInsightsData = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.ourlittlehugs.com/v1/api/insights/`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+

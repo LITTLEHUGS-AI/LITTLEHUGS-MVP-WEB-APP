@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import useSignIn from "./useSignIn";
 import SignInUI from "./Login";
 import { useAuth } from "../../lib/AuthContext";
@@ -9,27 +9,33 @@ import routesConfig from "../../config/routesConfig";
 import DocumentHead from "../common/DocumentHead";
 
 function SignIn() {
-  const navigate = useNavigate();
   const { signInMutation, visible, handleShowPassword } = useSignIn();
-  const { login, hasAuthenticated } = useAuth();
+  const { login } = useAuth();
+  // const { login, hasAuthenticated } = useAuth();
   const data = signInMutation?.data;
 
   useEffect(() => {
     if (signInMutation.isSuccess) {
+      const responseData = signInMutation.data;
       login(data);
-      window.location.href = "/";
+      if (responseData.is_organization === true) {
+        localStorage.setItem("userType", 'partner');
+        window.location.href = "/partner/dashboard";
+      }
+      if (responseData.is_personal === true) {
+        localStorage.setItem("userType", 'personal');
+        window.location.href = "/personal/dashboard";
+      }
     }
-  }, [data, login, signInMutation.isSuccess]);
+  }, [data, login, signInMutation.isSuccess, signInMutation.data]);
 
-  useEffect(() => {
-    if (hasAuthenticated) {
-      navigate("/");
-    }
-  }, [hasAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (hasAuthenticated) {
+  //     navigate("/");
+  //   }
+  // }, [hasAuthenticated, navigate]);
 
-  const onSubmit = (data) => {
-    signInMutation.mutate(data);
-  };
+  const onSubmit = (data) => signInMutation.mutate(data);
 
   useEffect(() => {
     if (

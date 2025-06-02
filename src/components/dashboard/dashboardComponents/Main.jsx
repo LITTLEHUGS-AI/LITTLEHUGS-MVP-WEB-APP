@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import RightHandSide from "./RightHandSide";
+import './Poppins-Regular-normal';
 
 const Main = () => {
 
@@ -43,12 +44,13 @@ const Main = () => {
       format: 'a4'
     });
 
-
     // Set background color (light cream)
     doc.setFillColor(255, 248, 240);
     doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
     const pageWidth = doc.internal.pageSize.getWidth();
 
+
+    doc.setFont("Poppins-Regular");
 
     // Add logo (circle with segments) - centered
     const imgData = await toBase64('/images/logo.jpg',);
@@ -56,14 +58,12 @@ const Main = () => {
 
     doc.setFontSize(20);
     doc.setTextColor(65, 105, 225);
-    doc.setFont('helvetica', 'bold');
     doc.text(`LittleHugs`, pageWidth / 2 + 9, 17, { align: 'center' });
 
 
     // Add date text - centered
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
-    doc.setFont('helvetica', 'normal');
     doc.text(`Downloaded on : ${assessmentName.created_at}`, pageWidth / 2 + 16, 23, { align: 'center' });
 
     // Add user details - align left for label, proper spacing for value
@@ -88,7 +88,6 @@ const Main = () => {
     // Overall Wellness Score
     doc.setFontSize(18);
     doc.setTextColor(65, 105, 215);
-    doc.setFont('helvetica', 'bold');
     doc.text('Overall Wellness Score', pageWidth / 2, 90, { align: 'center' });
 
     // Score
@@ -139,7 +138,6 @@ const Main = () => {
       // Domain name with better text wrapping
       doc.setFontSize(7);
       doc.setTextColor(0, 0, 0);
-      doc.setFont('helvetica', 'bold');
 
       // Split long domain names into multiple lines
       const domainText = domain?.domain || '';
@@ -183,7 +181,6 @@ const Main = () => {
       // Score text with enhanced styling
       doc.setFontSize(9);
       doc.setTextColor(0, 0, 0);
-      doc.setFont('helvetica', 'bold');
       doc.text(`${domain.score}/10`, x + domainWidth / 2, circleY + 1, {
         align: 'center'
       });
@@ -194,7 +191,6 @@ const Main = () => {
     // Outcome Overview
     doc.setFontSize(18);
     doc.setTextColor(65, 105, 215);
-    doc.setFont('helvetica', 'bold');
     doc.text('Outcome Overview', pageWidth / 2, 190, { align: 'center' });
 
 
@@ -299,7 +295,6 @@ const Main = () => {
     // Insight Cards heading
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'bold');
     doc.text('Insight Cards', 20, 15);
 
 
@@ -308,6 +303,7 @@ const Main = () => {
     const cardSpacing = 8;
     const cardWidth = pageWidth - 30;
 
+    
     if (assessmentName?.assessment_output?.personality_insight) {
       assessmentName.assessment_output.personality_insight.split('.').forEach((insight, index) => {
         if (insight.trim().length === 0) return;
@@ -320,7 +316,6 @@ const Main = () => {
         // Card text
         doc.setFontSize(12);
         doc.setTextColor(60, 60, 90);
-        doc.setFont('helvetica', 'normal');
 
         // Center text vertically and horizontally in the card
         doc.text(insight || 'N/A', pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
@@ -332,7 +327,6 @@ const Main = () => {
     const nextStepY = cardY + (5 * (cardHeight + cardSpacing));
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'bold');
     doc.text('Next step suggestions', 10, nextStepY);
 
     // Next step suggestions list
@@ -346,7 +340,6 @@ const Main = () => {
 
     doc.setFontSize(12);
     doc.setTextColor(60, 60, 90);
-    doc.setFont('helvetica', 'normal');
 
     suggestions.forEach((suggestion, index) => {
       const y = nextStepY + 10 + (index * 10);
@@ -372,7 +365,6 @@ const Main = () => {
     // Button text "Download Our Mobile App"
     doc.setFontSize(16);
     doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
     doc.text('Download Our Mobile App', pageWidth / 2, buttonY + 5, { align: 'center' });
 
     // Download button

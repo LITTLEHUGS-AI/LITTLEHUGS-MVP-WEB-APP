@@ -23,6 +23,13 @@ import ProtectedRoute from "./ProtectedRoute";
 import OpenRoute from "./OpenRoute";
 import AcceptInviteUser from "../temp/AcceptInviteUser";
 import AcceptInviteTeam from "../temp/AcceptInviteTeam";
+import AdminLogin from "../components/admin/AdminLogin";
+import AdminDashboard from "../components/admin/AdminDashboard";
+import AdminPartners from "../components/admin/AdminPartners";
+import AcceptInvitePartner from "../temp/AcceptInvitePartner";
+
+
+
 
 function AppRoutes() {
   return (
@@ -106,8 +113,16 @@ function AppRoutes() {
               }
             />
 
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/partners" element={<AdminPartners />} />
+
+
+
             <Route path="/accept-invite-user/:inviteId" element={<AcceptInviteUser />} />
             <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam />} />
+            <Route path="/partner-invite/:inviteId" element={<AcceptInvitePartner />} />
+
 
           </Routes>
         </Suspense>

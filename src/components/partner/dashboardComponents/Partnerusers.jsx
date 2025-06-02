@@ -2,12 +2,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
 import { Input, Select, Spin } from "antd";
-import { getTeamMembers, getUserLists, inviteUser } from "../../../api/partner-apis";
+import { getLatestAssessmentsByUser, getUserMembers, getTeamMembers, getUserLists, inviteUser } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
+import { usePartner } from "../../../lib/PartnerContext";
 import CommonLoader from "./CommonLoader";
+import MultiSelectDropdown from "../../common/MultiSelectDropdown";
 
 
 const PartnerUsers = () => {
+
+  const { userProfile } = usePartner();
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
@@ -16,6 +21,7 @@ const PartnerUsers = () => {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [therapist, setTherapist] = useState("");
+  const [program, setProgram] = useState([]);
   const [inviteLoading, setInviteLoading] = useState(false);
 
   const [users, setUsers] = useState([]);
@@ -24,7 +30,7 @@ const PartnerUsers = () => {
 
   const handleCloseAddUser = () => setIsAddUserOpen(false);
   const handleInviteUser = async () => {
-    if (!userName.trim() || !email.trim() || !therapist) {
+    if (!userName.trim() || !email.trim() || !(therapist || program)) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -36,11 +42,20 @@ const PartnerUsers = () => {
 
     try {
       setInviteLoading(true);
-      await inviteUser({
-        name: userName,
-        email: email,
-        therapist: therapist,
-      });
+      if (userProfile.partner_type === 'Therapy Center') {
+        await inviteUser({
+          name: userName,
+          email: email,
+          therapist: therapist,
+          programme: program
+        });
+      } else {
+        await inviteUser({
+          name: userName,
+          email: email,
+          programme: program,
+        });
+      }
 
       toast.success("User invited successfully!");
       setIsAddUserOpen(false);
@@ -78,24 +93,29 @@ const PartnerUsers = () => {
   const fetchUsers = useCallback(async () => {
     try {
       setUsersLoading(true);
-      const response = await getUserLists();
-      setUsers(response);
+      // const response = await getUserLists();
 
-      if (response.results.length > 0) {
-        // const completed = response.results.filter(
-        //   (user) => user.status.toLowerCase() === "completed"
-        // ).length;
-        // const incomplete = response.count - completed;
+      // setUsers(response);
 
-        // setCompletedCount(completed);
-        // setIncompleteCount(incomplete);
+      // if (response.results.length > 0) {
 
-        // const assessmentChartData = calculateAssessmentData(response.results);
-        // setAssessmentData(assessmentChartData);
+      // const usersData = getLatestAssessmentsByUser(response.results);
+      // setUsers(usersData);
+      // debugger
+      // const completed = response.results.filter(
+      //   (user) => user.status.toLowerCase() === "completed"
+      // ).length;
+      // const incomplete = response.count - completed;
 
-        // const domainChartData = calculateDomainData(response.results);
-        // setDomainData(domainChartData);
-      }
+      // setCompletedCount(completed);
+      // setIncompleteCount(incomplete);
+
+      // const assessmentChartData = calculateAssessmentData(response.results);
+      // setAssessmentData(assessmentChartData);
+
+      // const domainChartData = calculateDomainData(response.results);
+      // setDomainData(domainChartData);
+      // }
     } catch (error) {
       console.error("Error fetching users:", error);
       toast.error(error?.response?.data?.message || "Failed to fetch users");
@@ -110,8 +130,9 @@ const PartnerUsers = () => {
   useEffect(() => {
     fetchTeamMembers();
     async function a() {
-      const response = await getUserLists();
-      setUsers(response);
+      const response = await getUserMembers();
+      const usersData = getLatestAssessmentsByUser(response.results);
+      setUsers({ count: usersData.length, results: usersData });
     }
     a();
     fetchUsers();
@@ -176,10 +197,19 @@ const PartnerUsers = () => {
                   <span>User Name</span>
                   <span>{u?.user_name}</span>
                 </div>
+
+                {userProfile.partner_type === 'Therapy Center' &&
+                  <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
+                    <span>Assigned Therapist</span>
+                    <span></span>
+                  </div>
+                }
+
                 <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                  <span>Assigned therapist</span>
-                  <span>{u?.partner_name}</span>
+                  <span>Assigned Program</span>
+                  <span></span>
                 </div>
+
                 <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
                   <span>Assessment</span>
                   <span className="max-w-[120px] truncate">
@@ -206,9 +236,17 @@ const PartnerUsers = () => {
                     <th className="px-3 py-2 text-left font-normal">
                       User Name
                     </th>
+
+                    {userProfile.partner_type === 'Therapy Center' &&
+                      <th className="px-3 py-2 text-left font-normal">
+                        Assigned Therapist
+                      </th>
+                    }
+
                     <th className="px-3 py-2 text-left font-normal">
-                      Assigned Therapist
+                      Assigned Program
                     </th>
+
                     <th className="px-3 py-2 text-left font-normal">
                       Assessment
                     </th>
@@ -229,18 +267,31 @@ const PartnerUsers = () => {
                     </tr>
                   ) : (
                     users?.results?.map((u, i) => (
-                      <tr key={i}>
+                      <tr className={`${i%2===0 ? 'bg-gray-100':''}`} key={i}>
                         <td className="px-3 py-2 whitespace-nowrap">
-                          {u?.user_name}
+                          {u?.username}
                         </td>
+
+                        {userProfile.partner_type === 'Therapy Center' &&
+                          <td className="px-3 py-2 whitespace-nowrap">
+                            {u?.therapist}
+                          </td>
+                        }
+
                         <td className="px-3 py-2 whitespace-nowrap">
-                          {u?.partner_name}
+                          {u?.programme?.map((programme, index) => (
+                            <React.Fragment key={index}>
+                              {programme}
+                              <br />
+                            </React.Fragment>
+                          ))}
                         </td>
+
                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
                           {u?.assessment_type}
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
-                          {formatDate(u?.created_date)}
+                          {formatDate(u?.date_joined)}
                         </td>
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className="font-normal">{u?.status}</span>
@@ -286,28 +337,46 @@ const PartnerUsers = () => {
               />
             </div>
           </div>
+
+          {userProfile.partner_type === 'Therapy Center' &&
+            <div className="flex flex-col gap-4 md:flex-row md:gap-4">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="mb-1 text-gray-700 text-sm">
+                  Assigne Therapist
+                </label>
+                <Select
+                  showSearch
+                  placeholder="* Assigne Therapist"
+                  value={therapist}
+                  onChange={setTherapist}
+                  options={teamMembers}
+                  loading={loading}
+                  className="h-[2.5rem]"
+                />
+              </div>
+            </div>
+          }
+
           <div className="flex flex-col gap-4 md:flex-row md:gap-4">
             <div className="flex flex-col w-full md:w-1/2">
               <label className="mb-1 text-gray-700 text-sm">
-                Assigned Therapist
+                Assigne Program
               </label>
-              <Select
-                showSearch
-                placeholder="* Assigned Therapist"
-                value={therapist}
-                onChange={setTherapist}
-                options={teamMembers}
-                loading={loading}
-                className="h-[2.5rem]"
+              <MultiSelectDropdown
+                options={['Women Wellness 360', 'Child Wellness 360', 'SEL Assessment 360']}
+                placeholder="Select fruits"
+                onChange={setProgram}
+                maxSelectable={2}
               />
             </div>
           </div>
+
           <div className="flex justify-end mt-2">
             <CommonLoader
               loading={inviteLoading}
-              disabled={!userName.trim() || !email.trim() || !therapist}
+              disabled={!userName.trim() || !email.trim() || !(therapist || program)}
               onClick={handleInviteUser}
-              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !therapist
+              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !(therapist || program)
                 ? "bg-[#4F7DDDBF] cursor-not-allowed" : ""}`}
               type="primary"
             >

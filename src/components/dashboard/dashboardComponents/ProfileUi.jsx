@@ -5,6 +5,7 @@ import { Calendar, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 import store from "../../../config/storeInstance";
 import axios from "axios";
+import AddChildProfile from "./AddChildProifle";
 
 const ProfileUi = () => {
 
@@ -14,6 +15,8 @@ const ProfileUi = () => {
   const [allCountries, setAllCountries] = useState([]);
   const [allCities, setAllCities] = useState([]);
   const [allLanguages, setAllLanguages] = useState([]);
+
+  const [showAddProifle, setShowAddProfile] = useState(null);
 
   const [localMotherdDP, setLocalMotherDP] = useState(null);
   const [localChildDP, setLocalChildDP] = useState(null);
@@ -163,11 +166,11 @@ const ProfileUi = () => {
       fetchCities(res1.country);
 
       const res2 = await getChildProfileDetails();
+
       if (res2 && res2.profiles && res2.profiles.length > 0) {
         setChildProfileData(res2.profiles[0]);
         setSelectedChildGoalOptions([...res2.profiles[0].goal]);
       }
-
       store.setData({
         current: selectedProfile,
         completingPercentage: selectedProfile === 'child'
@@ -450,6 +453,11 @@ const ProfileUi = () => {
               </div>
             </div>
 
+
+            {/* {childProfileData && Object.keys(childProfileData).length === 0 &&
+              <div onClick={() => setShowAddProfile('childProfile')} className="w-20 h-20 rounded-full bg-red-200">Add Child Profile</div>
+            } */}
+
             {childProfileData && Object.keys(childProfileData).length > 0 && <div className="flex justify-center mb-10">
               <div className="relative flex flex-col items-center space-y-3">
                 <div
@@ -490,418 +498,428 @@ const ProfileUi = () => {
                   </label>
                 )}
               </div>
-            </div>
-            }
+            </div>}
+
           </div>
 
 
-
-          {selectedProfile === 'women' &&
-            <form >
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {showAddProifle === 'childProfile' && <AddChildProfile />}
 
 
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Country
-                  </label>
-                  <select
-                    name="country"
-                    value={womenProfileData.country}
-                    defaultValue=""
-                    onChange={handleWomenProfileChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden>Select Country</option>
-                    {allCountries.map((country, i) => (
-                      <option key={i} value={country.code}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+          {showAddProifle === null &&
+            <>
+              {selectedProfile === 'women' &&
+                <form >
 
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * City
-                  </label>
-                  <select name="city" value={womenProfileData.city} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
-                    {allCities.map((city, i) => (
-                      <option key={i} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Language
-                  </label>
-                  <select name="language" value={womenProfileData.language} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
-                    <option value="" hidden selected>
-                      * Select Language
-                    </option>
-                    {allLanguages.map((language, i) => (
-                      <option key={i} value={language}>
-                        {language}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
 
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Country
+                      </label>
+                      <select
+                        name="country"
+                        value={womenProfileData.country}
+                        defaultValue=""
+                        onChange={handleWomenProfileChange}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+                        required
+                      >
+                        <option value="" hidden>Select Country</option>
+                        {allCountries.map((country, i) => (
+                          <option key={i} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-              </div>
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * City
+                      </label>
+                      <select name="city" value={womenProfileData.city} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                        {allCities.map((city, i) => (
+                          <option key={i} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Language
+                      </label>
+                      <select name="language" value={womenProfileData.language} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                        <option value="" hidden selected>
+                          * Select Language
+                        </option>
+                        {allLanguages.map((language, i) => (
+                          <option key={i} value={language}>
+                            {language}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
 
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Date Of Birth
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="date"
-                      name="dob"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.dob}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                      placeholder="YYYY-MM-DD"
-                    />
                   </div>
-                </div>
 
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Current life stage
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <select
-                      name="life_stage"
-                      className="w-full border p-2 rounded border rounded-md"
-                      value={womenProfileData.life_stage}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                      required
-                    >
-                      <option value="" disabled hidden>
+
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Date Of Birth
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="date"
+                          name="dob"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={womenProfileData.dob}
+                          onChange={(e) => handleWomenProfileChange(e)}
+                          placeholder="YYYY-MM-DD"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
                         * Current life stage
-                      </option>
-                      <option>Early adulthood</option>
-                      <option>Adulthood</option>
-                      <option>Pregnancy</option>
-                      <option>Menopause</option>
-                      <option>Prefer not to say</option>
-                    </select>
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <select
+                          name="life_stage"
+                          className="w-full border p-2 rounded border rounded-md"
+                          value={womenProfileData.life_stage}
+                          onChange={(e) => handleWomenProfileChange(e)}
+                          required
+                        >
+                          <option value="" disabled hidden>
+                            * Current life stage
+                          </option>
+                          <option>Early adulthood</option>
+                          <option>Adulthood</option>
+                          <option>Pregnancy</option>
+                          <option>Menopause</option>
+                          <option>Prefer not to say</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
 
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Weight
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="number"
-                      name="weight"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.weight}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                    />
-                    <span className="text-gray-400 mr-3">kg</span>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Height
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="nuumber"
-                      name="height"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={womenProfileData.height}
-                      onChange={(e) => handleWomenProfileChange(e)}
-                    />
-                    <span className="text-gray-400 mr-3">cm</span>
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Occupation
-                  </label>
-                  <input
-                    type="text"
-                    name="occupation"
-                    className="w-full p-3 border rounded-md outline-none"
-                    value={womenProfileData.occupation}
-                    onChange={handleWomenProfileChange}
-                  />
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Lifestyle
-                  </label>
-                  <select name="life_style" value={womenProfileData.life_style} className="w-full border p-2 rounded border rounded-md" onChange={(e) => handleWomenProfileChange(e)} required>
-                    <option value="" disabled hidden>
-                      * Life Style
-                    </option>
-                    <option>Nuclear Family</option>
-                    <option>Joint Family</option>
-                    <option>Single Parent</option>
-                    <option>Shared Accommodation / Hostel</option>
-                    <option>Urban / Metro City</option>
-                    <option>Suburban / Town</option>
-                    <option>Rural / Village</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="relative" ref={womenGoalDropdownRef}>
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Goal is to work on
-                  </label>
-                  <div>
-                    <div
-                      className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
-                      onClick={toggleWomenGoalDropdown}
-                    >
-                      {selectedWomenGoalOptions.length === 0 ? (
-                        <span className="text-gray-500">
-                          * Goal is to work on
-                        </span>
-                      ) : (
-                        selectedWomenGoalOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
-                          >
-                            <span>{option}</span>
-                          </div>
-                        ))
-                      )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Weight
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="number"
+                          name="weight"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={womenProfileData.weight}
+                          onChange={(e) => handleWomenProfileChange(e)}
+                        />
+                        <span className="text-gray-400 mr-3">kg</span>
+                      </div>
                     </div>
 
-                    {isWomenGoalOpen && (
-                      <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                        {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
-                          .map((option) => (
-                            <div
-                              key={option}
-                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
-                                (item) => item === option
-                              )
-                                ? "bg-blue-50"
-                                : ""
-                                }`}
-                              onClick={() => toggleWomenGoalOption(option)}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedWomenGoalOptions.some((item) => item === option)}
-                                readOnly
-                                className="mr-2"
-                              />
-                              {option}
-                            </div>
-                          ))}
-                      </div>)}
-                  </div>
-
-                </div>
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Tone Preference
-                  </label>
-                  <div className="flex items-center border rounded-md">
-
-                    <select name="tone_prefrence" value={womenProfileData.tone_prefrence} onChange={(e) => handleWomenProfileChange(e)} className="w-full border p-2 rounded" required>
-                      <option value="" hidden selected>
-                        * Tone Prefrence
-                      </option>
-                      {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
-                        return <option key={i}>{tone}</option>;
-                      })}
-                    </select>
-
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <button
-                  type="button" onClick={handleSubmit}
-                  className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors"
-                >
-                  Save
-                </button>
-              </div>
-            </form>}
-
-
-          {selectedProfile === 'child' &&
-            <form >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Child Name
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      name="name"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={childProfileData.name}
-                      onChange={handleChildProfileChange}
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Date of Birth
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      name="dob"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={childProfileData.dob}
-                      onChange={handleChildProfileChange}
-                    />
-                    {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Age Group
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      name="age_group"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={childProfileData.age_group}
-                      onChange={handleChildProfileChange}
-                      placeholder="YYYY-MM-DD"
-                    />
-                    <Calendar className="w-5 h-5 text-gray-400 mr-3" />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Weight
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="text"
-                      name="weight"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={childProfileData.weight}
-                      onChange={handleChildProfileChange}
-                    />
-                    <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
-                  </div>
-                </div>
-
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Height
-                  </label>
-                  <div className="flex items-center border rounded-md">
-                    <input
-                      type="number"
-                      name="height"
-                      className="flex-grow p-3 outline-none rounded-md"
-                      value={childProfileData.height}
-                      onChange={handleChildProfileChange}
-                    />
-                    <span className="text-gray-400 mr-3`">cm</span>
-                  </div>
-                </div>
-
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Goal is to work on
-                  </label>
-                  <div>
-                    <div
-                      className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
-                      onClick={toggleChildGoalDropdown}
-                    >
-                      {selectedChildGoalOptions.length === 0 ? (
-                        <span className="text-gray-500">
-                          * Goal is to work on
-                        </span>
-                      ) : (
-                        selectedChildGoalOptions.map((option) => (
-                          <div
-                            key={option}
-                            className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
-                          >
-                            <span>{option}</span>
-                          </div>
-                        ))
-                      )}
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Height
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="nuumber"
+                          name="height"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={womenProfileData.height}
+                          onChange={(e) => handleWomenProfileChange(e)}
+                        />
+                        <span className="text-gray-400 mr-3">cm</span>
+                      </div>
                     </div>
 
-                    {isChildGoalOpen && (
-                      <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                        {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
-                          .map((option) => (
-                            <div
-                              key={option}
-                              className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
-                                (item) => item === option
-                              )
-                                ? "bg-blue-50"
-                                : ""
-                                }`}
-                              onClick={() => toggleChildGoalOption(option)}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedChildGoalOptions.some((item) => item === option)}
-                                readOnly
-                                className="mr-2"
-                              />
-                              {option}
-                            </div>
-                          ))}
-                      </div>)}
                   </div>
-                </div>
 
-              </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
-              <div className="mt-8">
-                <button type="submit" onClick={handleSubmit} className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors">
-                  Save
-                </button>
-              </div>
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Occupation
+                      </label>
+                      <input
+                        type="text"
+                        name="occupation"
+                        className="w-full p-3 border rounded-md outline-none"
+                        value={womenProfileData.occupation}
+                        onChange={handleWomenProfileChange}
+                      />
+                    </div>
 
-            </form>
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Lifestyle
+                      </label>
+                      <select name="life_style" value={womenProfileData.life_style} className="w-full border p-2 rounded border rounded-md" onChange={(e) => handleWomenProfileChange(e)} required>
+                        <option value="" disabled hidden>
+                          * Life Style
+                        </option>
+                        <option>Nuclear Family</option>
+                        <option>Joint Family</option>
+                        <option>Single Parent</option>
+                        <option>Shared Accommodation / Hostel</option>
+                        <option>Urban / Metro City</option>
+                        <option>Suburban / Town</option>
+                        <option>Rural / Village</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="relative" ref={womenGoalDropdownRef}>
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Goal is to work on
+                      </label>
+                      <div>
+                        <div
+                          className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
+                          onClick={toggleWomenGoalDropdown}
+                        >
+                          {selectedWomenGoalOptions.length === 0 ? (
+                            <span className="text-gray-500">
+                              * Goal is to work on
+                            </span>
+                          ) : (
+                            selectedWomenGoalOptions.map((option) => (
+                              <div
+                                key={option}
+                                className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                              >
+                                <span>{option}</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        {isWomenGoalOpen && (
+                          <div className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                            {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                              .map((option) => (
+                                <div
+                                  key={option}
+                                  className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                    (item) => item === option
+                                  )
+                                    ? "bg-blue-50"
+                                    : ""
+                                    }`}
+                                  onClick={() => toggleWomenGoalOption(option)}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedWomenGoalOptions.some((item) => item === option)}
+                                    readOnly
+                                    className="mr-2"
+                                  />
+                                  {option}
+                                </div>
+                              ))}
+                          </div>)}
+                      </div>
+
+                    </div>
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Tone Preference
+                      </label>
+                      <div className="flex items-center border rounded-md">
+
+                        <select name="tone_prefrence" value={womenProfileData.tone_prefrence} onChange={(e) => handleWomenProfileChange(e)} className="w-full border p-2 rounded" required>
+                          <option value="" hidden selected>
+                            * Tone Prefrence
+                          </option>
+                          {["Reassuring", "Motivational", "Calming", "Neutral"].map((tone, i) => {
+                            return <option key={i}>{tone}</option>;
+                          })}
+                        </select>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <button
+                      type="button" onClick={handleSubmit}
+                      className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </form>}
+
+
+              {selectedProfile === 'child' &&
+                <form >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Child Name
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="text"
+                          name="name"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={childProfileData.name}
+                          onChange={handleChildProfileChange}
+                        />
+                        <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Date of Birth
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="text"
+                          name="dob"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={childProfileData.dob}
+                          onChange={handleChildProfileChange}
+                        />
+                        {/* <ChevronDown className="w-5 h-5 text-gray-400 mr-3" /> */}
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Age Group
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="text"
+                          name="age_group"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={childProfileData.age_group}
+                          onChange={handleChildProfileChange}
+                          placeholder="YYYY-MM-DD"
+                        />
+                        <Calendar className="w-5 h-5 text-gray-400 mr-3" />
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Weight
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="text"
+                          name="weight"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={childProfileData.weight}
+                          onChange={handleChildProfileChange}
+                        />
+                        <ChevronDown className="w-5 h-5 text-gray-400 mr-3" />
+                      </div>
+                    </div>
+
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Height
+                      </label>
+                      <div className="flex items-center border rounded-md">
+                        <input
+                          type="number"
+                          name="height"
+                          className="flex-grow p-3 outline-none rounded-md"
+                          value={childProfileData.height}
+                          onChange={handleChildProfileChange}
+                        />
+                        <span className="text-gray-400 mr-3`">cm</span>
+                      </div>
+                    </div>
+
+
+                    <div className="relative">
+                      <label className="block text-sm text-gray-500 mb-1">
+                        * Goal is to work on
+                      </label>
+                      <div>
+                        <div
+                          className="border rounded p-2 bg-white  min-h-10 cursor-pointer"
+                          onClick={toggleChildGoalDropdown}
+                        >
+                          {selectedChildGoalOptions.length === 0 ? (
+                            <span className="text-gray-500">
+                              * Goal is to work on
+                            </span>
+                          ) : (
+                            selectedChildGoalOptions.map((option) => (
+                              <div
+                                key={option}
+                                className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
+                              >
+                                <span>{option}</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        {isChildGoalOpen && (
+                          <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                            {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                              .map((option) => (
+                                <div
+                                  key={option}
+                                  className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                    (item) => item === option
+                                  )
+                                    ? "bg-blue-50"
+                                    : ""
+                                    }`}
+                                  onClick={() => toggleChildGoalOption(option)}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedChildGoalOptions.some((item) => item === option)}
+                                    readOnly
+                                    className="mr-2"
+                                  />
+                                  {option}
+                                </div>
+                              ))}
+                          </div>)}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div className="mt-8">
+                    <button type="submit" onClick={handleSubmit} className="w-full bg-blue-500 text-white py-3 px-4 rounded-full hover:bg-blue-600 transition-colors">
+                      Save
+                    </button>
+                  </div>
+
+                </form>
+              }
+            </>
           }
+
+
+
+
 
         </div>
       </Modal>

@@ -74,7 +74,7 @@ const PartnerSidebar = ({ onTabChange }) => {
           <img
             src={logo}
             alt="Logo"
-            className="w-full h-full object-cover rounded-full"
+            className="max-w-full max-h-full object-contain rounded-full"
           />
         ) : (
           <svg width="32" height="32" fill="#979FA8" viewBox="0 0 24 24">
@@ -116,13 +116,13 @@ const PartnerSidebar = ({ onTabChange }) => {
           {activeTab === "settings" && settingsOpen && (
             <div className="flex flex-col ml-10 mt-1 space-y-1">
               {/* {userProfile.is_member === false && */}
-                <button
-                  onClick={() => handleSubTabClick("team")}
-                  className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
-                    ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
-                >
-                  Team member
-                </button>
+              <button
+                onClick={() => handleSubTabClick("team")}
+                className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
+                  ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
+              >
+                Team member
+              </button>
               {/* } */}
               <button
                 onClick={() => handleSubTabClick("users")}
@@ -134,13 +134,13 @@ const PartnerSidebar = ({ onTabChange }) => {
                 Users
               </button>
               {/* {userProfile?.is_member === false && */}
-                <button
-                  onClick={() => handleSubTabClick("firm")}
-                  className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
-                    ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
-                >
-                  Firm Setting
-                </button>
+              <button
+                onClick={() => handleSubTabClick("firm")}
+                className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "firm"
+                  ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
+              >
+                Firm Setting
+              </button>
               {/* } */}
             </div>
           )}
@@ -148,11 +148,11 @@ const PartnerSidebar = ({ onTabChange }) => {
       </nav>
 
       <div className="mt-auto flex items-center gap-3 px-6 py-2 border-t border-gray-300">
-        <img
-          src="/images/user.jpg"
-          alt="User Avatar"
-          className="w-10 h-10 rounded-full border"
-        />
+         <img
+            src={logo}
+            alt="User Avatar"
+            className="w-10 h-10 rounded-full border"
+          />
         <div className="flex flex-col">
           <Tooltip title={userProfile?.email || "amitsingh@gm..."}>
             <span className="text-sm font-normal text-gray-900">

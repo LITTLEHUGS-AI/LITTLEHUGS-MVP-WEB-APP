@@ -82,7 +82,7 @@ export default function AssesmentHandler() {
 
     const submitAssessment = async () => {
         try {
-            const response = await fetch('https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -127,7 +127,7 @@ export default function AssesmentHandler() {
     const finalSubmit = async () => {
 
         try {
-            const response = await fetch(`https://api.ourlittlehugs.com/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}`,
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/${ai.assessment_data.id}/?insights_for=${type}`,
                 {
                     method: 'PUT',
                     headers: {

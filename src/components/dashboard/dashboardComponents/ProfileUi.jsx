@@ -108,7 +108,7 @@ const ProfileUi = () => {
 
 
   const fetchCities = useCallback((country) => {
-    fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${country}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=${country}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
@@ -123,7 +123,7 @@ const ProfileUi = () => {
       })
       .catch(error => { console.error('Error:', error); });
 
-    fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${country}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/language/?country_code=${country}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
@@ -159,7 +159,7 @@ const ProfileUi = () => {
       women.country = res1.country;
       women.language = res1.language;
 
-      if (women.image != null) setWomenDP(`https://api.ourlittlehugs.com/${women.image}`);
+      if (women.image != null) setWomenDP(`${process.env.REACT_APP_API_URL}/${women.image}`);
       setWomenProfileData({ ...women });
       getProfileCompletion(women);
       setSelectedWomenGoalOptions([...women.intent]);
@@ -195,7 +195,7 @@ const ProfileUi = () => {
 
   useEffect(() => {
     (async () => {
-      fetch('https://api.ourlittlehugs.com/v1/api/country')
+      fetch(`${process.env.REACT_APP_API_URL}/v1/api/country`)
         .then(response => response.json())
         .then(result => {
           if (Array.isArray(result)) {
@@ -225,7 +225,7 @@ const ProfileUi = () => {
 
   // Fetch Countries
   useEffect(() => {
-    fetch('https://api.ourlittlehugs.com/v1/api/country/')
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/country/`)
       .then(response => response.json())
       .then(result => {
         if (Array.isArray(result)) {
@@ -258,7 +258,7 @@ const ProfileUi = () => {
     if (selectedProfile === 'women') {
       try {
         delete womenProfileData.image;
-        const response1 = await fetch('https://api.ourlittlehugs.com/v1/api/mother-profile', {
+        const response1 = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/mother-profile`, {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -276,7 +276,7 @@ const ProfileUi = () => {
 
           try {
             await axios.put(
-              'https://api.ourlittlehugs.com/v1/api/user-mother-profile-image',
+              `${process.env.REACT_APP_API_URL}/v1/api/user-mother-profile-image`,
               formData,
               {
                 headers: {
@@ -297,7 +297,7 @@ const ProfileUi = () => {
 
         delete womenProfileData.id;
         delete womenProfileData.name;
-        const response2 = await fetch('https://api.ourlittlehugs.com/v1/api/user-profiles', {
+        const response2 = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-profiles`, {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -319,7 +319,7 @@ const ProfileUi = () => {
     if (selectedProfile === 'child') {
       try {
         delete childProfileData.image;
-        const response = await fetch(`https://api.ourlittlehugs.com/v1/api/child-profiles/${childProfileData.id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/child-profiles/${childProfileData.id}`, {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -337,7 +337,7 @@ const ProfileUi = () => {
           formData.append('profile_id', childProfileData.id);
 
           await axios.put(
-            'https://api.ourlittlehugs.com/v1/api/user-child-profile-image',
+            `${process.env.REACT_APP_API_URL}/v1/api/user-child-profile-image`,
             formData, {
             headers: {
               'accept': 'application/json',

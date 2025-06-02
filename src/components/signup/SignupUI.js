@@ -94,7 +94,7 @@ function SignupUI({
 
     if (invitee && invitee.type === 'partner') {
 
-      const url = 'https://api.ourlittlehugs.com/v1/api/register-invited-partner';
+      const url = `${process.env.REACT_APP_API_URL}/v1/api/register-invited-partner`;
       const payload = {
         organisation_type :methods.getValues('organisation_type'),
         email: methods.getValues('email'),
@@ -377,7 +377,7 @@ function SignupUI({
 
   // Fetch Countries
   useEffect(() => {
-    fetch('https://api.ourlittlehugs.com/v1/api/country/')
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/country/`)
       .then(response => response.json())
       .then(result => {
         if (Array.isArray(result)) {
@@ -396,7 +396,7 @@ function SignupUI({
 
 
   const fetchCityLanguage = useCallback((country) => {
-    fetch(`https://api.ourlittlehugs.com/v1/api/city/?country_code=${country}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=${country}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
@@ -412,7 +412,7 @@ function SignupUI({
         console.error('City fetch error:', error);
       });
 
-    fetch(`https://api.ourlittlehugs.com/v1/api/language/?country_code=${country}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/v1/api/language/?country_code=${country}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
@@ -446,7 +446,7 @@ function SignupUI({
           const womenFormDataRaw = new FormData(womenFormRef.current);
 
           const womenProfilePromise = apiClient
-            .post("https://api.ourlittlehugs.com/v1/api/mother-profile", {
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/mother-profile`, {
               dob: womenFormDataRaw.get("dob"),
               life_stage: womenFormDataRaw.get("lifeStage"),
               weight: womenFormDataRaw.get("weight"),
@@ -472,7 +472,7 @@ function SignupUI({
           const childFormDataRaw = new FormData(childFormRef.current);
 
           const childProfilePromise = apiClient
-            .post("https://api.ourlittlehugs.com/v1/api/child-profile", {
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/child-profile`, {
               name: childFormDataRaw.get("name"),
               dob: childFormDataRaw.get("dob"),
               age_group: childFormDataRaw.get("ageGroup"),
@@ -498,7 +498,7 @@ function SignupUI({
           const menFormDataRaw = new FormData(menFormRef.current);
 
           const menProfilePromise = apiClient
-            .post("https://api.ourlittlehugs.com/v1/api/men-profile", {
+            .post(`${process.env.REACT_APP_API_URL}/v1/api/men-profile`, {
               name: menFormDataRaw.get("name"),
               dob: menFormDataRaw.get("dob"),
               age_group: menFormDataRaw.get("ageGroup"),
@@ -532,7 +532,7 @@ function SignupUI({
       const partnerFormDataRaw = new FormData(partnerFormRef.current);
 
       apiClient
-        .post("https://api.ourlittlehugs.com/v1/api/organisation-profile", {
+        .post(`${process.env.REACT_APP_API_URL}/v1/api/organisation-profile`, {
           organisation_name: partnerFormDataRaw.get("org_name"),
           description: partnerFormDataRaw.get("description"),
           organisation_type: orgType,
@@ -559,7 +559,7 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/member-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/member-invite/${token}`, {
             method: 'GET',
             headers: {
               'accept': 'application/json',
@@ -592,7 +592,7 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/user-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invite/${token}`, {
             method: 'GET',
             headers: {
               'accept': 'application/json',
@@ -624,7 +624,7 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`https://api.ourlittlehugs.com/v1/api/partner-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/partner-invite/${token}`, {
             method: 'GET',
             headers: { 'accept': 'application/json' }
           });

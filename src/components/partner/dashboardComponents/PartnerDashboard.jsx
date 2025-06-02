@@ -121,7 +121,7 @@ const PartnerDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch users");
+      // toast.error(error?.response?.data?.message || "Failed to fetch users");
     } finally {
       setUsersLoading(false);
     }
@@ -152,11 +152,11 @@ const PartnerDashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error(error?.response?.data?.message || "Failed to fetch users");
+      // toast.error(error?.response?.data?.message || "Failed to fetch users");
     } finally {
       setUsersLoading(false);
     }
-  }, [calculateAssessmentData, calculateDomainData]);
+  }, [calculateAssessmentData, calculateDomainData, completedAssesCount, users]);
 
   useEffect(() => {
     if (!initialFetchDone.current) {

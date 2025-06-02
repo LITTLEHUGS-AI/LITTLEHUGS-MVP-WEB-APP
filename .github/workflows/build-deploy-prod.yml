@@ -45,7 +45,7 @@ jobs:
         with:
           args: --delete
         env:
-          AWS_S3_BUCKET: staging.ourlittlehugs.com
+          AWS_S3_BUCKET: ourlittlehugs.com
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-south-1
@@ -57,5 +57,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-south-1
-          DISTRIBUTION: E2Q6VQY5ONBCG7
+          DISTRIBUTION: E2YSKF7DMPCF8I
           PATHS: "/*"

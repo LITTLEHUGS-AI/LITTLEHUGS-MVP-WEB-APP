@@ -18,6 +18,15 @@ export const getUserMembers = () => {
   return apiService.get("/partner-users/");
 };
 
+export const deleteUserMembers = (id) => {
+  return apiService.delete(`/partner-users/${id}`);
+};
+
+export const deleteTeamMember = (id) => {
+  return apiService.delete(`/org-member/${id}`);
+};
+
+
 
 export const inviteTeamMember = (data) => {
   return apiService.post("/member-invite/", {

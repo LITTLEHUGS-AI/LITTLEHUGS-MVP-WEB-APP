@@ -222,7 +222,7 @@ const PartnerDashboard = () => {
 
             <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
               <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg sm:text-xl font-semibold text-gray-700 font-normal">
+                <span className="text-lg sm:text-xl text-center font-semibold text-gray-700 font-normal">
                   Assessments
                 </span>
 
@@ -288,7 +288,7 @@ const PartnerDashboard = () => {
 
             <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
               <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg sm:text-xl font-semibold text-gray-700 font-normal">
+                <span className="text-lg sm:text-xl text-center font-semibold text-gray-700 font-normal">
                   Users
                 </span>
 
@@ -357,17 +357,17 @@ const PartnerDashboard = () => {
           </div>
 
           {/* Charts below both main and insight cards */}
-          <div className="flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-8">
+          <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-8">
             {/* Assessments Chart */}
 
             {assessmentData.length < 1 ? <div>No Assessments taken yet</div> :
-              <div className="flex flex-col gap-2 w-full">
-                <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
-                  Assessments
-                </span>
-                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
-                  <div className="flex flex-row items-center h-full">
-                    <div className="w-[60%] flex items-center justify-center">
+                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
+                <div className="flex flex-col gap-2 w-full">
+                  <span className="text-[16px] text-center font-semibold md:text-2xl font-normal text-gray-700 mb-1 ml-2">
+                    Assessments
+                  </span>
+                  <div className="w-full flex flex-row items-center justify-around h-full">
+                    <div className=" flex items-center justify-center">
                       <PieChart width={180} height={180}>
                         <Pie
                           data={assessmentData}
@@ -386,7 +386,7 @@ const PartnerDashboard = () => {
                         </Pie>
                       </PieChart>
                     </div>
-                    <div className="w-[40%] flex flex-col justify-center gap-2">
+                    <div className="flex flex-col justify-center gap-2">
                       {assessmentData.map((d, i) => (
                         <div
                           key={i}
@@ -408,11 +408,11 @@ const PartnerDashboard = () => {
 
             {/* Domains Chart */}
             {domainData.length < 1 ? <div>No Domains Generated yet</div> :
-              <div className="flex flex-col gap-2 w-full">
-                <span className="text-[16px] md:text-[28px] font-normal text-gray-700 mb-1 ml-2">
-                  Domains
-                </span>
-                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col h-[13.5rem] w-full">
+              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
+                <div className="flex flex-col gap-2 w-full">
+                  <span className="text-[16px] md:text-2xl text-center font-semibold font-normal text-gray-700 mb-1 ml-2">
+                    Domains
+                  </span>
                   <div className="flex flex-row items-center h-full">
                     <div className="w-[60%] flex items-center justify-center">
                       <PieChart width={180} height={180}>
@@ -433,7 +433,7 @@ const PartnerDashboard = () => {
                         </Pie>
                       </PieChart>
                     </div>
-                    <div className="w-[40%] flex flex-col justify-center gap-2">
+                    <div className="flex flex-col justify-center gap-2">
                       {domainData.map((d, i) => (
                         <div
                           key={i}

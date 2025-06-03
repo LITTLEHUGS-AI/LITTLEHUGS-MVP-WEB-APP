@@ -215,7 +215,7 @@ const PartnerUsers = () => {
                 <thead className="text-base">
                   <tr className="text-gray-600 bg-white">
                     <th className="px-3 py-2 text-left font-normal">
-                      User Name
+                      Name
                     </th>
 
                     {userProfile.partner_type === 'Therapy Center' &&
@@ -253,7 +253,7 @@ const PartnerUsers = () => {
                     users?.results?.map((u, i) => (
                       <tr className={`${i % 2 === 0 ? 'bg-gray-100' : ''}`} key={i}>
                         <td className="px-3 py-2 whitespace-nowrap">
-                          {u?.username}
+                          {u?.name}
                         </td>
 
                         {userProfile.partner_type === 'Therapy Center' &&
@@ -272,7 +272,7 @@ const PartnerUsers = () => {
                         </td>
 
                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
-                          {u?.assessment_type}
+                          {u?.latest_assessment}
                         </td>
 
                         <td className="px-3 py-2 whitespace-nowrap">

@@ -5,9 +5,12 @@ import { Input, Spin } from "antd";
 import { deleteTeamMember, getTeamMembers, inviteTeamMember } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
+import { usePartner } from "../../../lib/PartnerContext";
 
 
 const PartnerTeamMember = () => {
+  const { userProfile } = usePartner();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -177,7 +180,9 @@ const PartnerTeamMember = () => {
                       {member.email}
                     </td>
                     <td className="px-4 py-2 text-gray-700 text-sm">
-                      <button onClick={() => deleteUserMembers(member)} className="bg-red-500 p-2 rounded-xl text-white">Delete</button>
+                      {userProfile.email !== member.email &&
+                        <button onClick={() => deleteUserMembers(member)} className="bg-red-500 p-2 rounded-xl text-white">Delete</button>
+                      }
                     </td>
                   </tr>
                 ))}
@@ -229,8 +234,8 @@ const PartnerTeamMember = () => {
             disabled={!name.trim() || !email.trim() || loading}
             onClick={handleInvite}
             className={`bg-[#4F7DDD] text-white font-semibold px-4 md:px-8 py-5 rounded text-sm md:text-base font-quicksand ${!name.trim() || !email.trim() || loading
-                ? "bg-[#4F7DDDBF] cursor-not-allowed"
-                : ""
+              ? "bg-[#4F7DDDBF] cursor-not-allowed"
+              : ""
               }`}
             type="primary"
           >

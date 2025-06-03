@@ -40,7 +40,7 @@ const PartnerUsers = () => {
 
     try {
       setInviteLoading(true);
-      if (userProfile.partner_type === 'Therapy Center') {
+      if (userProfile?.partner_type === 'Therapy Center') {
         await inviteUser({
           name: userName,
           email: email,
@@ -135,6 +135,7 @@ const PartnerUsers = () => {
 
   return (
     <div className="flex flex-col w-full h-full px-3 pt-6 md:px-0 font-quicksand">
+
       <div className="flex items-center justify-between mb-4">
         <span className="text-[14px] md:text-2xl font-normal text-gray-700">
           Users
@@ -179,7 +180,7 @@ const PartnerUsers = () => {
                   <span>{u?.user_name}</span>
                 </div>
 
-                {userProfile.partner_type === 'Therapy Center' &&
+                {userProfile?.partner_type === 'Therapy Center' &&
                   <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
                     <span>Assigned Therapist</span>
                     <span></span>
@@ -218,7 +219,7 @@ const PartnerUsers = () => {
                       Name
                     </th>
 
-                    {userProfile.partner_type === 'Therapy Center' &&
+                    {userProfile?.partner_type === 'Therapy Center' &&
                       <th className="px-3 py-2 text-left font-normal">
                         Assigned Therapist
                       </th>}
@@ -328,7 +329,7 @@ const PartnerUsers = () => {
             </div>
           </div>
 
-          {userProfile.partner_type === 'Therapy Center' &&
+          {userProfile?.partner_type === 'Therapy Center' &&
             <div className="flex flex-col gap-4 md:flex-row md:gap-4">
               <div className="flex flex-col w-full md:w-1/2">
                 <label className="mb-1 text-gray-700 text-sm">

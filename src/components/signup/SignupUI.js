@@ -77,14 +77,16 @@ function SignupUI({
   const [invitee, setInvite] = useState({});
 
 
-  const childGoalDropdownRef = useRef(null);
   const womenGoalDropdownRef = useRef(null);
+  const childGoalDropdownRef = useRef(null);
+  const menGoalDropdownRef = useRef(null);
 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
       if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
+       if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -193,17 +195,18 @@ function SignupUI({
     });
   };
 
-  // const toneOptions = ["Reassuring", "Motivational", "Calming", "Neutral"];
-  // const [isToneOpen, setIsToneOpen] = useState(false);
-  const selectedToneOptions = [];
-  // const toggleToneDropdown = () => setIsToneOpen(!isToneOpen);
-  // const toggleToneOption = (option) => {
-  //   setSelectedToneOptions((prevSelected) => {
-  //     if (prevSelected.some((item) => item === option))
-  //       return prevSelected.filter((item) => item !== option);
-  //     else return [...prevSelected, option];
-  //   });
-  // };
+
+  const [isMenGoalOpen, setIsMenGoalOpen] = useState(false);
+  const [selectedMenGoalOptions, setSelectedMenGoalOptions] = useState([]);
+  const toggleMenGoalDropdown = () => setIsMenGoalOpen(!isMenGoalOpen);
+  const toggleMenGoalOption = (option) => {
+    setSelectedMenGoalOptions((prevSelected) => {
+      if (prevSelected.some((item) => item === option))
+        return prevSelected.filter((item) => item !== option);
+      else return [...prevSelected, option];
+    });
+  };
+
 
   const childOptions = ["Growth", "Nutrition", "Activity", "Developmental", "Wellness"];
   const [isChildGoalOpen, setIsChildGoalOpen] = useState(false);
@@ -1226,7 +1229,7 @@ function SignupUI({
                                 {childOptions.map((option) => (
                                   <div
                                     key={option}
-                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedToneOptions.some((item) => item === option)
+                                    className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedChildGoalOptions.some((item) => item === option)
                                       ? "bg-blue-50" : ""}`}
                                     onClick={() => toggleChildGoalOption(option)}
                                   >
@@ -1342,14 +1345,14 @@ function SignupUI({
                             {/* Dropdown button */}
                             <div
                               className="border rounded p-2 bg-white flex flex-wrap min-h-10 cursor-pointer"
-                              onClick={toggleWomenGoalDropdown}
+                              onClick={toggleMenGoalDropdown}
                             >
-                              {selectedWomenGoalOptions.length === 0 ? (
+                              {selectedMenGoalOptions.length === 0 ? (
                                 <span className="text-gray-500">
                                   * Goal is to work on
                                 </span>
                               ) : (
-                                selectedWomenGoalOptions.map((option) => (
+                                selectedMenGoalOptions.map((option) => (
                                   <div
                                     key={option}
                                     className="bg-blue-100 rounded-full px-2 py-1 text-sm flex items-center m-1"
@@ -1361,25 +1364,25 @@ function SignupUI({
                             </div>
 
                             {/* Dropdown menu */}
-                            {isWomenGoalOpen && (
-                              <div ref={womenGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
+                            {isMenGoalOpen && (
+                              <div ref={menGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
                                 {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
                                   .map((option) => (
                                     <div
                                       key={option}
-                                      className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedWomenGoalOptions.some(
+                                      className={`p-2 hover:bg-gray-100 cursor-pointer ${selectedMenGoalOptions.some(
                                         (item) => item === option
                                       )
                                         ? "bg-blue-50"
                                         : ""
                                         }`}
                                       onClick={() =>
-                                        toggleWomenGoalOption(option)
+                                        toggleMenGoalOption(option)
                                       }
                                     >
                                       <input
                                         type="checkbox"
-                                        checked={selectedWomenGoalOptions.some((item) => item === option)}
+                                        checked={selectedMenGoalOptions.some((item) => item === option)}
                                         readOnly
                                         className="mr-2"
                                       />

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import CommonModal from "./CommonModal";
 import { Input, Spin } from "antd";
-import { getTeamMembers, inviteTeamMember } from "../../../api/partner-apis";
+import { deleteTeamMember, getTeamMembers, inviteTeamMember } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
+import { usePartner } from "../../../lib/PartnerContext";
 
 
 const PartnerTeamMember = () => {
+  const { userProfile } = usePartner();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,12 +64,33 @@ const PartnerTeamMember = () => {
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
-          "Failed to invite member. Please try again."
+        "Failed to invite member. Please try again."
       );
     } finally {
       setLoading(false);
     }
   };
+
+
+  async function deleteUserMembers(user) {
+    const confirmed = window.confirm('Are you sure you want to delete this TeamMember?');
+    if (!confirmed) return;
+
+    try {
+      setFetchLoading(true);
+      debugger;
+      await deleteTeamMember(user.id);
+      debugger
+      fetchTeamMembers();
+    }
+    catch {
+      toast.error('Failed to Delete User')
+    }
+    finally {
+      setFetchLoading(false);
+    }
+  }
+
 
   return (
     <div className="flex flex-col w-full h-full px-3 pt-6 md:px-0 font-quicksand">
@@ -136,6 +160,9 @@ const PartnerTeamMember = () => {
                   <th className="text-left px-4 py-2 font-normal text-gray-700 border-b border-r border-[#4A4B4F80]">
                     Email
                   </th>
+                  <th className="text-left px-4 py-2 font-normal text-gray-700 border-b border-r border-[#4A4B4F80]">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -151,6 +178,11 @@ const PartnerTeamMember = () => {
                     </td>
                     <td className="px-4 py-2 text-gray-700 text-sm">
                       {member.email}
+                    </td>
+                    <td className="px-4 py-2 text-gray-700 text-sm">
+                      {userProfile.email !== member.email &&
+                        <button onClick={() => deleteUserMembers(member)} className="bg-red-500 p-2 rounded-xl text-white">Delete</button>
+                      }
                     </td>
                   </tr>
                 ))}
@@ -201,11 +233,10 @@ const PartnerTeamMember = () => {
             loading={loading}
             disabled={!name.trim() || !email.trim() || loading}
             onClick={handleInvite}
-            className={`bg-[#4F7DDD] text-white font-semibold px-4 md:px-8 py-5 rounded text-sm md:text-base font-quicksand ${
-              !name.trim() || !email.trim() || loading
-                ? "bg-[#4F7DDDBF] cursor-not-allowed"
-                : ""
-            }`}
+            className={`bg-[#4F7DDD] text-white font-semibold px-4 md:px-8 py-5 rounded text-sm md:text-base font-quicksand ${!name.trim() || !email.trim() || loading
+              ? "bg-[#4F7DDDBF] cursor-not-allowed"
+              : ""
+              }`}
             type="primary"
           >
             {loading ? "Inviting..." : "Invite Member"}

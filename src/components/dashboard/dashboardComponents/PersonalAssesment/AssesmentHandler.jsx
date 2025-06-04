@@ -175,6 +175,7 @@ export default function AssesmentHandler() {
                     </div>
                 </div>
 
+                <div className="mx-2 text-center">If you don't see questions, Please refresh the Page</div>
 
                 {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />

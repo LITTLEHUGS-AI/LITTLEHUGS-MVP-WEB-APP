@@ -90,9 +90,13 @@ const PartnerUsers = () => {
 
 
   async function fetchUsers() {
-    const response = await getUserMembers();
-    const usersData = getLatestAssessmentsByUser(response.results);
-    setUsers({ count: usersData.length, results: usersData });
+    try{
+      const response = await getUserMembers();
+      const usersData = getLatestAssessmentsByUser(response.results);
+      setUsers({ count: usersData.length, results: usersData });
+    }catch(error){
+      console.log(error);
+    }
   }
 
   // Fetch team members on component mount

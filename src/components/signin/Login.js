@@ -537,6 +537,7 @@ function SignInUI({
                             <InputField
                                 label="Email"
                                 name="email"
+                                input_type="email"
                                 fieldId="email"
                                 placeHolder="Enter your Email"
                                 message={isError ? message : ""}

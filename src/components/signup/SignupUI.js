@@ -754,6 +754,7 @@ function SignupUI({
                 <InputField
                   label="Email"
                   name="email"
+                  input_type="email"
                   isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"

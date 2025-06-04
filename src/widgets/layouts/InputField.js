@@ -53,13 +53,15 @@ function InputField({
           <Input
             autoComplete="off"
             value={value}
+            type={input_type}
             disabled={isDisabled}
             className={`w-full text-primary focus:outline-none placeholder:font-light placeholder:text-xs h-[40px] md:h-[42px] ${customStyle} ${isDisabled ? "cursor-not-allowed bg-gray-300" : ""
               }`}
             placeholder={placeHolder}
             onChange={(e) => {
               clearErrors(filedName);
-              setValue(filedName, e.target.value);
+              if (input_type === 'email') setValue(filedName, e.target.value.toLowerCase());
+              else setValue(filedName, e.target.value);
             }}
             readOnly={isReadOnly}
             id={fieldId}

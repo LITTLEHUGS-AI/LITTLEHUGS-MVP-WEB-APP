@@ -8,46 +8,53 @@ const plans = [
   {
     title: "Wellness Starter",
     description: "For first-time users exploring basic check-ins",
-    originalPrice: "₹138/-",
-    price: "₹ 69/-",
+    originalPrice: "₹49/-",
+    price: "₹ 19/-",
     button: "Choose Plan",
     features: [
-      "1 Assessment",
-      "Basic emotional insights",
-      "15-day access to progress tracking",
-      "Limited access to the resource library"
+      "First-time users, exploring basic self-check-ins",
+      "1 Program",
+      "Basic feedback only",
+      "7 Days Free",
+      "Limited access",
+      "Available at additional charges",
     ],
+    link:'/signup',
     note: "Counselling available at an additional charge",
   },
   {
     title: "Self-Wellness Plan",
     description: "For women & caregivers focused on emotional well-being",
-    originalPrice: "₹258/-",
-    price: "₹ 129/-",
+    originalPrice: "₹129/-",
+    price: "₹ 69/-",
     button: "Upgrade Plan",
     features: [
-      "1 Assessment/month",
-      "Personalized insights",
-      "Progress tracking",
-      "Full access to the resource library",
-      "Regular emotional check-ins"
+      "Women and caregivers focusing on self-check-in and emotional well-being",
+      "1 Program",
+      "✔",
+      "✔",
+      "Full access",
+      "Available at additional charges",
     ],
+    link:'/signup',
     extras: "Push notifications to stay on track",
     note: "Counselling available at an additional charge",
   },
   {
     title: "Co-Care Plan",
     description: "For families caring for both the child and the caregiver's wellness",
-    originalPrice: "₹498/-",
-    price: "₹ 249/-",
+    originalPrice: "₹249/-",
+    price: "₹ 99/-",
     button: "Upgrade Plan",
     features: [
-      "2 Assessments/month",
-      "Personalized insights for the caregiver and child",
-      "Progress dashboards",
-      "Full access to the resources",
-      "Regular emotional check-ins"
+      "Families and parents managing both self and child wellness",
+      "2 Programs",
+      "✔",
+      "✔",
+      "Full access",
+      "Available at additional charges",
     ],
+    link:'/signup',
     extras: "Notifications tailored to both journeys",
     note: "Counselling available at an additional charge",
   },
@@ -62,7 +69,8 @@ const plans = [
       "Screening & analytics",
       "Custom reports and integrations",
       "Team onboarding & support"
-    ]
+    ],
+    link:'/partner',
   }
 ];
 
@@ -113,7 +121,7 @@ const PricingPlans = () => {
                   <p className="mt-1 text-xs md:text-sm text-gray-600">{plan.description}</p>
                   <p className="mt-3 md:mt-4 text-xl md:text-2xl font-semibold text-[#263238]"><span className="text-[20px] text-gray-500 line-through">{plan.originalPrice}</span> {plan.price}</p>
                   <button
-                    onClick={() => { navigate("/signup") }}
+                    onClick={() => { navigate(`${plan.link}`) }}
                     className="mt-3 md:mt-4  bg-blue-600 hover:bg-blue-700 text-white py-2 px-7  rounded-full  transition duration-300"
                   >
                     {plan.button}

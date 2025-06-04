@@ -6,7 +6,7 @@ import Navbar from '../common/Navbar';
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
 import { Button } from "react-aria-components";
-import axios from "axios";
+// import axios from "axios";
 import { X } from "lucide-react";
 
 const INITIAL_VALUES = {
@@ -23,7 +23,7 @@ function SignInUI({
     handleShowPassword,
     SignInFormSchema,
 }) {
-    const apiUrl = process.env.REACT_APP_API_URL;
+    // const apiUrl = process.env.REACT_APP_API_URL;
 
     const methods = useForm({
         defaultValues: INITIAL_VALUES,
@@ -33,17 +33,17 @@ function SignInUI({
         onSubmit(data);
     };
 
-    const handleLogin = (logintype) => {
-        let redirect_url = ""
-        if (logintype === "google-login") {
-            redirect_url = `${window.location.origin}/auth`
-        } else {
-            redirect_url = `${window.location.origin}/auth/ms/callback`
-        }
-        axios.get(`${apiUrl}/v1/api/google/login?redirect_url=${redirect_url}`).then((response) => {
-            window.location.href = response.data.auth_url;
-        });
-    };
+    // const handleLogin = (logintype) => {
+    //     let redirect_url = ""
+    //     if (logintype === "google-login") {
+    //         redirect_url = `${window.location.origin}/auth`
+    //     } else {
+    //         redirect_url = `${window.location.origin}/auth/ms/callback`
+    //     }
+    //     axios.get(`${apiUrl}/v1/api/google/login?redirect_url=${redirect_url}`).then((response) => {
+    //         window.location.href = response.data.auth_url;
+    //     });
+    // };
 
     const inputsRef = useRef([]);
     const [otp, setOtp] = useState(Array(6).fill(""));
@@ -584,7 +584,7 @@ function SignInUI({
                                 {isPending ? <ButtonLoader /> : "Sign In"}
                             </Button>
 
-                            <div className="flex justify-center mt-4">
+                            {/* <div className="flex justify-center mt-4">
                                 <button
                                     type="button"
                                     className="mt-2 w-full flex items-center justify-center gap-2 text-sm bg-[#fef3e6] border border-gray-200 rounded-full py-2 hover:bg-[#f8e9d8]"
@@ -597,7 +597,8 @@ function SignInUI({
                                     />
 
                                 </button>
-                            </div>
+                            </div> */}
+
                         </form>
                     </FormProvider>
                 </div>

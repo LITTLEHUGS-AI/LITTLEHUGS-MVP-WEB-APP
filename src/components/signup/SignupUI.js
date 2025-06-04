@@ -4,7 +4,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import Navbar from "../common/Navbar";
 import { useAuth } from "../../lib/AuthContext";
 import useSignIn from "../signin/useSignIn";
@@ -39,7 +39,7 @@ function SignupUI({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  // const apiUrl = process.env.REACT_APP_API_URL;
 
   const [showPopup, setShowPopup] = useState(null);
   const [email, setEmail] = useState("");
@@ -86,7 +86,7 @@ function SignupUI({
     const handleClickOutside = (event) => {
       if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
       if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
-       if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
+      if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -158,20 +158,20 @@ function SignupUI({
     }
   }, [isSuccess, methods, invitee, isOtp, navigate]);
 
-  const handleLogin = (logintype) => {
-    let redirect_url = "";
-    if (logintype === "google-login") {
-      redirect_url = `${window.location.origin}/auth/google/callback`;
-    } else {
-      redirect_url = `${window.location.origin}/auth/ms/callback`;
-    }
-    sessionStorage.removeItem("chats");
-    axios
-      .get(`${apiUrl}/v1/api/google/login?redirect_url=${redirect_url}`)
-      .then((response) => {
-        window.location.href = response.data.authorization_url;
-      });
-  };
+  // const handleLogin = (logintype) => {
+  //   let redirect_url = "";
+  //   if (logintype === "google-login") {
+  //     redirect_url = `${window.location.origin}/auth/google/callback`;
+  //   } else {
+  //     redirect_url = `${window.location.origin}/auth/ms/callback`;
+  //   }
+  //   sessionStorage.removeItem("chats");
+  //   axios
+  //     .get(`${apiUrl}/v1/api/google/login?redirect_url=${redirect_url}`)
+  //     .then((response) => {
+  //       window.location.href = response.data.authorization_url;
+  //     });
+  // };
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [otpError, setOtpError] = useState(false);
@@ -599,7 +599,7 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invited/${token}`, {
             method: 'GET',
             headers: { 'accept': 'application/json' }
           });
@@ -797,7 +797,8 @@ function SignupUI({
                     ))}
                   </select>
                   <select  {...methods.register("language")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden>* Mother Tongue</option>
+                    {selectedUserType === 'personal' && <option value="" hidden>* Mother Tongue</option>}
+                    {selectedUserType === 'partner' && <option value="" hidden>* Language</option>}
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -843,7 +844,7 @@ function SignupUI({
                   {isPending ? <ButtonLoader /> : " Sign Up"}
                 </button>
 
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                   <button
                     type="button"
                     className="mt-2 w-full flex items-center justify-center gap-2 text-sm bg-[#fef3e6] border border-gray-200 rounded-full py-2 hover:bg-[#f8e9d8]"
@@ -855,7 +856,8 @@ function SignupUI({
                       className="w-10 h-5 justify-center"
                     />
                   </button>
-                </div>
+                </div> */}
+
               </form>
             </FormProvider>
 

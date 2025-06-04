@@ -8,6 +8,7 @@ import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
 import AssessmentAIQuestings from "./AssessmentAIQuestings";
 import { toast } from "react-toastify";
+import DocumentHead from "../../../common/DocumentHead";
 
 export default function AssesmentHandler() {
     const navigate = useNavigate();
@@ -156,6 +157,12 @@ export default function AssesmentHandler() {
 
     return (
         <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+
+             <DocumentHead
+                title="LittleHug - Assessment"
+                description="Assessment"
+                slug='assessment'
+            />
 
             <Sidebar />
 

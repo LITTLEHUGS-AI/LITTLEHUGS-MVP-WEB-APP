@@ -90,9 +90,13 @@ const PartnerUsers = () => {
 
 
   async function fetchUsers() {
-    const response = await getUserMembers();
-    const usersData = getLatestAssessmentsByUser(response.results);
-    setUsers({ count: usersData.length, results: usersData });
+    try{
+      const response = await getUserMembers();
+      const usersData = getLatestAssessmentsByUser(response.results);
+      setUsers({ count: usersData.length, results: usersData });
+    }catch(error){
+      console.log(error);
+    }
   }
 
   // Fetch team members on component mount
@@ -164,7 +168,7 @@ const PartnerUsers = () => {
         </div>
       ) : users.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-40 text-gray-500 text-base">
-          No team member, please add by clicking on add team member button
+          No Users, please add by clicking on add Users button
         </div>
       ) : (
         <>
@@ -177,7 +181,7 @@ const PartnerUsers = () => {
               >
                 <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
                   <span>User Name</span>
-                  <span>{u?.user_name}</span>
+                  <span>{u?.name}</span>
                 </div>
 
                 {userProfile?.partner_type === 'Therapy Center' &&
@@ -231,6 +235,11 @@ const PartnerUsers = () => {
                     <th className="px-3 py-2 text-left font-normal">
                       Latest Assessment
                     </th>
+
+                     <th className="px-3 py-2 text-left font-normal">
+                      Assessment Date
+                    </th>
+
                     <th className="px-3 py-2 text-left font-normal">
                       Joined Date
                     </th>
@@ -273,7 +282,11 @@ const PartnerUsers = () => {
                         </td>
 
                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
-                          {u?.latest_assessment}
+                          {u?.latest_assessment?.assessment_name || ''}
+                        </td>
+
+                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
+                          {formatDate(u?.latest_assessment?.date) || ''}
                         </td>
 
                         <td className="px-3 py-2 whitespace-nowrap">

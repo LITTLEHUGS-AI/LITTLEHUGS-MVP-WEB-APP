@@ -184,9 +184,9 @@ export default function AssesmentHandler() {
 
                 <div className="mx-2 text-center">If you don't see questions, Please refresh the Page</div>
 
-                {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
+                {quesLoding ? <div className="flex flex-col mx-4 text-center h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />
-                    <div className="text-xl font-bold">{quesLoding}</div>
+                    <div className="text-xl font-bold mt-4 mb-6">{quesLoding}</div>
                     <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
                 </div> :
                     <>

@@ -336,7 +336,7 @@ const PartnerUsers = () => {
               <Input
                 placeholder="* Email ID"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
                 className="h-[2.5rem]"
               />
             </div>

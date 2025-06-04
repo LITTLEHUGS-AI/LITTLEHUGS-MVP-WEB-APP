@@ -8,6 +8,7 @@ import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
 import AssessmentAIQuestings from "./AssessmentAIQuestings";
 import { toast } from "react-toastify";
+import DocumentHead from "../../../common/DocumentHead";
 
 export default function AssesmentHandler() {
     const navigate = useNavigate();
@@ -157,6 +158,12 @@ export default function AssesmentHandler() {
     return (
         <div className="flex flex-col md:flex-row h-screen bg-gray-50">
 
+             <DocumentHead
+                title="LittleHug - Assessment"
+                description="Assessment"
+                slug='assessment'
+            />
+
             <Sidebar />
 
             {/* Main content - scrollable */}
@@ -177,9 +184,9 @@ export default function AssesmentHandler() {
 
                 <div className="mx-2 text-center">If you don't see questions, Please refresh the Page</div>
 
-                {quesLoding ? <div className="flex flex-col h-full items-center justify-center">
+                {quesLoding ? <div className="flex flex-col mx-4 text-center h-full items-center justify-center">
                     <img alt="loading..." src='/gif/loading1.gif' />
-                    <div className="text-xl font-bold">{quesLoding}</div>
+                    <div className="text-xl font-bold mt-4 mb-6">{quesLoding}</div>
                     <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
                 </div> :
                     <>

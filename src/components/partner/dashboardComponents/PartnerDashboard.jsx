@@ -198,12 +198,12 @@ const PartnerDashboard = () => {
   };
 
 
-
-
   const formatNumber = (num) => {
     if (num === 0) return "0";
     return num < 10 ? `0${num}` : num;
   };
+
+
 
   return (
     <div className="w-full flex flex-col gap-3 mt-2 font-quicksand px-2 md:px-0">
@@ -216,17 +216,16 @@ const PartnerDashboard = () => {
           <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
             Dashboard
           </span>
+
+
           <div className="grid grid-cols-2 gap-4">
-
-
 
             <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
               <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg sm:text-xl text-center font-semibold text-gray-700 font-normal">
-                  Assessments
+                <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
+                  Assessments Status
                 </span>
-
-                <div className="flex flex-row items-center gap-4 sm:gap-6">
+<div className="flex flex-col md:flex-row  items-center gap-4 sm:gap-6">
                   <div className="relative w-[160px] h-[160px]">
                     <svg
                       width="160"
@@ -263,8 +262,8 @@ const PartnerDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-center space-y-4 w-full">
+                    <div className="mx-auto flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
                         {formatNumber(completedAssesCount)}
                       </div>
@@ -282,17 +281,18 @@ const PartnerDashboard = () => {
                       </span>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
               <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg sm:text-xl text-center font-semibold text-gray-700 font-normal">
+                <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
                   Users
                 </span>
 
-                <div className="flex flex-row items-center gap-4 sm:gap-6">
+             <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                   <div className="relative w-[160px] h-[160px]">
                     <svg
                       width="160"
@@ -330,7 +330,7 @@ const PartnerDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                            <div className="flex flex-col items-center space-y-4 w-full">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
                         {completedCount}
@@ -353,7 +353,6 @@ const PartnerDashboard = () => {
               </div>
             </div>
 
-
           </div>
 
           {/* Charts below both main and insight cards */}
@@ -364,7 +363,7 @@ const PartnerDashboard = () => {
                 <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
                 <div className="flex flex-col gap-2 w-full">
                   <span className="text-[16px] text-center font-semibold md:text-2xl font-normal text-gray-700 mb-1 ml-2">
-                    Assessments
+                    Assessment Types
                   </span>
                   <div className="w-full flex flex-row items-center justify-around h-full">
                     <div className=" flex items-center justify-center">

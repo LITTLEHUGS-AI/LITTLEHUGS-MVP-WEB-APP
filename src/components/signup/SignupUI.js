@@ -86,7 +86,7 @@ function SignupUI({
     const handleClickOutside = (event) => {
       if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
       if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
-       if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
+      if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -599,7 +599,7 @@ function SignupUI({
 
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invite/${token}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-invited/${token}`, {
             method: 'GET',
             headers: { 'accept': 'application/json' }
           });
@@ -797,8 +797,8 @@ function SignupUI({
                     ))}
                   </select>
                   <select  {...methods.register("language")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                  {selectedUserType === 'personal' &&  <option value="" hidden>* Mother Tongue</option>}
-                  {selectedUserType === 'partner' &&  <option value="" hidden>* Language</option>}
+                    {selectedUserType === 'personal' && <option value="" hidden>* Mother Tongue</option>}
+                    {selectedUserType === 'partner' && <option value="" hidden>* Language</option>}
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>
                         {language}
@@ -857,7 +857,7 @@ function SignupUI({
                     />
                   </button>
                 </div> */}
-                
+
               </form>
             </FormProvider>
 

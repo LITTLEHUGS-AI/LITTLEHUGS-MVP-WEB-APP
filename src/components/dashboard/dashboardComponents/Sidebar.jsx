@@ -1,7 +1,6 @@
 import {
   LogOut,
   LayoutDashboard,
-  IndianRupee,
   ChartColumnIncreasing,
   X,
   Menu,
@@ -85,7 +84,7 @@ const Sidebar = () => {
               <span className="ml-3 font-semibold">Dashboard</span>
             </NavLink>
 
-            <NavLink
+            {/* <NavLink
               to="/personal/plans"
               className={({ isActive }) =>
                 `flex items-center p-2 rounded ${isActive
@@ -96,7 +95,7 @@ const Sidebar = () => {
             >
               <IndianRupee size={20} />
               <span className="ml-3 font-semibold">Plans</span>
-            </NavLink>
+            </NavLink> */}
 
             <NavLink
               to="/personal/assessment"

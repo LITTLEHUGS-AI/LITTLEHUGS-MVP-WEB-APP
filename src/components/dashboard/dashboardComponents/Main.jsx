@@ -303,7 +303,7 @@ const Main = () => {
     const cardSpacing = 8;
     const cardWidth = pageWidth - 30;
 
-    
+
     if (assessmentName?.assessment_output?.personality_insight) {
       assessmentName.assessment_output.personality_insight.split('.').forEach((insight, index) => {
         if (insight.trim().length === 0) return;
@@ -397,15 +397,7 @@ const Main = () => {
 
 
 
-  const getColorByScore = (score) => {
-    if (score >= 80) return '#22c55e'; // green
-    if (score >= 60) return '#facc15'; // yellow
-    if (score >= 40) return '#fb923c'; // red
-    return '#ef4444'; // red-500
-  };
-
-
-  const CircleScore = ({ index, title, score }) => {
+  const CircleScore = ({ index, title, score, color }) => {
     let bgColor = 'bg-green-100';
     switch (index) {
       case 1: bgColor = '#F9BD87'; break;
@@ -434,7 +426,7 @@ const Main = () => {
                 cy="50"
                 r="45"
                 fill="none"
-                stroke={getColorByScore(score)}
+                stroke={color}
                 strokeWidth="10"
                 strokeDasharray="283"
                 strokeDashoffset={283 - (score / 100) * 283}
@@ -635,7 +627,7 @@ const Main = () => {
                     key={index}
                     title={assessment?.domain || 'fetching'}
                     score={assessment?.score || '0'}
-                    color="#22c55e"
+                    color={assessment?.flag || "#22c55e"}
                     index={index + 1}
                   />
                 ))}
@@ -648,45 +640,76 @@ const Main = () => {
             <div className="w-fulll my-8">
               <h2 className="text-xl font-bold mb-6">Wellness Scorecard</h2>
 
-              <div className="overflow-hidden border border-gray-200 rounded-md">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Domain</th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Score</th>
-                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Insight</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {domainWellnessScore.map((item, index) => (
-                      <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {item.domain}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          <div className="flex items-center">
-                            <span
-                              className="inline-block ring ring-1 w-4 h-4 rounded-full mr-2"
-                              style={{ backgroundColor: item.flag }}
-                            />
-                            <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                          <ul className="list-disc pl-5">
-                            {item.positive_summary && (
-                              <li>{item.positive_summary}</li>
-                            )}
-                            {item.negative_summary && (
-                              <li>{item.negative_summary}                            </li>
-                            )}
-                          </ul>
-                        </td>
+              <div className="overflow-x-auto border border-gray-200 rounded-md">
+                <div className="overflow-x-auto border border-gray-200 rounded-md">
+
+                  {/* Desktop View */}
+                  <table className="min-w-full divide-y divide-gray-200 hidden sm:table">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Domain</th>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Score</th>
+                        <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Insight</th>
                       </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {domainWellnessScore.map((item, index) => (
+                        <tr key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {item.domain}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            <div className="flex items-center">
+                              <span
+                                className="inline-block ring ring-1 w-4 h-4 rounded-full mr-2"
+                                style={{ backgroundColor: item.flag }}
+                              />
+                              <span>{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-700">
+                            <ul className="list-disc pl-5">
+                              {item.positive_summary && <li>{item.positive_summary}</li>}
+                              {item.negative_summary && <li>{item.negative_summary}</li>}
+                            </ul>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {/* Mobile View */}
+                  <div className="sm:hidden space-y-4 p-4">
+                    {domainWellnessScore.map((item, index) => (
+                      <div key={index} className="border rounded-md p-4 shadow-sm bg-white">
+                        <div className="mb-2">
+                          <p className="text-sm font-semibold text-gray-700">Domain:</p>
+                          <p className="text-sm text-gray-900">{item.domain}</p>
+                        </div>
+                        <div className="mb-2 flex items-center">
+                          <p className="text-sm font-semibold text-gray-700 mr-2">Score:</p>
+                          <span
+                            className="inline-block ring ring-1 w-4 h-4 rounded-full mr-2"
+                            style={{ backgroundColor: item.flag }}
+                          />
+                          <span className="text-sm">{item.flag.charAt(0).toUpperCase() + item.flag.slice(1)}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-700">Insight:</p>
+                          <ul className="list-disc pl-5 text-sm text-gray-700">
+                            {item.positive_summary && <li>{item.positive_summary}</li>}
+                            {item.negative_summary && <li>{item.negative_summary}</li>}
+                          </ul>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+
+                </div>
+
               </div>
+
+
             </div>
 
 

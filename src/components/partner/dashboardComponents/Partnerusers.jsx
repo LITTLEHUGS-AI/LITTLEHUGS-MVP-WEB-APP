@@ -27,6 +27,57 @@ const PartnerUsers = () => {
 
 
   const handleCloseAddUser = () => setIsAddUserOpen(false);
+
+
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      setUsersLoading(true);
+      const response = await getTeamMembers();
+      const options = response.map((member) => ({
+        label: member.name,
+        value: member.name,
+      }));
+      setTeamMembers(options);
+    } catch (error) {
+      console.error("Error fetching team members:", error);
+      toast.error(error?.response?.data?.detail || "Failed to fetch team members");
+    } finally {
+      setUsersLoading(false);
+    }
+  }, []);
+
+
+  async function fetchUsers() {
+    try {
+      const response = await getUserMembers();
+      const usersData = getLatestAssessmentsByUser(response.results);
+      setUsers({ count: usersData.length, results: usersData });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+
+
+  async function deleteUser(user) {
+    const confirmed = window.confirm('Are you sure you want to delete this user?');
+    if (!confirmed) return;
+
+    try {
+      setInviteLoading(true)
+      await deleteUserMembers(user.id);
+      fetchUsers();
+    }
+    catch {
+      toast.error('Failed to Delete User')
+    }
+    finally {
+      setInviteLoading(false);
+    }
+  }
+
   const handleInviteUser = async () => {
     if (!userName.trim() || !email.trim() || !(therapist || program)) {
       toast.error("Please fill in all required fields");
@@ -56,6 +107,7 @@ const PartnerUsers = () => {
       }
 
       toast.success("User invited successfully!");
+      fetchUsers();
       setIsAddUserOpen(false);
       setUserName("");
       setEmail("");
@@ -71,60 +123,6 @@ const PartnerUsers = () => {
   };
 
 
-  const fetchTeamMembers = useCallback(async () => {
-    try {
-      setUsersLoading(true);
-      const response = await getTeamMembers();
-      const options = response.map((member) => ({
-        label: member.name,
-        value: member.name,
-      }));
-      setTeamMembers(options);
-    } catch (error) {
-      console.error("Error fetching team members:", error);
-      toast.error(error?.response?.data?.detail || "Failed to fetch team members");
-    } finally {
-      setUsersLoading(false);
-    }
-  }, []);
-
-
-  async function fetchUsers() {
-    try{
-      const response = await getUserMembers();
-      const usersData = getLatestAssessmentsByUser(response.results);
-      setUsers({ count: usersData.length, results: usersData });
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  // Fetch team members on component mount
-  useEffect(() => {
-    fetchTeamMembers();
-    fetchUsers();
-  }, [fetchTeamMembers]);
-
-
-
-  async function deleteUser(user) {
-    const confirmed = window.confirm('Are you sure you want to delete this user?');
-    if (!confirmed) return;
-    
-    try {
-      setInviteLoading(true)
-      await deleteUserMembers(user.id);
-      fetchUsers();
-    }
-    catch {
-      toast.error('Failed to Delete User')
-    }
-    finally {
-      setInviteLoading(false);
-    }
-  }
-
-
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -134,6 +132,12 @@ const PartnerUsers = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+
+  useEffect(() => {
+    fetchTeamMembers();
+    fetchUsers();
+  }, [fetchTeamMembers]);
 
 
 
@@ -172,106 +176,40 @@ const PartnerUsers = () => {
         </div>
       ) : (
         <>
-          {/* mobile */}
-          <div className="flex flex-col gap-3 md:hidden">
-            {users?.results?.map((u, i) => (
-              <div
-                key={i}
-                className="border border-gray-300 rounded-[12px] bg-white p-3 flex flex-col gap-1"
-              >
-                <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                  <span>User Name</span>
-                  <span>{u?.name}</span>
-                </div>
-
-                {userProfile?.partner_type === 'Therapy Center' &&
-                  <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                    <span>Assigned Therapist</span>
-                    <span></span>
-                  </div>
-                }
-
-                <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                  <span>Assigned Program</span>
-                  <span></span>
-                </div>
-
-                <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                  <span>Assessment</span>
-                  <span className="max-w-[120px] truncate">
-                    {u?.assessment_type}
-                  </span>
-                </div>
-                <div className="flex flex-row justify-between text-xs text-gray-500 mb-1">
-                  <span>Date</span>
-                  <span>{formatDate(u?.created_date)}</span>
-                </div>
-                <div className="flex flex-row justify-between text-xs text-gray-500">
-                  <span>Status</span>
-                  <span>{u?.status}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* desktop */}
-          <div className="hidden md:block border border-gray-300 rounded-[8px] bg-white p-0">
-            <div className="overflow-x-auto px-4 pb-1">
+          <div className="border border-gray-300 rounded-[8px] bg-white">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto px-4 pb-1">
               <table className="min-w-full">
                 <thead className="text-base">
                   <tr className="text-gray-600 bg-white">
-                    <th className="px-3 py-2 text-left font-normal">
-                      Name
-                    </th>
-
-                    {userProfile?.partner_type === 'Therapy Center' &&
-                      <th className="px-3 py-2 text-left font-normal">
-                        Assigned Therapist
-                      </th>}
-
-                    <th className="px-3 py-2 text-left font-normal">
-                      Assigned Program
-                    </th>
-
-                    <th className="px-3 py-2 text-left font-normal">
-                      Latest Assessment
-                    </th>
-
-                     <th className="px-3 py-2 text-left font-normal">
-                      Assessment Date
-                    </th>
-
-                    <th className="px-3 py-2 text-left font-normal">
-                      Joined Date
-                    </th>
-                    <th className="px-3 py-2 text-left font-normal">
-                      Onboarding Status
-                    </th>
-                    <th className="px-3 py-2 text-left font-normal">
-                      Action
-                    </th>
+                    <th className="px-3 py-2 text-left font-normal">Name</th>
+                      <th className="px-3 py-2 text-left font-normal">Email</th>
+                    {userProfile?.partner_type === 'Therapy Center' && (
+                      <th className="px-3 py-2 text-left font-normal">Assigned Therapist</th>
+                    )}
+                    <th className="px-3 py-2 text-left font-normal">Assigned Program</th>
+                    <th className="px-3 py-2 text-left font-normal">Latest Assessment</th>
+                    <th className="px-3 py-2 text-left font-normal">Assessment Date</th>
+                    <th className="px-3 py-2 text-left font-normal">Joined Date</th>
+                    <th className="px-3 py-2 text-left font-normal">Onboarding Status</th>
+                    <th className="px-3 py-2 text-left font-normal">Action</th>
                   </tr>
-
                 </thead>
                 <tbody className="text-base">
                   {usersLoading ? (
                     <tr>
-                      <td colSpan="5" className="px-3 py-2 text-center">
+                      <td colSpan="8" className="px-3 py-2 text-center">
                         <CommonLoader loading={true} />
                       </td>
                     </tr>
                   ) : (
                     users?.results?.map((u, i) => (
                       <tr className={`${i % 2 === 0 ? 'bg-gray-100' : ''}`} key={i}>
-                        <td className="px-3 py-2 whitespace-nowrap">
-                          {u?.name}
-                        </td>
-
-                        {userProfile.partner_type === 'Therapy Center' &&
-                          <td className="px-3 py-2 whitespace-nowrap">
-                            {u?.therapist}
-                          </td>
-                        }
-
+                        <td className="px-3 py-2 whitespace-nowrap">{u?.name}</td>
+                         <td className="px-3 py-2 whitespace-nowrap">{u?.email}</td>
+                        {userProfile.partner_type === 'Therapy Center' && (
+                          <td className="px-3 py-2 whitespace-nowrap">{u?.therapist}</td>
+                        )}
                         <td className="px-3 py-2 whitespace-nowrap">
                           {u?.programme?.map((programme, index) => (
                             <React.Fragment key={index}>
@@ -280,25 +218,25 @@ const PartnerUsers = () => {
                             </React.Fragment>
                           ))}
                         </td>
-
                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
                           {u?.latest_assessment?.assessment_name || ''}
                         </td>
-
-                         <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
+                        <td className="px-3 py-2 whitespace-nowrap max-w-[160px] truncate">
                           {formatDate(u?.latest_assessment?.date) || ''}
                         </td>
-
                         <td className="px-3 py-2 whitespace-nowrap">
                           {formatDate(u?.date_joined)}
                         </td>
-
                         <td className="px-3 py-2 whitespace-nowrap">
                           <span className="font-normal">{u?.status}</span>
                         </td>
-
-                        <td className="px-3  py-2 whitespace-nowrap">
-                          <button onClick={() => deleteUser(u)} className="p-2 bg-red-500 font-semibold text-white rounded-lg">Delete</button>
+                        <td className="px-3 py-2 whitespace-nowrap">
+                          <button
+                            onClick={() => deleteUser(u)}
+                            className="p-2 bg-red-500 font-semibold text-white rounded-lg"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))
@@ -306,7 +244,75 @@ const PartnerUsers = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden px-4 pb-2 space-y-4">
+              {usersLoading ? (
+                <CommonLoader loading={true} />
+              ) : (
+                users?.results?.map((u, i) => (
+                  <div key={i} className="w-full"        >
+                    <div className="font-semibold text-lg">{u?.name}</div>
+                        <div className="text-sm">{u?.email}</div>
+
+                    {userProfile.partner_type === 'Therapy Center' && (
+                      <div>
+                        <span className="text-sm font-medium text-gray-600">
+                          Therapist:
+                        </span>{' '}
+                        {u?.therapist}
+                      </div>
+                    )}
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">
+                        Program:
+                      </span>{' '}
+                      {u?.programme?.join(', ')}
+                    </div>
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">
+                        Assessment:
+                      </span>{' '}
+                      {u?.latest_assessment?.assessment_name || ''}
+                    </div>
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">
+                        Assessment Date:
+                      </span>{' '}
+                      {formatDate(u?.latest_assessment?.date) || ''}
+                    </div>
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">
+                        Joined:
+                      </span>{' '}
+                      {formatDate(u?.date_joined)}
+                    </div>
+
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">
+                        Status:
+                      </span>{' '}
+                      {u?.status}
+                    </div>
+
+                    <div className="mt-2">
+                      <button
+                        onClick={() => deleteUser(u)}
+                        className="p-2 bg-red-500 font-semibold text-white rounded-lg w-full"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
+
         </>
       )}
 

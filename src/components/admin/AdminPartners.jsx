@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 export default function AdminPartners() {
 
+    const [loading, setLoading] = useState(false);
     const [partners, setPartners] = useState([]);
     const [newPartner, setNewPartner] = useState({ name: '', email: '', partnerType: 'Clinic' });
     const [showInvitePopup, setShowInvitePopup] = useState(false);
@@ -35,25 +36,26 @@ export default function AdminPartners() {
 
 
 
-
-    useEffect(() => {
+    async function fetchPartners() {
+        setLoading(true);
         fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/`, {
             method: 'GET',
             headers: {
                 'accept': 'application/json',
                 "Authorization": localStorage.getItem('authToken')
             },
+        }).then((res) => {
+            if (res.status === 404) {
+                toast.warn('No Partners, Please Add one.');
+                return [];
+            }
+            return res.json();
         })
-            .then((res) => {
-                if (res.status === 404) {
-                    toast.warn('No Partners, Please Add one.');
-                    return [];
-                }
-                return res.json();
-            })
-            .then((json) =>{if(json.results) setPartners(json.results)})
-            .catch((err) => toast.error(err));
-    }, []);
+            .then((json) => { if (json.results) setPartners(json.results) })
+            .catch((err) => toast.error(err))
+            .finally(() => setLoading(false));
+    }
+
 
     const invitePartner = () => {
         fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/`, {
@@ -75,6 +77,7 @@ export default function AdminPartners() {
             .catch((err) => toast.error(err));
     }
 
+
     const handleNewPartnerChange = (e) => {
         const { name, value } = e.target;
         setNewPartner(prev => ({
@@ -82,6 +85,37 @@ export default function AdminPartners() {
             [name]: value
         }));
     };
+
+
+    async function deletePartner(partner) {
+        const confirmed = window.confirm('Are you sure you want to delete this Partner?');
+        if (!confirmed) return;
+
+        try {
+            setLoading(true)
+            fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/${partner.name}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
+            }).then((res) => {
+                if (res.status === 204) toast.success('Partners Deleted');
+                else toast.error('Error in Deleting Partners');
+            });
+            fetchPartners();
+        }
+        catch {
+            toast.error('Failed to Delete Partner')
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+
+    useEffect(() => { fetchPartners(); }, []);
 
 
     return (
@@ -105,21 +139,44 @@ export default function AdminPartners() {
                                     <th className="px-6 py-3 text-lg font-bold text-gray-600">Invite Accepted</th>
                                     <th className="px-6 py-3 text-lg font-bold text-gray-600">Invited User</th>
                                     <th className="px-6 py-3 text-lg font-bold text-gray-600">Partner Type</th>
+                                    <th className="px-6 py-3 text-lg font-bold text-gray-600">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {partners.map((partner, index) => (
-                                    <tr key={index} className="hover:bg-gray-50 transition">
-                                        <td className="px-6 py-4 text-sm text-gray-700">{partner.email}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{partner.name}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{formatDate(partner.created_at)}</td>
-                                        <td className="px-6 py-4 text-sm">
-                                            {partner.status === "accepted" ? (formatDate(partner.updated_at)) : <Badge label="Pending" type="warning" />}
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="7" className="py-10">
+                                            <div className="flex justify-center items-center">
+                                                <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+                                            </div>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{partner.user_count}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{partner.partner_type}</td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    partners.map((partner, index) => (
+                                        <tr key={index} className="hover:bg-gray-50 transition">
+                                            <td className="px-6 py-4 text-sm text-gray-700">{partner.email}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">{partner.name}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">{formatDate(partner.created_at)}</td>
+                                            <td className="px-6 py-4 text-sm">
+                                                {partner.status === "accepted" ? (
+                                                    formatDate(partner.updated_at)
+                                                ) : (
+                                                    <Badge label="Pending" type="warning" />
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">{partner.user_count}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">{partner.partner_type}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">
+                                                <button
+                                                    onClick={() => deletePartner(partner)}
+                                                    className="p-2 rounded-xl text-white font-semobold bg-red-400"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                     </div>

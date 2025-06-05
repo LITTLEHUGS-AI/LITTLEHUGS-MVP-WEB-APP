@@ -9,7 +9,7 @@ const plans = [
     title: "Wellness Starter",
     description: "For first-time users exploring basic check-ins",
     originalPrice: "₹49/-",
-    price: "₹ 19/-",
+    price: "₹ 29/-",
     button: "Choose Plan",
     features: [
       "First-time users, exploring basic self-check-ins",

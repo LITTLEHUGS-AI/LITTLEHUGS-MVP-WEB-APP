@@ -93,7 +93,7 @@ export default function AdminPartners() {
 
         try {
             setLoading(true)
-            fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/${partner.name}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/v1/api/invite-partner/${partner.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
@@ -101,10 +101,9 @@ export default function AdminPartners() {
                     'Authorization': localStorage.getItem('authToken')
                 },
             }).then((res) => {
-                if (res.status === 204) toast.success('Partners Deleted');
+                if (res.status === 204) { toast.success('Partners Deleted'); fetchPartners(); }
                 else toast.error('Error in Deleting Partners');
             });
-            fetchPartners();
         }
         catch {
             toast.error('Failed to Delete Partner')

@@ -27,6 +27,7 @@ const PartnerDashboard = () => {
   const [completedCount, setCompletedCount] = useState(0);
   const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [incompleteAss, setIncompleteAss] = useState(0);
   const [totalAssess, setTotalAssess] = useState(0);
   const initialFetchDone = useRef(false);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -137,6 +138,7 @@ const PartnerDashboard = () => {
         setUniqueUsers(uniqueUsers);
         setCompletedCount(completedAtLeastOneAssessment);
         setIncompleteCount(didNotCompleteAnyAssessment);
+        setIncompleteAss(response?.count - totalCompletedAssessments);
         setCompletedAssesCount(totalCompletedAssessments);
         setTotalAssess(response?.count || 0);
 
@@ -225,7 +227,7 @@ const PartnerDashboard = () => {
                 <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
                   Assessments Status
                 </span>
-<div className="flex flex-col md:flex-row  items-center gap-4 sm:gap-6">
+                <div className="flex flex-col md:flex-row  items-center gap-4 sm:gap-6">
                   <div className="relative w-[160px] h-[160px]">
                     <svg
                       width="160"
@@ -274,7 +276,7 @@ const PartnerDashboard = () => {
 
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
-                        {formatNumber(incompleteCount)}
+                        {formatNumber(incompleteAss)}
                       </div>
                       <span className="text-gray-700 text-lg leading-tight">
                         Incomplete<br />Assessments
@@ -292,7 +294,7 @@ const PartnerDashboard = () => {
                   Users
                 </span>
 
-             <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                   <div className="relative w-[160px] h-[160px]">
                     <svg
                       width="160"
@@ -330,7 +332,7 @@ const PartnerDashboard = () => {
                     </div>
                   </div>
 
-                            <div className="flex flex-col items-center space-y-4 w-full">
+                  <div className="flex flex-col items-center space-y-4 w-full">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
                         {completedCount}
@@ -360,7 +362,7 @@ const PartnerDashboard = () => {
             {/* Assessments Chart */}
 
             {assessmentData.length < 1 ? <div>No Assessments taken yet</div> :
-                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
+              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
                 <div className="flex flex-col gap-2 w-full">
                   <span className="text-[16px] text-center font-semibold md:text-2xl font-normal text-gray-700 mb-1 ml-2">
                     Assessment Types

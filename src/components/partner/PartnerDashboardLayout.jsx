@@ -36,9 +36,9 @@ const PartnerDashboardLayout = () => {
 
   return (
     <PartnerProvider>
-      <div className="w-full flex flex-col items-center bg-white font-quicksand min-h-screen">
-        {/* Mobile Sidebar */}
-        <div className="md:hidden fixed top-0 left-0 w-full h-14 bg-white shadow flex items-center justify-between px-3 z-50">
+     <div className="w-full max-w-screen px-2 bg-white font-quicksand min-h-screen">
+        {/* Mobile Sidebar */} 
+        <div className="md:hidden fixed top-0 left-0 w-full max-w-full h-14 bg-white shadow flex items-center justify-between px-3 z-50">
           <button
             onClick={showDrawer}
             className="bg-transparent p-2"
@@ -58,14 +58,14 @@ const PartnerDashboardLayout = () => {
           </div>
         </div>
 
-        <div className="w-full flex flex-row pt-14 md:pt-0">
           {/* Desktop Sidebar */}
+        <div className="w-full flex flex-row pt-14 md:pt-0">
           <div className="hidden md:flex md:h-screen bg-white min-w-[250px] max-w-xs w-64 flex-shrink-0 flex-col border border-gray-300 rounded-[10px]">
             <PartnerSidebar onTabChange={handleTabChange} />
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col items-stretch px-2 py-4">
+          <div className="flex-1 flex flex-col items-stretch py-4">
             <PartnerHeader />
             <div className="bg-white w-full h-full flex flex-col p-0">
               {MainContent}

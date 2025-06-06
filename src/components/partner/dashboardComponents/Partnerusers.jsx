@@ -142,7 +142,7 @@ const PartnerUsers = () => {
 
 
   return (
-    <div className="flex flex-col w-full h-full px-3 pt-6 md:px-0 font-quicksand">
+    <div className="flex flex-col w-full px-1 md:px-4 h-full pt-6 font-quicksand">
 
       <div className="flex items-center justify-between mb-4">
         <span className="text-[14px] md:text-2xl font-normal text-gray-700">
@@ -178,7 +178,7 @@ const PartnerUsers = () => {
         <>
           <div className="border border-gray-300 rounded-[8px] bg-white">
             {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto px-4 pb-1">
+            <div className="hidden lg:block overflow-x-auto px-4 pb-1">
               <table className="min-w-full">
                 <thead className="text-base">
                   <tr className="text-gray-600 bg-white">
@@ -246,7 +246,7 @@ const PartnerUsers = () => {
             </div>
 
             {/* Mobile Cards */}
-            <div className="md:hidden px-4 pb-2 space-y-4">
+            <div className="lg:hidden px-1 pb-2 space-y-4 overflow-x-hidden max-w-full">
               {usersLoading ? (
                 <CommonLoader loading={true} />
               ) : (

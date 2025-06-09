@@ -113,6 +113,17 @@ const Sidebar = () => {
         </div>
 
         <div className="fixed bottom-0 p-4 mt-auto">
+
+          <div className="h-[200px] overflow-hidden mb-4">
+            <iframe
+              className="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/8fiETwzBW0o"
+              title="Little Hugs Personal Program"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+
           <div className="md:hidden mb-3">
             <p className="text-xs font-medium text-gray-500 mb-1">PROFILE</p>
             <ProfileUi />

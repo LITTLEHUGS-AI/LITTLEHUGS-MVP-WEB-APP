@@ -12,6 +12,7 @@ import { toastErrorMessage } from "../common/Constants";
 import { apiClient, setupApiAccessToken } from "../../api/api-client";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
+import SearchableSelect from "../../widgets/layouts/SearchableSelect";
 
 const INITIAL_VALUES = {
   name: "",
@@ -747,7 +748,7 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   placeHolder="Enter your Name"
                 />
 
@@ -755,7 +756,7 @@ function SignupUI({
                   label="Email"
                   name="email"
                   input_type="email"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}
@@ -789,14 +790,15 @@ function SignupUI({
                 </select>
 
                 <div className="flex gap-4">
-                  <select {...methods.register("city")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
-                    <option value="" hidden>* City</option>
-                    {allCities.map((city, i) => (
-                      <option key={i} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                  
+                  <SearchableSelect
+                    name="city"
+                    placeHolder="* City"
+                    options={allCities}
+                    register={methods.register}
+                    setValue={methods.setValue}
+                  />
+
                   <select  {...methods.register("language")} defaultValue="" className="w-1/2 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required>
                     {selectedUserType === 'personal' && <option value="" hidden>* Mother Tongue</option>}
                     {selectedUserType === 'partner' && <option value="" hidden>* Language</option>}

@@ -98,6 +98,7 @@ const PartnerSidebar = ({ onTabChange }) => {
           <span className="z-10">Dashboard</span>
         </button>
 
+
         <div className="relative">
           <button
             onClick={() => handleTabClick("settings")}
@@ -121,9 +122,9 @@ const PartnerSidebar = ({ onTabChange }) => {
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
                     ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
                 >
-                  Team member
+                  {userProfile?.partner_type === 'Therapy Center' ? "Therapist" : " Team member"}
                 </button>
-              } 
+              }
               <button
                 onClick={() => handleSubTabClick("users")}
                 className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "users"
@@ -146,6 +147,17 @@ const PartnerSidebar = ({ onTabChange }) => {
           )}
         </div>
       </nav>
+
+
+      <div className="h-[200px] px-1 overflow-hidden mb-4">
+        <iframe
+          className="w-full h-full rounded-lg"
+          src="https://www.youtube.com/embed/BNeo814cXzE"
+          title="Little Hugs Partnership Program"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
 
       <div className="mt-auto flex items-center gap-3 px-6 py-2 border-t border-gray-300">
         <img

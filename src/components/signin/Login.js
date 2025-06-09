@@ -545,7 +545,7 @@ function SignInUI({
                             />
 
                             <InputField
-                                type={visible.password ? "text" : "password"}
+                                input_type={visible.password ? "text" : "password"}
                                 name="password"
                                 placeHolder="Enter your password"
                                 showIcon={visible.password}

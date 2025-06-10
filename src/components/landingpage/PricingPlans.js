@@ -109,7 +109,7 @@ const PricingPlans = () => {
 
         {/* Pricing Plans Section */}
         <div className="bg-white py-8 md:py-12 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-3xl font-semibold mb-8 text-center">50% Offer for Early Birds</h1>
+          <h1 className="text-3xl md:text-3xl font-semibold mb-8 text-center">Early Birds Offer</h1>
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {plans.map((plan, index) => (
               <div
@@ -129,7 +129,7 @@ const PricingPlans = () => {
                   <ul className="mt-3 md:mt-4 text-xs md:text-sm text-gray-700 space-y-1 md:space-y-2">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start">
-                        <span className="text-green-600 mr-2 flex-shrink-0">✔</span>
+                        {/* <span className="text-green-600 mr-2 flex-shrink-0">✔</span> */}
                         <span>{feature}</span>
                       </li>
                     ))}

@@ -10,8 +10,18 @@ const RightHandSide = ({ show }) => {
   useEffect(() => {
     async function getData(current) {
       const res = await getShareAssessment(current);
-      setInsight(res?.[0]?.assessment_output?.personality_insight || 'N/A');
-    };
+
+      let domainIndex = -1;
+
+      for (let i = 0; i < res.length; i++) {
+        const result = res[i];
+        if (result.assessment_output?.domain_insights && Object.keys(result.assessment_output.domain_insights).length > 0) {
+          domainIndex = i;
+          break;
+        }
+      }
+      setInsight(res?.[domainIndex].assessment_output?.personality_insight || 'N/A');
+    }
 
     const dd = store.getData();
     if ((Object.keys(dd).length !== 0)) {

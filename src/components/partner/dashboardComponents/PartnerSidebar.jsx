@@ -122,7 +122,7 @@ const PartnerSidebar = ({ onTabChange }) => {
                   className={`text-left text-base px-2 py-1 transition-colors w-full ${activeSubTab === "team"
                     ? "font-bold text-gray-800" : "font-normal text-gray-700"}`}
                 >
-                  {userProfile?.partner_type === 'Therapy Center' ? "Therapist" : " Team member"}
+                  {userProfile?.partner_type === 'Therapy Center' ? "Therapist" : "Departments"}
                 </button>
               }
               <button

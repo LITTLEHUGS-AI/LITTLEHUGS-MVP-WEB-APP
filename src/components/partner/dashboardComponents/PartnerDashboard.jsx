@@ -65,12 +65,14 @@ const PartnerDashboard = () => {
     const domainCounts = {};
 
     results.forEach(user => {
-      (user.domains ?? []).forEach(domain => {
-        if (!domainCounts[domain]) {
-          domainCounts[domain] = 0;
-        }
-        domainCounts[domain]++;
-      });
+      if (user.status === "completed") {
+        (user.domains ?? []).forEach(domain => {
+          if (!domainCounts[domain]) {
+            domainCounts[domain] = 0;
+          }
+          domainCounts[domain]++;
+        });
+      }
     });
 
     const domainStructure = Object.entries(domainCounts)

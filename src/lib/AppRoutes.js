@@ -27,6 +27,8 @@ import AdminLogin from "../components/admin/AdminLogin";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import AdminPartners from "../components/admin/AdminPartners";
 import AcceptInvitePartner from "../temp/AcceptInvitePartner";
+import AppPrivacyPolicy from "../components/misc/appPrivacypolicy";
+import MobileAccDelete from "../components/misc/mobileAccDelete";
 
 
 
@@ -67,6 +69,10 @@ function AppRoutes() {
             <Route path={routesConfig.signUp.path} element={<OpenRoute><Signup /></OpenRoute>} />
             {/* dashboard */}
             <Route path="/auth/callback" element={<GoogleCallback />} />
+
+            <Route path="/mobile/privacy-policy" element={<OpenRoute><AppPrivacyPolicy /></OpenRoute>} />
+            <Route path="/mobile/account-delete" element={<MobileAccDelete />} />
+
 
             <Route
               path="/personal/dashboard"
@@ -118,11 +124,9 @@ function AppRoutes() {
             <Route path="/admin/partners" element={<AdminPartners />} />
 
 
-
             <Route path="/accept-invite-user/:inviteId" element={<AcceptInviteUser />} />
             <Route path="/accept-invite/:inviteId" element={<AcceptInviteTeam />} />
             <Route path="/partner-invite/:inviteId" element={<AcceptInvitePartner />} />
-
 
           </Routes>
         </Suspense>

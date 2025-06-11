@@ -96,7 +96,7 @@ const PartnerTeamMember = () => {
     <div className="flex flex-col w-full h-full px-3 pt-6 md:px-0 font-quicksand">
       <div className="flex items-center justify-between mb-4">
         <span className="text-[14px] md:text-2xl font-normal text-gray-700">
-          Team Members
+          {userProfile?.partner_type === 'Therapy Center' ? "Therapist" : "Department Leads"}
         </span>
         <div className="flex items-center gap-1">
           <button
@@ -109,7 +109,7 @@ const PartnerTeamMember = () => {
             className="text-[14px] md:text-[16px] font-semibold text-[#4F7DDD] cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           >
-            Add Team Member
+            {userProfile?.partner_type === 'Therapy Center' ? "Add Therapist" : "Invite Department Leads"}
           </p>
         </div>
       </div>
@@ -120,7 +120,7 @@ const PartnerTeamMember = () => {
         </div>
       ) : teamMembers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-40 text-gray-500 text-base">
-          No team member, please add by clicking on add team member button
+          {userProfile?.partner_type === 'Therapy Center' ? "No therapist, please add by clicking on add Therapist button" : "No departmept leads, please add by clicking on Invite Department Leads button"}
         </div>
       ) : (
         <>
@@ -155,7 +155,7 @@ const PartnerTeamMember = () => {
               <thead>
                 <tr className="bg-white">
                   <th className="text-left px-4 py-2 font-normal text-gray-700 border-b w-1/2 border-r border-[#4A4B4F80]">
-                    Team Member
+                    {userProfile?.partner_type === 'Therapy Center' ? "Therapist" : "Department Lead"}
                   </th>
                   <th className="text-left px-4 py-2 font-normal text-gray-700 border-b border-r border-[#4A4B4F80]">
                     Email
@@ -201,7 +201,7 @@ const PartnerTeamMember = () => {
         }}
         title={
           <div className="w-full text-center font-normal text-[16px] md:text-2xl">
-            Add Team Member
+            {userProfile?.partner_type === 'Therapy Center' ? "Add Therapist" : "Invite Department Lead"}
           </div>
         }
         footer={null}
@@ -209,10 +209,10 @@ const PartnerTeamMember = () => {
         <div className="flex flex-col gap-4 mt-4 w-full md:flex-row md:gap-4">
           <div className="flex flex-col w-full md:w-1/2">
             <label className="mb-1 text-gray-700 text-sm">
-              Team Member Name
+              {userProfile?.partner_type === 'Therapy Center' ? "Therapist Name" : "Department Lead Name"}
             </label>
             <Input
-              placeholder="* Team Member Name"
+              placeholder={userProfile?.partner_type === 'Therapy Center' ? "* Therapist Name" : "* Department Lead Name"}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="h-9 md:h-[2.5rem] text-[14px]"
@@ -239,7 +239,7 @@ const PartnerTeamMember = () => {
               }`}
             type="primary"
           >
-            {loading ? "Inviting..." : "Invite Member"}
+            {loading ? "Inviting..." : "Invite"}
           </CommonLoader>
         </div>
       </CommonModal>

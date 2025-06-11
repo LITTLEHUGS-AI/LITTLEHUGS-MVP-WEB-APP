@@ -748,7 +748,7 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
-                  // isReadOnly={true}
+                  isReadOnly={true}
                   placeHolder="Enter your Name"
                 />
 
@@ -756,7 +756,7 @@ function SignupUI({
                   label="Email"
                   name="email"
                   input_type="email"
-                  // isReadOnly={true}
+                  isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}

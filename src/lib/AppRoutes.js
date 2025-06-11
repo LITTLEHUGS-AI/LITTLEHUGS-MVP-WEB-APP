@@ -71,7 +71,7 @@ function AppRoutes() {
             <Route path="/auth/callback" element={<GoogleCallback />} />
 
             <Route path="/mobile/privacy-policy" element={<OpenRoute><AppPrivacyPolicy /></OpenRoute>} />
-            <Route path="/mobile/account-delete" element={<OpenRoute><MobileAccDelete /></OpenRoute>} />
+            <Route path="/mobile/account-delete" element={<MobileAccDelete />} />
 
 
             <Route

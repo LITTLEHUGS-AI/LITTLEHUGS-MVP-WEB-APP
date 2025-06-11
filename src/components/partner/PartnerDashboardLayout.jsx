@@ -36,7 +36,7 @@ const PartnerDashboardLayout = () => {
 
   return (
     <PartnerProvider>
-     <div className="w-full max-w-screen px-2 bg-white font-quicksand min-h-screen">
+     <div className="max-w-screen px-2 bg-white font-quicksand min-h-screen">
         {/* Mobile Sidebar */} 
         <div className="md:hidden fixed top-0 left-0 w-full max-w-full h-14 bg-white shadow flex items-center justify-between px-3 z-50">
           <button
@@ -67,7 +67,7 @@ const PartnerDashboardLayout = () => {
           {/* Main Content */}
           <div className="flex-1 flex flex-col items-stretch py-4">
             <PartnerHeader />
-            <div className="bg-white w-full h-full flex flex-col p-0">
+            <div className="bg-white h-full flex flex-col p-0">
               {MainContent}
             </div>
           </div>

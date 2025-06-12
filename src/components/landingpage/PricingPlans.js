@@ -138,7 +138,7 @@ const PricingPlans = () => {
               return (
                 <div
                   key={index}
-                  className={`relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${plan.popular ? 'ring-2 ring-purple-500 scale-105' : ''
+                  className={`relative flex flex-col bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${plan.popular ? 'ring-2 ring-purple-500 scale-105' : ''
                     }`}
                 >
                   {/* Popular Badge */}
@@ -151,7 +151,7 @@ const PricingPlans = () => {
                   )}
 
                   <div className={`p-2 bg-gradient-to-br ${plan.gradient} rounded-t-2xl`}>
-                    <div className="flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6 mx-auto">
+                    <div className="flex items-center justify-center w-16 h-12 bg-white rounded-2xl shadow-lg mb-1 mx-auto">
                       <IconComponent className="w-8 h-8 text-gray-700" />
                     </div>
 
@@ -159,7 +159,7 @@ const PricingPlans = () => {
                       {plan.name}
                     </h3>
 
-                    <p className="text-sm text-gray-600 text-center mb-6 leading-relaxed">
+                    <p className="text-sm text-gray-600 text-center mb-2 leading-relaxed">
                       {plan.subtitle}
                     </p>
 
@@ -170,22 +170,16 @@ const PricingPlans = () => {
                         </span>
                       )}
                       <div className="flex items-baseline justify-center">
-                        <span className="text-4xl font-bold text-gray-900">
-                          {plan.price}
-                        </span>
-                        <span className="text-lg text-gray-600 ml-1">
-                          {plan.period}
-                        </span>
+                        <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                        <span className="text-lg text-gray-600 ml-1">{plan.period}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="p-4">
-                    <p className="text-gray-600 mb-6 text-center">
-                      {plan.description}
-                    </p>
+                    <p className="text-gray-600 mb-2 text-center">{plan.description}</p>
 
-                    <ul className="space-y-4 mb-8">
+                    <ul className="space-y-2 mb-1">
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-start">
                           <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -199,13 +193,14 @@ const PricingPlans = () => {
                         {plan.additional}
                       </p>
                     )}
-
-                    <Link to={plan.link}
-                      className={`w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${plan.buttonStyle}`}
-                    >
-                      {plan.buttonText}
-                    </Link>
                   </div>
+
+                  <Link
+                    to={plan.link}
+                    className={`mt-auto mb-2 mx-4 py-4 px-6 rounded-xl font-semibold text-lg text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${plan.buttonStyle}`}
+                  >
+                    {plan.buttonText}
+                  </Link>
                 </div>
               );
             })}

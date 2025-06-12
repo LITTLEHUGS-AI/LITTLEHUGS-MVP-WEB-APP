@@ -502,6 +502,12 @@ const Main = () => {
       }
 
       setStep('');
+
+      if (domainIndex < 0) {
+        setStep('blur');
+        return;
+      }
+
       setData(data);
       setAssessmentName(data?.[domainIndex]);
       const domainArray = Object.keys(domainInsight).map(key => domainInsight[key]);
@@ -522,23 +528,18 @@ const Main = () => {
 
     const dd = store.getData();
     if ((Object.keys(dd).length !== 0)) {
-      // if (dd.current === 'child') setProfileData(dd.child);
-      // if (dd.current === 'women') setProfileData(dd.women);
-      // if (dd.current !== undefined) getData(dd.current);
-    } else {
-      // (async () => {
-      //   const res = await getWomenProfileDetails();
-      //   res && setProfileData(res);
-      //   getData('women');
-      // })();
+      if (dd.current === 'women') setProfileData(dd.women);
+      if (dd.current === 'child') setProfileData(dd.child);
+      if (dd.current === 'men') setProfileData(dd.men);
+      if (dd.current !== undefined) getData(dd.current);
     }
 
     const unsubscribe = store.subscribe((newData) => {
       if (newData.current === 'child') setProfileData(newData.child);
       if (newData.current === 'women') setProfileData(newData.women);
-      if (newData.current !== undefined) { getData(newData.current) };
+      if (newData.current === 'men') setProfileData(newData.men);
+      if (newData.current !== undefined) getData(newData.current);
     });
-
     return () => unsubscribe();
   }, [getData])
 

@@ -220,7 +220,7 @@ const Contact = () => {
                                     <a href="https://www.linkedin.com/company/littlehugs/" target='_blank' rel="noreferrer" className="w-12 h-12">
                                         <img className="w-full h-full" alt='linkedin' src='/images/contactus/linkedin.png' />
                                     </a>
-                                    <a href="/contact" className="w-12 h-12">
+                                    <a href="https://www.facebook.com/profile.php?id=61577311737612#" target='_blank' rel="noreferrer" className="w-12 h-12">
                                         <img className="w-full h-full" alt='facebook' src='/images/contactus/facebook.png' />
                                     </a>
                                 </div>

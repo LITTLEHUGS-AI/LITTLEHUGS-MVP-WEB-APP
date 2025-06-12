@@ -83,6 +83,11 @@ export default function AssesmentHandler() {
 
     const submitAssessment = async () => {
         try {
+            let id = 0;
+            if(dd.current === 'women') id = dd.women.id;
+            if(dd.current === 'child') id = dd.child.id;
+            if(dd.current === 'men') id = dd.men.id;
+
             const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/`, {
                 method: 'POST',
                 headers: {
@@ -93,14 +98,14 @@ export default function AssesmentHandler() {
                 signal: controller.signal,
                 body: JSON.stringify({
                     assessment_type: type,
-                    profile_id: dd.current === 'women' ? dd.women.id : dd.child.id,
+                    profile_id: id,
                     goal: [
                         "Improve emotional regulation",
                         "Encourage communication"
                     ],
                     responses: combinedAnswers,
                     created_by_type: dd.current,
-                    created_by_id: dd.current === 'women' ? dd.women.id : dd.child.id,
+                    created_by_id: id
                 })
             });
             clearTimeout(timeoutId);

@@ -20,7 +20,7 @@ const RightHandSide = ({ show }) => {
           break;
         }
       }
-      setInsight(res?.[domainIndex].assessment_output?.personality_insight || 'N/A');
+      if (domainIndex > -1) setInsight(res?.[domainIndex].assessment_output?.personality_insight || 'N/A');
     }
 
     const dd = store.getData();

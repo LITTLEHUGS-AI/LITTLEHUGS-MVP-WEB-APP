@@ -764,10 +764,10 @@ function SignupUI({
                 />
                 <InputField
                   label="Password"
+                  input_type={visible.password ? "text" : "password"}
                   name="password"
                   fieldId="password"
                   placeHolder="Enter your Password"
-                  type={visible.password ? "text" : "password"}
                   visible
                   showIcon={visible.password}
                   handleChange={handleShowPassword}
@@ -790,7 +790,7 @@ function SignupUI({
                 </select>
 
                 <div className="flex gap-4">
-                  
+
                   <SearchableSelect
                     name="city"
                     placeHolder="* City"

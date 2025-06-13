@@ -136,7 +136,7 @@ const ProfileUi = () => {
 
 
   const fetchCities = useCallback((country) => {
-    if (typeof country !== 'string' || country.trim() === '')  return;
+    if (typeof country !== 'string' || country.trim() === '') return;
 
     fetch(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=${country}`, {
       method: 'GET',
@@ -176,7 +176,7 @@ const ProfileUi = () => {
   useEffect(() => {
     if (dd.women && (Object.keys(dd.women).length !== 0)) {
       setWomenProfileData(dd.women);
-      if (dd.women.image != null) setWomenDP(`${process.env.REACT_APP_API_URL}/${dd.women.image}`);
+      if (dd.women.image != null) setWomenDP(dd.women.image);
     }
     if (dd.child && (Object.keys(dd.child).length !== 0)) {
       setChildProfileData(dd.child);
@@ -1171,6 +1171,23 @@ const ProfileUi = () => {
                   <select name="language" value={menProfileData.language} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
                     <option value="" hidden selected>
                       * Select Language
+                    </option>
+                    {allLanguages.map((language, i) => (
+                      <option key={i} value={language}>
+                        {language}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Life Stage
+                  </label>
+                  <select name="language" value={menProfileData.language} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                    <option value="" hidden selected>
+                      * Select Life Stage
                     </option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>

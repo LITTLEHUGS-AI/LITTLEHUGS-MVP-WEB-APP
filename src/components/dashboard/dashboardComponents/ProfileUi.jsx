@@ -110,9 +110,9 @@ const ProfileUi = () => {
 
 
   const getProfileCompletion = useCallback((profile) => {
-    delete profile.image;
-    delete profile.relation_with_child;
     const profileCopy = { ...profile };
+    delete profileCopy.image;
+    delete profileCopy.relation_with_child;
 
     const keys = Object.keys(profileCopy);
     const totalKeys = keys.length;
@@ -136,6 +136,8 @@ const ProfileUi = () => {
 
 
   const fetchCities = useCallback((country) => {
+    if (typeof country !== 'string' || country.trim() === '') return;
+
     fetch(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=${country}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -172,9 +174,19 @@ const ProfileUi = () => {
 
 
   useEffect(() => {
-    if (dd.women && (Object.keys(dd.women).length !== 0)) setWomenProfileData(dd.women);
-    if (dd.child && (Object.keys(dd.child).length !== 0)) setChildProfileData(dd.child);
-    if (dd.men && (Object.keys(dd.men).length !== 0)) setMenProfileData(dd.men);
+    if (dd.women && (Object.keys(dd.women).length !== 0)) {
+      setWomenProfileData(dd.women);
+      if (dd.women.image != null) setWomenDP(dd.women.image);
+    }
+    if (dd.child && (Object.keys(dd.child).length !== 0)) {
+      setChildProfileData(dd.child);
+      if (dd.child.image != null) setChildDP(dd.child.image);
+      setSelectedChildGoalOptions([...dd.child.goal]);
+    }
+    if (dd.men && (Object.keys(dd.men).length !== 0)) {
+      setMenProfileData(dd.men);
+      setSelectedMenGoalOptions([...dd.men.intent])
+    }
   }, [dd])
 
 
@@ -189,18 +201,25 @@ const ProfileUi = () => {
         setMenProfileData(data.men);
         setCompleteProfile(data.completingPercentage);
 
+        switch (selectedProfile) {
+          case 'women': fetchCities(data.women.country); break;
+          case 'child': fetchCities(data.child.country); break;
+          case 'men': fetchCities(data.men.country); break;
+          default: ;
+        }
 
         setProfiles(prev => {
           const newState = {
-            women: !!dd.women,
-            child: !!dd.child,
-            men: !!dd.men,
+            women: Object.keys(dd.women).length > 0,
+            child: Object.keys(dd.child).length > 0,
+            men: Object.keys(dd.men).length > 0,
           };
           if (prev.women === newState.women && prev.child === newState.child && prev.men === newState.men) return prev;
           return newState;
         });
         return;
       }
+
       const res1 = await getWomenProfileDetails();
       let localProfiles = { women: false, child: false, men: false };
       let current = null;
@@ -211,24 +230,25 @@ const ProfileUi = () => {
       setProfiles({ ...localProfiles });
 
       if (localProfiles.women) { current = 'women'; completeage = getProfileCompletion(res1.mother_profile) }
-      else if (localProfiles.child) { current = 'child'; completeage = getProfileCompletion(res1.child_profiles[0]) }
+      else if (localProfiles.child) { current = 'child'; completeage = getProfileCompletion(res1.child_profiles[0]); }
       else if (localProfiles.men) { current = 'men'; completeage = getProfileCompletion(res1.men_profile) }
       setSelectedProfile(current);
 
 
       const women = { ...res1.mother_profile };
-      women.city = res1.city;
-      women.country = res1.country;
-      women.language = res1.language;
+      if (Object.keys(women).length > 0) {
+        women.name = res1.name;
+        women.city = res1.city;
+        women.country = res1.country;
+        women.language = res1.language;
+      }
 
       if (localProfiles.women) {
-        women.name = res1.name;
 
         if (women.image != null) setWomenDP(`${process.env.REACT_APP_API_URL}/${women.image}`);
         setWomenProfileData({ ...women });
         getProfileCompletion(women);
         setSelectedWomenGoalOptions([...women.intent]);
-
         fetchCities(res1.country);
       }
 
@@ -239,9 +259,15 @@ const ProfileUi = () => {
         setSelectedChildGoalOptions([...res1.child_profiles[0].goal]);
       }
 
+      const men = { ...res1.men_profile };
       if (localProfiles.men) {
-        setMenProfileData(res1.men_profile);
-        setSelectedMenGoalOptions([...res1.men_profile.intent])
+        men.city = res1.city;
+        men.country = res1.country;
+        men.language = res1.language;
+
+        setMenProfileData({ ...men });
+        setSelectedMenGoalOptions([...res1.men_profile.intent]);
+        fetchCities(res1.country);
       }
 
       store.setData({
@@ -249,8 +275,8 @@ const ProfileUi = () => {
         completingPercentage: completeage,
         name: "",
         women,
-        child: res1.child_profiles[0],
-        men: res1.men_profile
+        child: res1.child_profiles[0] ?? {},
+        men
       });
 
     } catch (error) {
@@ -286,6 +312,7 @@ const ProfileUi = () => {
     const handleClickOutsideGoal = (event) => {
       if (womenGoalDropdownRef.current && !womenGoalDropdownRef.current.contains(event.target)) setIsWomenGoalOpen(false);
       if (childGoalDropdownRef.current && !childGoalDropdownRef.current.contains(event.target)) setIsChildGoalOpen(false);
+      if (menGoalDropdownRef.current && !menGoalDropdownRef.current.contains(event.target)) setIsMenGoalOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutsideGoal);
     return () => document.removeEventListener("mousedown", handleClickOutsideGoal);
@@ -325,6 +352,8 @@ const ProfileUi = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const profile = { womenProfileData, childProfileData, menProfileData };
 
     if (selectedProfile === 'women') {
       try {
@@ -429,7 +458,7 @@ const ProfileUi = () => {
 
     if (selectedProfile === 'men') {
       try {
-        delete womenProfileData.image;
+        delete menProfileData.image;
         const response1 = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/men-profile`, {
           method: 'PUT',
           headers: {
@@ -469,7 +498,7 @@ const ProfileUi = () => {
 
         delete menProfileData.id;
         delete menProfileData.name;
-        const response2 = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/men-profile`, {
+        const response2 = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/user-profiles`, {
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
@@ -488,7 +517,22 @@ const ProfileUi = () => {
     }
 
     handleCancel();
-    initialData();
+
+    let complete = 0;
+    switch (selectedProfile) {
+      case 'women': complete = getProfileCompletion(womenProfileData); break;
+      case 'child': complete = getProfileCompletion(childProfileData); break;
+      case 'men': complete = getProfileCompletion(menProfileData); break;
+      default: ;
+    }
+
+    store.setData({
+      completingPercentage: complete,
+      women: profile.womenProfileData,
+      child: profile.childProfileData,
+      men: profile.menProfileData
+    });
+
   };
 
 
@@ -1084,7 +1128,6 @@ const ProfileUi = () => {
           {selectedProfile === 'men' &&
             <form >
 
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
                 <div className="relative">
@@ -1093,9 +1136,9 @@ const ProfileUi = () => {
                   </label>
                   <select
                     name="country"
-                    value={womenProfileData.country}
+                    value={menProfileData.country}
                     defaultValue=""
-                    onChange={handleWomenProfileChange}
+                    onChange={handleMenProfileChange}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                     required
                   >
@@ -1112,7 +1155,7 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <select name="city" value={womenProfileData.city} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                  <select name="city" value={menProfileData.city} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
                     {allCities.map((city, i) => (
                       <option key={i} value={city}>
                         {city}
@@ -1125,9 +1168,26 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Language
                   </label>
-                  <select name="language" value={womenProfileData.language} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                  <select name="language" value={menProfileData.language} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
                     <option value="" hidden selected>
                       * Select Language
+                    </option>
+                    {allLanguages.map((language, i) => (
+                      <option key={i} value={language}>
+                        {language}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    * Life Stage
+                  </label>
+                  <select name="language" value={menProfileData.language} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
+                    <option value="" hidden selected>
+                      * Select Life Stage
                     </option>
                     {allLanguages.map((language, i) => (
                       <option key={i} value={language}>

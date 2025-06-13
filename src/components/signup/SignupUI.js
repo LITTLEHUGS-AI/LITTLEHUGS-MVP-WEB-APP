@@ -4,7 +4,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import axios from "axios";
 import Navbar from "../common/Navbar";
 import { useAuth } from "../../lib/AuthContext";
 import useSignIn from "../signin/useSignIn";
@@ -450,6 +449,7 @@ function SignupUI({
     if (selectedUserType === "personal") {
       const promises = [];
       try {
+        
         if (showWomenPopup) {
           const womenFormDataRaw = new FormData(womenFormRef.current);
 
@@ -484,7 +484,7 @@ function SignupUI({
               name: childFormDataRaw.get("name"),
               dob: childFormDataRaw.get("dob"),
               age_group: childFormDataRaw.get("ageGroup"),
-              goal: [childFormDataRaw.get("goal")],
+              goal: [...selectedChildGoalOptions],
               tone_prefrence: childFormDataRaw.get("tone_prefrence"),
               relation_with_child: childFormDataRaw.get("relationWithChild"),
               occupation: childFormDataRaw.get("occupation"),
@@ -502,6 +502,7 @@ function SignupUI({
           promises.push(childProfilePromise);
         }
 
+
         if (showMenPopup) {
           const menFormDataRaw = new FormData(menFormRef.current);
 
@@ -510,7 +511,9 @@ function SignupUI({
               name: menFormDataRaw.get("name"),
               dob: menFormDataRaw.get("dob"),
               age_group: menFormDataRaw.get("ageGroup"),
-              goal: [menFormDataRaw.get("goal")],
+              life_stage:menFormDataRaw.get("lifeStage"),
+              life_style:menFormDataRaw.get("lifeStyle"),
+              intent: [...selectedMenGoalOptions],
               tone_prefrence: menFormDataRaw.get("tone_prefrence"),
               relation_with_child: menFormDataRaw.get("relationWithChild"),
               occupation: menFormDataRaw.get("occupation"),
@@ -764,10 +767,10 @@ function SignupUI({
                 />
                 <InputField
                   label="Password"
+                  input_type={visible.password ? "text" : "password"}
                   name="password"
                   fieldId="password"
                   placeHolder="Enter your Password"
-                  type={visible.password ? "text" : "password"}
                   visible
                   showIcon={visible.password}
                   handleChange={handleShowPassword}
@@ -790,7 +793,7 @@ function SignupUI({
                 </select>
 
                 <div className="flex gap-4">
-                  
+
                   <SearchableSelect
                     name="city"
                     placeHolder="* City"

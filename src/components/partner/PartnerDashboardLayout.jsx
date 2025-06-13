@@ -65,7 +65,7 @@ const PartnerDashboardLayout = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col items-stretch py-4">
+          <div className="flex-1 flex flex-col overflow-x-scroll items-stretch py-4">
             <PartnerHeader />
             <div className="bg-white h-full flex flex-col p-0">
               {MainContent}

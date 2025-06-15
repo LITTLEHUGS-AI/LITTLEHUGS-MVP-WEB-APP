@@ -449,7 +449,6 @@ function SignupUI({
     if (selectedUserType === "personal") {
       const promises = [];
       try {
-
         if (showWomenPopup) {
           const womenFormDataRaw = new FormData(womenFormRef.current);
 

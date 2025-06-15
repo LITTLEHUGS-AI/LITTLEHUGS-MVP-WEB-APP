@@ -5,7 +5,8 @@ import { Calendar, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 import store from "../../../config/storeInstance";
 import axios from "axios";
-// import AddChildProfile from "./AddChildProifle";
+import SearchableSelect from "../../../widgets/layouts/SearchableSelect";
+
 
 const ProfileUi = () => {
 
@@ -86,10 +87,10 @@ const ProfileUi = () => {
 
 
   const handleWomenProfileChange = (e) => {
-    setWomenProfileData((prevData) => ({
-      ...prevData,
+    setWomenProfileData({
+      ...womenProfileData,
       [e.target.name]: e.target.value
-    }));
+    });
     if (e.target.name === 'country') fetchCities(e.target.value);
   };
 
@@ -728,34 +729,30 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Country
                   </label>
-                  <select
+                  <SearchableSelect
                     name="country"
-                    value={womenProfileData.country}
-                    defaultValue=""
-                    onChange={handleWomenProfileChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden>Select Country</option>
-                    {allCountries.map((country, i) => (
-                      <option key={i} value={country.code}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
+                    placeHolder="* Country"
+                    key1="name"
+                    key2="code"
+                    defaultValue={womenProfileData.country}
+                    options={allCountries}
+                    onChnageType="true"
+                    setValue={handleWomenProfileChange}
+                  />
                 </div>
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <select name="city" value={womenProfileData.city} onChange={handleWomenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
-                    {allCities.map((city, i) => (
-                      <option key={i} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableSelect
+                    name="city"
+                    placeHolder="* City"
+                    defaultValue={womenProfileData.city}
+                    options={allCities}
+                    onChnageType="true"
+                    setValue={handleWomenProfileChange}
+                  />
                 </div>
 
                 <div className="relative">

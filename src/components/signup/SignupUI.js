@@ -438,7 +438,7 @@ function SignupUI({
 
 
   useEffect(() => {
-    if (formData.country) fetchCityLanguage(formData.country);
+    if (formData.country) fetchCityLanguage(formData.country)
   }, [formData.country, fetchCityLanguage, partnerFormRef])
 
 
@@ -449,7 +449,6 @@ function SignupUI({
     if (selectedUserType === "personal") {
       const promises = [];
       try {
-        
         if (showWomenPopup) {
           const womenFormDataRaw = new FormData(womenFormRef.current);
 
@@ -511,8 +510,8 @@ function SignupUI({
               name: menFormDataRaw.get("name"),
               dob: menFormDataRaw.get("dob"),
               age_group: menFormDataRaw.get("ageGroup"),
-              life_stage:menFormDataRaw.get("lifeStage"),
-              life_style:menFormDataRaw.get("lifeStyle"),
+              life_stage: menFormDataRaw.get("lifeStage"),
+              life_style: menFormDataRaw.get("lifeStyle"),
               intent: [...selectedMenGoalOptions],
               tone_prefrence: menFormDataRaw.get("tone_prefrence"),
               relation_with_child: menFormDataRaw.get("relationWithChild"),
@@ -765,6 +764,7 @@ function SignupUI({
                   message={isError ? message : ""}
                   isDisabled={isPending}
                 />
+
                 <InputField
                   label="Password"
                   input_type={visible.password ? "text" : "password"}
@@ -777,26 +777,22 @@ function SignupUI({
                   isDisabled={isPending}
                 />
 
-                <select
-                  {...methods.register("country")}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                  required
-                >
-                  <option value="" hidden selected>
-                    * Country
-                  </option>
-                  {allCountries.map((country, i) => (
-                    <option key={i} value={country.code}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
+
+                <SearchableSelect
+                  name="country"
+                  placeholder="* Country"
+                  options={allCountries}
+                  key1="name"
+                  key2="code"
+                  setValue={methods.setValue}
+                />
+
 
                 <div className="flex gap-4">
 
                   <SearchableSelect
                     name="city"
-                    placeHolder="* City"
+                    placeholder="* City"
                     options={allCities}
                     register={methods.register}
                     setValue={methods.setValue}

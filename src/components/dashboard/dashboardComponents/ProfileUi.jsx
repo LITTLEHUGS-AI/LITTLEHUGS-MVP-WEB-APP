@@ -1131,35 +1131,32 @@ const ProfileUi = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     * Country
                   </label>
-                  <select
+                  <SearchableSelect
                     name="country"
-                    value={menProfileData.country}
-                    defaultValue=""
-                    onChange={handleMenProfileChange}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                    required
-                  >
-                    <option value="" hidden>Select Country</option>
-                    {allCountries.map((country, i) => (
-                      <option key={i} value={country.code}>
-                        {country.name}
-                      </option>
-                    ))}
-                  </select>
+                    placeHolder="* Country"
+                    key1="name"
+                    key2="code"
+                    defaultValue={menProfileData.country}
+                    options={allCountries}
+                    onChnageType="true"
+                    setValue={handleMenProfileChange}
+                  />
                 </div>
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
                     * City
                   </label>
-                  <select name="city" value={menProfileData.city} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
-                    {allCities.map((city, i) => (
-                      <option key={i} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                  <SearchableSelect
+                    name="city"
+                    placeHolder="* City"
+                    defaultValue={menProfileData.city}
+                    options={allCities}
+                    onChnageType="true"
+                    setValue={handleMenProfileChange}
+                  />
                 </div>
+
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
@@ -1177,24 +1174,9 @@ const ProfileUi = () => {
                   </select>
                 </div>
 
-
-                <div className="relative">
-                  <label className="block text-sm text-gray-500 mb-1">
-                    * Life Stage
-                  </label>
-                  <select name="language" value={menProfileData.language} onChange={handleMenProfileChange} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600" required >
-                    <option value="" hidden selected>
-                      * Select Life Stage
-                    </option>
-                    {allLanguages.map((language, i) => (
-                      <option key={i} value={language}>
-                        {language}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
               </div>
+
+
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 

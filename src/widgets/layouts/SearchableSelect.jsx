@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-const SearchableSelect = ({ name, placeholder, options, key1, key2, defaultValue, onChnageType, setValue }) => {
+const SearchableSelect = ({ name, className, placeholder, inputCss, options, key1, key2, defaultValue, onChnageType, setValue }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showOptions, setShowOptions] = useState(false);
 
@@ -18,6 +18,12 @@ const SearchableSelect = ({ name, placeholder, options, key1, key2, defaultValue
         );
         if (defaultV.length > 0) setSearchTerm(defaultV[0]);
       }
+    }
+    else if (defaultValue && options.length > 0) {
+      const defaultV = options.filter(
+        option => option.toLowerCase() === defaultValue.toLowerCase()
+      );
+      if (defaultV.length > 0) setSearchTerm(defaultV[0]);
     }
   }, [defaultValue, onChnageType, options, key1, key2, setSearchTerm]);
 
@@ -65,15 +71,14 @@ const SearchableSelect = ({ name, placeholder, options, key1, key2, defaultValue
 
 
   return (
-    <div className="relative">
+    <div className={className}>
       <input
         type="text"
         placeholder={(typeof placeholder === 'string') ? placeholder : ''}
-        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
+        className={`${inputCss ? inputCss : "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"}`}
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
-          // setValue(name, e.target.value);
           setShowOptions(true);
         }}
         onFocus={() => setShowOptions(true)}
@@ -82,7 +87,7 @@ const SearchableSelect = ({ name, placeholder, options, key1, key2, defaultValue
       />
 
       {showOptions && (
-        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto shadow">
+        <ul className={`absolute z-10 ${className} bg-white border border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto shadow`}>
           {filteredOptions.length > 0 ? (
             filteredOptions.map((option, i) => (
               <li
@@ -91,7 +96,6 @@ const SearchableSelect = ({ name, placeholder, options, key1, key2, defaultValue
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
               >
                 {key1 !== undefined ? option[key1] : option}
-                {/* {JSON.stringify(option)} */}
               </li>
             ))
           ) : (

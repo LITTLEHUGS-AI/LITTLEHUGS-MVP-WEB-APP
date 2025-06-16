@@ -18,11 +18,11 @@ export default function AssesmentHandler() {
     const no = searchParams.get('no');
     if (!(type && no)) navigate('/personal/assessment');
 
-    const dd = store.getData();
+    const state = store.getData();
     let id = 0;
-    if (dd.current === 'women') id = dd.women.id;
-    if (dd.current === 'child') id = dd.child.id;
-    if (dd.current === 'men') id = dd.men.id;
+    if (state.current === 'women') id = state.women.id;
+    if (state.current === 'child') id = state.child.id;
+    if (state.current === 'men') id = state.men.id;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 300000);
@@ -66,14 +66,14 @@ export default function AssesmentHandler() {
         async function getIncomplete() {
 
             setIncompleteLoading(true);
-            const lastIncompleteAssessment = await getIncompleteAssessment2(id, dd.current);
+            const lastIncompleteAssessment = await getIncompleteAssessment2(id, state.current);
 
             if (lastIncompleteAssessment.ass_data) {
-                const myObj = {};
-                myObj.assessment_data = {};
-                myObj.assessment_data.id = lastIncompleteAssessment.ass_data.assessment;
-                myObj.assessment_data.questions = lastIncompleteAssessment.ass_data.assessment_details;
-                setAI(myObj);
+                const tempObj = {};
+                tempObj.assessment_data = {};
+                tempObj.assessment_data.id = lastIncompleteAssessment.ass_data.assessment;
+                tempObj.assessment_data.questions = lastIncompleteAssessment.ass_data.assessment_details;
+                setAI(tempObj);
 
                 setCurrentStep(4);
                 setQuesLoding(null);
@@ -85,7 +85,7 @@ export default function AssesmentHandler() {
         }
         getIncomplete();
 
-    }, [dd, id])
+    }, [state, id])
 
     const handleAnswersChange = (newAnswers) => {
         setCombinedAnswers(prev => {
@@ -113,9 +113,9 @@ export default function AssesmentHandler() {
     const submitAssessment = async () => {
         try {
             let id = 0;
-            if (dd.current === 'women') id = dd.women.id;
-            if (dd.current === 'child') id = dd.child.id;
-            if (dd.current === 'men') id = dd.men.id;
+            if (state.current === 'women') id = state.women.id;
+            if (state.current === 'child') id = state.child.id;
+            if (state.current === 'men') id = state.men.id;
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/`, {
                 method: 'POST',
@@ -133,7 +133,7 @@ export default function AssesmentHandler() {
                         "Encourage communication"
                     ],
                     responses: combinedAnswers,
-                    created_by_type: dd.current,
+                    created_by_type: state.current,
                     created_by_id: id
                 })
             });

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Sidebar from "../Sidebar";
 import ProfileUi from "../ProfileUi";
-import useAssessmentQuestions from "../../../../api/personal-assessment";
+import useAssessmentQuestions, { getIncompleteAssessment2 } from "../../../../api/personal-assessment";
 import GoalsQuestionnaire from './AssessmentQuestions';
 import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
@@ -19,13 +19,16 @@ export default function AssesmentHandler() {
     if (!(type && no)) navigate('/personal/assessment');
 
     const dd = store.getData();
+    let id = 0;
+    if (dd.current === 'women') id = dd.women.id;
+    if (dd.current === 'child') id = dd.child.id;
+    if (dd.current === 'men') id = dd.men.id;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 300000);
 
     const { questions: goalQuestions } = useAssessmentQuestions('goal', no);
     const { questions: intentQuestions } = useAssessmentQuestions('intent', no);
-
 
     const [goalsQuestionnaire, setGoalsQuestionnaire] = useState([]);
     const [intentQuestionnaire, setIntentQuestionnaire] = useState([]);
@@ -37,6 +40,7 @@ export default function AssesmentHandler() {
 
     const [currentStep, setCurrentStep] = useState(1);
     const [quesLoding, setQuesLoding] = useState(null);
+    const [incompleteLoading, setIncompleteLoading] = useState(true);
 
 
     const [consentAccept, setConsentAccept] = useState([]);
@@ -57,6 +61,31 @@ export default function AssesmentHandler() {
         if (intentQuestions?.results?.length > 0) { setIntentQuestionnaire(updateQuestionType(intentQuestions.results)); };
     }, [intentQuestions]);
 
+    useEffect(() => {
+
+        async function getIncomplete() {
+
+            setIncompleteLoading(true);
+            const lastIncompleteAssessment = await getIncompleteAssessment2(id, dd.current);
+
+            if (lastIncompleteAssessment.ass_data) {
+                const myObj = {};
+                myObj.assessment_data = {};
+                myObj.assessment_data.id = lastIncompleteAssessment.ass_data.assessment;
+                myObj.assessment_data.questions = lastIncompleteAssessment.ass_data.assessment_details;
+                setAI(myObj);
+
+                setCurrentStep(4);
+                setQuesLoding(null);
+                setIncompleteLoading(false);
+            }
+            else setIncompleteLoading(false);
+
+
+        }
+        getIncomplete();
+
+    }, [dd, id])
 
     const handleAnswersChange = (newAnswers) => {
         setCombinedAnswers(prev => {
@@ -84,9 +113,9 @@ export default function AssesmentHandler() {
     const submitAssessment = async () => {
         try {
             let id = 0;
-            if(dd.current === 'women') id = dd.women.id;
-            if(dd.current === 'child') id = dd.child.id;
-            if(dd.current === 'men') id = dd.men.id;
+            if (dd.current === 'women') id = dd.women.id;
+            if (dd.current === 'child') id = dd.child.id;
+            if (dd.current === 'men') id = dd.men.id;
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/api/pre-screenng-assesment-submission/`, {
                 method: 'POST',
@@ -163,7 +192,7 @@ export default function AssesmentHandler() {
     return (
         <div className="flex flex-col md:flex-row h-screen bg-gray-50">
 
-             <DocumentHead
+            <DocumentHead
                 title="LittleHug - Assessment"
                 description="Assessment"
                 slug='assessment'
@@ -189,11 +218,21 @@ export default function AssesmentHandler() {
 
                 <div className="mx-2 text-center">If you don't see questions, Please refresh the Page</div>
 
-                {quesLoding ? <div className="flex flex-col mx-4 text-center h-full items-center justify-center">
-                    <img alt="loading..." src='/gif/loading1.gif' />
-                    <div className="text-xl font-bold mt-4 mb-6">{quesLoding}</div>
-                    <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
-                </div> :
+                {(quesLoding || incompleteLoading) ?
+                    <>
+                        {quesLoding &&
+                            <div className="flex flex-col mx-4 text-center h-full items-center justify-center">
+                                <img alt="loading..." src='/gif/loading1.gif' />
+                                <div className="text-xl font-bold mt-4 mb-6">{quesLoding}</div>
+                                <div className="text-lg font-bold">It will take 2 minutes. Please be patient.<br />Please don't Click Refresh or Back button</div>
+                            </div>}
+                        {incompleteLoading &&
+                            <div className="flex flex-col mx-4 text-center h-full items-center justify-center">
+                                <img alt="loading..." src='/gif/loading1.gif' />
+                                <div className="text-xl font-bold mt-4 mb-6">Checking your Old Incomplete Assessment (If any) </div>
+                                <div className="text-lg font-bold">It will take 2 minutes. Please be patient.</div>
+                            </div>}
+                    </> :
                     <>
                         {/* Progress Steps */}
                         <div className="mt-8 lg:mt-16 mb-8 mx-auto w-full max-w-xl">

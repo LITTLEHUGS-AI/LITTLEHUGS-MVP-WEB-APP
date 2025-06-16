@@ -1010,6 +1010,23 @@ const ProfileUi = () => {
 
                 <div className="relative">
                   <label className="block text-sm text-gray-500 mb-1">
+                    * Gender
+                  </label>
+                  <select
+                    name="gender"
+                    required
+                    value={childProfileData.gender}
+                     onChange={handleChildProfileChange}
+                    className="border p-2 rounded w-full appearance-none pr-10 bg-white text-gray-700"
+                  >
+                    <option value="" disabled selected>* Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-sm text-gray-500 mb-1">
                     * Age Group
                   </label>
                   <div className="flex items-center border rounded-md">
@@ -1378,8 +1395,8 @@ const ProfileUi = () => {
 
 
         </div>
-      </Modal>
-    </div>
+      </Modal >
+    </div >
   );
 };
 

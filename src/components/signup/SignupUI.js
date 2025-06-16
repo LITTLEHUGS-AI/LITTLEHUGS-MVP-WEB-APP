@@ -489,6 +489,7 @@ function SignupUI({
               occupation: childFormDataRaw.get("occupation"),
               weight: childFormDataRaw.get("weight"),
               height: childFormDataRaw.get("height"),
+              gender: childFormDataRaw.get("gender"),
             })
             .then((response) => {
               if (response.profile) {
@@ -750,7 +751,7 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   placeHolder="Enter your Name"
                 />
 
@@ -758,7 +759,7 @@ function SignupUI({
                   label="Email"
                   name="email"
                   input_type="email"
-                  isReadOnly={true}
+                  // isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}
@@ -1168,6 +1169,17 @@ function SignupUI({
                           </div>
 
                           <div className="relative">
+                            <select name="gender" className="border p-2 rounded w-full appearance-none pr-10 bg-white text-gray-700">
+                              <option value="" disabled selected>* Gender</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                            </select>
+                            <span className="absolute right-3 top-2.5 text-gray-500 pointer-events-none">
+                              ▼
+                            </span>
+                          </div>
+
+                          <div className="relative">
                             <input
                               type="text"
                               placeholder="* Weight"
@@ -1179,6 +1191,7 @@ function SignupUI({
                               kg
                             </span>
                           </div>
+
                           <div className="relative">
                             <input
                               type="text"

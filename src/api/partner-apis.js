@@ -136,6 +136,22 @@ export function analyzeAssessmentData(data) {
 }
 
 
+export function countUsersByStatus(users) {
+  let acceptedCount = 0;
+  let notAcceptedCount = 0;
+
+  users.forEach(user => {
+    if (user.status === "accepted") acceptedCount++;
+    else notAcceptedCount++;
+  });
+
+  return {
+    accepted: acceptedCount,
+    notAccepted: notAcceptedCount
+  };
+}
+
+
 export function getUniqueAssessmentTypes(data) {
   // Predefined color map for known assessment types
   const colorMap = {
@@ -148,7 +164,7 @@ export function getUniqueAssessmentTypes(data) {
   const result = [];
 
   for (const entry of data) {
-    const type = entry.assessment_type?.trim(); // Trim whitespace and check for existence
+    const type = entry.assessment_type?.trim();
 
     if (type && !seen.has(type) && colorMap[type]) {
       seen.add(type);

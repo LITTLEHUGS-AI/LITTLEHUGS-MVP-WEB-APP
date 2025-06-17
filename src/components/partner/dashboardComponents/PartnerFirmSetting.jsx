@@ -236,13 +236,9 @@ const PartnerFirmSetting = () => {
         return;
       }
 
-
       setLogoLocal(file);
       setLogoFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogo(reader.result);
-      };
       reader.readAsDataURL(file);
     }
   };

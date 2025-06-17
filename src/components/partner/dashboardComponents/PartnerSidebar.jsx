@@ -98,6 +98,21 @@ const PartnerSidebar = ({ onTabChange }) => {
           <span className="z-10">Dashboard</span>
         </button>
 
+        <button
+          onClick={() => handleTabClick("new dash")}
+          className={`group flex items-center px-4 py-2 font-normal text-base transition-colors relative w-full text-left bg-white ${activeTab === "new dash"
+            ? "text-[#4F7DDD] font-semibold"
+            : "text-gray-700"
+            }`}
+        >
+          {activeTab === "new dash" && (
+            <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#4F7DDD] rounded-r-full" />
+          )}
+          <LayoutDashboard size={22} className="mr-3 z-10" />
+          <span className="z-10">New Dashboard</span>
+        </button>
+        
+
 
         <div className="relative">
           <button

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Sidebar from "../Sidebar";
 import ProfileUi from "../ProfileUi";
-import useAssessmentQuestions, { getIncompleteAssessment2 } from "../../../../api/personal-assessment";
+import useAssessmentQuestions, { getIncompleteAssessment } from "../../../../api/personal-assessment";
 import GoalsQuestionnaire from './AssessmentQuestions';
 import { updateQuestionType } from "../../../../api/utilities";
 import store from "../../../../config/storeInstance";
@@ -40,7 +40,7 @@ export default function AssesmentHandler() {
 
     const [currentStep, setCurrentStep] = useState(1);
     const [quesLoding, setQuesLoding] = useState(null);
-    const [incompleteLoading, setIncompleteLoading] = useState(true);
+    const [incompleteLoading, setIncompleteLoading] = useState(null);
 
 
     const [consentAccept, setConsentAccept] = useState([]);
@@ -61,26 +61,42 @@ export default function AssesmentHandler() {
         if (intentQuestions?.results?.length > 0) { setIntentQuestionnaire(updateQuestionType(intentQuestions.results)); };
     }, [intentQuestions]);
 
+
     useEffect(() => {
+
+        let timeoutId;
+        if (timeoutId) clearTimeout(timeoutId);
 
         async function getIncomplete() {
 
             setIncompleteLoading(true);
-            const lastIncompleteAssessment = await getIncompleteAssessment2(id, state.current);
 
-            if (lastIncompleteAssessment.ass_data) {
-                const tempObj = {};
-                tempObj.assessment_data = {};
-                tempObj.assessment_data.id = lastIncompleteAssessment.ass_data.assessment;
-                tempObj.assessment_data.questions = lastIncompleteAssessment.ass_data.assessment_details;
-                setAI(tempObj);
+             if (!id || id < 1) return ;
 
-                setCurrentStep(4);
-                setQuesLoding(null);
-                setIncompleteLoading(false);
+            const lastInProgresseAssessment = await getIncompleteAssessment(id, state.current, 'in_progress');
+
+            if (!lastInProgresseAssessment) {
+
+                const lastIncompleteAssessment = await getIncompleteAssessment(id, state.current, 'incomplete');
+
+                if (lastIncompleteAssessment.ass_data) {
+                    const tempObj = {};
+                    tempObj.assessment_data = {};
+                    tempObj.assessment_data.id = lastIncompleteAssessment.ass_data.assessment;
+                    tempObj.assessment_data.questions = lastIncompleteAssessment.ass_data.assessment_details;
+                    setAI(tempObj);
+
+                    setCurrentStep(4);
+                    setQuesLoding(null);
+                    setIncompleteLoading(false);
+                }
+                else setIncompleteLoading(false);
+
+            } else {
+                setIncompleteLoading(null);
+                setQuesLoding("Seems like you have initiated the Assessment, We are waiting for generating AI Questions.");
+                timeoutId = setTimeout(() => { window.location.reload() }, 120000);
             }
-            else setIncompleteLoading(false);
-
 
         }
         getIncomplete();

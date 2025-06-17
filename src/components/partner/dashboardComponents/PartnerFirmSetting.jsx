@@ -9,6 +9,7 @@ import {
   getOrganizationProfile,
   updateOrganizationProfile,
 } from "../../../api/partner-apis";
+import SearchableSelect from "../../../widgets/layouts/SearchableSelect";
 
 const { TextArea } = Input;
 
@@ -180,9 +181,9 @@ const PartnerFirmSetting = () => {
   const [descRows, setDescRows] = useState(getInitialDescRows);
   const [servicesOffered, setServicesOffered] = useState([]);
   const [littleHugsFor, setLittleHugsFor] = useState([]);
-  const [allCountries, setAllCountries] = useState([]);
-  const [allLanguages, setAllLanguages] = useState([]);
+  const [allCities, setAllCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
+  const [allLanguages, setAllLanguages] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [organisationName, setOrganisationName] = useState("");
   const [description, setDescription] = useState("");
@@ -255,21 +256,24 @@ const PartnerFirmSetting = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchCountriesAndLanguages() {
-      const data = await apiClient.get("https://restcountries.com/v3.1/all");
-      const languages = new Set();
-      const countries = new Set();
-      data.forEach((country) => {
-        if (country.languages)
-          Object.values(country.languages).forEach((lang) =>
-            languages.add(lang)
-          );
-        if (country.name?.common) countries.add(country.name.common);
-      });
-      setAllLanguages([...languages].sort());
-      setAllCountries([...countries].sort());
+    async function fetchCities() {
+      const data = await apiClient.get(`${process.env.REACT_APP_API_URL}/v1/api/city/?country_code=IN`);
+      if (Array.isArray(data) && Array.isArray(data[0].name)) {
+        const cities = data[0].name;
+        if (cities.length < 1) toast.error('Got Zero Cities Names');
+        else setAllCities([...cities]);
+      }
     }
-    fetchCountriesAndLanguages();
+    async function fetchLanguages() {
+      const data = await apiClient.get(`${process.env.REACT_APP_API_URL}/v1/api/language/?country_code=IN`);
+      if (Array.isArray(data) && Array.isArray(data[0].name)) {
+        const cities = data[0].name;
+        if (cities.length < 1) toast.error('Got Zero Languages Names');
+        else setAllLanguages([...cities]);
+      }
+    }
+    fetchCities();
+    fetchLanguages();
   }, []);
 
   const isFormValid =
@@ -389,8 +393,7 @@ const PartnerFirmSetting = () => {
                       <img
                         src={
                           typeof logo === "string"
-                            ? logo
-                            : URL.createObjectURL(logo)
+                            ? logo : URL.createObjectURL(logo)
                         }
                         alt="Logo"
                         className="w-full h-full object-cover rounded-full"
@@ -434,12 +437,17 @@ const PartnerFirmSetting = () => {
           </div>
           <div className="flex flex-col md:flex-row gap-3 md:gap-4 mt-3 w-full">
             <div className="flex flex-row w-full gap-3">
-              <CustomSingleSelectDropdown
-                placeholder="* City"
-                options={allCountries}
-                selected={selectedCity}
-                setSelected={setSelectedCity}
+
+              <SearchableSelect
+                name="city"
+                className="w-full md:w-1/2"
+                inputCss = "w-full flex items-center justify-between border border-[#26323866] rounded-lg px-4 py-2 cursor-pointer bg-white"
+                placeHolder="* City"
+                defaultValue={selectedCity}
+                options={allCities}
+                setValue={(name, city)=>setSelectedCity(city)}
               />
+
               <CustomSingleSelectDropdown
                 placeholder="* Language"
                 options={allLanguages}

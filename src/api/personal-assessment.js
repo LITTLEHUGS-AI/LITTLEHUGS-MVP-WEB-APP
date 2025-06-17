@@ -11,7 +11,6 @@ const personalDashboardAPI = axios.create({
 
 
 
-
 const useAssessmentQuestions = (questionFor, type) => {
   const [questions, setQuestions] = useState([]);
   const [error, setError] = useState(null);
@@ -40,5 +39,37 @@ const useAssessmentQuestions = (questionFor, type) => {
 
   return { questions, error, loading };
 };
+
+
+
+export const getIncompleteAssessment = async (profileId, type, status) => {
+
+  if (!profileId || profileId < 1) return { ques: [] };
+
+  try {
+    const token = localStorage.getItem("accessToken");
+    const response = await personalDashboardAPI.get(`/process/`, {
+      params: { profile_id: profileId, profile_type: type, status },
+      headers: { Authorization: token },
+    });
+
+    if (status === 'in_progress') {
+      if (response.data.status === status) return true;
+      else return false;
+    }
+
+    if (status === 'incomplete') {
+      if (response.data.assessment_details.length > 0) return { ass_data: response.data };
+      else return { ques: [] };
+    }
+
+  } catch (err) {
+    console.warn("Failed to fetch questions", err);
+    if (status === 'in_progress') return false;
+    if (status === 'incomplete') return { ques: [] }; 
+  }
+};
+
+
 
 export default useAssessmentQuestions;

@@ -1,5 +1,3 @@
-// src/components/Toast.js
-
 import React, { useEffect, useState } from "react";
 
 const TestToast = ({ type, title, message, role, onClose, duration = 6000 }) => {

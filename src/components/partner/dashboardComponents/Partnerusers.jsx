@@ -178,7 +178,7 @@ const PartnerUsers = () => {
         <>
           <div className="border border-gray-300 rounded-[8px] bg-white">
             {/* Desktop Table */}
-            <div className="hidden lg:block overflow-x-auto px-4 pb-1">
+            <div className="hidden xl:block overflow-x-auto px-4 pb-1">
               <table className="min-w-full">
                 <thead className="text-base">
                   <tr className="text-gray-600 bg-white">
@@ -246,7 +246,7 @@ const PartnerUsers = () => {
             </div>
 
             {/* Mobile Cards */}
-            <div className="lg:hidden px-1 pb-2 space-y-4 overflow-x-hidden max-w-full">
+            <div className="xl:hidden px-1 pb-2 space-y-4 overflow-x-hidden max-w-full">
               {usersLoading ? (
                 <CommonLoader loading={true} />
               ) : (

@@ -78,9 +78,7 @@ const PartnerTeamMember = () => {
 
     try {
       setFetchLoading(true);
-      debugger;
       await deleteTeamMember(user.id);
-      debugger
       fetchTeamMembers();
     }
     catch {

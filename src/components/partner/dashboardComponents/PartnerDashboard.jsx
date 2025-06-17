@@ -55,6 +55,7 @@ const PartnerDashboard = () => {
 
 
   const calculateDomainData = useCallback((results) => {
+
     const colorPalette = [
       "#B1A4E7", "#D3CBA5", "#D9E4FC", "#69A664", "#FFC655",
       "#FF7F50", "#87CEFA", "#98FB98", "#FFD700", "#E9967A",
@@ -64,12 +65,14 @@ const PartnerDashboard = () => {
     const domainCounts = {};
 
     results.forEach(user => {
-      user.domains.forEach(domain => {
-        if (!domainCounts[domain]) {
-          domainCounts[domain] = 0;
-        }
-        domainCounts[domain]++;
-      });
+      if (user.status === "completed") {
+        (user.domains ?? []).forEach(domain => {
+          if (!domainCounts[domain]) {
+            domainCounts[domain] = 0;
+          }
+          domainCounts[domain]++;
+        });
+      }
     });
 
     const domainStructure = Object.entries(domainCounts)

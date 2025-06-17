@@ -293,7 +293,7 @@ const PersonalAssessment = () => {
             </div>}
 
             {/* SEL Assessment Card */}
-            <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
+             {type === 'men' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
                 LittleHugs Corporate Partnership Program
               </h2>
@@ -309,7 +309,7 @@ const PersonalAssessment = () => {
                   Learn More
                 </button>
               </div>
-            </div>
+            </div>}
 
           </div>
 

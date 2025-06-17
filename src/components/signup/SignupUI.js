@@ -4,7 +4,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import InputField from "../../widgets/layouts/InputField";
 import { ButtonLoader } from "../common/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import axios from "axios";
 import Navbar from "../common/Navbar";
 import { useAuth } from "../../lib/AuthContext";
 import useSignIn from "../signin/useSignIn";
@@ -439,7 +438,7 @@ function SignupUI({
 
 
   useEffect(() => {
-    if (formData.country) fetchCityLanguage(formData.country);
+    if (formData.country) fetchCityLanguage(formData.country)
   }, [formData.country, fetchCityLanguage, partnerFormRef])
 
 
@@ -484,12 +483,13 @@ function SignupUI({
               name: childFormDataRaw.get("name"),
               dob: childFormDataRaw.get("dob"),
               age_group: childFormDataRaw.get("ageGroup"),
-              goal: [childFormDataRaw.get("goal")],
+              goal: [...selectedChildGoalOptions],
               tone_prefrence: childFormDataRaw.get("tone_prefrence"),
               relation_with_child: childFormDataRaw.get("relationWithChild"),
               occupation: childFormDataRaw.get("occupation"),
               weight: childFormDataRaw.get("weight"),
               height: childFormDataRaw.get("height"),
+              gender: childFormDataRaw.get("gender"),
             })
             .then((response) => {
               if (response.profile) {
@@ -502,6 +502,7 @@ function SignupUI({
           promises.push(childProfilePromise);
         }
 
+
         if (showMenPopup) {
           const menFormDataRaw = new FormData(menFormRef.current);
 
@@ -510,7 +511,9 @@ function SignupUI({
               name: menFormDataRaw.get("name"),
               dob: menFormDataRaw.get("dob"),
               age_group: menFormDataRaw.get("ageGroup"),
-              goal: [menFormDataRaw.get("goal")],
+              life_stage: menFormDataRaw.get("lifeStage"),
+              life_style: menFormDataRaw.get("lifeStyle"),
+              intent: [...selectedMenGoalOptions],
               tone_prefrence: menFormDataRaw.get("tone_prefrence"),
               relation_with_child: menFormDataRaw.get("relationWithChild"),
               occupation: menFormDataRaw.get("occupation"),
@@ -748,7 +751,7 @@ function SignupUI({
                 <InputField
                   name="name"
                   fieldId="name"
-                  // isReadOnly={true}
+                  isReadOnly={true}
                   placeHolder="Enter your Name"
                 />
 
@@ -756,44 +759,41 @@ function SignupUI({
                   label="Email"
                   name="email"
                   input_type="email"
-                  // isReadOnly={true}
+                  isReadOnly={true}
                   fieldId="email"
                   placeHolder="Enter your Email"
                   message={isError ? message : ""}
                   isDisabled={isPending}
                 />
+
                 <InputField
                   label="Password"
+                  input_type={visible.password ? "text" : "password"}
                   name="password"
                   fieldId="password"
                   placeHolder="Enter your Password"
-                  type={visible.password ? "text" : "password"}
                   visible
                   showIcon={visible.password}
                   handleChange={handleShowPassword}
                   isDisabled={isPending}
                 />
 
-                <select
-                  {...methods.register("country")}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
-                  required
-                >
-                  <option value="" hidden selected>
-                    * Country
-                  </option>
-                  {allCountries.map((country, i) => (
-                    <option key={i} value={country.code}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
+
+                <SearchableSelect
+                  name="country"
+                  placeholder="* Country"
+                  options={allCountries}
+                  key1="name"
+                  key2="code"
+                  setValue={methods.setValue}
+                />
+
 
                 <div className="flex gap-4">
-                  
+
                   <SearchableSelect
                     name="city"
-                    placeHolder="* City"
+                    placeholder="* City"
                     options={allCities}
                     register={methods.register}
                     setValue={methods.setValue}
@@ -1169,6 +1169,17 @@ function SignupUI({
                           </div>
 
                           <div className="relative">
+                            <select name="gender" className="border p-2 rounded w-full appearance-none pr-10 bg-white text-gray-700">
+                              <option value="" disabled selected>* Gender</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                            </select>
+                            <span className="absolute right-3 top-2.5 text-gray-500 pointer-events-none">
+                              ▼
+                            </span>
+                          </div>
+
+                          <div className="relative">
                             <input
                               type="text"
                               placeholder="* Weight"
@@ -1180,6 +1191,7 @@ function SignupUI({
                               kg
                             </span>
                           </div>
+
                           <div className="relative">
                             <input
                               type="text"

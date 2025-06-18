@@ -39,6 +39,9 @@ const Navbar = () => {
         <li className={isActive("/partner") ? "font-bold" : ""}>
           <Link to="/partner">For Partners</Link>
         </li>
+         <li className={isActive("/corporate") ? "font-bold" : ""}>
+          <Link to="/corporate">For Corporates</Link>
+        </li>
         <li className={isActive("/assesment") ? "font-bold" : ""}>
           <Link to="/assesment">Programs</Link>
         </li>
@@ -93,6 +96,9 @@ const Navbar = () => {
           </li>
           <li className={isActive("/partner") ? "font-bold" : ""}>
             <Link to="/partner" onClick={closeMenu}>For Partners</Link>
+          </li>
+           <li className={isActive("/corporate") ? "font-bold" : ""}>
+            <Link to="/corporate" onClick={closeMenu}>For Corporates</Link>
           </li>
           <li className={isActive("/assesment") ? "font-bold" : ""}>
             <Link to="/assesment" onClick={closeMenu}>Programs</Link>

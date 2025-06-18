@@ -29,6 +29,7 @@ import AdminPartners from "../components/admin/AdminPartners";
 import AcceptInvitePartner from "../temp/AcceptInvitePartner";
 import AppPrivacyPolicy from "../components/misc/appPrivacypolicy";
 import MobileAccDelete from "../components/misc/mobileAccDelete";
+import CorporateLandingPage from "../components/landingpage/Corporate";
 
 
 
@@ -65,8 +66,12 @@ function AppRoutes() {
               path={routesConfig.assesmentLanding.path}
               element={<OpenRoute><AssesmentLandingPage /></OpenRoute>}
             />
+
+            <Route path={routesConfig.corporateLanding.path} element={<OpenRoute><CorporateLandingPage /></OpenRoute>} />
+
             <Route path={routesConfig.signIn.path} element={<OpenRoute><SignIn /></OpenRoute>} />
             <Route path={routesConfig.signUp.path} element={<OpenRoute><Signup /></OpenRoute>} />
+            
             {/* dashboard */}
             <Route path="/auth/callback" element={<GoogleCallback />} />
 

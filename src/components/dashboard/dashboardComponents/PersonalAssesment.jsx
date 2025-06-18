@@ -187,7 +187,7 @@ const PersonalAssessment = () => {
             </button>
 
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs Corporate Partnership Program
+              LittleHugs SEL Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
@@ -295,7 +295,7 @@ const PersonalAssessment = () => {
             {/* SEL Assessment Card */}
              {type === 'men' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
-                LittleHugs Corporate Partnership Program
+                LittleHugs SEL Wellness Program
               </h2>
 
               <p className="text-gray-600 text-center mb-8 flex-grow">

@@ -69,7 +69,7 @@ const PartnerSidebar = ({ onTabChange }) => {
 
   return (
     <aside className="flex flex-col h-screen bg-white w-full font-quicksand">
-      <div className="h-[10%] flex items-center justify-center px-6 py-4 border-b border-gray-300">
+      {/* <div className="h-[10%] flex items-center justify-center px-6 py-4 border-b border-gray-300">
         {logo !== null ? (
           <img
             src={logo}
@@ -81,7 +81,7 @@ const PartnerSidebar = ({ onTabChange }) => {
             <path d="M12 16a1 1 0 0 1-1-1V9.83l-1.59 1.58a1 1 0 1 1-1.41-1.41l3.3-3.29a1 1 0 0 1 1.41 0l3.3 3.29a1 1 0 1 1-1.41 1.41L13 9.83V15a1 1 0 0 1-1 1ZM5 20a1 1 0 0 1-1-1v-2a7 7 0 0 1 14 0v2a1 1 0 0 1-1 1Zm1-2v1h12v-1a5 5 0 0 0-10 0Z" />
           </svg>
         )}
-      </div>
+      </div> */}
 
       <nav className="h-[80%] flex-1 px-4 py-6 space-y-2">
         <button
@@ -95,23 +95,9 @@ const PartnerSidebar = ({ onTabChange }) => {
             <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#4F7DDD] rounded-r-full" />
           )}
           <LayoutDashboard size={22} className="mr-3 z-10" />
-          <span className="z-10">Dashboard</span>
+          <span className="z-10">Wellness Dashboard</span>
         </button>
 
-        <button
-          onClick={() => handleTabClick("new dash")}
-          className={`group flex items-center px-4 py-2 font-normal text-base transition-colors relative w-full text-left bg-white ${activeTab === "new dash"
-            ? "text-[#4F7DDD] font-semibold"
-            : "text-gray-700"
-            }`}
-        >
-          {activeTab === "new dash" && (
-            <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-[#4F7DDD] rounded-r-full" />
-          )}
-          <LayoutDashboard size={22} className="mr-3 z-10" />
-          <span className="z-10">New Dashboard</span>
-        </button>
-        
 
 
         <div className="relative">

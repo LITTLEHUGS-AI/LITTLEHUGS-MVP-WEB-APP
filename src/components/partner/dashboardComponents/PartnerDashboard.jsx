@@ -25,8 +25,8 @@ const PartnerDashboard = () => {
   const [usersLoading, setUsersLoading] = useState(false);
   const [uniqueUsers, setUniqueUsers] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
-  const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteAss, setIncompleteAss] = useState(0);
   const [totalAssess, setTotalAssess] = useState(0);
   const initialFetchDone = useRef(false);

@@ -38,7 +38,12 @@ const routesConfig = {
     corporateLanding: {
         path: '/corporate',
         title: 'Wellness Assessments for Corporates',
-        description: 'Science-backed wellness tests for women, children, and SEL—get instant insights, pre-screening results & more with LittleHugs.'
+        description: 'Science-backed wellness tests for women, children and SEL—get instant insights, pre-screening results & more with LittleHugs.'
+    },
+    schoolPartnerLanding: {
+        path: '/school',
+        title: 'Wellness Assessments for Schools',
+        description: 'Science-backed wellness tests for children and SEL—get instant insights, pre-screening results & more with LittleHugs.'
     },
     signIn: {
         path: '/signin',

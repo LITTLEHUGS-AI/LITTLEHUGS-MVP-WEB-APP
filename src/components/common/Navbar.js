@@ -39,8 +39,11 @@ const Navbar = () => {
         <li className={isActive("/partner") ? "font-bold" : ""}>
           <Link to="/partner">For Partners</Link>
         </li>
-         <li className={isActive("/corporate") ? "font-bold" : ""}>
+        <li className={isActive("/corporate") ? "font-bold" : ""}>
           <Link to="/corporate">For Corporates</Link>
+        </li>
+        <li className={isActive("/school") ? "font-bold" : ""}>
+          <Link to="/school">For Schools</Link>
         </li>
         <li className={isActive("/assesment") ? "font-bold" : ""}>
           <Link to="/assesment">Programs</Link>
@@ -57,14 +60,14 @@ const Navbar = () => {
       </ul>
 
       {/* CTA Button */}
-     
-          <button
-            onClick={() => navigate('/signup')}
-            className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
-          >
-            Try For Free
-          </button>
-      
+
+      <button
+        onClick={() => navigate('/signup')}
+        className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
+      >
+        Try For Free
+      </button>
+
 
       {/* Mobile Menu Button */}
       <button
@@ -97,8 +100,11 @@ const Navbar = () => {
           <li className={isActive("/partner") ? "font-bold" : ""}>
             <Link to="/partner" onClick={closeMenu}>For Partners</Link>
           </li>
-           <li className={isActive("/corporate") ? "font-bold" : ""}>
+          <li className={isActive("/corporate") ? "font-bold" : ""}>
             <Link to="/corporate" onClick={closeMenu}>For Corporates</Link>
+          </li>
+          <li className={isActive("/school") ? "font-bold" : ""}>
+            <Link to="/school" onClick={closeMenu}>For Schools</Link>
           </li>
           <li className={isActive("/assesment") ? "font-bold" : ""}>
             <Link to="/assesment" onClick={closeMenu}>Programs</Link>

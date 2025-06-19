@@ -1,5 +1,5 @@
-import Navbar from '../common/Navbar.js';
 import { Link } from "react-router-dom";
+import Navbar from '../common/Navbar.js';
 import routesConfig from '../../config/routesConfig.js';
 import DocumentHead from '../common/DocumentHead.js';
 

@@ -31,6 +31,7 @@ import AppPrivacyPolicy from "../components/misc/appPrivacypolicy";
 import MobileAccDelete from "../components/misc/mobileAccDelete";
 import CorporateLandingPage from "../components/landingpage/Corporate";
 import SchoolPartnerPage from "../components/landingpage/SchoolPartnerLandingPage";
+import TherapyCenter from "../components/landingpage/TherapyCenter";
 
 
 
@@ -67,6 +68,11 @@ function AppRoutes() {
             <Route
               path={routesConfig.schoolPartnerLanding.path}
               element={<OpenRoute><SchoolPartnerPage /></OpenRoute>}
+            />
+
+            <Route
+              path={routesConfig.therapyCenterLanding.path}
+              element={<OpenRoute><TherapyCenter /></OpenRoute>}
             />
 
             <Route

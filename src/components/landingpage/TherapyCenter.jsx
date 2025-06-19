@@ -25,7 +25,7 @@ export default function TherapyCenter() {
                     </div>
                     <div className="flex-1 flex justify-center">
                         <div className="bg-[#FFFAE2] rounded-full p-10 w-80 h-80 flex items-center justify-center">
-                            <img alt="Therapy Center"  src='/images/therapy/therapy.png' />
+                            <img alt="Therapy Center" src='/images/therapy/therapy.png' />
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ export default function TherapyCenter() {
                         {/* Evelyn Section */}
                         <div className="text-center">
                             <h3 className="text-lg font-semibold mb-6">Evelyn: Risk Monitor</h3>
-                            <img alt="Therapy Center"  className='h-48 mx-auto mb-6' src='/images/therapy/th1.png' />
+                            <img alt="Therapy Center" className='h-48 mx-auto mb-6' src='/images/therapy/th1.png' />
                             <ul className="text-left font-semibold space-y-2 text-md">
                                 <li>• Detects early warning signs of child development such as:</li>
                                 <li className="ml-4 !mt-0">◦ Autism Spectrum Disorder (ASD)</li>
@@ -57,7 +57,7 @@ export default function TherapyCenter() {
                         {/* Materna Section */}
                         <div className="text-center">
                             <h3 className="text-lg font-semibold mb-6">Materna: Postpartum Support and Women's Wellness</h3>
-                            <img alt="Therapy Center"  className='h-48 mx-auto mb-6' src='/images/therapy/th2.png' />
+                            <img alt="Therapy Center" className='h-48 mx-auto mb-6' src='/images/therapy/th2.png' />
                             <ul className="text-left font-semibold space-y-2 text-md">
                                 <li>• Designed for postpartum and women's wellness</li>
                                 <li>• Helps to cope with Postpartum Depression (PPD), Postpartum Anxiety Disorder, Postpartum OCD (Obsessive-Compulsive Disorder), Postpartum Fatigue Syndrome, Postpartum Thyroiditis, Reactive Attachment Disorder, Postpartum Rage, Postpartum Thyroid disorders (Hyperthyroidism & Hypothyroidism), Nutrient Deficiencies (Iron, Vitamin D, Omega-3, etc.)</li>
@@ -77,22 +77,22 @@ export default function TherapyCenter() {
 
                     <div className="grid md:grid-cols-4 gap-8">
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th3.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th3.png' />
                             <h3 className="font-semibold mb-2">Empower clients with self-guided, AI-backed check-ins</h3>
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th4.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th4.png' />
                             <h3 className="font-semibold mb-2">Track emotional trends and progress ethically</h3>
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th5.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th5.png' />
                             <h3 className="font-semibold mb-2">Offer extended care between sessions</h3>
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th6.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th6.png' />
                             <h3 className="font-semibold mb-2">Strengthen engagement with light digital tools</h3>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ export default function TherapyCenter() {
                     <h2 className="text-2xl font-bold text-center mb-2">Who is it for?</h2>
 
                     <div className="flex items-center justify-center">
-                        <img alt="Therapy Center"  className='h-80' src='/images/therapy/th7.png' />
+                        <img alt="Therapy Center" className='h-80' src='/images/therapy/th7.png' />
                         <div className="text-center">
                             <ul className="inline-block text-left text-lg space-y-2">
                                 <li>• Psychologists & Family Therapists</li>
@@ -162,7 +162,7 @@ export default function TherapyCenter() {
 
                     <div className="grid md:grid-cols-4 gap-8">
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th8.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th8.png' />
                             <h3 className="font-semibold text-xl mb-2">Client Companion App</h3>
                             <ul className="text-lg ml-6 text-left">
                                 <li>• Daily check-ins</li>
@@ -172,7 +172,7 @@ export default function TherapyCenter() {
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th9.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th9.png' />
                             <h3 className="font-semibold text-xl mb-2">Therapist Dashboard</h3>
                             <ul className="text-lg ml-6 text-left">
                                 <li>• Real-time client trends</li>
@@ -182,7 +182,7 @@ export default function TherapyCenter() {
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th10.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th10.png' />
                             <h3 className="font-semibold text-xl mb-2">Self-Care Routines</h3>
                             <ul className="text-lg ml-6 text-left">
                                 <li>• Daily grounding</li>
@@ -191,7 +191,7 @@ export default function TherapyCenter() {
                         </div>
 
                         <div className="text-center">
-                            <img alt="Therapy Center"  className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th11.png' />
+                            <img alt="Therapy Center" className='w-16 h-16 mx-auto mb-4' src='/images/therapy/th11.png' />
                             <h3 className="font-semibold text-xl mb-2">Co-Branded Access</h3>
                             <ul className="text-lg ml-6 text-left">
                                 <li>• Your practice name / logo for a professional handover experience</li>
@@ -219,7 +219,8 @@ export default function TherapyCenter() {
                     </svg>
                 </div>
 
-                <div className="relative flex flex-col items-center gap-8 sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
+                {/* Footer Content */}
+                <div className="relative flex flex-col items-center max-w-6xl mx-auto space-between sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
 
                     {/* Left - Who We Serve */}
                     <div className="text-center md:text-left space-y-1 sm:space-y-2">
@@ -231,6 +232,16 @@ export default function TherapyCenter() {
                             <li>Therapy Centers</li>
                             <li>Corporate</li>
                         </ul>
+                    </div>
+
+                    <div className="h-[200px] px-1 overflow-hidden mb-4">
+                        <iframe
+                            className="w-full h-full rounded-lg"
+                            src="https://www.youtube.com/embed/BNeo814cXzE"
+                            title="Little Hugs Partnership Program"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
                     </div>
 
                     {/* Center - Get LittleHugs */}

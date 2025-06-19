@@ -1103,7 +1103,7 @@ const ProfileUi = () => {
 
                     {isChildGoalOpen && (
                       <div ref={childGoalDropdownRef} className="absolute mt-1 w-64 border rounded bg-white shadow-lg z-10 max-h-60 overflow-y-auto">
-                        {["Sleep", "Hormones", "Fatigue", "Anxiety", "Self Care"]
+                        {["Growth", "Nutrition", "Activity", "Developmental", "Wellness"]
                           .map((option) => (
                             <div
                               key={option}

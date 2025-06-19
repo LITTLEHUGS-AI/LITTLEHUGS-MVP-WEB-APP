@@ -29,6 +29,9 @@ import AdminPartners from "../components/admin/AdminPartners";
 import AcceptInvitePartner from "../temp/AcceptInvitePartner";
 import AppPrivacyPolicy from "../components/misc/appPrivacypolicy";
 import MobileAccDelete from "../components/misc/mobileAccDelete";
+import CorporateLandingPage from "../components/landingpage/Corporate";
+import SchoolPartnerPage from "../components/landingpage/SchoolPartnerLandingPage";
+import TherapyCenter from "../components/landingpage/TherapyCenter";
 
 
 
@@ -61,12 +64,27 @@ function AppRoutes() {
               path={routesConfig.partenerLanding.path}
               element={<OpenRoute><PartenerLandingPage /></OpenRoute>}
             />
+
+            <Route
+              path={routesConfig.schoolPartnerLanding.path}
+              element={<OpenRoute><SchoolPartnerPage /></OpenRoute>}
+            />
+
+            <Route
+              path={routesConfig.therapyCenterLanding.path}
+              element={<OpenRoute><TherapyCenter /></OpenRoute>}
+            />
+
             <Route
               path={routesConfig.assesmentLanding.path}
               element={<OpenRoute><AssesmentLandingPage /></OpenRoute>}
             />
+
+            <Route path={routesConfig.corporateLanding.path} element={<OpenRoute><CorporateLandingPage /></OpenRoute>} />
+
             <Route path={routesConfig.signIn.path} element={<OpenRoute><SignIn /></OpenRoute>} />
             <Route path={routesConfig.signUp.path} element={<OpenRoute><Signup /></OpenRoute>} />
+
             {/* dashboard */}
             <Route path="/auth/callback" element={<GoogleCallback />} />
 

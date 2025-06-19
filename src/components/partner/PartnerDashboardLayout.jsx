@@ -8,6 +8,7 @@ import { Menu } from "lucide-react";
 import { Drawer } from "antd";
 import { PartnerProvider } from "../../lib/PartnerContext";
 import PartnerUsers from "./dashboardComponents/Partnerusers";
+import CorporateWellnessDashboard from "./dashboardComponents/PartnerDashboard2";
 
 const PartnerDashboardLayout = () => {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,8 @@ const PartnerDashboardLayout = () => {
   let MainContent = null;
   if (activeTab === "dashboard") {
     MainContent = <PartnerDashboard />;
+  } else if (activeTab === "new dash") {
+    MainContent = <CorporateWellnessDashboard />;
   } else if (activeTab === "settings" && activeSubTab === "team") {
     MainContent = <PartnerTeamMember />;
   } else if (activeTab === "settings" && activeSubTab === "users") {
@@ -36,8 +39,8 @@ const PartnerDashboardLayout = () => {
 
   return (
     <PartnerProvider>
-     <div className="max-w-screen px-2 bg-white font-quicksand min-h-screen">
-        {/* Mobile Sidebar */} 
+      <div className="max-w-screen px-2 bg-white font-quicksand min-h-screen">
+        {/* Mobile Sidebar */}
         <div className="md:hidden fixed top-0 left-0 w-full max-w-full h-14 bg-white shadow flex items-center justify-between px-3 z-50">
           <button
             onClick={showDrawer}
@@ -58,34 +61,35 @@ const PartnerDashboardLayout = () => {
           </div>
         </div>
 
-          {/* Desktop Sidebar */}
+        {/* Desktop Sidebar */}
         <div className="w-full flex flex-row pt-14 md:pt-0">
+          {/* Sidebar */}
           <div className="hidden md:flex md:h-screen bg-white min-w-[250px] max-w-xs w-64 flex-shrink-0 flex-col border border-gray-300 rounded-[10px]">
             <PartnerSidebar onTabChange={handleTabChange} />
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-x-scroll items-stretch py-4">
+          <div className="flex-1 flex flex-col h-screen overflow-y-auto py-4">
             <PartnerHeader />
-            <div className="bg-white h-full flex flex-col p-0">
+            <div className="bg-white flex flex-col p-0 flex-1">
               {MainContent}
             </div>
           </div>
-        </div>
+          </div>
 
-        {/* Mobile Drawer Sidebar */}
-        <Drawer
-          placement="left"
-          width={280}
-          onClose={onClose}
-          open={open}
-          closable={false}
-          headerStyle={{ display: "none" }}
-          bodyStyle={{ padding: 0 }}
-        >
-          <PartnerSidebar onTabChange={handleTabChange} />
-        </Drawer>
-      </div>
+          {/* Mobile Drawer Sidebar */}
+          <Drawer
+            placement="left"
+            width={280}
+            onClose={onClose}
+            open={open}
+            closable={false}
+            headerStyle={{ display: "none" }}
+            bodyStyle={{ padding: 0 }}
+          >
+            <PartnerSidebar onTabChange={handleTabChange} />
+          </Drawer>
+        </div>
     </PartnerProvider>
   );
 };

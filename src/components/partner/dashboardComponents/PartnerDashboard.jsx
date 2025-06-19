@@ -11,6 +11,7 @@ import {
 } from "../../../api/partner-apis";
 import { toast } from "react-toastify";
 import CommonLoader from "./CommonLoader";
+import CorporateWellnessDashboard from "./PartnerDashboard2";
 
 const PartnerDashboard = () => {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
@@ -25,8 +26,8 @@ const PartnerDashboard = () => {
   const [usersLoading, setUsersLoading] = useState(false);
   const [uniqueUsers, setUniqueUsers] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
-  const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [completedAssesCount, setCompletedAssesCount] = useState(0);
   const [incompleteAss, setIncompleteAss] = useState(0);
   const [totalAssess, setTotalAssess] = useState(0);
   const initialFetchDone = useRef(false);
@@ -211,319 +212,324 @@ const PartnerDashboard = () => {
 
 
   return (
-    <div className="w-full flex flex-col gap-3 mt-2 font-quicksand px-2 md:px-0">
-      {usersLoading ? (
-        <div className="flex items-center justify-center w-full h-[60vh]">
-          <Spin size="large" />
-        </div>
-      ) : (
-        <>
-          <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
-            Dashboard
-          </span>
+    <div className="overflow-auto">
+      <CorporateWellnessDashboard />
 
-
-          <div className="grid grid-cols-2 gap-4">
-
-            <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
-              <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
-                  Assessments Status
-                </span>
-                <div className="flex flex-col md:flex-row  items-center gap-4 sm:gap-6">
-                  <div className="relative w-[160px] h-[160px]">
-                    <svg
-                      width="160"
-                      height="160"
-                      viewBox="0 0 200 200"
-                      className="transform -rotate-90"
-                    >
-                      <circle
-                        cx="100"
-                        cy="100"
-                        r="80"
-                        fill="none"
-                        stroke="#DDBEBE"
-                        strokeWidth="20"
-                      />
-                      <circle
-                        cx="100"
-                        cy="100"
-                        r="80"
-                        fill="none"
-                        stroke="#D3D3A5"
-                        strokeWidth="20"
-                        strokeDasharray="125.66 376.99"
-                        strokeDashoffset="0"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="text-2xl sm:text-3xl font-bold text-gray-800">
-                        {formatNumber(totalAssess)}
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600 text-center">
-                        <div>Assessments</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center space-y-4 w-full">
-                    <div className="mx-auto flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
-                        {formatNumber(completedAssesCount)}
-                      </div>
-                      <span className="text-gray-700 text-lg leading-tight">
-                        Completed <br />Assessments
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
-                        {formatNumber(incompleteAss)}
-                      </div>
-                      <span className="text-gray-700 text-lg leading-tight">
-                        Incomplete<br />Assessments
-                      </span>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
-              <div className="flex flex-col gap-3 w-full">
-                <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
-                  Users
-                </span>
-
-                <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
-                  <div className="relative w-[160px] h-[160px]">
-                    <svg
-                      width="160"
-                      height="160"
-                      viewBox="0 0 200 200"
-                      className="transform -rotate-90"
-                    >
-                      <circle
-                        cx="100"
-                        cy="100"
-                        r="80"
-                        fill="none"
-                        stroke="#DDBEBE"
-                        strokeWidth="20"
-                      />
-                      <circle
-                        cx="100"
-                        cy="100"
-                        r="80"
-                        fill="none"
-                        stroke="#D3D3A5"
-                        strokeWidth="20"
-                        strokeDasharray="125.66 376.99"
-                        strokeDashoffset="0"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="text-2xl sm:text-3xl font-bold text-gray-800">
-                        {uniqueUsers}
-                      </div>
-                      <div className="text-xs sm:text-sm text-gray-600 text-center">
-                        <div>Unique</div>
-                        <div>Users</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center space-y-4 w-full">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
-                        {completedCount}
-                      </div>
-                      <span className="text-gray-700 text-lg leading-tight">
-                        Users who completed 1<br />assessment
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
-                        {incompleteCount}
-                      </div>
-                      <span className="text-gray-700 text-lg leading-tight">
-                        Users who did not<br />complete 1 assessment
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+      <div className="w-full flex flex-col gap-3 mt-2 font-quicksand px-6 md:px-1">
+        {usersLoading ? (
+          <div className="flex items-center justify-center w-full h-[60vh]">
+            <Spin size="large" />
           </div>
+        ) : (
+          <>
+            <span className="block md:hidden text-[16px] font-normal text-gray-700 mb-2 ml-1">
+              Dashboard
+            </span>
 
-          {/* Charts below both main and insight cards */}
-          <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-8">
-            {/* Assessments Chart */}
 
-            {assessmentData.length < 1 ? <div>No Assessments taken yet</div> :
-              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
-                <div className="flex flex-col gap-2 w-full">
-                  <span className="text-[16px] text-center font-semibold md:text-2xl font-normal text-gray-700 mb-1 ml-2">
-                    Assessment Types
+            <div className="grid grid-cols-2 gap-4">
+
+              <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
+                <div className="flex flex-col gap-3 w-full">
+                  <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
+                    Assessments Status
                   </span>
-                  <div className="w-full flex flex-row items-center justify-around h-full">
-                    <div className=" flex items-center justify-center">
-                      <PieChart width={180} height={180}>
-                        <Pie
-                          data={assessmentData}
-                          dataKey="value"
-                          nameKey="name"
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={35}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          paddingAngle={3}
-                        >
-                          {assessmentData.map((entry, idx) => (
-                            <Cell key={`cell2-${idx}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                      </PieChart>
-                    </div>
-                    <div className="flex flex-col justify-center gap-2">
-                      {assessmentData.map((d, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-2 text-xs md:text-base text-gray-600"
-                        >
-                          <span
-                            className="inline-block w-4 h-4 rounded-full"
-                            style={{ background: d.color }}
-                          ></span>
-                          {d.name}
+                  <div className="flex flex-col md:flex-row  items-center gap-4 sm:gap-6">
+                    <div className="relative w-[160px] h-[160px]">
+                      <svg
+                        width="160"
+                        height="160"
+                        viewBox="0 0 200 200"
+                        className="transform -rotate-90"
+                      >
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#DDBEBE"
+                          strokeWidth="20"
+                        />
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#D3D3A5"
+                          strokeWidth="20"
+                          strokeDasharray="125.66 376.99"
+                          strokeDashoffset="0"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="text-2xl sm:text-3xl font-bold text-gray-800">
+                          {formatNumber(totalAssess)}
                         </div>
-                      ))}
+                        <div className="text-xs sm:text-sm text-gray-600 text-center">
+                          <div>Assessments</div>
+                        </div>
+                      </div>
                     </div>
+
+                    <div className="flex flex-col items-center space-y-4 w-full">
+                      <div className="mx-auto flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
+                          {formatNumber(completedAssesCount)}
+                        </div>
+                        <span className="text-gray-700 text-lg leading-tight">
+                          Completed <br />Assessments
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
+                          {formatNumber(incompleteAss)}
+                        </div>
+                        <span className="text-gray-700 text-lg leading-tight">
+                          Incomplete<br />Assessments
+                        </span>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
-            }
 
-
-            {/* Domains Chart */}
-            {domainData.length < 1 ? <div>No Domains Generated yet</div> :
-              <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
-                <div className="flex flex-col gap-2 w-full">
-                  <span className="text-[16px] md:text-2xl text-center font-semibold font-normal text-gray-700 mb-1 ml-2">
-                    Domains
+              <div className="flex flex-col lg:flex-row border border-gray-300 rounded-2xl p-4 sm:p-6 gap-4">
+                <div className="flex flex-col gap-3 w-full">
+                  <span className="text-lg h-10 sm:text-xl text-center font-semibold text-gray-700 font-normal">
+                    Users
                   </span>
-                  <div className="flex flex-row items-center h-full">
-                    <div className="w-[60%] flex items-center justify-center">
-                      <PieChart width={180} height={180}>
-                        <Pie
-                          data={domainData}
-                          dataKey="value"
-                          nameKey="name"
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={35}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          paddingAngle={3}
-                        >
-                          {domainData.map((entry, idx) => (
-                            <Cell key={`cell-${idx}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                      </PieChart>
-                    </div>
-                    <div className="flex flex-col justify-center gap-2">
-                      {domainData.map((d, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-2 text-xs md:text-[0.95rem] text-gray-600"
-                        >
-                          <span
-                            className="inline-block w-4 h-4 rounded-full"
-                            style={{ background: d.color }}
-                          ></span>
-                          {d.name}
+
+                  <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                    <div className="relative w-[160px] h-[160px]">
+                      <svg
+                        width="160"
+                        height="160"
+                        viewBox="0 0 200 200"
+                        className="transform -rotate-90"
+                      >
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#DDBEBE"
+                          strokeWidth="20"
+                        />
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="80"
+                          fill="none"
+                          stroke="#D3D3A5"
+                          strokeWidth="20"
+                          strokeDasharray="125.66 376.99"
+                          strokeDashoffset="0"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="text-2xl sm:text-3xl font-bold text-gray-800">
+                          {uniqueUsers}
                         </div>
-                      ))}
+                        <div className="text-xs sm:text-sm text-gray-600 text-center">
+                          <div>Unique</div>
+                          <div>Users</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center space-y-4 w-full">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#D3D3A5] flex items-center justify-center text-gray-700 font-medium text-sm">
+                          {completedCount}
+                        </div>
+                        <span className="text-gray-700 text-lg leading-tight">
+                          Users who completed 1<br />assessment
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-[#DDBEBE] flex items-center justify-center text-gray-700 font-medium text-sm">
+                          {incompleteCount}
+                        </div>
+                        <span className="text-gray-700 text-lg leading-tight">
+                          Users who did not<br />complete 1 assessment
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            }
-          </div>
 
-        </>
-      )}
+            </div>
 
-      {/* Add User Modal */}
-      <CommonModal
-        open={isAddUserOpen}
-        // onCancel={handleCloseAddUser}
-        title={
-          <div className="w-full text-center font-semibold text-lg">
-            Add User
-          </div>
-        }
-        footer={null}
-      >
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 md:flex-row md:gap-4">
-            <div className="flex flex-col w-full md:w-1/2">
-              <label className="mb-1 text-gray-700 text-sm">User Name</label>
-              <Input
-                placeholder="* User Name"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="h-[2.5rem]"
-              />
+            {/* Charts below both main and insight cards */}
+            <div className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-8">
+              {/* Assessments Chart */}
+
+              {assessmentData.length < 1 ? <div>No Assessments taken yet</div> :
+                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
+                  <div className="flex flex-col gap-2 w-full">
+                    <span className="text-[16px] text-center font-semibold md:text-2xl font-normal text-gray-700 mb-1 ml-2">
+                      Assessment Types
+                    </span>
+                    <div className="w-full flex flex-row items-center justify-around h-full">
+                      <div className=" flex items-center justify-center">
+                        <PieChart width={180} height={180}>
+                          <Pie
+                            data={assessmentData}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={35}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            paddingAngle={3}
+                          >
+                            {assessmentData.map((entry, idx) => (
+                              <Cell key={`cell2-${idx}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </div>
+                      <div className="flex flex-col justify-center gap-2">
+                        {assessmentData.map((d, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center gap-2 text-xs md:text-base text-gray-600"
+                          >
+                            <span
+                              className="inline-block w-4 h-4 rounded-full"
+                              style={{ background: d.color }}
+                            ></span>
+                            {d.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+
+
+              {/* Domains Chart */}
+              {domainData.length < 1 ? <div>No Domains Generated yet</div> :
+                <div className="border border-gray-300 rounded-[16px] bg-white p-6 flex flex-col  w-full">
+                  <div className="flex flex-col gap-2 w-full">
+                    <span className="text-[16px] md:text-2xl text-center font-semibold font-normal text-gray-700 mb-1 ml-2">
+                      Domains
+                    </span>
+                    <div className="flex flex-row items-center h-full">
+                      <div className="w-[60%] flex items-center justify-center">
+                        <PieChart width={180} height={180}>
+                          <Pie
+                            data={domainData}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={35}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            paddingAngle={3}
+                          >
+                            {domainData.map((entry, idx) => (
+                              <Cell key={`cell-${idx}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </div>
+                      <div className="flex flex-col justify-center gap-2">
+                        {domainData.map((d, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center gap-2 text-xs md:text-[0.95rem] text-gray-600"
+                          >
+                            <span
+                              className="inline-block w-4 h-4 rounded-full"
+                              style={{ background: d.color }}
+                            ></span>
+                            {d.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
-            <div className="flex flex-col w-full md:w-1/2">
-              <label className="mb-1 text-gray-700 text-sm">Email ID</label>
-              <Input
-                placeholder="* Email ID"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-[2.5rem]"
-              />
+
+          </>
+        )}
+
+        {/* Add User Modal */}
+        <CommonModal
+          open={isAddUserOpen}
+          // onCancel={handleCloseAddUser}
+          title={
+            <div className="w-full text-center font-semibold text-lg">
+              Add User
+            </div>
+          }
+          footer={null}
+        >
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-4">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="mb-1 text-gray-700 text-sm">User Name</label>
+                <Input
+                  placeholder="* User Name"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="h-[2.5rem]"
+                />
+              </div>
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="mb-1 text-gray-700 text-sm">Email ID</label>
+                <Input
+                  placeholder="* Email ID"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-[2.5rem]"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 md:flex-row md:gap-4">
+              <div className="flex flex-col w-full md:w-1/2">
+                <label className="mb-1 text-gray-700 text-sm">
+                  Assigned Therapist
+                </label>
+                <Select
+                  showSearch
+                  placeholder="* Assigned Therapist"
+                  value={therapist}
+                  onChange={setTherapist}
+                  options={teamMembers}
+                  loading={loading}
+                  className="h-[2.5rem]"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end mt-2">
+              <CommonLoader
+                loading={inviteLoading}
+                disabled={!userName.trim() || !email.trim() || !therapist}
+                onClick={handleInviteUser}
+                className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !therapist
+                  ? "bg-[#4F7DDDBF] cursor-not-allowed"
+                  : ""
+                  }`}
+                type="primary"
+              >
+                {inviteLoading ? "Inviting..." : "Invite User"}
+              </CommonLoader>
             </div>
           </div>
-          <div className="flex flex-col gap-4 md:flex-row md:gap-4">
-            <div className="flex flex-col w-full md:w-1/2">
-              <label className="mb-1 text-gray-700 text-sm">
-                Assigned Therapist
-              </label>
-              <Select
-                showSearch
-                placeholder="* Assigned Therapist"
-                value={therapist}
-                onChange={setTherapist}
-                options={teamMembers}
-                loading={loading}
-                className="h-[2.5rem]"
-              />
-            </div>
-          </div>
-          <div className="flex justify-end mt-2">
-            <CommonLoader
-              loading={inviteLoading}
-              disabled={!userName.trim() || !email.trim() || !therapist}
-              onClick={handleInviteUser}
-              className={`bg-[#4F7DDD] text-white font-semibold px-8 py-5 rounded text-base font-quicksand ${!userName.trim() || !email.trim() || !therapist
-                ? "bg-[#4F7DDDBF] cursor-not-allowed"
-                : ""
-                }`}
-              type="primary"
-            >
-              {inviteLoading ? "Inviting..." : "Invite User"}
-            </CommonLoader>
-          </div>
-        </div>
-      </CommonModal>
+        </CommonModal>
+      </div>
+
     </div>
   );
 };

@@ -35,6 +35,21 @@ const routesConfig = {
         title: 'Wellness Assessments for Moms & Kids',
         description: 'Science-backed wellness tests for women, children, and SEL—get instant insights, pre-screening results & more with LittleHugs.'
     },
+    corporateLanding: {
+        path: '/corporate',
+        title: 'Wellness Assessments for Corporates',
+        description: 'Science-backed wellness tests for women, children and SEL—get instant insights, pre-screening results & more with LittleHugs.'
+    },
+     therapyCenterLanding: {
+        path: '/therapy-center',
+        title: 'Wellness Assessments for Therapy Center',
+        description: 'Science-backed wellness tests for Women, children and SEL—get instant insights, pre-screening results & more with LittleHugs.'
+    },
+    schoolPartnerLanding: {
+        path: '/school',
+        title: 'Wellness Assessments for Schools',
+        description: 'Science-backed wellness tests for children and SEL—get instant insights, pre-screening results & more with LittleHugs.'
+    },
     signIn: {
         path: '/signin',
         title: 'Sign In - LittleHugs',

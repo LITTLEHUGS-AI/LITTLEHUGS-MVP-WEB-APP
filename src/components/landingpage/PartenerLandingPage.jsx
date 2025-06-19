@@ -103,11 +103,13 @@ function PartenerLandingPage() {
       body: JSON.stringify({ country: formData.country })
     })
       .then(response => response.json())
-      .then(data => { if (data && data.data) {
-    setAllCities(data.data);
-  } else {
-    setAllCities([]);
-  }})
+      .then(data => {
+        if (data && data.data) {
+          setAllCities(data.data);
+        } else {
+          setAllCities([]);
+        }
+      })
       .catch(error => {
         console.error('Error:', error);
       });
@@ -596,7 +598,7 @@ function PartenerLandingPage() {
                 ))}
               </select>
 
-                <select
+              <select
                 name="city"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-600"
                 onChange={handleChange}
@@ -698,7 +700,7 @@ function PartenerLandingPage() {
           </div>
 
           {/* Footer Content */}
-          <div className="relative flex flex-col items-center gap-8 sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
+          <div className="relative flex flex-col items-center max-w-6xl mx-auto space-between sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
 
             {/* Left - Who We Serve */}
             <div className="text-center md:text-left space-y-1 sm:space-y-2">
@@ -710,6 +712,16 @@ function PartenerLandingPage() {
                 <li>Therapy Centers</li>
                 <li>Corporate</li>
               </ul>
+            </div>
+
+            <div className="h-[200px] px-1 overflow-hidden mb-4">
+              <iframe
+                className="w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/BNeo814cXzE"
+                title="Little Hugs Partnership Program"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
 
             {/* Center - Get LittleHugs */}
@@ -734,6 +746,7 @@ function PartenerLandingPage() {
 
           </div>
         </div>
+
       </div>
     </>
   );

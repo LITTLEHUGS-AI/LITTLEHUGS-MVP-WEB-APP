@@ -40,7 +40,7 @@ const Navbar = () => {
             <ul className="space-y-2">
               <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/corporate'>Corporates</Link></li>
               <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/school'>Schools</Link></li>
-              <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/therapy-center'>Tharepy Center</Link></li>
+              <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/therapy-center'>Therapy Center</Link></li>
             </ul>
           </div>
         </li>

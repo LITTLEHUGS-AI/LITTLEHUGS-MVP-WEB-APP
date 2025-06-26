@@ -12,9 +12,9 @@ export default function CorporateLandingPage() {
       <div className="bg-[#4F7DDD] text-white">
         <div className="container mx-auto px-6 py-16">
           <div className="flex items-center justify-between">
-            <div className="max-w-xl">
+            <div className="max-w-2xl">
               <p className="text-xl mb-4 opacity-90">OUR LITTLEHUGS FOR CORPORATES</p>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
                 Recognize early. Respond early
               </h1>
               <p className="text-lg mb-8 opacity-90 leading-relaxed">
@@ -28,7 +28,7 @@ export default function CorporateLandingPage() {
               <div className="w-80 h-80 bg-cream-100 rounded-full flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-yellow-50 rounded-full"></div>
                 <div className="relative z-10">
-                  <img alt='corporate' src='/images/corporate/handsake.png' />
+                  <img className='p-6' alt='corporate' src='/images/corporate/c1.png' />
                 </div>
               </div>
             </div>
@@ -197,7 +197,8 @@ export default function CorporateLandingPage() {
           </svg>
         </div>
 
-        <div className="relative flex flex-col items-center gap-8 sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
+        {/* Footer Content */}
+        <div className="relative flex flex-col items-center max-w-6xl mx-auto space-between sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
 
           {/* Left - Who We Serve */}
           <div className="text-center md:text-left space-y-1 sm:space-y-2">
@@ -211,6 +212,16 @@ export default function CorporateLandingPage() {
             </ul>
           </div>
 
+          <div className="h-[200px] px-1 overflow-hidden mb-4">
+            <iframe
+              className="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/BNeo814cXzE"
+              title="Little Hugs Partnership Program"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+
           {/* Center - Get LittleHugs */}
           <div className="mb-0 sm:mb-4 md:mb-9 text-center">
             <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
@@ -220,16 +231,6 @@ export default function CorporateLandingPage() {
               </button>
             </Link>
           </div>
-
-          {/* Right - Support */}
-          {/* Commented out as in original code */}
-          {/* <div className="text-center md:text-right space-y-1 sm:space-y-2">
-        <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800 mb-1 sm:mb-2">Support</h3>
-        <ul className="font-normal font-quicksand text-base sm:text-lg md:text-xl text-gray-600 space-y-0.5 sm:space-y-1">
-          <li>FAQ</li>
-          <li>Help</li>
-        </ul>
-      </div> */}
 
         </div>
       </div>

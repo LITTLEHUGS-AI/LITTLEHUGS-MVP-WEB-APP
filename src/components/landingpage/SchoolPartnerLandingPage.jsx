@@ -147,8 +147,8 @@ function SchoolPartnerPage() {
         </div>
 
 
-
-        <div className="relative bg-[#fef8e6] overflow-hidden mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px]">
+    {/* Footer Content */}
+       <div className="relative bg-[#fef8e6] overflow-hidden mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px]">
           {/* Curve Top */}
           <div className="absolute top-0 left-0 w-full">
             <svg
@@ -166,7 +166,7 @@ function SchoolPartnerPage() {
           </div>
 
           {/* Footer Content */}
-          <div className="relative flex flex-col items-center gap-8 sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
+          <div className="relative flex flex-col items-center max-w-6xl mx-auto space-between sm:gap-10 md:gap-0 md:flex-row md:justify-around md:items-start lg:items-center py-8 sm:py-12 md:py-16 px-4 sm:px-6 md:px-8">
 
             {/* Left - Who We Serve */}
             <div className="text-center md:text-left space-y-1 sm:space-y-2">
@@ -180,6 +180,16 @@ function SchoolPartnerPage() {
               </ul>
             </div>
 
+            <div className="h-[200px] px-1 overflow-hidden mb-4">
+              <iframe
+                className="w-full h-full rounded-lg"
+                src="https://www.youtube.com/embed/BNeo814cXzE"
+                title="Little Hugs Partnership Program"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
             {/* Center - Get LittleHugs */}
             <div className="mb-0 sm:mb-4 md:mb-9 text-center">
               <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
@@ -189,16 +199,6 @@ function SchoolPartnerPage() {
                 </button>
               </Link>
             </div>
-
-            {/* Right - Support */}
-            {/* Commented out as in original code */}
-            {/* <div className="text-center md:text-right space-y-1 sm:space-y-2">
-        <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800 mb-1 sm:mb-2">Support</h3>
-        <ul className="font-normal font-quicksand text-base sm:text-lg md:text-xl text-gray-600 space-y-0.5 sm:space-y-1">
-          <li>FAQ</li>
-          <li>Help</li>
-        </ul>
-      </div> */}
 
           </div>
         </div>

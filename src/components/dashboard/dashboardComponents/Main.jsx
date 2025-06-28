@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { Download } from "lucide-react";
-import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import store from "../../../config/storeInstance";
 import RightHandSide from "./RightHandSide";
-// import './Poppins-Regular-normal';
+import AssessmetPDF from "./AssessmetPDF";
+
 
 const Main = () => {
+
 
   const [step, setStep] = useState('loading');
 
@@ -20,379 +20,32 @@ const Main = () => {
   const [IncompletedAssessments, setIncompleteAssessments] = useState(0);
 
 
-  const toBase64 = async (url) => {
-    const response = await fetch(url, { mode: 'cors' });
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  };
+  // const toBase64 = async (url) => {
+  //   const response = await fetch(url, { mode: 'cors' });
+  //   const blob = await response.blob();
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => resolve(reader.result);
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(blob);
+  //   });
+  // };
 
-  let userName = "UserName";
-  if (profileData.name !== undefined) userName = profileData.name;
+  // let userName = "UserName";
+  // if (profileData.name !== undefined) userName = profileData.name;
 
   const [assessmentName, setAssessmentName] = useState({});
 
 
-  const downloadPDF = async () => {
 
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      format: 'a4'
-    });
-
-    // Set background color (light cream)
-    doc.setFillColor(255, 248, 240);
-    doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-
-    // doc.setFont("Poppins-Regular");
-
-    // Add logo (circle with segments) - centered
-    const imgData = await toBase64('/images/logo.jpg',);
-    doc.addImage(imgData, 'JPEG', pageWidth / 2 - 20, 10, 10, 10);
-
-    doc.setFontSize(20);
-    doc.setTextColor(65, 105, 225);
-    doc.text(`LittleHugs`, pageWidth / 2 + 9, 17, { align: 'center' });
-
-
-    // Add date text - centered
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Downloaded on : ${assessmentName.created_at}`, pageWidth / 2 + 16, 23, { align: 'center' });
-
-    // Add user details - align left for label, proper spacing for value
-    doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0);
-
-    // User Name
-    doc.text('User Name', 26, 40);
-    doc.text(':', 70, 40);
-    doc.text(userName, 80, 40);
-
-    // Assessment Name
-    doc.text('Assessment Name', 26, 50);
-    doc.text(':', 70, 50);
-    doc.text(assessmentName?.assessment_output?.assessment_name || 'N/A', 80, 50);
-
-    // Assessment Date
-    doc.text('Assessment Date:', 26, 60);
-    doc.text(':', 70, 60);
-    doc.text((latestdate && new Date(latestdate).toLocaleString()) || 'N/A', 80, 60);
-
-    // Overall Wellness Score
-    doc.setFontSize(18);
-    doc.setTextColor(65, 105, 215);
-    doc.text('Overall Wellness Score', pageWidth / 2, 90, { align: 'center' });
-
-    // Score
-    doc.setFontSize(36);
-    doc.setTextColor(80, 80, 70);
-    doc.text(`${assessmentName?.assessment_output?.overall_assessment?.score || 'N/A'}/100`, pageWidth / 2, 105, { align: 'center' });
-
-    // Top Five Domains
-    doc.setFontSize(18);
-    doc.setTextColor(65, 105, 225);
-    doc.text('Top Five Domains', pageWidth / 2, 120, { align: 'center' });
-
-    // Domain visualization (simplified with proper spacing)
-    const domainWidth = 30;
-    const domainSpacing = 8;
-    const totalWidth = (domainWidth * 5) + (domainSpacing * 4);
-    const domainStartX = (pageWidth - totalWidth) / 2;
-    const domainY = 125;
-
-
-
-
-
-
-
-
-
-
-
-    //     const domainStartX = 20; // Start further from edge
-    // const domainY = 50; // Adjust vertical position
-    // const domainWidth = 35;
-    // const domainSpacing = 2; // Reduced spacing for better fit
-    const rectHeight = 40; // Slightly taller rectangles
-
-    domainWellnessScore.forEach((domain, index) => {
-      const x = domainStartX + (index * (domainWidth + domainSpacing));
-
-      // Enhanced rectangle with rounded corners effect
-      doc.setFillColor(...hexToRgb(domain.flag));
-      doc.roundedRect(x, domainY, domainWidth, rectHeight, 2, 2, 'F');
-
-      // Add subtle border for definition
-      doc.setDrawColor(0, 0, 0, 0.1);
-      doc.setLineWidth(0.2);
-      doc.roundedRect(x, domainY, domainWidth, rectHeight, 2, 2, 'S');
-
-      // Domain name with better text wrapping
-      doc.setFontSize(7);
-      doc.setTextColor(0, 0, 0);
-
-      // Split long domain names into multiple lines
-      const domainText = domain?.domain || '';
-      const words = domainText.split(' ');
-      const maxWidth = domainWidth - 4;
-
-      if (words.length > 2) {
-        // Multi-line text for long domains
-        const line1 = words.slice(0, Math.ceil(words.length / 2)).join(' ');
-        const line2 = words.slice(Math.ceil(words.length / 2)).join(' ');
-
-        doc.text(line1, x + domainWidth / 2, domainY + 8, {
-          align: 'center',
-          maxWidth: maxWidth
-        });
-        doc.text(line2, x + domainWidth / 2, domainY + 14, {
-          align: 'center',
-          maxWidth: maxWidth
-        });
-      } else {
-        // Single line for shorter domains
-        doc.text(domainText, x + domainWidth / 2, domainY + 12, {
-          align: 'center',
-          maxWidth: maxWidth
-        });
-      }
-
-      // Enhanced circle design
-      const circleY = domainY + 26;
-      const circleRadius = 7;
-
-      // White background circle
-      doc.setFillColor(255, 255, 255);
-      doc.circle(x + domainWidth / 2, circleY, circleRadius, 'F');
-
-      // Colored border
-      doc.setDrawColor(...hexToRgb(domain.flag));
-      doc.setLineWidth(2);
-      doc.circle(x + domainWidth / 2, circleY, circleRadius, 'S');
-
-      // Score text with enhanced styling
-      doc.setFontSize(9);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`${domain.score}/10`, x + domainWidth / 2, circleY + 1, {
-        align: 'center'
-      });
-
-
-    });
-
-    // Outcome Overview
-    doc.setFontSize(18);
-    doc.setTextColor(65, 105, 215);
-    doc.text('Outcome Overview', pageWidth / 2, 190, { align: 'center' });
-
-
-    // Table
-    const tableX = 6;
-    const tableY = 185;
-    const tableWidth = pageWidth - 20;
-    const rowHeight = 15; // Increased for wrapped text
-
-    // Table headers
-    doc.setFillColor(255, 255, 255);
-    doc.rect(tableX, tableY, tableWidth, 10, 'F');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Domain', tableX + 10, tableY + 7);
-    doc.text('Score', tableX + tableWidth / 2 - 20, tableY + 7);
-    doc.text('Insights', tableX + tableWidth / 2 + 10, tableY + 7);
-
-    // Text wrapping helper function
-    function wrapText(text, maxWidth, fontSize = 10) {
-      doc.setFontSize(fontSize);
-      const words = text.split(' ');
-      const lines = [];
-      let currentLine = '';
-
-      words.forEach(word => {
-        const testLine = currentLine + (currentLine ? ' ' : '') + word;
-        const testWidth = doc.getTextWidth(testLine);
-
-        if (testWidth > maxWidth && currentLine) {
-          lines.push(currentLine);
-          currentLine = word;
-        } else {
-          currentLine = testLine;
-        }
-      });
-
-      if (currentLine) lines.push(currentLine);
-      return lines;
-    }
-
-    // Table rows
-    if (domainWellnessScore.length > 0) {
-      let currentY = tableY + 12;
-
-      domainWellnessScore.forEach((outcome, index) => {
-        // Calculate insight text lines
-        const insightWidth = tableWidth / 2 - 20;
-        const insightLines = outcome.positive_summary ?
-          wrapText(outcome.positive_summary, insightWidth, 10) : [];
-
-        // Calculate row height based on text lines
-        const actualRowHeight = Math.max(rowHeight, (insightLines.length * 4) + 8);
-
-        // White background for rows
-        doc.setFillColor(255, 255, 255);
-        doc.rect(tableX, currentY, tableWidth, actualRowHeight, 'F');
-
-        // Domain - wrap if needed
-        doc.setFontSize(10);
-        doc.setTextColor(0, 0, 0);
-        const domainWidth = tableWidth / 2 - 40;
-        const domainLines = wrapText(outcome.domain, domainWidth, 10);
-
-        domainLines.forEach((line, lineIndex) => {
-          doc.text(line, tableX + 10, currentY + 7 + (lineIndex * 4));
-        });
-
-        // Status indicator
-        const statusX = tableX + tableWidth / 2 - 20;
-        doc.setFillColor(...hexToRgb(outcome.flag));
-        doc.circle(statusX - 5, currentY + 5, 2, 'F');
-
-        // Status text
-        const statusText = outcome.flag.charAt(0).toUpperCase() + outcome.flag.slice(1);
-        doc.text(statusText, statusX, currentY + 7);
-
-        // Insight - wrapped text
-        doc.setFontSize(10);
-
-        insightLines.forEach((line, lineIndex) => {
-          if (lineIndex === 0) {
-            // Add bullet point to first line only
-            doc.text('• ' + line, tableX + tableWidth / 2, currentY + 7 + (lineIndex * 4));
-          } else {
-            // Indent continuation lines to align with text after bullet
-            doc.text(line, tableX + tableWidth / 2 + 8, currentY + 7 + (lineIndex * 4));
-          }
-        });
-
-        currentY += actualRowHeight + 2; // Add small gap between rows
-      });
-    }
-
-
-    doc.addPage();
-
-    // Set background color (light cream) for second page
-    doc.setFillColor(255, 248, 240);
-    doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
-
-    // Insight Cards heading
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Insight Cards', 20, 15);
-
-
-    const cardY = 25;
-    const cardHeight = 25;
-    const cardSpacing = 8;
-    const cardWidth = pageWidth - 30;
-
-
-    if (assessmentName?.assessment_output?.personality_insight) {
-      assessmentName.assessment_output.personality_insight.split('.').forEach((insight, index) => {
-        if (insight.trim().length === 0) return;
-        const y = cardY + (index * (cardHeight + cardSpacing));
-
-        // Card background (light lavender)
-        doc.setFillColor(230, 230, 250);
-        doc.roundedRect(20, y, cardWidth, cardHeight, 5, 5, 'F');
-
-        // Card text
-        doc.setFontSize(12);
-        doc.setTextColor(60, 60, 90);
-
-        // Center text vertically and horizontally in the card
-        doc.text(insight || 'N/A', pageWidth / 2, y + cardHeight / 2 + 2, { align: 'center' });
-      });
-    }
-
-
-    // Next step suggestions heading
-    const nextStepY = cardY + (5 * (cardHeight + cardSpacing));
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Next step suggestions', 10, nextStepY);
-
-    // Next step suggestions list
-    const suggestions = [
-      "Self-nudge packs (affirmations, sleep ritual, mini-care planner)",
-      "Smart nudges activated for flagged domain",
-      "Next Check-In Reminder: 7 days or custom schedule",
-      "Journaling prompt",
-      "Talk to our therapist"
-    ];
-
-    doc.setFontSize(12);
-    doc.setTextColor(60, 60, 90);
-
-    suggestions.forEach((suggestion, index) => {
-      const y = nextStepY + 10 + (index * 10);
-
-      // Bullet point
-      doc.text('•', 35, y);
-
-      // Suggestion text
-      doc.text(suggestion, 45, y);
-    });
-
-    // Download App section
-    const appSectionY = doc.internal.pageSize.getHeight() - 70;
-    const buttonWidth = 130;
-    const buttonHeight = 40;
-    const buttonX = (pageWidth - buttonWidth) / 2;
-    const buttonY = appSectionY + 20;
-
-    // Button background
-    doc.setFillColor(80, 80, 100);
-    doc.roundedRect(buttonX - 30, buttonY - 10, buttonWidth + 60, buttonHeight + 20, 5, 5, 'F');
-
-    // Button text "Download Our Mobile App"
-    doc.setFontSize(16);
-    doc.setTextColor(255, 255, 255);
-    doc.text('Download Our Mobile App', pageWidth / 2, buttonY + 5, { align: 'center' });
-
-    // Download button
-    doc.setFillColor(65, 105, 225);
-    doc.roundedRect(buttonX, buttonY + 15, buttonWidth, buttonHeight - 15, 10, 10, 'F');
-
-    // Download button text
-    doc.setFontSize(14);
-    doc.setTextColor(255, 255, 255);
-    doc.text('Download', pageWidth / 2, buttonY + 27, { align: 'center' });
-
-    // Save PDF
-    try {
-      doc.save(`${userName}-LittleHugs-Assessment.pdf`);
-    } catch (error) {
-      alert('Error saving PDF:');
-    }
-  };
-
-
-  const colorMap = {
-    green: [0, 255, 0],
-    red: [255, 0, 0],
-    yellow: [220, 220, 0],
-    blue: [0, 0, 255],
-  };
-
-  function hexToRgb(inputColor) { return colorMap[inputColor.toLowerCase()] || [0, 0, 0]; }
+  // const colorMap = {
+  //   green: [0, 255, 0],
+  //   red: [255, 0, 0],
+  //   yellow: [220, 220, 0],
+  //   blue: [0, 0, 255],
+  // };
+
+  // function hexToRgb(inputColor) { return colorMap[inputColor.toLowerCase()] || [0, 0, 0]; }
 
 
 
@@ -562,7 +215,6 @@ const Main = () => {
 
         <div className="w-full">
 
-
           {(step === 'loading') &&
             <div className="fixed inset-0 flex items-center justify-center z-10 px-2">
               <div className="flex items-center justify-center bg-gray-50">
@@ -715,22 +367,9 @@ const Main = () => {
 
 
             {/* PDF Report Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-white rounded-lg border border-gray-200">
-              <div className="flex items-center mb-3 sm:mb-0">
-                <div className="bg-red-500 p-2 rounded">
-                  <span className="text-white text-xs">PDF</span>
-                </div>
-                <span className="ml-3">Here is your detailed summary</span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  className="p-2 border border-gray-300 rounded-lg"
-                  onClick={downloadPDF}
-                >
-                  <Download size={20} />
-                </button>
-              </div>
-            </div>
+            <AssessmetPDF name={profileData.name} assessmentName={assessmentName} domainWellnessScore={domainWellnessScore} latestdate={latestdate} />
+
+
           </div>
 
         </div>

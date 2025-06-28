@@ -74,6 +74,13 @@ export const getUniqueUsers = () => {
   return apiService.get("/partner-users/assessments/");
 }
 
+export const getDashboardMetrics = () => {
+  return apiService.get("/partner-summary/metrics/");
+}
+
+export const getDashboardMetricsGraph = () => {
+  return apiService.get("/partner-summary-graph/metrics/");
+}
 
 
 

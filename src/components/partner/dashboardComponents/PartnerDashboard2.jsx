@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {  TrendingUp } from 'lucide-react';
-import {  getDashboardMetrics, getDashboardMetricsGraph, getUniqueUsers } from '../../../api/partner-apis';
+import { ChevronDown } from 'lucide-react';
+import { getDashboardMetrics, getDashboardMetricsGraph, getTeamMembers, getUniqueUsers } from '../../../api/partner-apis';
 import { Spin } from 'antd';
 import PercentageSemiCircle from './PercentageSemiCircle';
 import SVGLineChart from './SVGLIneChart';
@@ -14,12 +14,22 @@ const CorporateWellnessDashboard = () => {
   const [programData, setProgramData] = useState([]);
   const [domainData, setDomainData] = useState([]);
 
-  // const [accptedUsersCount, setAccptedUsersCount] = useState(0);
-  // const [pendingUsersCount, setPendingUsersCount] = useState(0);
 
+  const [timePeriodOpen, setTimePeriodOpen] = useState(false);
+  const [selectedTimePeriod, setSelectedTimePeriod] = useState({ value: '', label: 'TIME PERIOD' });
+  const timePeriods = [
+    { value: '', label: 'All Time' },
+    { value: 'this_week', label: 'This Week' },
+    { value: 'last_week', label: 'Last Week' },
+    { value: 'this_month', label: 'This Month' },
+    { value: 'last_month', label: 'Last Month' },
+    { value: 'this_year', label: 'This Year' },
+    { value: 'last_year', label: 'Last Year' }
+  ];
 
-  // const [completedAtLeast1Count, setCompletedCount] = useState(0);
-  // const [incompleteCount, setIncompleteCount] = useState(0);
+  const [departmentOpen, setDepartmentOpen] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState({ id: 0, name: "DEPARTMENT" });
+  const [departments, setDepartments] = useState([]);
 
 
 
@@ -84,10 +94,10 @@ const CorporateWellnessDashboard = () => {
       const response = await getUniqueUsers();
 
       if (response.results.length > 0) {
-      //   const { completedAtLeastOneAssessment, didNotCompleteAnyAssessment } = analyzeAssessmentData(response.results);
+        //   const { completedAtLeastOneAssessment, didNotCompleteAnyAssessment } = analyzeAssessmentData(response.results);
 
-      //   setCompletedCount(completedAtLeastOneAssessment);
-      //   setIncompleteCount(didNotCompleteAnyAssessment);
+        //   setCompletedCount(completedAtLeastOneAssessment);
+        //   setIncompleteCount(didNotCompleteAnyAssessment);
 
         const assessmentChartData = calculateAssessmentData(response.results);
         setProgramData(assessmentChartData);
@@ -114,17 +124,20 @@ const CorporateWellnessDashboard = () => {
   }, [calculateAssessmentData, calculateDomainData]);
 
 
-  const fetchMetrics = useCallback(async () => {
+  const fetchMetrics = useCallback(async (time, departmentId) => {
     setUsersLoading(true);
-    getDashboardMetrics().then((data) => {
+
+    getDashboardMetrics(time, departmentId).then((data) => {
       setMetrics(data?.results[0]);
     }).finally(() => setUsersLoading(false));
 
-    getDashboardMetricsGraph().then((data) => {
+    getDashboardMetricsGraph(time, departmentId).then((data) => {
       if (data.results) setMetricsGraph(data.results);
     }).finally(() => setUsersLoading(false));
 
-  },[]);
+    getTeamMembers().then((data) => setDepartments([{ id: 0, name: "All Departments" }, ...data]));
+
+  }, []);
 
 
   useEffect(() => { fetchMetrics(); fetchUniqueUsers() }, [fetchMetrics, fetchUniqueUsers]);
@@ -185,7 +198,75 @@ const CorporateWellnessDashboard = () => {
       <div className="mx-auto px-4">
 
         {/* Main Title */}
-        <h2 className="text-4xl font-bold text-gray-900 mb-8">LittleHugs Wellness Summary</h2>
+
+        <div className='flex flex-col md:flex-row justify-between gap-4 mb-8'>
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900">LittleHugs Wellness Summary</h2>
+
+          <div className='flex gap-2'>
+
+            <div className="relative">
+              <button
+                onClick={() => setTimePeriodOpen(!timePeriodOpen)}
+                className="flex items-center justify-between px-6 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors min-w-[160px]"
+              >
+                <span>{selectedTimePeriod.label}</span>
+                <ChevronDown
+                  className={`w-4 h-4 ml-2 transition-transform ${timePeriodOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {timePeriodOpen && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  {timePeriods.map((period) => (
+                    <button
+                      key={period.label}
+                      onClick={() => {
+                        setSelectedTimePeriod(period);
+                        setTimePeriodOpen(false);
+                        fetchMetrics(period.value, selectedDepartment.id);
+                      }}
+                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                    >
+                      {period.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => setDepartmentOpen(!departmentOpen)}
+                className="flex items-center justify-between px-6 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors min-w-[160px]"
+              >
+                <span>{selectedDepartment.name}</span>
+                <ChevronDown
+                  className={`w-4 h-4 ml-2 transition-transform ${departmentOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {departmentOpen && (
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  {departments.map((department) => (
+                    <button
+                      key={department.id}
+                      onClick={() => {
+                        setSelectedDepartment(department);
+                        setDepartmentOpen(false);
+                        fetchMetrics(selectedTimePeriod.value, department.id);
+                      }}
+                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
+                    >
+                      {department.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+
         {usersLoading ?
           <div className="flex items-center justify-center w-full h-[60vh]">
             <Spin size="large" />
@@ -200,7 +281,7 @@ const CorporateWellnessDashboard = () => {
                 <div className="flex items-center justify-center mb-4">
                   <PercentageSemiCircle percentage={metrics?.participation?.percentage} />
                 </div>
-                <div className="flex-end flex items-center justify-center gap-2 text-green-600">
+                <div className={`flex-end flex items-center justify-center gap-2 text-${metrics?.participation?.increase < 0 ? "red" : "green"}-600`}>
                   <span className="font-semibold">{typeof metrics?.participation?.increase === "number" ? metrics?.participation?.increase : "N/A"}%</span>
                 </div>
               </div>
@@ -215,7 +296,7 @@ const CorporateWellnessDashboard = () => {
                     {typeof metrics?.engagement?.increase === "number" ? metrics.engagement.increase + " %" : "N/A"}
                   </div>
                 </div>
-                <div className="flex-end flex items-center justify-center gap-2 text-green-600">
+                <div className={`flex-end flex items-center justify-center gap-2 text-${metrics?.engagement?.increase < 0 ? "red" : "green"}-600`}>
                   <span className="font-semibold">{typeof metrics?.engagement?.percentage === "number" ? metrics.engagement.percentage : "N/A"}%</span>
                 </div>
               </div>
@@ -228,8 +309,7 @@ const CorporateWellnessDashboard = () => {
                 <div className="text-center mb-4">
                   <div className="text-5xl font-bold text-gray-900 mb-2">{typeof metrics?.repeat_engagement?.increase === "number" ? metrics.repeat_engagement.increase + " %" : "N/A"}</div>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-blue-600">
-                  <TrendingUp className="w-4 h-4" />
+                <div className={`flex-end flex items-center justify-center gap-2 text-${metrics?.repeat_engagement?.increase < 0 ? "red" : "green"}-600`}>
                   <span className="font-semibold">  {typeof metrics?.repeat_engagement?.percentage === "number" ? metrics.repeat_engagement.percentage : "N/A"}</span>
                 </div>
               </div>

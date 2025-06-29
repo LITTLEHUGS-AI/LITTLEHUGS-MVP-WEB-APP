@@ -74,6 +74,19 @@ export const getUniqueUsers = () => {
   return apiService.get("/partner-users/assessments/");
 }
 
+export const getDashboardMetrics = (period, department) => {
+  const params = {};
+  if (period) params.period = period;
+  if (department) params.department = department;
+  return apiService.get("/partner-summary/metrics/", params);
+}
+
+export const getDashboardMetricsGraph = (period, department) => {
+  const params = {};
+  if (period) params.period = period;
+  if (department) params.department = department;
+  return apiService.get("/partner-summary-graph/metrics/", params);
+}
 
 
 

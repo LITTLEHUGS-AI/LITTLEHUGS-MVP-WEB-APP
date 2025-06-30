@@ -11,7 +11,6 @@ const CorporateWellnessDashboard = () => {
 
   const [metrics, setMetrics] = useState([]);
   const [metricsGraph, setMetricsGraph] = useState([]);
-  const [programData, setProgramData] = useState([]);
   const [domainData, setDomainData] = useState([]);
 
 
@@ -33,25 +32,25 @@ const CorporateWellnessDashboard = () => {
 
 
 
-  const calculateAssessmentData = useCallback((results) => {
-    const assessmentStructure = [
-      { name: "women-wellness-360", value: 0, color: "#A5B4FC" },
-      { name: "child-wellness-360", value: 0, color: "#FDE68A" },
-      { name: "sel-assessment-360", value: 0, color: "#FCA5A5" },
-    ];
+  // const calculateAssessmentData = useCallback((results) => {
+  //   const assessmentStructure = [
+  //     { name: "women-wellness-360", value: 0, color: "#A5B4FC" },
+  //     { name: "child-wellness-360", value: 0, color: "#FDE68A" },
+  //     { name: "sel-assessment-360", value: 0, color: "#FCA5A5" },
+  //   ];
 
-    return assessmentStructure
-      .map((assessment) => {
-        const count = results.filter(
-          (user) => user.assessment_type === assessment.name
-        ).length;
-        return {
-          ...assessment,
-          value: count,
-        };
-      })
-      .filter((assessment) => assessment.value !== 0);
-  }, []);
+  //   return assessmentStructure
+  //     .map((assessment) => {
+  //       const count = results.filter(
+  //         (user) => user.assessment_type === assessment.name
+  //       ).length;
+  //       return {
+  //         ...assessment,
+  //         value: count,
+  //       };
+  //     })
+  //     .filter((assessment) => assessment.value !== 0);
+  // }, []);
 
   const calculateDomainData = useCallback((results) => {
 
@@ -99,21 +98,12 @@ const CorporateWellnessDashboard = () => {
         //   setCompletedCount(completedAtLeastOneAssessment);
         //   setIncompleteCount(didNotCompleteAnyAssessment);
 
-        const assessmentChartData = calculateAssessmentData(response.results);
-        setProgramData(assessmentChartData);
+        // const assessmentChartData = calculateAssessmentData(response.results);
+        // setProgramData(assessmentChartData);
 
         const domainChartData = calculateDomainData(response.results);
         setDomainData(domainChartData);
       }
-
-      // const response2 = await getUserMembers();
-      // if (response.results.length > 0) {
-      //   const { accepted, notAccepted } = countUsersByStatus(response2.results);
-      //   setAccptedUsersCount(accepted);
-      //   setPendingUsersCount(notAccepted);
-      // }
-
-
 
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -121,7 +111,7 @@ const CorporateWellnessDashboard = () => {
       setUsersLoading(false);
     }
 
-  }, [calculateAssessmentData, calculateDomainData]);
+  }, [calculateDomainData]);
 
 
   const fetchMetrics = useCallback(async (time, departmentId) => {
@@ -412,17 +402,22 @@ const CorporateWellnessDashboard = () => {
                 </h3>
                 <div className="relative w-full overflow-hidden">
                   <div className='flex items-end justify-between pl-4 overflow-x-auto gap-6 h-56'>
-                    {programData.map((program, index) => (
+                    {Object.entries(metrics?.diversity_engagement || {}).map((program, index) => (
                       <div key={index} className="flex flex-col items-center gap-2">
+                        {program[1]}
                         <div
-                          className={`w-16 bg-blue-400 rounded-t-lg transition-all duration-1000 ease-out relative overflow-hidden hover:shadow-lg`}
-                          style={{ height: `${program.value * 4}px` }}
+                          className="w-16 rounded-t-lg transition-all duration-1000 ease-out bg-blue-400 relative overflow-hidden hover:shadow-lg"
+                          style={{
+                            height: `${program[1] * 4}px`,
+                          }}
+                          title={`${program[0]}: ${program[1]}`}
                         >
-                          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20" />
                         </div>
-                        <span className="text-xs text-gray-600 text-center">{program.name}</span>
+                        <span className="text-xs text-gray-600 text-center">{program[0] + '-wellness-360'}</span>
                       </div>
                     ))}
+
                   </div>
                 </div>
               </div>

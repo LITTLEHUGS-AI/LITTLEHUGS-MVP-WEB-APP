@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { getDashboardMetrics, getDashboardMetricsGraph, getTeamMembers, getUniqueUsers } from '../../../api/partner-apis';
 import { Spin } from 'antd';
@@ -14,6 +14,7 @@ const CorporateWellnessDashboard = () => {
   const [domainData, setDomainData] = useState([]);
 
 
+  const dropdownTimePeriodRef = useRef(null);
   const [timePeriodOpen, setTimePeriodOpen] = useState(false);
   const [selectedTimePeriod, setSelectedTimePeriod] = useState({ value: '', label: 'TIME PERIOD' });
   const timePeriods = [
@@ -26,6 +27,7 @@ const CorporateWellnessDashboard = () => {
     { value: 'last_year', label: 'Last Year' }
   ];
 
+  const dropdownDepartmentdRef = useRef(null);
   const [departmentOpen, setDepartmentOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState({ id: 0, name: "DEPARTMENT" });
   const [departments, setDepartments] = useState([]);
@@ -183,6 +185,20 @@ const CorporateWellnessDashboard = () => {
   };
 
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownTimePeriodRef.current && !dropdownTimePeriodRef.current.contains(event.target)) {
+        setTimePeriodOpen(false);
+      }
+        if (dropdownDepartmentdRef.current && !dropdownDepartmentdRef.current.contains(event.target)) {
+        setDepartmentOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <div className="mx-auto px-4">
@@ -194,7 +210,7 @@ const CorporateWellnessDashboard = () => {
 
           <div className='flex gap-2'>
 
-            <div className="relative">
+            <div className="relative" ref={dropdownTimePeriodRef}>
               <button
                 onClick={() => setTimePeriodOpen(!timePeriodOpen)}
                 className="flex items-center justify-between px-6 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors min-w-[160px]"
@@ -224,7 +240,7 @@ const CorporateWellnessDashboard = () => {
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative" ref={dropdownDepartmentdRef}>
               <button
                 onClick={() => setDepartmentOpen(!departmentOpen)}
                 className="flex items-center justify-between px-6 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors min-w-[160px]"
@@ -297,10 +313,10 @@ const CorporateWellnessDashboard = () => {
                   REPEAT PARTICIPATION
                 </h3>
                 <div className="text-center mb-4">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">{typeof metrics?.repeat_engagement?.increase === "number" ? metrics.repeat_engagement.increase + " %" : "N/A"}</div>
+                  <div className="text-5xl font-bold text-gray-900 mb-2">{typeof metrics?.repeat_engagement?.percentage === "number" ? metrics.repeat_engagement.percentage + " %" : "N/A"}</div>
                 </div>
                 <div className={`flex-end flex items-center justify-center gap-2 text-${metrics?.repeat_engagement?.increase < 0 ? "red" : "green"}-600`}>
-                  <span className="font-semibold">  {typeof metrics?.repeat_engagement?.percentage === "number" ? metrics.repeat_engagement.percentage : "N/A"}</span>
+                  <span className="font-semibold">  {typeof metrics?.repeat_engagement?.increase === "number" ? metrics.repeat_engagement.increase : "N/A"}</span>
                 </div>
               </div>
 

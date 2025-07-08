@@ -283,11 +283,11 @@ const CorporateWellnessDashboard = () => {
                 </h3>
                 <div className="text-center mb-4">
                   <div className="text-5xl font-bold text-gray-900 mb-2">
-                    {typeof metrics?.engagement?.increase === "number" ? metrics.engagement.increase + " %" : "N/A"}
+                    {typeof metrics?.engagement?.percentage === "number" ? metrics.engagement.percentage + " %" : "N/A"}
                   </div>
                 </div>
                 <div className={`flex-end flex items-center justify-center gap-2 text-${metrics?.engagement?.increase < 0 ? "red" : "green"}-600`}>
-                  <span className="font-semibold">{typeof metrics?.engagement?.percentage === "number" ? metrics.engagement.percentage : "N/A"}%</span>
+                  <span className="font-semibold">{typeof metrics?.engagement?.increase === "number" ? metrics.engagement.increase : "N/A"}%</span>
                 </div>
               </div>
 

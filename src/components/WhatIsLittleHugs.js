@@ -20,13 +20,16 @@ const WhatIsLittleHugs = () => {
         {/* Text container - full width on mobile, half on desktop */}
         <div className="flex flex-col justify-center w-full lg:w-1/2 order-1 lg:order-2">
           <div className="text-2xl sm:text-3xl md:text-4xl font-medium leading-snug text-[#4A4B4F] mb-4">
-            "Early support for the people who care the most"
+            "Early care for every mind that matters — yours included"
           </div>
           <p className="text-base sm:text-lg md:text-xl pt-2 font-normal text-[#4A4B4F] mb-4 text-center md:text-left">
-            LittleHugs is India's first emotionally intelligent care platform for women and children. We help caregivers and professionals screen for early signs of burnout, anxiety, and developmental delays — and guide them through gentle, expert-informed routines that bring clarity, not overwhelm.
+            <strong>LittleHugs</strong> is your everyday emotional wellness buddy — designed for individuals, parents, and families who want to check in before things feel too heavy.
+          </p>
+          <p className="text-base sm:text-lg md:text-xl font-normal text-[#4A4B4F] mb-4 text-center md:text-left">
+            We help women, men, and children spot early signs of stress, burnout, or emotional imbalance — and gently guide them with expert-backed routines that support clarity, not overwhelm.
           </p>
           <p className="text-base sm:text-lg md:text-xl font-normal text-[#4A4B4F] text-center md:text-left">
-            Whether you're a mom navigating emotional exhaustion, or a therapist supporting dozens of children — LittleHugs was built to support you too.
+            Whether you’re a working mom juggling everything, a dad unsure how to express burnout, or a parent concerned about your child’s emotions — LittleHugs is here to support <strong>you</strong> too.
           </p>
         </div>
       </div>

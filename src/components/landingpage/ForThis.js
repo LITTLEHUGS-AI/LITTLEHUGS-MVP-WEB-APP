@@ -28,6 +28,13 @@ function ForThis() {
             image: "/landing/Mothers.png"
         },
         {
+            title: "Men",
+            sub_heading: "For Your Inner Balance",
+            description: `Track stress patterns, understand emotional shifts, and support your mental well-being — with clarity, confidence, and zero judgment./nBecause strength starts with self-awareness.`,
+            subDescription: 'Because strength starts with self-awareness.',
+            image: "/landing/Teenagers.png"
+        },
+        {
             title: "Caregivers",
             sub_heading: "For the Ones Who Hold Others",
             description: "Co-care tools to build deeper bonds while gently supporting those you love—and yourself",
@@ -138,12 +145,15 @@ function ForThis() {
                     <h3 className="text-xl sm:text-2xl md:text-[24px] font-[600] text-[#4A4B4F] mb-3 md:mb-4">
                         {selectedData.sub_heading}
                     </h3>
-                    <p className="text-base sm:text-lg text-[#4A4B4F] mb-6 md:mb-8">
+                    <p className="text-base sm:text-lg text-[#4A4B4F] mb-2">
                         {selectedData.description}
                     </p>
+                    {selectedData.subDescription && <p className="text-base sm:text-lg text-[#4A4B4F]">
+                        {selectedData.subDescription}
+                    </p>}
                     <button
                         onClick={() => { navigate("/assesment") }}
-                        className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-full text-sm sm:text-base"
+                        className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-full text-sm sm:text-base mt-6 md:mt-8"
                     >
                         Explore Our Programs
                     </button>
@@ -157,8 +167,8 @@ function ForThis() {
                         key={index}
                         onClick={() => setSelectedData(item)}
                         className={`px-3 py-1 rounded-full text-sm border transition-all ${selectedData.title === item.title
-                                ? "bg-[#4F7DDD] text-white border-[#4F7DDD]"
-                                : "bg-white text-[#4A4B4F] border-gray-300 hover:border-[#4F7DDD]"
+                            ? "bg-[#4F7DDD] text-white border-[#4F7DDD]"
+                            : "bg-white text-[#4A4B4F] border-gray-300 hover:border-[#4F7DDD]"
                             }`}
                     >
                         {item.title}

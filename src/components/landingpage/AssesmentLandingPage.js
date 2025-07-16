@@ -100,13 +100,12 @@ function AssesmentLandingPage() {
                     {/* Introduction Section */}
                     <div className="bg-white mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px]">
                         <div className="max-w-6xl mx-auto">
+                            <p className="text-gray-800 text-lg text-center md:text-xl lg:text-2xl font-semibold font-quicksand mb-4">At LittleHugs, we believe support should feel like care — not confusion.</p>
                             <p className="text-gray-800 text-lg md:text-xl lg:text-2xl font-normal font-quicksand mb-4">
-                                At LittleHugs, we believe that every woman, parent, and caregiver deserves support they can trust—
-                                without the overwhelm of medical jargon or the pressure of a diagnosis.
+                             Whether you're a woman navigating stress, a parent concerned about your child, or simply someone trying to understand your emotions — you deserve gentle, reliable guidance.
                             </p>
                             <p className="text-gray-800 text-lg md:text-xl lg:text-2xl font-normal font-quicksand">
-                                That's why we've built our self-check tools with compassion, clarity, and evidence-based insight—
-                                in collaboration with experts in emotional health, child development, hormonal wellness, and more.
+                               That’s why we’ve built our check-in tools with empathy, simplicity, and expert-backed insight — combining emotional wellness, child development, and hormonal care into one easy, human-first experience.
                             </p>
                         </div>
                     </div>

@@ -24,7 +24,7 @@ function Home() {
                 img: "/images/care_2.svg",
             },
             {
-                title: "Used by moms, women, caregivers, schools, and clinics",
+                title: "Used by Women, Men, Child, Working professionals, Schools, Clinics",
                 img: "/images/care_3.svg",
             },
             {

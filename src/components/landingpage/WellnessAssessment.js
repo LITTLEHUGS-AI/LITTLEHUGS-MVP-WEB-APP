@@ -35,18 +35,21 @@ const WellnessAssessment = ({ onClose, heading }) => {
         {heading === 1 ? (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            LittleHugs 360° Women's Wellness Program
+              LittleHugs 360° Women's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What the Program Covers:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Mood & emotional balance</li>
-                <li>Anxiety, overthinking</li>
-                <li>Physical energy & fatigue</li>
-                <li>Support systems in relationship quality</li>
-                <li>Self-care routines & burnout-warning sign</li>
+                <li>Mood & emotional regulation</li>
+                <li>Anxiety, mental overload, overthinking</li>
+                <li>Hormonal balance & fatigue (e.g., PMS, perimenopause, PCOS)</li>
+                <li>Self-image, body confidence & social comparison</li>
+                <li>Relationship health & parenting stress</li>
+                <li>Sleep habits, digital wellbeing, and rest patterns</li>
+                <li>Work-life burnout signs and emotional coping</li>
+                <li>Self-care rituals & early red flag detection</li>
               </ul>
             </div>
 
@@ -54,27 +57,33 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-6 sm:mb-8 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>HAC Wellness Score</li>
-                <li>Key theme insights (e.g. "You feel unsupported," "You're emotionally fatigued")</li>
-                <li>AI-supported nudges (swimming, rest rituals, conversation starter pools)</li>
-                <li>PDF summary with personal wellness trendline</li>
+                <li><b>HAC Wellness Score</b> across 20 life domains</li>
+                <li><b>Key insight flags</b> (e.g., “You may be in early burnout,” “Hormonal mood changes detected”)</li>
+                <li><b>AI-generated nudges</b> (e.g., journaling cues, body-awareness tools, calm-down rituals)</li>
+                <li><b>Personal wellness timeline</b> (PDF report with emotional patterns + suggestions)</li>
+                <li>Optional <b>Follow-up support path</b> (sleep reset, confidence builder, burnout toolkit)</li>
               </ul>
             </div>
           </>
         ) : heading === 2 ? (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            LittleHugs 360° Children's Wellness Program
+              LittleHugs 360° Children's Wellness Program
             </h1>
 
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What the Program Covers:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Developmental milestones (motor, speech, cognitive, social)</li>
-                <li>learning, autism signs, behavioral regulation</li>
-                <li>Mood, anxiety, social-emotional health</li>
-                <li>Growth, nutrition, sensory function, immunizations</li>
+                <li>Developmental milestones (language, motor skills, problem-solving)</li>
+                <li>Social-emotional learning (empathy, confidence, coping with change)</li>
+                <li>Behavioral signs (hyperactivity, aggression, emotional withdrawal)</li>
+                <li>Communication skills (speech clarity, understanding, social use of language)</li>
+                <li>School readiness (attention, memory, curiosity, early literacy/numerac</li>
+                <li>Sleep patterns, nutrition habits, and physical activity</li>
+                <li>Peer relationships, emotional safety, and self-esteem</li>
+                <li>Caregiver bonding, routines, and parenting stress</li>
+                <li>Environmental stability and access to safe support systems</li>
               </ul>
             </div>
 
@@ -82,28 +91,32 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-6 sm:mb-8 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>RAG status (Red/Amber/Green) for each domain</li>
-                <li>Risk flags and severity scores</li>
-                <li>Personalized insights, home strategies, and referral guidance</li>
-                <li>Shareable caregiver summary (optional PDF)</li>
+                <li><b>HAC Wellness Score</b> adapted to child age & domain relevance</li>
+                <li><b>Key growth & behavior insights</b> (e.g., “Signs of emotional withdrawal,” “Delayed speech milestones”)</li>
+                <li><b>AI-powered caregiver nudges</b> (e.g., play-based prompts, conversation starters, routine support)</li>
+                <li><b>Development & wellness summary</b> (PDF snapshot with trendlines & risk flags)</li>
+                <li>Optional <b>Guided care track</b> (e.g., language stimulation, emotion regulation, focus support)</li>
               </ul>
             </div>
           </>
         ) : (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-            LittleHugs Corporate Partnership Program
+             LittleHugs 360° Men’s Wellness Program
             </h1>
-
+            
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What it Program:</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What the Program Covers:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Self-Awareness: Emotions, triggers, strengths</li>
-                <li>Self-Regulation: Stress management, impulse control</li>
-                <li>Social Awareness: Empathy, inclusion, perspective-taking</li>
-                <li>Relationship Skills: Communication, boundaries, conflict resolution</li>
-                <li>Responsible Decision-Making: Ethics, reflection, choices</li>
+                <li>Emotional awareness, irritability, and resilience</li>
+                <li>Stress & burnout from work, caregiving, or identity roles</li>
+                <li>Hormonal wellness (e.g., testosterone-linked mood, energy dips)</li>
+                <li>Sleep issues, fatigue, and digital overstimulation</li>
+                <li>Body confidence, self-image, and aging transitions</li>
+                <li>Relationship satisfaction, parenting load, and co-parenting stress</li>
+                <li>Impulse control, anger management, and conflict resolution</li>
+                <li>Self-care awareness, loneliness, and mental load detection</li>
               </ul>
             </div>
 
@@ -111,11 +124,11 @@ const WellnessAssessment = ({ onClose, heading }) => {
             <div className="mb-6 sm:mb-8 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">Output:</h2>
               <ul className="list-disc list-inside text-gray-600 space-y-1 pl-2 sm:pl-4 text-sm sm:text-base">
-                <li>Domain scores: Thriving, Developing, Needs Support</li>
-                <li>Strengths/growth summary</li>
-                <li>Personalized action steps & micro-habits</li>
-                <li>Optional external feedback layer (for children or shared settings)</li>
-                <li>Referral suggestions for high emotional or relational concern</li>
+                <li><b>HAC Wellness Score</b> tailored to men’s 20-domain profile</li>
+                <li><b>Key emotional insights</b> (e.g., “You may be emotionally disconnected,” “Stress is impacting your energy”</li>
+                <li><b>AI-driven nudges</b> (e.g., movement prompts, self-reflection tools, anger diffusers)</li>
+                <li><b>ersonal wellness summary</b> with trendlines across sleep, mood, and energy</li>
+                <li>Optional <b>Guided plans </b> (e.g., stress reboot, fatherhood clarity, confidence reset)</li>
               </ul>
             </div>
           </>

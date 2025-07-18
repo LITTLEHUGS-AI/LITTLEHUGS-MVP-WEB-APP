@@ -22,7 +22,7 @@ function AssesmentLandingPage() {
             description: "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
         },
         {
-            title: "LittleHugs Corporate Partnership Program",
+            title: "LittleHugs 360° Men’s Wellness Program",
             description: "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
         },
     ];

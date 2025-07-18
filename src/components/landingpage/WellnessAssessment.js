@@ -102,9 +102,9 @@ const WellnessAssessment = ({ onClose, heading }) => {
         ) : (
           <>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center mt-2 px-4">
-              LittleHugs Corporate Partnership Program
+             LittleHugs 360° Men’s Wellness Program
             </h1>
-
+            
             {/* What it Assesses Section */}
             <div className="mb-4 sm:mb-6 px-2 sm:px-4">
               <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">What the Program Covers:</h2>

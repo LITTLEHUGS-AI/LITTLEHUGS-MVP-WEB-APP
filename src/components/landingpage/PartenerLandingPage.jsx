@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../common/Navbar.js';
-import { Link } from "react-router-dom";
 import routesConfig from '../../config/routesConfig.js';
 import DocumentHead from '../common/DocumentHead.js';
 import { apiClient } from '../../api/api-client.js';

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import routesConfig from '../../config/routesConfig.js';
 import DocumentHead from '../common/DocumentHead.js';
 import { apiClient } from '../../api/api-client.js';
+import { useWaitlist } from '../../lib/WaitlistContext';
 
 
 function PartenerLandingPage() {

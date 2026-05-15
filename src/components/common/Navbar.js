@@ -1,16 +1,16 @@
+// src/components/common/Navbar.js
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useWaitlist } from "../../lib/WaitlistContext";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showPartnerSubmenu, setShowPartnerSubmenu] = useState(false);
+  const { openWaitlist } = useWaitlist();
 
   const isActive = (path) => location.pathname === path;
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
@@ -32,10 +32,8 @@ const Navbar = () => {
           <Link to="/personal">For You</Link>
         </li>
 
-        {/* Corporate with dropdown */}
         <li className={`relative group ${(isActive("/partner") || isActive("/corporate") || isActive("/school") || isActive("/therapy-center")) ? "font-bold" : ""}`}>
           <Link to="/partner" className="cursor-pointer">For Partners</Link>
-
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white shadow-xl border w-48 rounded-lg z-50 p-4">
             <ul className="space-y-2">
               <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/corporate'>Corporates</Link></li>
@@ -49,10 +47,6 @@ const Navbar = () => {
           <Link to="/assesment">Programs</Link>
         </li>
 
-        {/* <li className={isActive("/pricingplans") ? "font-bold" : ""}>
-          <Link to="/pricingplans">Pricing</Link>
-        </li> */}
-
         <li className={isActive("/about") ? "font-bold" : ""}>
           <Link to="/about">About Us</Link>
         </li>
@@ -62,16 +56,13 @@ const Navbar = () => {
         </li>
       </ul>
 
-
       {/* CTA Button */}
-
       <button
-        onClick={() => navigate('/signup')}
-        className="w-[120px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
+        onClick={openWaitlist}
+        className="hidden lg:block w-[140px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
       >
-        Try For Free
+        Join Waitlist
       </button>
-
 
       {/* Mobile Menu Button */}
       <button
@@ -80,12 +71,10 @@ const Navbar = () => {
         aria-label="Toggle menu"
       >
         {isMenuOpen ? (
-          // X icon for close
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          // Hamburger icon
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -94,8 +83,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-white z-10 flex flex-col pt-20 px-6 pb-6 lg:hidden transition-transform duration-300 ease-in-out ${isMenuOpen ? "transform translate-x-0" : "transform translate-x-full"
-          }`}
+        className={`fixed inset-0 bg-white z-10 flex flex-col pt-20 px-6 pb-6 lg:hidden transition-transform duration-300 ease-in-out ${isMenuOpen ? "transform translate-x-0" : "transform translate-x-full"}`}
       >
         <ul className="flex flex-col items-center gap-6 text-[#4A4B4F] font-medium font-quicksand text-xl">
           <li className={isActive("/personal") ? "font-bold" : ""}>
@@ -110,37 +98,24 @@ const Navbar = () => {
               <button onClick={() => setShowPartnerSubmenu(!showPartnerSubmenu)}>
                 <svg
                   className={`w-4 h-4 transition-transform duration-200 ${showPartnerSubmenu ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
             </Link>
-
             {showPartnerSubmenu && (
               <ul className="mt-2 ml-4 space-y-3 text-base text-gray-600">
-                <li className={isActive("/corporate") ? "font-bold" : ""}>
-                  <Link to="/corporate" onClick={closeMenu}>Corporates</Link>
-                </li>
-                <li className={isActive("/school") ? "font-bold" : ""}>
-                  <Link to="/school" onClick={closeMenu}>Schools</Link>
-                </li>
-                <li className={isActive("/therapy-center") ? "font-bold" : ""}>
-                  <Link to="/therapy-center" onClick={closeMenu}>Therapy Center</Link>
-                </li>
+                <li className={isActive("/corporate") ? "font-bold" : ""}><Link to="/corporate" onClick={closeMenu}>Corporates</Link></li>
+                <li className={isActive("/school") ? "font-bold" : ""}><Link to="/school" onClick={closeMenu}>Schools</Link></li>
+                <li className={isActive("/therapy-center") ? "font-bold" : ""}><Link to="/therapy-center" onClick={closeMenu}>Therapy Center</Link></li>
               </ul>
             )}
           </li>
 
-
           <li className={isActive("/assesment") ? "font-bold" : ""}>
             <Link to="/assesment" onClick={closeMenu}>Programs</Link>
           </li>
-          {/* <li className={isActive("/pricingplans") ? "font-bold" : ""}>
-            <Link to="/pricingplans" onClick={closeMenu}>Pricing</Link>
-          </li> */}
           <li className={isActive("/about") ? "font-bold" : ""}>
             <Link to="/about" onClick={closeMenu}>About Us</Link>
           </li>
@@ -149,19 +124,13 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Mobile CTA */}
         <div className="mt-8 flex justify-center">
-          {!isActive("/contact") && (
-            <button
-              onClick={() => {
-                navigate('/signup');
-                closeMenu();
-              }}
-              className="w-full max-w-xs h-12 bg-[#4F7DDD] hover:bg-blue-700 text-white text-base font-medium px-4 py-2 rounded-[10px]"
-            >
-              Try For Free
-            </button>
-          )}
+          <button
+            onClick={() => { openWaitlist(); closeMenu(); }}
+            className="w-full max-w-xs h-12 bg-[#4F7DDD] hover:bg-blue-700 text-white text-base font-medium px-4 py-2 rounded-[10px]"
+          >
+            Join Waitlist
+          </button>
         </div>
       </div>
     </nav>

@@ -1,8 +1,10 @@
+// src/components/HeroSection.js
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { useWaitlist } from "../lib/WaitlistContext";
 
 const HeroSection = () => {
+  const { openWaitlist } = useWaitlist();
+
   return (
     <div
       className="w-full bg-[#FAF3ED] font-quicksand px-4 sm:px-6 md:px-[80px]"
@@ -13,25 +15,27 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="w-full lg:max-w-[630px] order-2 lg:order-1">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 leading-snug text-[#4A4B4F] text-center lg:text-left">
-             Check in with yourself — and your family — in just 5 minutes.
+              Check in with yourself — and your family — in just 5 minutes.
             </h1>
             <p className="text-base sm:text-lg md:text-xl leading-7 md:leading-8 text-[#4A4B4F] mb-6 text-center lg:text-left">
               <strong>LittleHugs</strong> is your everyday emotional wellness buddy. We help you spot early signs of stress, burnout, or imbalance — for you, your partner, or your child — and guide you toward gentle, expert-backed care.
-            <br />
-            <i className="mt-4">No pressure. No overwhelm. Just clarity, calm, and care — one check-in at a time.</i>
+              <br />
+              <i className="mt-4">No pressure. No overwhelm. Just clarity, calm, and care — one check-in at a time.</i>
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
-              <Link to="/assesment" className="w-full sm:w-auto">
-                <button className="w-full sm:w-auto bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                  Explore our Programs
-                </button>
-              </Link>
-              <Link to="/partner#book-a-demo" className="w-full sm:w-auto">
-                <button className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition">
-                  Partner with us
-                </button>
-              </Link>
+              <button
+                onClick={openWaitlist}
+                className="w-full sm:w-auto bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition"
+              >
+                Join the Waitlist
+              </button>
+              <button
+                onClick={openWaitlist}
+                className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition"
+              >
+                Partner with us
+              </button>
             </div>
           </div>
 

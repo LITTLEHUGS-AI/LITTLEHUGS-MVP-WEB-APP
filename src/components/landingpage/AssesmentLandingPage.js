@@ -2,12 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import Navbar from '../common/Navbar';
 import WellnessAssessment from "./WellnessAssessment";
-import { useNavigate } from 'react-router-dom';
+import { useWaitlist } from '../../lib/WaitlistContext';
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
 
 function AssesmentLandingPage() {
-    const navigate = useNavigate();
+    const { openWaitlist } = useWaitlist();
     const [showPopup, setShowPopup] = useState(false);
     const [titleData, setTitleData] = useState("");
     const { title, description } = routesConfig.assesmentLanding;
@@ -205,7 +205,7 @@ function AssesmentLandingPage() {
                             {/* Join Button */}
                             <div className="mt-6 md:mt-8">
                                 <button
-                                    onClick={() => navigate("/signup")}
+                                    onClick={openWaitlist}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-5 md:px-6 py-2 rounded-full transition text-sm md:text-base"
                                 >
                                     Join

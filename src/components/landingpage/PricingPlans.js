@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../common/Navbar'
 import { Link, useNavigate } from "react-router-dom";
+import { useWaitlist } from '../../lib/WaitlistContext';
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
 import { Building, Check, Heart, Star, Users } from 'lucide-react';
@@ -115,6 +116,7 @@ const features = [
 
 const PricingPlans = () => {
   const navigate = useNavigate();
+  const { openWaitlist } = useWaitlist();
   const { title, description } = routesConfig.pricingPlans;
 
   return (
@@ -195,12 +197,21 @@ const PricingPlans = () => {
                     )}
                   </div>
 
-                  <Link
-                    to={plan.link}
-                    className={`mt-auto mb-2 mx-4 py-4 px-6 rounded-xl font-semibold text-lg text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${plan.buttonStyle}`}
-                  >
-                    {plan.buttonText}
-                  </Link>
+                  {plan.link === '/signup' ? (
+                    <button
+                      onClick={openWaitlist}
+                      className={`mt-auto mb-2 mx-4 py-4 px-6 rounded-xl font-semibold text-lg text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${plan.buttonStyle}`}
+                    >
+                      Join Waitlist
+                    </button>
+                  ) : (
+                    <Link
+                      to={plan.link}
+                      className={`mt-auto mb-2 mx-4 py-4 px-6 rounded-xl font-semibold text-lg text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${plan.buttonStyle}`}
+                    >
+                      {plan.buttonText}
+                    </Link>
+                  )}
                 </div>
               );
             })}

@@ -1,8 +1,9 @@
 import Navbar from '../common/Navbar.js';
-import { Link } from 'react-router-dom';
+import { useWaitlist } from '../../lib/WaitlistContext';
 
 
 export default function TherapyCenter() {
+    const { openWaitlist } = useWaitlist();
     return (
         <div className="min-h-screen font-quicksand bg-white">
 
@@ -19,9 +20,9 @@ export default function TherapyCenter() {
                         <p className="text-gray-700 mb-8 max-w-md">
                             A gentle, science-backed digital tool to help therapists understand and support their clients between visits — with emotional check-ins, self-care routines, and early signal detection.
                         </p>
-                        <Link to="/signup" className="bg-gray-800 text-white px-6 py-3 rounded-3xl hover:bg-gray-700 transition-colors">
+                        <button onClick={openWaitlist} className="bg-gray-800 text-white px-6 py-3 rounded-3xl hover:bg-gray-700 transition-colors">
                             Partner with Us
-                        </Link>
+                        </button>
                     </div>
                     <div className="flex-1 flex justify-center">
                         <div className="bg-[#FFFAE2] rounded-full p-10 w-80 h-80 flex items-center justify-center">
@@ -247,11 +248,9 @@ export default function TherapyCenter() {
                     {/* Center - Get LittleHugs */}
                     <div className="mb-0 sm:mb-4 md:mb-9 text-center">
                         <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
-                        <Link to="/signup">
-                            <button className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
+                        <button onClick={openWaitlist} className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
                                 Get a Demo
                             </button>
-                        </Link>
                     </div>
 
                 </div>

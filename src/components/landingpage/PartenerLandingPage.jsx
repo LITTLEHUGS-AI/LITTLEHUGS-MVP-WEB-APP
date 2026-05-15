@@ -7,6 +7,7 @@ import { apiClient } from '../../api/api-client.js';
 
 
 function PartenerLandingPage() {
+  const { openWaitlist } = useWaitlist();
   const { title, description } = routesConfig.partenerLanding;
 
   const [showPopup, setShowPopup] = useState(null);
@@ -727,11 +728,9 @@ function PartenerLandingPage() {
             {/* Center - Get LittleHugs */}
             <div className="mb-0 sm:mb-4 md:mb-9 text-center">
               <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
-              <Link to="/signup">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
+              <button onClick={openWaitlist} className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
                   Get a Demo
                 </button>
-              </Link>
             </div>
 
             {/* Right - Support */}

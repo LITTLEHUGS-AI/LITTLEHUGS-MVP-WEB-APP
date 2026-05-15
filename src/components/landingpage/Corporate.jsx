@@ -1,8 +1,9 @@
 import React from 'react';
 import Navbar from '../common/Navbar';
-import { Link } from 'react-router-dom';
+import { useWaitlist } from '../../lib/WaitlistContext';
 
 export default function CorporateLandingPage() {
+  const { openWaitlist } = useWaitlist();
   return (
     <div className="min-h-screen bg-white">
 
@@ -20,9 +21,9 @@ export default function CorporateLandingPage() {
               <p className="text-lg mb-8 opacity-90 leading-relaxed">
                 Our platform provides preventive, personalized, and stigma-free emotional care, helping your people feel seen, supported, and stronger — before things break down.
               </p>
-              <Link to="/signup" className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+              <button onClick={openWaitlist} className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
                 Partner with Us
-              </Link>
+              </button>
             </div>
             <div className="hidden md:block">
               <div className="w-80 h-80 bg-cream-100 rounded-full flex items-center justify-center relative">
@@ -225,11 +226,9 @@ export default function CorporateLandingPage() {
           {/* Center - Get LittleHugs */}
           <div className="mb-0 sm:mb-4 md:mb-9 text-center">
             <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
-            <Link to="/signup">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
+            <button onClick={openWaitlist} className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
                 Get a Demo
               </button>
-            </Link>
           </div>
 
         </div>

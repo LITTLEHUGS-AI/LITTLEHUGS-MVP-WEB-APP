@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useWaitlist } from "../../lib/WaitlistContext";
 import Navbar from '../common/Navbar.js';
 import routesConfig from '../../config/routesConfig.js';
 import DocumentHead from '../common/DocumentHead.js';
@@ -6,6 +6,7 @@ import DocumentHead from '../common/DocumentHead.js';
 
 function SchoolPartnerPage() {
   const { title, description } = routesConfig.schoolPartnerLanding;
+  const { openWaitlist } = useWaitlist();
 
   return (
     <>
@@ -31,9 +32,9 @@ function SchoolPartnerPage() {
                 Whether you're a pre-primary center or a K-12 institution, our platform is built to identify emotional red flags early, empower caregivers, and foster a culture of empathy and resilience.
               </p>
               <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
-                <Link to='/signup' className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
+                <button onClick={openWaitlist} className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
                   Partner with Us
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -193,11 +194,9 @@ function SchoolPartnerPage() {
             {/* Center - Get LittleHugs */}
             <div className="mb-0 sm:mb-4 md:mb-9 text-center">
               <h3 className="font-medium font-quicksand text-xl sm:text-2xl md:text-[28px] text-gray-800">Get LittleHugs</h3>
-              <Link to="/signup">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
+              <button onClick={openWaitlist} className="bg-blue-500 hover:bg-blue-600 text-white mt-2 sm:mt-3 md:mt-4 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition text-sm sm:text-base">
                   Get a Demo
                 </button>
-              </Link>
             </div>
 
           </div>

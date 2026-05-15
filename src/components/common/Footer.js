@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useWaitlist } from "../../lib/WaitlistContext";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const { openWaitlist } = useWaitlist();
 
   return (
     <>
@@ -38,11 +40,9 @@ const Footer = () => {
                   Explore our Programs
                 </button>
               </Link>
-              <Link to="/signup" className="w-full sm:w-auto">
-                <button className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition">
-                  Partner with us
-                </button>
-              </Link>
+              <button onClick={openWaitlist} className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition">
+                Partner with us
+              </button>
             </div>
           </div>
 

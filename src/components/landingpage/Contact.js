@@ -227,15 +227,6 @@ const Contact = () => {
                                 </div>
                             </div>
 
-                            {/* Right Side */}
-                            <div className="bg-gray-50 rounded-2xl ring-1 ring-gray-300 p-8">
-                                <h3 className="text-xl font-semibold text-gray-800 mb-4">Bangalore Office</h3>
-                                <div className="space-y-2 text-gray-600">
-                                    <p>Villa No 34, M1 Home Terra Alegria Hoskote,</p>
-                                    <p>Bangalore 562129</p>
-                                    <p className="font-medium">+91 9028396098</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </section>

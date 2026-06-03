@@ -6,7 +6,6 @@ import { useWaitlist } from "../../lib/WaitlistContext";
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showPartnerSubmenu, setShowPartnerSubmenu] = useState(false);
   const { openWaitlist } = useWaitlist();
 
   const isActive = (path) => location.pathname === path;
@@ -32,16 +31,6 @@ const Navbar = () => {
           <Link to="/personal">For You</Link>
         </li>
 
-        <li className={`relative group ${(isActive("/partner") || isActive("/corporate") || isActive("/school") || isActive("/therapy-center")) ? "font-bold" : ""}`}>
-          <Link to="/partner" className="cursor-pointer">For Partners</Link>
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 hidden group-hover:block bg-white shadow-xl border w-48 rounded-lg z-50 p-4">
-            <ul className="space-y-2">
-              <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/corporate'>Corporates</Link></li>
-              <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/school'>Schools</Link></li>
-              <li className="text-gray-600 hover:text-gray-800 cursor-pointer"><Link to='/therapy-center'>Therapy Center</Link></li>
-            </ul>
-          </div>
-        </li>
 
         <li className={isActive("/assesment") ? "font-bold" : ""}>
           <Link to="/assesment">Programs</Link>
@@ -90,28 +79,6 @@ const Navbar = () => {
             <Link to="/personal" onClick={closeMenu}>For You</Link>
           </li>
 
-          <li>
-            <Link to="/partner"
-              className={`flex justify-between w-full items-center ${isActive("/partner") || isActive("/corporate") || isActive("/school") || isActive("/therapy-center") ? "font-bold" : ""}`}
-            >
-              For Partners
-              <button onClick={() => setShowPartnerSubmenu(!showPartnerSubmenu)}>
-                <svg
-                  className={`w-4 h-4 transition-transform duration-200 ${showPartnerSubmenu ? "rotate-180" : ""}`}
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </Link>
-            {showPartnerSubmenu && (
-              <ul className="mt-2 ml-4 space-y-3 text-base text-gray-600">
-                <li className={isActive("/corporate") ? "font-bold" : ""}><Link to="/corporate" onClick={closeMenu}>Corporates</Link></li>
-                <li className={isActive("/school") ? "font-bold" : ""}><Link to="/school" onClick={closeMenu}>Schools</Link></li>
-                <li className={isActive("/therapy-center") ? "font-bold" : ""}><Link to="/therapy-center" onClick={closeMenu}>Therapy Center</Link></li>
-              </ul>
-            )}
-          </li>
 
           <li className={isActive("/assesment") ? "font-bold" : ""}>
             <Link to="/assesment" onClick={closeMenu}>Programs</Link>

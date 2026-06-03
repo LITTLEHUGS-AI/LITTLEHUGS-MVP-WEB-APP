@@ -21,11 +21,7 @@ const MainHeader = () => {
                             Explore our Programs
                         </button>
                     </Link>
-                    <Link to="/partner#book-a-demo" className="w-full sm:w-auto mt-3 sm:mt-0">
-                        <button className="px-4 sm:px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] transition w-full sm:w-auto text-sm sm:text-base">
-                            Partner with us
-                        </button>
-                    </Link>
+
                 </div>
             </div>
             <div className="flex justify-center items-center p-3 sm:p-4 md:p-5">

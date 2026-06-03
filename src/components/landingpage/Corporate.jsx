@@ -21,9 +21,7 @@ export default function CorporateLandingPage() {
               <p className="text-lg mb-8 opacity-90 leading-relaxed">
                 Our platform provides preventive, personalized, and stigma-free emotional care, helping your people feel seen, supported, and stronger — before things break down.
               </p>
-              <button onClick={openWaitlist} className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-                Partner with Us
-              </button>
+
             </div>
             <div className="hidden md:block">
               <div className="w-80 h-80 bg-cream-100 rounded-full flex items-center justify-center relative">

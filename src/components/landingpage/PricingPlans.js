@@ -304,11 +304,7 @@ const PricingPlans = () => {
                   Explore our Programs
                 </button>
               </Link>
-              <Link to="/partner" className="w-full sm:w-auto">
-                <button className="w-full border border-[#283036] text-[#283036] px-6 md:px-8 py-2 md:py-3 rounded-full font-semibold text-base md:text-lg font-quicksand hover:bg-[#283036] hover:text-white transition">
-                  Partner with us
-                </button>
-              </Link>
+
             </div>
           </div>
         </div>

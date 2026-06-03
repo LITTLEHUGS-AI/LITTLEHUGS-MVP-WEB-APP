@@ -32,9 +32,7 @@ function SchoolPartnerPage() {
                 Whether you're a pre-primary center or a K-12 institution, our platform is built to identify emotional red flags early, empower caregivers, and foster a culture of empathy and resilience.
               </p>
               <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
-                <button onClick={openWaitlist} className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                  Partner with Us
-                </button>
+
               </div>
             </div>
 

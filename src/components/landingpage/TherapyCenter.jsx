@@ -20,9 +20,7 @@ export default function TherapyCenter() {
                         <p className="text-gray-700 mb-8 max-w-md">
                             A gentle, science-backed digital tool to help therapists understand and support their clients between visits — with emotional check-ins, self-care routines, and early signal detection.
                         </p>
-                        <button onClick={openWaitlist} className="bg-gray-800 text-white px-6 py-3 rounded-3xl hover:bg-gray-700 transition-colors">
-                            Partner with Us
-                        </button>
+
                     </div>
                     <div className="flex-1 flex justify-center">
                         <div className="bg-[#FFFAE2] rounded-full p-10 w-80 h-80 flex items-center justify-center">

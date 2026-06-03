@@ -224,6 +224,12 @@ const Contact = () => {
                                     <a href="https://www.facebook.com/profile.php?id=61577311737612#" target='_blank' rel="noreferrer" className="w-12 h-12">
                                         <img className="w-full h-full" alt='facebook' src='/images/contactus/facebook.png' />
                                     </a>
+                                    <a href="https://www.youtube.com/@OurLittleHugs" target='_blank' rel="noreferrer" className="w-12 h-12 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-full h-full">
+                                            <rect width="48" height="48" rx="10" fill="#FF0000"/>
+                                            <polygon points="20,15 20,33 34,24" fill="white"/>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
 

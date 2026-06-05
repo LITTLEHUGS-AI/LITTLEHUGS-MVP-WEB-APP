@@ -237,8 +237,8 @@ const WomenWellnessFlow = ({ onClose }) => {
   const handleSingleSelect = (step, option) => {
     const mapped = step.valueMap ? (step.valueMap[option] ?? option) : option;
     setAnswers(prev => ({ ...prev, [step.id]: mapped }));
-    // Auto-advance on single select after a short delay
-    setTimeout(() => setStepIdx(i => Math.min(i + 1, TOTAL_STEPS - 1)), 300);
+    // Auto-advance; if last step, submit instead
+    setTimeout(() => advance(), 300);
   };
 
   const handleMultiToggle = (step, option) => {
@@ -493,8 +493,8 @@ const WomenWellnessFlow = ({ onClose }) => {
                       ← Back
                     </button>
                   )}
-                  {/* Show Next button for text/number/multi types; single/select auto-advance */}
-                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi') && (
+                  {/* Next / Submit button — always show for text/number/multi, and always on last step */}
+                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi' || stepIdx === TOTAL_STEPS - 1) && (
                     <button
                       onClick={advance}
                       disabled={!isAnswered(step)}

@@ -1,9 +1,9 @@
 // src/components/HeroSection.js
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useWellness } from "../lib/WellnessContext";
 
 const HeroSection = () => {
-  const navigate = useNavigate();
+  const { openWellnessFlow } = useWellness();
 
   return (
     <div
@@ -25,12 +25,17 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
               <button
-                onClick={() => navigate('/signup')}
-                className="w-full sm:w-auto bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition"
+                onClick={openWellnessFlow}
+                className="w-full sm:w-auto bg-[#1E2C2B] text-white px-6 py-2 rounded-full hover:bg-[#111818] transition"
               >
-                Get Started
+                Take a Wellness Check-in
               </button>
-
+              <button
+                onClick={openWellnessFlow}
+                className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition"
+              >
+                Try it free →
+              </button>
             </div>
           </div>
 

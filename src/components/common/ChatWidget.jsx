@@ -31,7 +31,6 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showStarters, setShowStarters] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -56,7 +55,6 @@ export default function ChatWidget() {
       if (!trimmed || isLoading) return;
 
       setShowStarters(false);
-      setHasError(false);
 
       const userMsg = { role: "user", content: trimmed };
       const updatedMessages = [...messages, userMsg];
@@ -85,7 +83,6 @@ export default function ChatWidget() {
           { role: "assistant", content: data.message },
         ]);
       } catch {
-        setHasError(true);
         setMessages((prev) => [
           ...prev,
           {

@@ -1,9 +1,9 @@
 // src/components/HeroSection.js
 import React from "react";
-import { useWaitlist } from "../lib/WaitlistContext";
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
-  const { openWaitlist } = useWaitlist();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -25,10 +25,10 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
               <button
-                onClick={openWaitlist}
+                onClick={() => navigate('/signup')}
                 className="w-full sm:w-auto bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition"
               >
-                Join the Waitlist
+                Get Started
               </button>
 
             </div>

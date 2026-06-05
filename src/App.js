@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "./lib/useToastContext";
 import { WaitlistProvider } from "./lib/WaitlistContext";
-import WaitlistModal from "./components/common/WaitlistModal";
 import ChatWidget from "./components/common/ChatWidget";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,7 +36,6 @@ const App = () => {
         />
         <AuthProvider>
           <WaitlistProvider>
-            <WaitlistModal />
             <AppRoutes />
             <ChatWidget />
           </WaitlistProvider>

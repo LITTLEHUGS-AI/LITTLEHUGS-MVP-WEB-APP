@@ -1,12 +1,11 @@
 // src/components/common/Navbar.js
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useWaitlist } from "../../lib/WaitlistContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { openWaitlist } = useWaitlist();
 
   const isActive = (path) => location.pathname === path;
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -30,28 +29,32 @@ const Navbar = () => {
         <li className={isActive("/personal") ? "font-bold" : ""}>
           <Link to="/personal">For You</Link>
         </li>
-
-
         <li className={isActive("/assesment") ? "font-bold" : ""}>
           <Link to="/assesment">Programs</Link>
         </li>
-
         <li className={isActive("/about") ? "font-bold" : ""}>
           <Link to="/about">About Us</Link>
         </li>
-
         <li className={isActive("/contact") ? "font-bold" : ""}>
           <Link to="/contact">Contact Us</Link>
         </li>
       </ul>
 
-      {/* CTA Button */}
-      <button
-        onClick={openWaitlist}
-        className="hidden lg:block w-[140px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
-      >
-        Join Waitlist
-      </button>
+      {/* Desktop CTA — Sign In + Get Started */}
+      <div className="hidden lg:flex items-center gap-3">
+        <Link
+          to="/signin"
+          className="text-[#4F7DDD] font-medium font-quicksand text-base hover:underline"
+        >
+          Sign In
+        </Link>
+        <button
+          onClick={() => navigate("/signup")}
+          className="w-[140px] h-10 sm:h-[42px] bg-[#4F7DDD] hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-[10px]"
+        >
+          Get Started
+        </button>
+      </div>
 
       {/* Mobile Menu Button */}
       <button
@@ -78,8 +81,6 @@ const Navbar = () => {
           <li className={isActive("/personal") ? "font-bold" : ""}>
             <Link to="/personal" onClick={closeMenu}>For You</Link>
           </li>
-
-
           <li className={isActive("/assesment") ? "font-bold" : ""}>
             <Link to="/assesment" onClick={closeMenu}>Programs</Link>
           </li>
@@ -91,12 +92,19 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <Link
+            to="/signin"
+            onClick={closeMenu}
+            className="text-[#4F7DDD] font-medium font-quicksand text-base hover:underline"
+          >
+            Sign In
+          </Link>
           <button
-            onClick={() => { openWaitlist(); closeMenu(); }}
+            onClick={() => { navigate("/signup"); closeMenu(); }}
             className="w-full max-w-xs h-12 bg-[#4F7DDD] hover:bg-blue-700 text-white text-base font-medium px-4 py-2 rounded-[10px]"
           >
-            Join Waitlist
+            Get Started
           </button>
         </div>
       </div>

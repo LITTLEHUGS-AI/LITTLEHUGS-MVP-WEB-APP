@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useWaitlist } from "../../lib/WaitlistContext";
+import { useNavigate } from 'react-router-dom';
 
 const WellnessAssessment = ({ onClose, heading }) => {
-  const { openWaitlist } = useWaitlist();
+  const navigate = useNavigate();
 
   // Prevent body scrolling when modal is open
   useEffect(() => {
@@ -141,7 +141,7 @@ const WellnessAssessment = ({ onClose, heading }) => {
         {/* Action Button */}
         <div className="flex justify-center px-2 sm:px-4 pb-2 sm:pb-4">
           <button
-            onClick={openWaitlist}
+            onClick={() => navigate('/signup')}
             className="bg-[#1E2C2B] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full hover:bg-[#111818] transition font-medium text-sm sm:text-base w-full sm:w-auto sm:min-w-[200px]"
           >
             Take quick assessment

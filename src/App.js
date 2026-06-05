@@ -6,7 +6,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "./lib/useToastContext";
 import { WaitlistProvider } from "./lib/WaitlistContext";
+import { WellnessProvider, useWellness } from "./lib/WellnessContext";
+import WaitlistModal from "./components/common/WaitlistModal";
 import ChatWidget from "./components/common/ChatWidget";
+import WomenWellnessFlow from "./components/landingpage/WomenWellnessFlow";
+
+// Inner component so it can consume WellnessContext
+const WellnessFlowMount = () => {
+  const { isOpen, closeWellnessFlow } = useWellness();
+  return isOpen ? <WomenWellnessFlow onClose={closeWellnessFlow} /> : null;
+};
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
@@ -36,8 +45,12 @@ const App = () => {
         />
         <AuthProvider>
           <WaitlistProvider>
-            <AppRoutes />
-            <ChatWidget />
+            <WellnessProvider>
+              <WaitlistModal />
+              <WellnessFlowMount />
+              <AppRoutes />
+              <ChatWidget />
+            </WellnessProvider>
           </WaitlistProvider>
         </AuthProvider>
       </ToastProvider>

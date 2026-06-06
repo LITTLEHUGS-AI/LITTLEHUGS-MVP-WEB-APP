@@ -3,7 +3,7 @@ import Navbar from '../common/Navbar'
 import MainHeader from './MainHeader'
 import EverydayCare from '../EverydayCare'
 import WhyWeExist from './WhyWeExist'
-import OurPartner from './OurPartner'
+// import OurPartner from './OurPartner' — hidden
 import JoinMovement from './JoinMovement'
 import DocumentHead from '../common/DocumentHead'
 import routesConfig from '../../config/routesConfig'

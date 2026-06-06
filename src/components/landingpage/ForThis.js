@@ -28,13 +28,6 @@ function ForThis() {
             image: "/landing/Mothers.png"
         },
         {
-            title: "Men",
-            sub_heading: "For Your Inner Balance",
-            description: `Track stress patterns, understand emotional shifts, and support your mental well-being — with clarity, confidence, and zero judgment./nBecause strength starts with self-awareness.`,
-            subDescription: 'Because strength starts with self-awareness.',
-            image: "/landing/Teenagers.png"
-        },
-        {
             title: "Caregivers",
             sub_heading: "For the Ones Who Hold Others",
             description: "Co-care tools to build deeper bonds while gently supporting those you love—and yourself",

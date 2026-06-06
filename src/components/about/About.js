@@ -49,7 +49,7 @@ function About() {
                     features={everyDayCareData.feature}
                 />
                 <WhyWeExist />
-                <OurPartner />
+                {/* <OurPartner /> — hidden, Meet Our Experts section */}
                 <JoinMovement />
             </div>
         </>

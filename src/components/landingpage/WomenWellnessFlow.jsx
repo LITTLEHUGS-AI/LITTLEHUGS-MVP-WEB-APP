@@ -710,7 +710,7 @@ const WomenWellnessFlow = ({ onClose }) => {
                     const score = computeWellnessScore(assessment.questions, qAnswers);
                     const { label } = scoreColour(score);
                     const top3 = assessment.domains.slice(0,3).join(', ');
-                    const text = `Just got my wellness score — ${score}/100 (${label} 🌱). My top areas: ${top3}. Try yours: https://ourlittlehugs.com`;
+                    const text = `Just got my wellness score — ${score}/100 (${label} 🌱). My top areas: ${top3}. Try yours: https://littlehugs.online`;
                     if (navigator.share) {
                       navigator.share({ text });
                     } else {

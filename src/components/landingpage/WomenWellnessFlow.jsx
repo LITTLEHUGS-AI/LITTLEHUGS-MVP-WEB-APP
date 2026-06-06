@@ -498,7 +498,7 @@ const WomenWellnessFlow = ({ onClose }) => {
 
                 {apiError && stepIdx === TOTAL_STEPS - 1 && (
                   <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs">
-                    {apiError} — The service may be waking up. Please try again in a moment.
+                    {apiError}
                   </div>
                 )}
 
@@ -512,16 +512,14 @@ const WomenWellnessFlow = ({ onClose }) => {
                       ← Back
                     </button>
                   )}
-                  {/* Next / Submit button — always show for text/number/multi, and always on last step */}
-                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi' || stepIdx === TOTAL_STEPS - 1) && (
-                    <button
-                      onClick={advance}
-                      disabled={!isAnswered(step)}
-                      className="flex-1 bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium disabled:opacity-40 hover:bg-[#111818] transition"
-                    >
-                      {stepIdx === TOTAL_STEPS - 1 ? 'Generate my check-in →' : 'Next →'}
-                    </button>
-                  )}
+                  {/* Next / Submit — always visible as fallback; single/select also auto-advance on pick */}
+                  <button
+                    onClick={advance}
+                    disabled={!isAnswered(step)}
+                    className="flex-1 bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium disabled:opacity-40 hover:bg-[#111818] transition"
+                  >
+                    {stepIdx === TOTAL_STEPS - 1 ? 'Generate my check-in →' : 'Next →'}
+                  </button>
                 </div>
               </div>
             );
@@ -535,7 +533,7 @@ const WomenWellnessFlow = ({ onClose }) => {
               <p className="text-gray-400 text-xs mt-2">This takes around 30–60 seconds — please keep this window open</p>
               {loadingSeconds >= 30 && (
                 <p className="text-purple-500 text-xs mt-3 animate-pulse">
-                  Still working… AI takes a moment to personalise everything for you 💗
+                  Still working… our system is analysing your responses 💗
                 </p>
               )}
             </div>

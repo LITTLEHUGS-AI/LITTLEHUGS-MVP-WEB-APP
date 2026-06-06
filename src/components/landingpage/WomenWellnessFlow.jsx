@@ -153,9 +153,11 @@ const STEPS = [
 
 const LOADING_MESSAGES = [
   'Understanding your wellness profile…',
-  'Finding the domains that matter most to you…',
-  'Crafting personalised questions just for you…',
-  'Almost ready…',
+  'Analysing what matters most to you…',
+  'Mapping your emotional landscape…',
+  'Selecting the right domains for you…',
+  'Crafting personalised questions…',
+  'Almost there — putting it all together…',
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -209,10 +211,18 @@ const WomenWellnessFlow = ({ onClose }) => {
   const [qAnswers, setQAnswers] = useState([]);
   const [loadingMsg, setLoadingMsg] = useState(0);
 
-  // Rotate loading messages
+  // Rotate loading messages (slower — 4s each so they don't loop too fast)
   useEffect(() => {
     if (phase !== 'loading') return;
-    const id = setInterval(() => setLoadingMsg(m => (m + 1) % LOADING_MESSAGES.length), 2200);
+    const id = setInterval(() => setLoadingMsg(m => (m + 1) % LOADING_MESSAGES.length), 4000);
+    return () => clearInterval(id);
+  }, [phase]);
+
+  // Track elapsed time during loading so we can show a patience note
+  const [loadingSeconds, setLoadingSeconds] = useState(0);
+  useEffect(() => {
+    if (phase !== 'loading') { setLoadingSeconds(0); return; }
+    const id = setInterval(() => setLoadingSeconds(s => s + 1), 1000);
     return () => clearInterval(id);
   }, [phase]);
 
@@ -304,12 +314,16 @@ const WomenWellnessFlow = ({ onClose }) => {
   const submitAssessment = useCallback(async () => {
     setPhase('loading');
     setApiError('');
+    // Abort after 130 s (backend timeout is 120 s)
+    const controller = new AbortController();
+    const abortTimer = setTimeout(() => controller.abort(), 130_000);
     try {
       const body = buildRequest();
       const res = await fetch(`${API_URL}/api/assessment/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: controller.signal,
       });
 
       if (!res.ok) {
@@ -327,9 +341,14 @@ const WomenWellnessFlow = ({ onClose }) => {
       setQAnswers([]);
       setPhase('assessment');
     } catch (e) {
-      setApiError(e.message || 'Something went wrong. Please try again.');
+      const msg = e.name === 'AbortError'
+        ? 'This is taking longer than expected. Please try again.'
+        : (e.message || 'Something went wrong. Please try again.');
+      setApiError(msg);
       setPhase('questions');
-      setStepIdx(TOTAL_STEPS - 1); // back to last step
+      setStepIdx(TOTAL_STEPS - 1);
+    } finally {
+      clearTimeout(abortTimer);
     }
   }, [buildRequest, TOTAL_STEPS]);
 
@@ -513,7 +532,12 @@ const WomenWellnessFlow = ({ onClose }) => {
             <div className="flex flex-col items-center justify-center py-14 text-center">
               <div className="w-14 h-14 border-4 border-[#E8E0F3] border-t-[#1E2C2B] rounded-full animate-spin mb-6" />
               <p className="text-[#1E2C2B] font-semibold text-base mb-1">{LOADING_MESSAGES[loadingMsg]}</p>
-              <p className="text-gray-400 text-xs mt-2">This may take up to 30 seconds</p>
+              <p className="text-gray-400 text-xs mt-2">This takes around 30–60 seconds — please keep this window open</p>
+              {loadingSeconds >= 30 && (
+                <p className="text-purple-500 text-xs mt-3 animate-pulse">
+                  Still working… AI takes a moment to personalise everything for you 💗
+                </p>
+              )}
             </div>
           )}
 

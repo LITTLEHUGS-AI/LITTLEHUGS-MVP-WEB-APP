@@ -220,6 +220,13 @@ const WomenWellnessFlow = ({ onClose }) => {
 
   // Track elapsed time during loading so we can show a patience note
   const [loadingSeconds, setLoadingSeconds] = useState(0);
+
+  // Email capture state
+  const [captureEmail, setCaptureEmail] = useState('');
+  const [captureEmailSent, setCaptureEmailSent] = useState(false);
+  const [captureEmailLoading, setCaptureEmailLoading] = useState(false);
+  const [captureEmailError, setCaptureEmailError] = useState('');
+  const [shareCopied, setShareCopied] = useState(false);
   useEffect(() => {
     if (phase !== 'loading') { setLoadingSeconds(0); return; }
     const id = setInterval(() => setLoadingSeconds(s => s + 1), 1000);
@@ -641,16 +648,92 @@ const WomenWellnessFlow = ({ onClose }) => {
                   This is a wellness reflection tool, not a clinical diagnosis. If you're struggling, please reach out to a qualified professional.
                 </p>
 
+                {/* ── Email Capture ── */}
+                {!captureEmailSent ? (
+                  <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-2xl p-4 mb-4">
+                    <p className="text-sm font-semibold text-[#166534] mb-1">💗 Save your wellness snapshot</p>
+                    <p className="text-xs text-[#4b7a5e] mb-3">Get your score + 3 personalised habits in your inbox.</p>
+                    <input
+                      type="email"
+                      placeholder="Your email address"
+                      value={captureEmail}
+                      onChange={e => { setCaptureEmail(e.target.value); setCaptureEmailError(''); }}
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm mb-2 focus:outline-none focus:border-[#1E2C2B]"
+                    />
+                    {captureEmailError && <p className="text-red-500 text-xs mb-2">{captureEmailError}</p>}
+                    <button
+                      disabled={captureEmailLoading}
+                      onClick={async () => {
+                        if (!captureEmail || !captureEmail.includes('@')) {
+                          setCaptureEmailError('Please enter a valid email address.');
+                          return;
+                        }
+                        setCaptureEmailLoading(true);
+                        try {
+                          const score = computeWellnessScore(assessment.questions, qAnswers);
+                          const { label } = scoreColour(score);
+                          const res = await fetch(`${API_URL}/api/lead/capture`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              name: profileName || 'Friend',
+                              email: captureEmail,
+                              score,
+                              label,
+                              domains: assessment.domains.slice(0, 5),
+                              overall_assessment: assessment.overall_assessment || '',
+                            }),
+                          });
+                          if (!res.ok) throw new Error('Failed');
+                          setCaptureEmailSent(true);
+                        } catch {
+                          setCaptureEmailError('Something went wrong. Please try again.');
+                        } finally {
+                          setCaptureEmailLoading(false);
+                        }
+                      }}
+                      className="w-full bg-[#1E2C2B] text-white py-2.5 rounded-full text-sm font-medium disabled:opacity-50 hover:bg-[#111818] transition"
+                    >
+                      {captureEmailLoading ? 'Sending…' : 'Send my report →'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-2xl p-4 mb-4 text-center">
+                    <p className="text-sm font-semibold text-[#166534]">💗 Check your inbox!</p>
+                    <p className="text-xs text-[#4b7a5e] mt-1">Your wellness snapshot is on its way.</p>
+                  </div>
+                )}
+
+                {/* ── Share Button ── */}
+                <button
+                  onClick={() => {
+                    const score = computeWellnessScore(assessment.questions, qAnswers);
+                    const { label } = scoreColour(score);
+                    const top3 = assessment.domains.slice(0,3).join(', ');
+                    const text = `Just got my wellness score — ${score}/100 (${label} 🌱). My top areas: ${top3}. Try yours: https://ourlittlehugs.com`;
+                    if (navigator.share) {
+                      navigator.share({ text });
+                    } else {
+                      navigator.clipboard.writeText(text);
+                      setShareCopied(true);
+                      setTimeout(() => setShareCopied(false), 2500);
+                    }
+                  }}
+                  className="w-full border border-[#1E2C2B] text-[#1E2C2B] py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition mb-2"
+                >
+                  {shareCopied ? '✓ Copied to clipboard!' : '🔗 Share my score'}
+                </button>
+
                 <div className="space-y-2">
                   <button
-                    onClick={() => { setPhase('questions'); setStepIdx(0); setAnswers({}); setAssessment(null); setQAnswers([]); }}
-                    className="w-full border border-[#1E2C2B] text-[#1E2C2B] py-3 rounded-full text-sm font-medium hover:bg-gray-50 transition"
+                    onClick={() => { setPhase('questions'); setStepIdx(0); setAnswers({}); setAssessment(null); setQAnswers([]); setCaptureEmailSent(false); setCaptureEmail(''); }}
+                    className="w-full border border-gray-200 text-gray-500 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
                   >
                     Take another check-in
                   </button>
                   <button
                     onClick={onClose}
-                    className="w-full bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium hover:bg-[#111818] transition"
+                    className="w-full bg-[#1E2C2B] text-white py-2.5 rounded-full text-sm font-medium hover:bg-[#111818] transition"
                   >
                     Done
                   </button>

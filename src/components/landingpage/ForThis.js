@@ -4,41 +4,29 @@ import { useNavigate } from 'react-router-dom';
 function ForThis() {
     const dropdown_data = [
         {
-            title: "Children",
-            sub_heading: "For Little Minds That Bloom",
-            description: "Daily milestone moments, sensory play, and gentle rituals that help your child thrive",
-            image: "/landing/Children.png"
-        },
-        {
-            title: "Teenagers",
-            sub_heading: "For Growing Hearts & Minds",
-            description: "Support emotional balance, focus, and self-esteem through guided wellness tools designed for teens",
-            image: "/landing/Teenagers.png"
-        },
-        {
-            title: "Women",
-            sub_heading: "For Your Inner Flow",
-            description: "Track hormones, manage stress, and nurture your emotional cycles with kindness and clarity",
+            title: "You",
+            sub_heading: "For You, First",
+            description: "Daily check-ins, gentle habits, and a few minutes that are finally just yours",
             image: "/landing/Women.png"
         },
         {
-            title: "Mothers",
-            sub_heading: "For the Journey of Motherhood",
-            description: "Postpartum care, emotional check-ins, and daily rituals that hold space for your healing and joy",
+            title: "At Home",
+            sub_heading: "When You're Holding It All Together",
+            description: "Gentle daily moments for the days you give everything to everyone — and forget yourself",
             image: "/landing/Mothers.png"
         },
         {
-            title: "Caregivers",
-            sub_heading: "For the Ones Who Hold Others",
-            description: "Co-care tools to build deeper bonds while gently supporting those you love—and yourself",
+            title: "For Others",
+            sub_heading: "For the One Who Holds Everyone",
+            description: "When you carry the weight for everyone else, this holds a little space for you too",
             image: "/landing/Caregivers.png"
         }
     ]
     const [selectedData, setSelectedData] = useState({
-        title: "Children",
-        sub_heading: "For Little Minds That Bloom",
-        description: "Daily milestone moments, sensory play, and gentle rituals that help your child thrive",
-        image: "/landing/Children.png"
+        title: "You",
+        sub_heading: "For You, First",
+        description: "Daily check-ins, gentle habits, and a few minutes that are finally just yours",
+        image: "/landing/Women.png"
     })
 
     const navigate = useNavigate()
@@ -60,7 +48,7 @@ function ForThis() {
     return (
         <div className="w-full mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px] font-quicksand text-center text-gray-800 flex flex-col items-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-[#4A4B4F] mb-6 sm:mb-8 lg:mb-10">
-                Who is this for?
+                For the woman behind every role
             </h2>
 
             <div className="flex flex-col lg:flex-row justify-between items-center max-w-6xl mx-auto p-4 gap-8 lg:gap-4">
@@ -148,7 +136,7 @@ function ForThis() {
                         onClick={() => { navigate("/assesment") }}
                         className="bg-[#4F7DDD] hover:bg-blue-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 rounded-full text-sm sm:text-base mt-6 md:mt-8"
                     >
-                        Explore Our Programs
+                        Start My Reflection
                     </button>
                 </div>
             </div>

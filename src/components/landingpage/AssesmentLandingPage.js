@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import Navbar from '../common/Navbar';
-import WellnessAssessment from "./WellnessAssessment";
+// import WellnessAssessment from "./WellnessAssessment"; // not needed
 import WomenWellnessFlow from "./WomenWellnessFlow";
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
@@ -57,45 +57,54 @@ function AssesmentLandingPage() {
                 <div className="flex flex-col min-h-screen">
                     <Navbar />
 
-                    {/* Cards Section */}
-                    <div className="py-8 md:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 relative overflow-hidden bg-[#E8E0F3]">
-                        <div className="flex flex-col gap-6 md:gap-8 z-10 relative mx-auto max-w-7xl">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                                {cards.map((card, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-[#FAF3ED] border border-[#26323866] rounded-xl p-6 md:p-8 flex flex-col items-center text-center h-full"
-                                    >
-                                        <h3 className="text-lg md:text-xl font-semibold text-center font-quicksand text-gray-800 mb-4 md:mb-6 leading-tight">
-                                            {card.title}
-                                        </h3>
-                                        <p className="text-sm md:text-base font-medium font-quicksand text-gray-600 mb-6 md:mb-8 flex-grow">
-                                            {card.description}
-                                        </p>
-                                        <button
-                                            onClick={() => {
-                                                if (index === 0) {
-                                                    setTitleData(1)
-                                                } else if (index === 1) {
-                                                    setTitleData(2)
-                                                } else if (index === 2) {
-                                                    setTitleData(3)
-                                                }
-                                                setShowPopup(true);
-                                            }}
-                                            className="bg-[#1E2C2B] text-white py-2 md:py-3 px-6 md:px-8 rounded-full hover:bg-[#111818] transition w-full max-w-[180px] text-sm md:text-base"
-                                        >
-                                            Learn more
-                                        </button>
-                                    </div>
-                                ))}
+                    {/* Lead Attraction Section */}
+                    <div className="py-12 md:py-20 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-20 relative overflow-hidden bg-[#E8E0F3]">
+                        <div className="max-w-5xl mx-auto text-center mb-10 md:mb-14">
+                            <p className="text-xs md:text-sm font-semibold tracking-widest text-[#4F7DDD] uppercase mb-3 font-quicksand">Free · 5 Minutes · No Sign-Up Required</p>
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1E2C2B] leading-tight font-quicksand mb-4">
+                                Understand yourself in 5 minutes
+                            </h1>
+                            <p className="text-base md:text-lg text-[#4A4B4F] max-w-2xl mx-auto font-quicksand mb-8">
+                                Answer a few honest questions. Walk away with your personal wellness score, 
+                                meaningful insights across 15 life areas, and a 7-day habit plan — tailored to you.
+                            </p>
+                            <button
+                                onClick={() => setShowWomenFlow(true)}
+                                className="bg-[#4F7DDD] hover:bg-[#3d6bc9] text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-semibold text-base md:text-lg font-quicksand transition shadow-md"
+                            >
+                                Start my free check-in →
+                            </button>
+                            <p className="text-xs text-[#9ca3af] mt-3 font-quicksand">Takes 5 minutes · 100% private · No clinical diagnosis</p>
+                        </div>
+
+                        {/* 3 benefit cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                            <div className="bg-[#FAF3ED] rounded-2xl p-6 md:p-8 text-center border border-[#e5d6c8]">
+                                <div className="text-3xl mb-3">🌡️</div>
+                                <h3 className="text-base md:text-lg font-semibold text-[#1E2C2B] font-quicksand mb-2">Know where you stand</h3>
+                                <p className="text-sm text-[#6b7280] font-quicksand leading-relaxed">
+                                    Get a personalised wellness score across 15 areas of life — emotional, physical, social, hormonal, and more. 
+                                    See exactly where you're thriving and where you deserve more support.
+                                </p>
+                            </div>
+                            <div className="bg-[#FAF3ED] rounded-2xl p-6 md:p-8 text-center border border-[#e5d6c8]">
+                                <div className="text-3xl mb-3">🌱</div>
+                                <h3 className="text-base md:text-lg font-semibold text-[#1E2C2B] font-quicksand mb-2">Your 7-day habit plan</h3>
+                                <p className="text-sm text-[#6b7280] font-quicksand leading-relaxed">
+                                    Walk away with 3 specific habits matched to your top wellness areas — yoga poses, 
+                                    meditation practices, nutrition nudges, and self-reflection prompts designed for real life.
+                                </p>
+                            </div>
+                            <div className="bg-[#FAF3ED] rounded-2xl p-6 md:p-8 text-center border border-[#e5d6c8]">
+                                <div className="text-3xl mb-3">📈</div>
+                                <h3 className="text-base md:text-lg font-semibold text-[#1E2C2B] font-quicksand mb-2">Come back and grow</h3>
+                                <p className="text-sm text-[#6b7280] font-quicksand leading-relaxed">
+                                    Small habits done consistently change everything. Return in 7 days and see your score shift. 
+                                    Each check-in shows you how far you've come — and what to focus on next.
+                                </p>
                             </div>
                         </div>
-                        {showPopup && <WellnessAssessment
-                            onClose={() => setShowPopup(false)}
-                            heading={titleData}
-                            onStartAssessment={() => { setShowPopup(false); setShowWomenFlow(true); }}
-                        />}
+
                         {showWomenFlow && <WomenWellnessFlow onClose={() => setShowWomenFlow(false)} />}
                     </div>
 

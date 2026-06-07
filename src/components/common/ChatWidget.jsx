@@ -106,6 +106,18 @@ export default function ChatWidget() {
     }
   }, [isOpen]);
 
+  // Allow any on-page button to open Lily via a global event: window.dispatchEvent(new Event("lily:open"))
+  useEffect(() => {
+    const open = () => {
+      setIsOpen(true);
+      try {
+        sessionStorage.setItem("lh_lily_seen", "1");
+      } catch {}
+    };
+    window.addEventListener("lily:open", open);
+    return () => window.removeEventListener("lily:open", open);
+  }, []);
+
   const sendMessage = useCallback(
     async (text) => {
       const trimmed = text.trim();

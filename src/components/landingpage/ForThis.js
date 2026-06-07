@@ -19,7 +19,7 @@ function ForThis() {
             title: "For Others",
             sub_heading: "For the One Who Holds Everyone",
             description: "When you carry the weight for everyone else, this holds a little space for you too",
-            image: "/landing/Caregivers.png"
+            image: "/landing/Women.png"
         }
     ]
     const [selectedData, setSelectedData] = useState({

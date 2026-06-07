@@ -1,7 +1,6 @@
 // src/components/blog/BlogPost.jsx
 // A single article at /blogs/:slug. Built for humans first, structured for search and AI engines.
-// Styled to match the live LittleHugs landing page: Quicksand; cream #FAF3ED; text #4A4B4F;
-// muted #6b6c70; dark-green #1E2C2B rounded-full primary buttons (hover #111818).
+// Matches the live landing page (Quicksand, cream #FAF3ED, #4A4B4F text, dark-green #1E2C2B pills).
 import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useWellness } from "../../lib/WellnessContext";
@@ -89,9 +88,11 @@ const BlogPost = () => {
     setMeta("og:description", post.metaDescription, "property");
     setMeta("og:type", "article", "property");
     setMeta("og:url", url, "property");
+    if (post.image) setMeta("og:image", `${SITE_URL}${post.image}`, "property");
     setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", post.metaTitle || post.title);
     setMeta("twitter:description", post.metaDescription);
+    if (post.image) setMeta("twitter:image", `${SITE_URL}${post.image}`);
 
     const ld = [
       {
@@ -99,6 +100,7 @@ const BlogPost = () => {
         "@type": "BlogPosting",
         headline: post.title,
         description: post.metaDescription,
+        image: post.image ? `${SITE_URL}${post.image}` : undefined,
         author: { "@type": "Organization", name: blogAuthor.name, url: SITE_URL },
         publisher: {
           "@type": "Organization",
@@ -155,9 +157,9 @@ const BlogPost = () => {
     .filter(Boolean);
 
   return (
-    <main className="bg-[#FAF3ED] min-h-screen font-quicksand text-[#4A4B4F]" style={{ fontFamily: "Quicksand, sans-serif" }}>
-      <article className="max-w-2xl mx-auto px-5 sm:px-6 pt-8 pb-16">
-        {/* Breadcrumb (left-aligned) */}
+    <main className="bg-[#FAF3ED] min-h-screen font-quicksand text-left text-[#4A4B4F]" style={{ fontFamily: "Quicksand, sans-serif" }}>
+      <article className="max-w-3xl mx-auto px-5 sm:px-6 pt-8 pb-16">
+        {/* Breadcrumb (left-aligned, sits at the article's left edge) */}
         <nav aria-label="Breadcrumb" className="text-left text-sm text-[#6b6c70] mb-6">
           <Link to="/" className="hover:text-[#1E2C2B]">Home</Link>
           <span className="mx-1.5" aria-hidden="true">/</span>
@@ -165,6 +167,12 @@ const BlogPost = () => {
           <span className="mx-1.5" aria-hidden="true">/</span>
           <span className="text-[#1E2C2B]">{post.category}</span>
         </nav>
+
+        {/* Hero image */}
+        {post.image && (
+          <img src={post.image} alt={post.imageAlt || post.title}
+            className="w-full h-56 sm:h-72 object-cover rounded-3xl mb-8" loading="eager" />
+        )}
 
         <span className="inline-block rounded-full bg-[#fef8e6] text-[#4A4B4F] text-xs font-semibold px-3 py-1 mb-4">
           {post.category}
@@ -180,8 +188,8 @@ const BlogPost = () => {
           <span>Updated {formatDate(post.updated || post.date)}</span>
         </div>
 
-        {/* Body */}
-        <div>
+        {/* Body — constrained for comfortable reading */}
+        <div className="max-w-2xl">
           {post.content.map((block, i) =>
             block.type === "callout" ? (
               <div
@@ -204,7 +212,7 @@ const BlogPost = () => {
 
         {/* FAQs (visible + structured) */}
         {post.faqs && post.faqs.length > 0 && (
-          <section className="mt-12">
+          <section className="mt-12 max-w-2xl">
             <h2 className="text-2xl font-semibold text-[#4A4B4F] mb-5">Common questions</h2>
             <div className="space-y-4">
               {post.faqs.map((f, i) => (
@@ -235,7 +243,7 @@ const BlogPost = () => {
         </section>
 
         {/* Author note */}
-        <p className="mt-10 text-sm text-[#6b6c70] italic">{blogAuthor.bio}</p>
+        <p className="mt-10 text-sm text-[#6b6c70] italic max-w-2xl">{blogAuthor.bio}</p>
       </article>
 
       {/* Related */}
@@ -247,12 +255,17 @@ const BlogPost = () => {
               <Link
                 key={r.slug}
                 to={`/blogs/${r.slug}`}
-                className="group rounded-2xl bg-white border border-[#efe4d8] p-5 hover:shadow-md transition-shadow"
+                className="group rounded-2xl bg-white border border-[#efe4d8] overflow-hidden hover:shadow-md transition-shadow"
               >
-                <span className="text-xs font-semibold text-[#6b6c70]">{r.category}</span>
-                <h3 className="mt-1.5 font-medium text-[#4A4B4F] leading-snug group-hover:text-[#1E2C2B] transition-colors">
-                  {r.title}
-                </h3>
+                {r.image && (
+                  <img src={r.image} alt={r.imageAlt || r.title} className="w-full h-28 object-cover" loading="lazy" />
+                )}
+                <div className="p-5">
+                  <span className="text-xs font-semibold text-[#6b6c70]">{r.category}</span>
+                  <h3 className="mt-1.5 font-medium text-[#4A4B4F] leading-snug group-hover:text-[#1E2C2B] transition-colors">
+                    {r.title}
+                  </h3>
+                </div>
               </Link>
             ))}
           </div>

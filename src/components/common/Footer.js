@@ -1,13 +1,37 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xvzlerle";
 
 const Footer = () => {
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | submitting | success | error
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus("submitting");
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, source: "footer-early-access" }),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
 
   return (
     <>
       <div className="h-[10px] mt-12 md:mt-[120px]"></div>
-      <div className="relative bg-[#fef8e6] overflow-hidden px-4 sm:px-6 md:px-[80px] pb-8">
+      <div id="early-access" className="relative bg-[#fef8e6] overflow-hidden px-4 sm:px-6 md:px-[80px] pb-8">
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
           <svg
@@ -38,28 +62,44 @@ const Footer = () => {
                   Explore our Programs
                 </button>
               </Link>
-
             </div>
           </div>
 
           {/* Right Side - Email Subscription */}
-          <div className="w-full lg:w-[50%] flex flex-col sm:flex-row mb-10 lg:mb-20 gap-4 justify-center items-center">
-            <div className="w-full sm:w-[70%]">
-              <input
-                disabled
-                className="w-full border border-[#263238] rounded-[10px] h-12 sm:h-[72px] px-4 py-2"
-                type="text"
-                placeholder="Enter your email"
-              />
-            </div>
-            <div className="w-full sm:w-auto">
-              <button
-                onClick={() => navigate("/contact")}
-                className="w-full sm:w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-12 sm:h-[72px]"
-              >
-                Subscribe
-              </button>
-            </div>
+          <div className="w-full lg:w-[50%] flex flex-col mb-10 lg:mb-20 gap-2 justify-center items-center">
+            {status === "success" ? (
+              <p className="text-[#15803d] font-medium text-center text-base sm:text-lg">
+                You're on the list. We'll be in touch when your check-in is ready.
+              </p>
+            ) : (
+              <>
+                <form onSubmit={handleSubscribe} className="w-full flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <div className="w-full sm:w-[70%]">
+                    <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full border border-[#263238] rounded-[10px] h-12 sm:h-[72px] px-4 py-2 outline-none"
+                      type="email"
+                      required
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div className="w-full sm:w-auto">
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      className="w-full sm:w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-12 sm:h-[72px] disabled:opacity-60"
+                    >
+                      {status === "submitting" ? "…" : "Get early access"}
+                    </button>
+                  </div>
+                </form>
+                {status === "error" && (
+                  <p className="text-[#dc2626] text-sm text-center">Something slipped — please try again.</p>
+                )}
+                <p className="text-[#6b6c70] text-xs text-center mt-1">No spam. Private by design.</p>
+              </>
+            )}
           </div>
         </div>
       </div>

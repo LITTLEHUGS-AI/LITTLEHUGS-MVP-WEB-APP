@@ -9,11 +9,12 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 const WORKER_URL = "https://littlehugs-chat.mdi-operations.workers.dev";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xvzlerle"; // same waitlist pipeline
 const AUTO_OPEN_DELAY = 9000; // ms before Lily opens herself
+const ENABLE_AUTO_OPEN = false; // Lily no longer auto-opens — opens only on click
 const OFFER_AFTER_USER_MSGS = 2; // soft offer card appears after the 2nd reply
 const MAX_USER_MSGS = 10; // hard cap — after this, push to My Reflection
 
 const PUSH_MESSAGE =
-  "We've shared a lot today 🤍 The kindest next step is your Reflection — a free 5-minute check-in that gives you a personal wellness snapshot and a 3-minute reset ritual, just for you. Shall we begin?";
+  "We've shared a lot today. The kindest next step is your Reflection — a free 5-minute check-in that gives you a personal wellness snapshot and a 3-minute reset ritual, just for you. Shall we begin?";
 
 const STARTER_PROMPTS = [
   "How do I find a few minutes for myself in a busy day?",
@@ -24,10 +25,10 @@ const STARTER_PROMPTS = [
 function openerForPath() {
   const p = (typeof window !== "undefined" && window.location.pathname) || "/";
   if (p.includes("assesment") || p.includes("assessment"))
-    return "Hi! I'm Lily 🤍 Taking a minute for yourself? I'm right here. How are you feeling today?";
+    return "Hi, I'm Lily. Taking a minute for yourself? I'm right here. How are you feeling today?";
   if (p.includes("about"))
-    return "Hi! I'm Lily — your Reflection companion 🤍 Glad you're getting to know us. How are you really doing today?";
-  return "Hi! I'm Lily — your Reflection companion 🤍 I'm here for you, whatever today has been like. How are you really doing?";
+    return "Hi, I'm Lily — your Reflection companion. Glad you're getting to know us. How are you really doing today?";
+  return "Hi, I'm Lily — your Reflection companion. I'm here for you, whatever today has been like. How are you really doing?";
 }
 
 export default function ChatWidget() {
@@ -77,7 +78,7 @@ export default function ChatWidget() {
 
   // Proactive: auto-open the chat (time-on-page or exit-intent), once per session
   useEffect(() => {
-    if (seen()) return;
+    if (!ENABLE_AUTO_OPEN || seen()) return;
     let fired = false;
     const fire = () => {
       if (fired) return;
@@ -156,7 +157,7 @@ export default function ChatWidget() {
           ...prev,
           {
             role: "assistant",
-            content: "I had a little moment — please try sending that again. 🤍",
+            content: "I had a little moment — please try sending that again.",
           },
         ]);
       } finally {
@@ -317,19 +318,19 @@ export default function ChatWidget() {
             {showOffer && !offerDismissed && !limitReached && (
               <div style={{ background: "#ffffff", border: "1px solid #f0e0d0", borderRadius: "16px", padding: "14px", boxShadow: "0 2px 10px rgba(0,0,0,0.06)" }}>
                 <p style={{ margin: "0 0 10px", fontSize: "13px", lineHeight: 1.5, color: "#333", fontWeight: 600 }}>
-                  Want your reflection snapshot + a 3-minute reset ritual — just for you? 🤍
+                  Want your reflection snapshot + a 3-minute reset ritual — just for you?
                 </p>
                 <button onClick={startReflection} style={{ width: "100%", background: "#1E2C2B", color: "white", border: "none", borderRadius: "999px", padding: "10px", fontSize: "13px", fontWeight: 600, cursor: "pointer", marginBottom: "10px" }}>
                   Start My Reflection →
                 </button>
                 {offerStatus === "done" ? (
-                  <p style={{ margin: 0, fontSize: "12.5px", color: "#15803d", textAlign: "center", fontWeight: 600 }}>It's on its way 🤍 Check your inbox.</p>
+                  <p style={{ margin: 0, fontSize: "12.5px", color: "#15803d", textAlign: "center", fontWeight: 600 }}>It's on its way — check your inbox.</p>
                 ) : (
                   <>
                     <p style={{ margin: "0 0 6px", fontSize: "11.5px", color: "#7b7d82", textAlign: "center" }}>Not now? I'll send the reset ritual to your inbox.</p>
                     <form onSubmit={submitOffer} style={{ display: "flex", gap: "6px" }}>
                       <input type="email" required value={offerEmail} onChange={(e) => setOfferEmail(e.target.value)} placeholder="you@email.com" style={{ flex: 1, border: "1px solid #f0d8c4", borderRadius: "10px", padding: "8px 10px", fontSize: "12.5px", outline: "none", background: "white", color: "#333" }} />
-                      <button type="submit" disabled={offerStatus === "submitting"} style={{ background: "#4F7DDD", color: "white", border: "none", borderRadius: "10px", padding: "0 12px", fontSize: "12px", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>{offerStatus === "submitting" ? "…" : "Send 🤍"}</button>
+                      <button type="submit" disabled={offerStatus === "submitting"} style={{ background: "#4F7DDD", color: "white", border: "none", borderRadius: "10px", padding: "0 12px", fontSize: "12px", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>{offerStatus === "submitting" ? "…" : "Send"}</button>
                     </form>
                     {offerStatus === "error" && <p style={{ margin: "6px 0 0", fontSize: "11px", color: "#dc2626", textAlign: "center" }}>Something slipped — try again?</p>}
                     <button onClick={() => setOfferDismissed(true)} style={{ width: "100%", marginTop: "8px", background: "transparent", border: "none", color: "#9ca3af", fontSize: "11.5px", cursor: "pointer" }}>Maybe later</button>
@@ -359,11 +360,11 @@ export default function ChatWidget() {
                 Start My Reflection →
               </button>
               {offerStatus === "done" ? (
-                <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#15803d", textAlign: "center", fontWeight: 600 }}>Your reset ritual is on its way 🤍</p>
+                <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#15803d", textAlign: "center", fontWeight: 600 }}>Your reset ritual is on its way — check your inbox.</p>
               ) : (
                 <form onSubmit={submitOffer} style={{ display: "flex", gap: "6px", marginTop: "8px" }}>
                   <input type="email" required value={offerEmail} onChange={(e) => setOfferEmail(e.target.value)} placeholder="Email for your reset ritual" style={{ flex: 1, border: "1px solid #f0d8c4", borderRadius: "10px", padding: "8px 10px", fontSize: "12.5px", outline: "none", background: "white", color: "#333" }} />
-                  <button type="submit" disabled={offerStatus === "submitting"} style={{ background: "#4F7DDD", color: "white", border: "none", borderRadius: "10px", padding: "0 12px", fontSize: "12px", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>{offerStatus === "submitting" ? "…" : "Send 🤍"}</button>
+                  <button type="submit" disabled={offerStatus === "submitting"} style={{ background: "#4F7DDD", color: "white", border: "none", borderRadius: "10px", padding: "0 12px", fontSize: "12px", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>{offerStatus === "submitting" ? "…" : "Send"}</button>
                 </form>
               )}
             </div>

@@ -2,7 +2,7 @@
 const routesConfig = {
     home: {
         path: '/',
-        title: 'LittleHugs – Everyday Wellness for Mothers & Families',
+        title: 'LittleHugs – Everyday Wellness for Women',
         description: "A daily wellness companion for women in the UAE. Check in with yourself — gently, in just 5 minutes a day."
     },
     about: {
@@ -22,8 +22,8 @@ const routesConfig = {
     },
     personalLanding: {
         path: '/personal',
-        title: 'Wellness Check-ins for Women, Moms & Parents',
-        description: 'A daily wellness companion with science-backed check-ins. Personalised insights for moms, parents and women.'
+        title: 'Daily Wellness Check-ins for Women',
+        description: 'A daily wellness companion with science-backed check-ins. Personalised insights for the woman who holds it all together.'
     },
     partenerLanding: {
         path: '/partner',

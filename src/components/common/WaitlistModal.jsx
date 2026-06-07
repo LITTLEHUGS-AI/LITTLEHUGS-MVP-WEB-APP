@@ -55,7 +55,7 @@ export default function WaitlistModal() {
 
         {status === "success" ? (
           <div className="text-center py-6">
-            <div className="text-4xl mb-4">🎉</div>
+            
             <h2 className="text-2xl font-bold text-[#4A4B4F] mb-2">You're on the list!</h2>
             <p className="text-[#4A4B4F] text-base leading-relaxed">
               We'll reach out as soon as LittleHugs is ready for you. Thank you for being part of this journey.

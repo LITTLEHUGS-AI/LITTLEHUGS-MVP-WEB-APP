@@ -2,8 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const DocumentHead = ({ title, description, slug }) => {
-    const baseUrl = 'https://www.ourlittlehugs.com';
-    const imageUrl = 'https://staging.ourlittlehugs.com/LOGO.svg';
+    const baseUrl = 'https://littlehugs.vercel.app';
+    const imageUrl = 'https://littlehugs.vercel.app/og-image.png';
 
     return (
         <Helmet>

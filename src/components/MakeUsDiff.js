@@ -7,7 +7,7 @@ function MakeUsDiff() {
             img: "/images/make_1.svg",
         },
         {
-            title: "Built for both sides of care",
+            title: "Made for the woman behind every role",
             img: "/images/make_2.svg",
         },
         {

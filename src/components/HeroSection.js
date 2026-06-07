@@ -1,9 +1,11 @@
 // src/components/HeroSection.js
 import React from "react";
 import { useWellness } from "../lib/WellnessContext";
+import { useWaitlist } from "../lib/WaitlistContext";
 
 const HeroSection = () => {
   const { openWellnessFlow } = useWellness();
+  const { openWaitlist } = useWaitlist();
 
   return (
     <div
@@ -23,7 +25,7 @@ const HeroSection = () => {
               <i className="mt-4">No pressure. No overwhelm. Just clarity, calm, and care — one check-in at a time.</i>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-3">
               <button
                 onClick={openWellnessFlow}
                 className="w-full sm:w-auto bg-[#1E2C2B] text-white px-6 py-2 rounded-full hover:bg-[#111818] transition"
@@ -31,19 +33,25 @@ const HeroSection = () => {
                 Start My Reflection
               </button>
               <button
-                onClick={openWellnessFlow}
+                onClick={() => window.dispatchEvent(new Event("lily:open"))}
                 className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition"
               >
-                Try it free →
-              </button>
-              <button
-                onClick={() => window.dispatchEvent(new Event("lily:open"))}
-                className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#4F7DDD] text-[#4F7DDD] hover:bg-[#EFF6FF] transition flex items-center justify-center gap-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#4F7DDD" aria-hidden="true"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
                 Talk to Lily
               </button>
             </div>
+
+            <p className="text-sm text-[#6b6c70] mb-2 text-center lg:text-left">
+              Not ready?{" "}
+              <button
+                onClick={openWaitlist}
+                className="underline text-[#4F7DDD] hover:text-[#3a64bd] transition"
+              >
+                Get early access →
+              </button>
+            </p>
+            <p className="text-sm text-[#6b6c70] mb-6 text-center lg:text-left">
+              Private by design. Your reflections stay yours.
+            </p>
           </div>
 
           {/* Right Blob Content */}

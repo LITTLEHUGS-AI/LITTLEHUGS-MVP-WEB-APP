@@ -56,7 +56,7 @@ function AssesmentLandingPage() {
                                 onClick={() => setShowWomenFlow(true)}
                                 className="bg-[#4F7DDD] hover:bg-[#3d6bc9] text-white px-8 py-3 md:px-10 md:py-4 rounded-full font-semibold text-base md:text-lg font-quicksand transition shadow-md"
                             >
-                                Start my free check-in →
+                                Start My Reflection →
                             </button>
                             <p className="text-xs text-[#9ca3af] mt-3 font-quicksand">Takes 5 minutes · 100% private · No clinical diagnosis</p>
                         </div>

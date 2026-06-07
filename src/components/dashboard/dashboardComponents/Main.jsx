@@ -231,7 +231,7 @@ const Main = () => {
               <div className="bg-white p-6 rounded-lg max-w-md w-full ring-2 text-center">
                 <h2 className="text-xl font-semibold">Please Take an Assessment to view your Dashboard</h2>
                 <Link to='/personal/assessment' className="block w-52 mt-4 bg-red-500 text-white text-center p-2 mx-auto rounded cursor-pointer"  >
-                  Go to Assessment
+                  Go to My Reflection
                 </Link>
               </div>
             </div>

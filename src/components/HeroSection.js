@@ -28,7 +28,7 @@ const HeroSection = () => {
                 onClick={openWellnessFlow}
                 className="w-full sm:w-auto bg-[#1E2C2B] text-white px-6 py-2 rounded-full hover:bg-[#111818] transition"
               >
-                Take a Wellness Check-in
+                Start My Reflection
               </button>
               <button
                 onClick={openWellnessFlow}

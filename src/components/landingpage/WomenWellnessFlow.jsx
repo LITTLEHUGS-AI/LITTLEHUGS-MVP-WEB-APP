@@ -384,7 +384,7 @@ const WomenWellnessFlow = ({ onClose }) => {
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between z-10 rounded-t-2xl">
           <div className="flex items-center gap-2">
             <img src="/images/logo.svg" alt="LittleHugs" className="h-5 w-auto" />
-            <span className="font-semibold text-[#1E2C2B] text-sm">Women's Wellness Check-in</span>
+            <span className="font-semibold text-[#1E2C2B] text-sm">My Reflection</span>
           </div>
           <button
             onClick={onClose}
@@ -709,7 +709,7 @@ const WomenWellnessFlow = ({ onClose }) => {
                   <button
                     onClick={() => {
                       const top3 = topDomains.slice(0, 3).join(', ');
-                      const msg = `💗 I just took the LittleHugs Wellness Check-in!\n\nMy score: ${score}/100 — ${label} 🌱\n\nMy focus areas: ${top3}\n\nTake yours → https://www.littlehugs.online`;
+                      const msg = `💗 I just took My Reflection on LittleHugs!\n\nMy score: ${score}/100 — ${label} 🌱\n\nMy focus areas: ${top3}\n\nTake yours → https://www.littlehugs.online`;
                       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                     }}
                     className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 rounded-full text-sm font-medium hover:bg-[#20bd5a] transition"
@@ -722,7 +722,7 @@ const WomenWellnessFlow = ({ onClose }) => {
                   <button
                     onClick={() => {
                       const top3 = topDomains.slice(0, 3).join(', ');
-                      const txt = `💗 My LittleHugs Wellness Score: ${score}/100 — ${label}\nFocus areas: ${top3}\nTake yours → https://www.littlehugs.online`;
+                      const txt = `💗 My LittleHugs Reflection: ${score}/100 — ${label}\nFocus areas: ${top3}\nTake yours → https://www.littlehugs.online`;
                       if (navigator.share) {
                         navigator.share({ title: 'My Wellness Score', text: txt, url: 'https://www.littlehugs.online' });
                       } else {

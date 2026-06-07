@@ -14,15 +14,15 @@ const WORKER_URL = "https://littlehugs-chat.mdi-operations.workers.dev";
 // ───────────────────────────────────────────────────────────────────────────
 
 const STARTER_PROMPTS = [
-  "How can I build a better sleep routine for my baby?",
-  "What are some self-care habits for new moms?",
-  "What milestones should my 3-month-old be reaching?",
+  "How do I find a few minutes for myself in a busy day?",
+  "I'm feeling stretched thin — where do I start?",
+  "What's a simple way to reset when I'm overwhelmed?",
 ];
 
 const INITIAL_MESSAGE = {
   role: "assistant",
   content:
-    "Hi! I'm Lily 🤍 Your LittleHugs wellness companion. I'm here to support you on your motherhood journey. How can I help you today?",
+    "Hi! I'm Lily 🤍 Your LittleHugs wellness companion. I'm here for you — whatever today has been like. How are you really doing?",
 };
 
 export default function ChatWidget() {

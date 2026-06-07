@@ -22,7 +22,7 @@ export const blogAuthor = {
 export const blogPosts = [
   {
     slug: "the-mental-load-why-youre-so-tired",
-    image: "/images/journal/the-mental-load-why-youre-so-tired.svg",
+    image: "/images/journal/the-mental-load-why-youre-so-tired.png",
     imageAlt: "Abstract LittleHugs Journal cover for an article on the mental load women carry",
     title: "The mental load: why the woman who holds it all together is so tired",
     metaTitle: "The Mental Load: Why You're So Tired (and How to Carry Less)",
@@ -65,7 +65,7 @@ export const blogPosts = [
 
   {
     slug: "5-minute-self-care-for-a-busy-day",
-    image: "/images/journal/5-minute-self-care-for-a-busy-day.svg",
+    image: "/images/journal/5-minute-self-care-for-a-busy-day.png",
     imageAlt: "LittleHugs Journal cover for five-minute self-care ideas for busy women",
     title: "5-minute self-care that actually fits a packed day",
     metaTitle: "5-Minute Self-Care That Actually Fits a Busy Day",
@@ -109,7 +109,7 @@ export const blogPosts = [
 
   {
     slug: "daily-reflection-journal-prompts-for-women",
-    image: "/images/journal/daily-reflection-journal-prompts-for-women.svg",
+    image: "/images/journal/daily-reflection-journal-prompts-for-women.png",
     imageAlt: "LittleHugs Journal cover for daily reflection journal prompts for women",
     title: "Daily reflection journal prompts for women (when there's no time for you)",
     metaTitle: "30 Daily Reflection Journal Prompts for Women",
@@ -172,7 +172,7 @@ export const blogPosts = [
 
   {
     slug: "running-on-empty-signs-youre-carrying-too-much",
-    image: "/images/journal/running-on-empty-signs-youre-carrying-too-much.svg",
+    image: "/images/journal/running-on-empty-signs-youre-carrying-too-much.png",
     imageAlt: "LittleHugs Journal cover for the quiet signs of running on empty",
     title: "Running on empty: quiet signs you're carrying too much",
     metaTitle: "Running on Empty: Quiet Signs You're Carrying Too Much",
@@ -220,7 +220,7 @@ export const blogPosts = [
 
   {
     slug: "how-to-set-boundaries-without-guilt",
-    image: "/images/journal/how-to-set-boundaries-without-guilt.svg",
+    image: "/images/journal/how-to-set-boundaries-without-guilt.png",
     imageAlt: "LittleHugs Journal cover for setting boundaries without guilt",
     title: "How to set boundaries without guilt — for women who say yes to everyone",
     metaTitle: "How to Set Boundaries Without Guilt (For Women Who Say Yes)",
@@ -262,7 +262,7 @@ export const blogPosts = [
 
   {
     slug: "self-care-in-dubai-when-family-is-far-away",
-    image: "/images/journal/self-care-in-dubai-when-family-is-far-away.svg",
+    image: "/images/journal/self-care-in-dubai-when-family-is-far-away.png",
     imageAlt: "LittleHugs Journal cover for self-care as an expat woman in Dubai",
     title: "Looking after yourself in Dubai when your family is an ocean away",
     metaTitle: "Self-Care in Dubai When Your Family Is Far Away",
@@ -302,7 +302,7 @@ export const blogPosts = [
 
   {
     slug: "evening-wind-down-routine-to-switch-off",
-    image: "/images/journal/evening-wind-down-routine-to-switch-off.svg",
+    image: "/images/journal/evening-wind-down-routine-to-switch-off.png",
     imageAlt: "LittleHugs Journal cover for an evening wind-down routine to switch off",
     title: "A realistic evening wind-down for women who never switch off",
     metaTitle: "A Realistic Evening Wind-Down Routine to Finally Switch Off",
@@ -341,7 +341,7 @@ export const blogPosts = [
 
   {
     slug: "the-sunday-reset-weekly-check-in",
-    image: "/images/journal/the-sunday-reset-weekly-check-in.svg",
+    image: "/images/journal/the-sunday-reset-weekly-check-in.png",
     imageAlt: "LittleHugs Journal cover for the Sunday reset weekly check-in",
     title: "The Sunday reset: a gentle weekly check-in for a calmer week",
     metaTitle: "The Sunday Reset: A Gentle Weekly Check-In for a Calmer Week",
@@ -380,7 +380,7 @@ export const blogPosts = [
 
   {
     slug: "why-women-put-themselves-last",
-    image: "/images/journal/why-women-put-themselves-last.svg",
+    image: "/images/journal/why-women-put-themselves-last.png",
     imageAlt: "LittleHugs Journal cover for why women put themselves last",
     title: "Why women put themselves last — and how to take five minutes that are truly yours",
     metaTitle: "Why Women Put Themselves Last (and How to Reclaim Five Minutes)",
@@ -421,7 +421,7 @@ export const blogPosts = [
 
   {
     slug: "build-a-self-care-habit-that-sticks",
-    image: "/images/journal/build-a-self-care-habit-that-sticks.svg",
+    image: "/images/journal/build-a-self-care-habit-that-sticks.png",
     imageAlt: "LittleHugs Journal cover for building a self-care habit that sticks",
     title: "How to build a self-care habit that actually sticks — without streaks or guilt",
     metaTitle: "How to Build a Self-Care Habit That Actually Sticks",

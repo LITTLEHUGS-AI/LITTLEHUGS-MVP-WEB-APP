@@ -9,9 +9,9 @@ function JoinMovement() {
                 Join the Movement
             </h2>
             <p className="text-base sm:text-lg max-w-3xl text-[#4A4B4F] mb-6 sm:mb-8 md:mb-10 px-0 sm:px-2 md:px-4 font-quicksand">
-                We're building more than a platform — we're building a world where every child feels seen early,
-                and every caregiver feels supported. Whether you're a school, clinic, parent, or simply someone
-                who believes in early care, we'd love to build with you.
+                We're building more than a platform — we're building a world where every woman feels seen, supported,
+                and a little less alone. Whether you're here for yourself, or you simply believe women deserve
+                a daily moment of care, we'd love to build with you.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-6 w-full max-w-xs sm:max-w-none">
                 <Link to="/assesment" className="w-full sm:w-auto">

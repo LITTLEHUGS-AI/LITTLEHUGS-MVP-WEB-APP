@@ -10,7 +10,7 @@ const MainHeader = () => {
                     systems don't
                 </h1>
                 <p className="text-base sm:text-lg md:text-xl font-quicksand text-[#4A4B4F] mb-4 sm:mb-6 text-center md:text-left">
-                    LittleHugs is an emotionally intelligent wellness platform that helps families and institutions spot early signs of emotional and developmental risks — and respond with gentle, guided care.
+                    LittleHugs is a wellness companion for the woman who holds it all together — at work, at home, for everyone but herself. A gentle daily space to pause, reflect, and feel a little more like yourself again.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl font-quicksand text-[#4A4B4F] mb-4 sm:mb-6 text-center md:text-left">
                     From the first nudge to the final insight, we're here to make care simpler, stigma-free, and deeply human.

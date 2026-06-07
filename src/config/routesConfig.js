@@ -8,7 +8,7 @@ const routesConfig = {
     about: {
         path: '/about',
         title: 'About LittleHugs Wellness Platform',
-        description: 'We are reimagining wellness for moms, kids and caregivers — science-backed, stigma-free habits that help families thrive.'
+        description: 'Wellness for the woman who holds it all together. Gentle, stigma-free daily check-ins that help you feel a little more like yourself.'
     },
     contact: {
         path: '/contact',

@@ -24,7 +24,7 @@ function Home() {
                 img: "/images/care_2.svg",
             },
             {
-                title: "Used by Women, Men, Child, Working professionals, Schools, Clinics",
+                title: "Designed for every woman — new mothers, working moms, and caregivers",
                 img: "/images/care_3.svg",
             },
             {

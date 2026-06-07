@@ -227,6 +227,26 @@ const BlogPost = () => {
           </section>
         )}
 
+        {/* Further reading (references) */}
+        {post.references && post.references.length > 0 && (
+          <section className="mt-12 max-w-2xl">
+            <h2 className="text-xl font-semibold text-[#4A4B4F] mb-2">Further reading</h2>
+            <p className="text-sm text-[#6b6c70] mb-3 italic">
+              This is general wellbeing writing, not medical advice. If things feel heavy, these trusted resources can help.
+            </p>
+            <ul className="list-disc pl-6 space-y-1.5 text-[#4A4B4F]">
+              {post.references.map((r, i) => (
+                <li key={i}>
+                  <a href={r.url} target="_blank" rel="noopener noreferrer"
+                    className="text-[#1E2C2B] underline underline-offset-2 hover:text-[#111818]">
+                    {r.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* Closing reflection CTA — landing-page dark panel */}
         <section className="mt-12 rounded-3xl bg-[#1E2C2B] text-white p-8 text-center">
           <h2 className="text-xl sm:text-2xl font-medium">You hold space for everyone.</h2>

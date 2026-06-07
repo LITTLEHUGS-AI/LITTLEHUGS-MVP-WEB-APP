@@ -97,10 +97,10 @@ function AssesmentLandingPage() {
                         <div className="max-w-6xl mx-auto">
                             <p className="text-gray-800 text-lg text-center md:text-xl lg:text-2xl font-semibold font-quicksand mb-4">At LittleHugs, we believe support should feel like care — not confusion.</p>
                             <p className="text-gray-800 text-lg md:text-xl lg:text-2xl font-normal font-quicksand mb-4">
-                             Whether you're a woman navigating stress, a parent concerned about your child, or simply someone trying to understand your emotions — you deserve gentle, reliable guidance.
+                             Whether you're stretched thin at work, carrying a full home, or simply trying to understand how you really feel — you deserve gentle, reliable guidance.
                             </p>
                             <p className="text-gray-800 text-lg md:text-xl lg:text-2xl font-normal font-quicksand">
-                               That’s why we’ve built our check-in tools with empathy, simplicity, and expert-backed insight — combining emotional wellness, child development, and hormonal care into one easy, human-first experience.
+                               That’s why we’ve built our check-in tools with empathy, simplicity, and expert-backed insight — combining emotional, physical, social, and hormonal wellness into one easy, human-first experience.
                             </p>
                         </div>
                     </div>
@@ -118,7 +118,7 @@ function AssesmentLandingPage() {
                                         Our tools are not medical tests or diagnostic evaluations—and they're not meant to replace professional advice.
                                     </p>
                                     <p>
-                                        They are gentle, science-informed, and stigma-free self-assessments designed to help you reflect, notice early signs, and better understand your or your child's well-being.
+                                        They are gentle, science-informed, and stigma-free self-assessments designed to help you reflect, notice how you're really doing, and better understand your own well-being.
                                     </p>
                                     <p>
                                         Think of them as your private, expert-informed check-ins—translated into simple, everyday language, and designed to meet you where you are.

@@ -520,7 +520,7 @@ const WomenWellnessFlow = ({ onClose }) => {
                     </button>
                   )}
                   {/* Next / Submit button — always show for text/number/multi, and always on last step */}
-                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi' || stepIdx === TOTAL_STEPS - 1) && (
+                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi' || step.type === 'select' || stepIdx === TOTAL_STEPS - 1) && (
                     <button
                       onClick={advance}
                       disabled={!isAnswered(step)}

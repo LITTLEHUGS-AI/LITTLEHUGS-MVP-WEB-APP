@@ -1,11 +1,9 @@
 // src/components/HeroSection.js
 import React from "react";
 import { useWellness } from "../lib/WellnessContext";
-import { useWaitlist } from "../lib/WaitlistContext";
 
 const HeroSection = () => {
   const { openWellnessFlow } = useWellness();
-  const { openWaitlist } = useWaitlist();
 
   return (
     <div
@@ -40,15 +38,6 @@ const HeroSection = () => {
               </button>
             </div>
 
-            <p className="text-sm text-[#6b6c70] mb-2 text-center lg:text-left">
-              Not ready?{" "}
-              <button
-                onClick={openWaitlist}
-                className="underline text-[#4F7DDD] hover:text-[#3a64bd] transition"
-              >
-                Get early access →
-              </button>
-            </p>
             <p className="text-sm text-[#6b6c70] mb-6 text-center lg:text-left">
               Private by design. Your reflections stay yours.
             </p>

@@ -15,7 +15,7 @@ const Footer = () => {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ email, source: "footer-early-access" }),
+        body: JSON.stringify({ email, source: "footer-subscribe" }),
       });
       if (res.ok) {
         setStatus("success");
@@ -31,7 +31,7 @@ const Footer = () => {
   return (
     <>
       <div className="h-[10px] mt-12 md:mt-[120px]"></div>
-      <div id="early-access" className="relative bg-[#fef8e6] overflow-hidden px-4 sm:px-6 md:px-[80px] pb-8">
+      <div id="subscribe" className="relative bg-[#fef8e6] overflow-hidden px-4 sm:px-6 md:px-[80px] pb-8">
         {/* Curve Top */}
         <div className="absolute top-0 left-0 w-full">
           <svg
@@ -69,7 +69,7 @@ const Footer = () => {
           <div className="w-full lg:w-[50%] flex flex-col mb-10 lg:mb-20 gap-2 justify-center items-center">
             {status === "success" ? (
               <p className="text-[#15803d] font-medium text-center text-base sm:text-lg">
-                You're on the list. We'll be in touch when your check-in is ready.
+                You're in. Your gentle weekly check-in is on its way.
               </p>
             ) : (
               <>
@@ -81,7 +81,7 @@ const Footer = () => {
                       className="w-full border border-[#263238] rounded-[10px] h-12 sm:h-[72px] px-4 py-2 outline-none"
                       type="email"
                       required
-                      placeholder="Enter your email"
+                      placeholder="Your email for a weekly check-in"
                     />
                   </div>
                   <div className="w-full sm:w-auto">
@@ -90,14 +90,14 @@ const Footer = () => {
                       disabled={status === "submitting"}
                       className="w-full sm:w-[138px] bg-[#263238] text-white px-6 py-2 rounded-[70px] hover:bg-gray-700 transition h-12 sm:h-[72px] disabled:opacity-60"
                     >
-                      {status === "submitting" ? "…" : "Get early access"}
+                      {status === "submitting" ? "…" : "Subscribe"}
                     </button>
                   </div>
                 </form>
                 {status === "error" && (
                   <p className="text-[#dc2626] text-sm text-center">Something slipped — please try again.</p>
                 )}
-                <p className="text-[#6b6c70] text-xs text-center mt-1">No spam. Private by design.</p>
+                <p className="text-[#6b6c70] text-xs text-center mt-1">A gentle weekly nudge. No spam. Private by design.</p>
               </>
             )}
           </div>

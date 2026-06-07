@@ -15,10 +15,10 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="w-full lg:max-w-[630px] order-2 lg:order-1">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 leading-snug text-[#4A4B4F] text-center lg:text-left">
-              Check in with yourself — and your family — in just 5 minutes.
+              Check in with yourself — in just 5 minutes a day.
             </h1>
             <p className="text-base sm:text-lg md:text-xl leading-7 md:leading-8 text-[#4A4B4F] mb-6 text-center lg:text-left">
-              <strong>LittleHugs</strong> is your everyday emotional wellness buddy. We help you spot early signs of stress, burnout, or imbalance — for you, your partner, or your child — and guide you toward gentle, expert-backed care.
+              <strong>LittleHugs</strong> is your everyday wellness companion — for the woman who holds it all together for everyone else. A few quiet minutes of comfort, a gentle nudge, and someone who listens.
               <br />
               <i className="mt-4">No pressure. No overwhelm. Just clarity, calm, and care — one check-in at a time.</i>
             </p>

@@ -32,7 +32,7 @@ function PersonalLandingPage() {
                          A wellness hug for every stage of life
                         </h1>
                         <p className="text-base sm:text-lg md:text-xl text-[#4A4B4F] mb-2">
-                            Whether you're a mom, a dad, a caregiver, or a growing child — <b>LittleHugs</b> offers gentle check-ins, smart emotional insights, and daily wellness tools, right at your fingertips.
+                            Wherever you are in life — leading at work, running a home, or simply needing a moment for yourself — <b>LittleHugs</b> offers gentle check-ins, caring insights, and daily wellness tools, right at your fingertips.
                         </p>
                         <p className="text-base sm:text-lg md:text-xl text-[#4A4B4F] mb-6">
                             Care that grows with you.

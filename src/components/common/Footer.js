@@ -28,9 +28,9 @@ const Footer = () => {
           {/* Left Side - Text and Buttons */}
           <div className="flex flex-col gap-3 justify-normal w-full lg:w-auto mb-10 lg:mb-0 text-center lg:text-left">
             <h1 className="text-xl sm:text-2xl md:text-[28px] leading-normal sm:leading-10 font-normal mb-4 text-[#4A4B4F]">
-              Whether you're a mom, a dad, a caregiver<br className="hidden sm:block" />
-              or simply caring for yourself -<br className="hidden sm:block" />
-              LittleHugs gives you a smarter way to care
+              Whether you're leading at work, holding it together at home,<br className="hidden sm:block" />
+              or simply trying to find a moment for yourself —<br className="hidden sm:block" />
+              LittleHugs gives you a gentler way to care
             </h1>
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
               <Link to="/assesment" className="w-full sm:w-auto">

@@ -3,7 +3,7 @@ const routesConfig = {
     home: {
         path: '/',
         title: 'LittleHugs – Everyday Wellness for Mothers & Families',
-        description: "A daily wellness companion for mothers and families in the UAE. Check in with yourself and your child — gently, in just 5 minutes."
+        description: "A daily wellness companion for women in the UAE. Check in with yourself — gently, in just 5 minutes a day."
     },
     about: {
         path: '/about',

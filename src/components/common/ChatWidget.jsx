@@ -22,7 +22,7 @@ const STARTER_PROMPTS = [
 const INITIAL_MESSAGE = {
   role: "assistant",
   content:
-    "Hi! I'm Lily 🤍 Your LittleHugs wellness companion. I'm here for you — whatever today has been like. How are you really doing?",
+    "Hi! I'm Lily — your Reflection companion 🤍 I'm here for you, whatever today has been like. How are you really doing?",
 };
 
 export default function ChatWidget() {
@@ -250,7 +250,7 @@ export default function ChatWidget() {
                   lineHeight: 1.2,
                 }}
               >
-                Lily
+                Lily · Your Reflection
               </p>
               <p
                 style={{
@@ -260,7 +260,7 @@ export default function ChatWidget() {
                   lineHeight: 1.3,
                 }}
               >
-                LittleHugs Wellness Companion
+                Your Reflection companion
               </p>
             </div>
             {/* Online indicator */}

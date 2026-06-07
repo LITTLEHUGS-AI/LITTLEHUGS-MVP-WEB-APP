@@ -298,7 +298,7 @@ export default function AssesmentHandler() {
                                             about understanding yourself better.
                                         </p>
                                         <p className="text-gray-700">
-                                            Whether you're navigating motherhood, balancing work and life, or simply feeling overwhelmed—this
+                                            Whether you're stretched thin at work, carrying a full home, or simply feeling overwhelmed—this
                                             tool helps bring gentle clarity to how your mind and body are doing.
                                         </p>
                                         <p className="text-gray-700">

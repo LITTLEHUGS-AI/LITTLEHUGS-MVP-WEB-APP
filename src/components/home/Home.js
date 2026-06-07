@@ -20,11 +20,11 @@ function Home() {
                 img: "/images/care_1.svg",
             },
             {
-                title: "Built on WHO, IAP & CDC-aligned tools",
+                title: "Built on validated, science-backed wellness frameworks",
                 img: "/images/care_2.svg",
             },
             {
-                title: "Designed for every woman — new mothers, working moms, and caregivers",
+                title: "Designed for the woman who holds it all together",
                 img: "/images/care_3.svg",
             },
             {

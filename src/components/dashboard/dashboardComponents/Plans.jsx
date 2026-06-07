@@ -120,7 +120,7 @@ const Plans = () => {
                   Self-Wellness Plan
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  For women & caregivers focused on emotional well-being
+                  For the woman focused on her own well-being
                 </p>
                 <div className="flex items-center gap-2 mb-6">
                   <span className="text-gray-400 line-through">Rs. 258/-</span>

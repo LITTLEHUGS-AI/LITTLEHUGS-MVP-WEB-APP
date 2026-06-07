@@ -266,7 +266,7 @@ function SignInUI({
                                 <section>
                                     <h2 className="text-lg font-medium text-gray-800 mb-2">1. Overview of Services</h2>
                                     <p className="text-gray-600">
-                                        LittleHugs provides AI-guided wellness assessments for mothers, caregivers, children, and families. Our tools are
+                                        LittleHugs provides AI-guided wellness reflections for women. Our tools are
                                         non-diagnostic and are intended for reflection, insight, and support, not medical treatment.
                                     </p>
                                 </section>
@@ -410,7 +410,7 @@ function SignInUI({
                                             <li>Name, email address, and login details when you sign up</li>
                                             <li>Assessment responses (emotional, physical, cognitive, etc.)</li>
                                             <li>Voluntary journal entries, feedback, and preferences</li>
-                                            <li>Optional demographic details (e.g., age range, motherhood status)</li>
+                                            <li>Optional demographic details (e.g., age range, life stage)</li>
                                         </ul>
                                     </div>
 

@@ -151,7 +151,6 @@ const BlogPost = () => {
     );
   }
 
-  const callout = post.content.find((b) => b.type === "callout");
   const related = (post.related || [])
     .map((s) => blogPosts.find((p) => p.slug === s))
     .filter(Boolean);

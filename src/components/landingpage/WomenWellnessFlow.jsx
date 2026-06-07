@@ -211,6 +211,13 @@ const WomenWellnessFlow = ({ onClose }) => {
   const [qAnswers, setQAnswers] = useState([]);
   const [loadingMsg, setLoadingMsg] = useState(0);
 
+  // Lead capture & share
+  const [captureEmail, setCaptureEmail] = useState('');
+  const [captureEmailSent, setCaptureEmailSent] = useState(false);
+  const [captureEmailLoading, setCaptureEmailLoading] = useState(false);
+  const [captureEmailError, setCaptureEmailError] = useState('');
+  const [shareCopied, setShareCopied] = useState(false);
+
   // Rotate loading messages (slower — 4s each so they don't loop too fast)
   useEffect(() => {
     if (phase !== 'loading') return;
@@ -220,13 +227,6 @@ const WomenWellnessFlow = ({ onClose }) => {
 
   // Track elapsed time during loading so we can show a patience note
   const [loadingSeconds, setLoadingSeconds] = useState(0);
-
-  // Email capture state
-  const [captureEmail, setCaptureEmail] = useState('');
-  const [captureEmailSent, setCaptureEmailSent] = useState(false);
-  const [captureEmailLoading, setCaptureEmailLoading] = useState(false);
-  const [captureEmailError, setCaptureEmailError] = useState('');
-  const [shareCopied, setShareCopied] = useState(false);
   useEffect(() => {
     if (phase !== 'loading') { setLoadingSeconds(0); return; }
     const id = setInterval(() => setLoadingSeconds(s => s + 1), 1000);
@@ -505,7 +505,7 @@ const WomenWellnessFlow = ({ onClose }) => {
 
                 {apiError && stepIdx === TOTAL_STEPS - 1 && (
                   <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs">
-                    {apiError}
+                    {apiError} — The service may be waking up. Please try again in a moment.
                   </div>
                 )}
 
@@ -519,14 +519,16 @@ const WomenWellnessFlow = ({ onClose }) => {
                       ← Back
                     </button>
                   )}
-                  {/* Next / Submit — always visible as fallback; single/select also auto-advance on pick */}
-                  <button
-                    onClick={advance}
-                    disabled={!isAnswered(step)}
-                    className="flex-1 bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium disabled:opacity-40 hover:bg-[#111818] transition"
-                  >
-                    {stepIdx === TOTAL_STEPS - 1 ? 'Generate my check-in →' : 'Next →'}
-                  </button>
+                  {/* Next / Submit button — always show for text/number/multi, and always on last step */}
+                  {(step.type === 'text' || step.type === 'number' || step.type === 'multi' || stepIdx === TOTAL_STEPS - 1) && (
+                    <button
+                      onClick={advance}
+                      disabled={!isAnswered(step)}
+                      className="flex-1 bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium disabled:opacity-40 hover:bg-[#111818] transition"
+                    >
+                      {stepIdx === TOTAL_STEPS - 1 ? 'Generate my check-in →' : 'Next →'}
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -540,7 +542,7 @@ const WomenWellnessFlow = ({ onClose }) => {
               <p className="text-gray-400 text-xs mt-2">This takes around 30–60 seconds — please keep this window open</p>
               {loadingSeconds >= 30 && (
                 <p className="text-purple-500 text-xs mt-3 animate-pulse">
-                  Still working… our system is analysing your responses 💗
+                  Still working… AI takes a moment to personalise everything for you 💗
                 </p>
               )}
             </div>
@@ -648,92 +650,99 @@ const WomenWellnessFlow = ({ onClose }) => {
                   This is a wellness reflection tool, not a clinical diagnosis. If you're struggling, please reach out to a qualified professional.
                 </p>
 
-                {/* ── Email Capture ── */}
-                {!captureEmailSent ? (
-                  <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-2xl p-4 mb-4">
-                    <p className="text-sm font-semibold text-[#166534] mb-1">💗 Save your wellness snapshot</p>
-                    <p className="text-xs text-[#4b7a5e] mb-3">Get your score + 3 personalised habits in your inbox.</p>
-                    <input
-                      type="email"
-                      placeholder="Your email address"
-                      value={captureEmail}
-                      onChange={e => { setCaptureEmail(e.target.value); setCaptureEmailError(''); }}
-                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm mb-2 focus:outline-none focus:border-[#1E2C2B]"
-                    />
-                    {captureEmailError && <p className="text-red-500 text-xs mb-2">{captureEmailError}</p>}
-                    <button
-                      disabled={captureEmailLoading}
-                      onClick={async () => {
-                        if (!captureEmail || !captureEmail.includes('@')) {
-                          setCaptureEmailError('Please enter a valid email address.');
-                          return;
-                        }
-                        setCaptureEmailLoading(true);
-                        try {
-                          const score = computeWellnessScore(assessment.questions, qAnswers);
-                          const { label } = scoreColour(score);
-                          const res = await fetch(`${API_URL}/api/lead/capture`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              name: profileName || 'Friend',
-                              email: captureEmail,
-                              score,
-                              label,
-                              domains: assessment.domains.slice(0, 5),
-                              overall_assessment: assessment.overall_assessment || '',
-                            }),
-                          });
-                          if (!res.ok) throw new Error('Failed');
-                          setCaptureEmailSent(true);
-                        } catch {
-                          setCaptureEmailError('Something went wrong. Please try again.');
-                        } finally {
-                          setCaptureEmailLoading(false);
-                        }
-                      }}
-                      className="w-full bg-[#1E2C2B] text-white py-2.5 rounded-full text-sm font-medium disabled:opacity-50 hover:bg-[#111818] transition"
-                    >
-                      {captureEmailLoading ? 'Sending…' : 'Send my report →'}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-2xl p-4 mb-4 text-center">
-                    <p className="text-sm font-semibold text-[#166534]">💗 Check your inbox!</p>
-                    <p className="text-xs text-[#4b7a5e] mt-1">Your wellness snapshot is on its way.</p>
-                  </div>
-                )}
-
-                {/* ── Share Button ── */}
-                <button
-                  onClick={() => {
-                    const score = computeWellnessScore(assessment.questions, qAnswers);
-                    const { label } = scoreColour(score);
-                    const top3 = assessment.domains.slice(0,3).join(', ');
-                    const text = `Just got my wellness score — ${score}/100 (${label} 🌱). My top areas: ${top3}. Try yours: https://littlehugs.online`;
-                    if (navigator.share) {
-                      navigator.share({ text });
-                    } else {
-                      navigator.clipboard.writeText(text);
-                      setShareCopied(true);
-                      setTimeout(() => setShareCopied(false), 2500);
-                    }
-                  }}
-                  className="w-full border border-[#1E2C2B] text-[#1E2C2B] py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition mb-2"
-                >
-                  {shareCopied ? '✓ Copied to clipboard!' : '🔗 Share my score'}
-                </button>
+                {/* ── Email capture ── */}
+                <div className="bg-[#f0fdf4] border border-green-100 rounded-2xl p-4 mb-4">
+                  <p className="text-sm font-semibold text-[#1E2C2B] mb-1">💗 Save your wellness snapshot</p>
+                  <p className="text-xs text-gray-500 mb-3">Get your score + 3 personalised habits in your inbox.</p>
+                  {captureEmailSent ? (
+                    <p className="text-sm text-green-600 font-medium text-center py-2">Check your inbox 💗</p>
+                  ) : (
+                    <>
+                      <input
+                        type="email"
+                        value={captureEmail}
+                        onChange={e => { setCaptureEmail(e.target.value); setCaptureEmailError(''); }}
+                        placeholder="your@email.com"
+                        className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm mb-2 outline-none focus:border-green-400"
+                      />
+                      {captureEmailError && <p className="text-xs text-red-500 mb-2">{captureEmailError}</p>}
+                      <button
+                        disabled={captureEmailLoading}
+                        onClick={async () => {
+                          if (!captureEmail || !captureEmail.includes('@')) {
+                            setCaptureEmailError('Please enter a valid email.');
+                            return;
+                          }
+                          setCaptureEmailLoading(true);
+                          setCaptureEmailError('');
+                          try {
+                            const res = await fetch(`${API_URL}/api/lead/capture`, {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                name: profileName || 'Friend',
+                                email: captureEmail,
+                                score,
+                                label,
+                                domains: topDomains,
+                                overall_assessment: assessment.overall_assessment || '',
+                              }),
+                            });
+                            if (!res.ok) throw new Error('Failed');
+                            setCaptureEmailSent(true);
+                          } catch {
+                            setCaptureEmailError('Something went wrong. Please try again.');
+                          } finally {
+                            setCaptureEmailLoading(false);
+                          }
+                        }}
+                        className="w-full bg-[#1E2C2B] text-white py-2.5 rounded-full text-sm font-medium hover:bg-[#111818] transition disabled:opacity-60"
+                      >
+                        {captureEmailLoading ? 'Sending…' : 'Send my report →'}
+                      </button>
+                    </>
+                  )}
+                </div>
 
                 <div className="space-y-2">
+                  {/* WhatsApp share */}
+                  <button
+                    onClick={() => {
+                      const top3 = topDomains.slice(0, 3).join(', ');
+                      const msg = `💗 I just took the LittleHugs Wellness Check-in!\n\nMy score: ${score}/100 — ${label} 🌱\n\nMy focus areas: ${top3}\n\nTake yours → https://www.littlehugs.online`;
+                      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+                    }}
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 rounded-full text-sm font-medium hover:bg-[#20bd5a] transition"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Share on WhatsApp
+                  </button>
+
+                  {/* Copy link */}
+                  <button
+                    onClick={() => {
+                      const top3 = topDomains.slice(0, 3).join(', ');
+                      const txt = `💗 My LittleHugs Wellness Score: ${score}/100 — ${label}\nFocus areas: ${top3}\nTake yours → https://www.littlehugs.online`;
+                      if (navigator.share) {
+                        navigator.share({ title: 'My Wellness Score', text: txt, url: 'https://www.littlehugs.online' });
+                      } else {
+                        navigator.clipboard.writeText(txt).then(() => { setShareCopied(true); setTimeout(() => setShareCopied(false), 2000); });
+                      }
+                    }}
+                    className="w-full border border-gray-200 text-gray-600 py-3 rounded-full text-sm font-medium hover:bg-gray-50 transition"
+                  >
+                    {shareCopied ? '✓ Copied!' : '🔗 Share my score'}
+                  </button>
+
                   <button
                     onClick={() => { setPhase('questions'); setStepIdx(0); setAnswers({}); setAssessment(null); setQAnswers([]); setCaptureEmailSent(false); setCaptureEmail(''); }}
-                    className="w-full border border-gray-200 text-gray-500 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition"
+                    className="w-full border border-[#1E2C2B] text-[#1E2C2B] py-3 rounded-full text-sm font-medium hover:bg-gray-50 transition"
                   >
                     Take another check-in
                   </button>
                   <button
                     onClick={onClose}
-                    className="w-full bg-[#1E2C2B] text-white py-2.5 rounded-full text-sm font-medium hover:bg-[#111818] transition"
+                    className="w-full bg-[#1E2C2B] text-white py-3 rounded-full text-sm font-medium hover:bg-[#111818] transition"
                   >
                     Done
                   </button>

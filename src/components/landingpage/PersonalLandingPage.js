@@ -56,7 +56,7 @@ function PersonalLandingPage() {
                         <div className="flex justify-center lg:justify-start items-center gap-4 mb-6">
                             <Link to="/assesment">
                                 <button className="bg-gray-800 text-white px-6 py-2 rounded-full hover:bg-gray-700 transition">
-                                    Explore Our Programs
+                                    Explore how we support
                                 </button>
                             </Link>
                         </div>
@@ -82,6 +82,7 @@ function PersonalLandingPage() {
                 </div>
          
 
+                {/* Programs cards hidden — uncomment to re-enable
                 <section className="w-full mt-12 md:mt-[120px] px-4 sm:px-6 md:px-[80px] font-quicksand text-800">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium font-quicksand text-[#4A4B4F] text-center mb-6 md:mb-8">What hug do you need today?</h2>
                     <div className="bg-[#FFFFFF] py-8 sm:py-10 md:py-12 lg:py-16 px-4 sm:px-6 md:px-[22px] relative overflow-hidden">
@@ -121,6 +122,7 @@ function PersonalLandingPage() {
                         />}
                     </div>
                 </section>
+                */}
                 <>
                     <div className="h-[6px] sm:h-[8px] md:h-[10px] mt-8 sm:mt-12 md:mt-16 lg:mt-[120px]"></div>
                     <div className="relative bg-[#fef8e6] overflow-hidden pt-12 sm:pt-16 md:pt-20 pb-6 sm:pb-8">
@@ -150,7 +152,7 @@ function PersonalLandingPage() {
                             <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-none">
                                 <Link to="/assesment" className="w-full sm:w-auto">
                                     <button className="bg-[#283036] text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-base sm:text-lg font-quicksand hover:bg-[#1f252b] transition w-full">
-                                        Explore our Programs
+                                        Explore how we support
                                     </button>
                                 </Link>
 

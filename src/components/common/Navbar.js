@@ -29,7 +29,7 @@ const Navbar = () => {
           <Link to="/personal">For You</Link>
         </li>
         <li className={location.pathname.startsWith("/blogs") ? "font-bold" : ""}>
-          <Link to="/blogs">Blogs</Link>
+          <Link to="/blogs">Journals</Link>
         </li>
         <li className={isActive("/about") ? "font-bold" : ""}>
           <Link to="/about">About Us</Link>
@@ -65,7 +65,7 @@ const Navbar = () => {
             <Link to="/personal" onClick={closeMenu}>For You</Link>
           </li>
           <li className={location.pathname.startsWith("/blogs") ? "font-bold" : ""}>
-            <Link to="/blogs" onClick={closeMenu}>Blogs</Link>
+            <Link to="/blogs" onClick={closeMenu}>Journals</Link>
           </li>
           <li className={isActive("/about") ? "font-bold" : ""}>
             <Link to="/about" onClick={closeMenu}>About Us</Link>

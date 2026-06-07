@@ -1,31 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Navbar from '../common/Navbar'
 import ForThis from './ForThis'
-import WellnessAssessment from './WellnessAssessment';
+// import WellnessAssessment from './WellnessAssessment'; // hidden with program cards
 import { Link } from 'react-router-dom';
 import routesConfig from '../../config/routesConfig';
 import DocumentHead from '../common/DocumentHead';
 
 function PersonalLandingPage() {
-    const cards = [
-        {
-            title: "LittleHugs 360° Women's Wellness Program",
-            description:
-                "A high-level mind-body-social scan that gives a complete picture of a woman's mental health, emotional resilience, self-care capacity, and support system.",
-        },
-        {
-            title: "LittleHugs 360° Children's Wellness Program",
-            description:
-                "To provide a comprehensive snapshot of a child's developmental, behavioral, emotional, and physical wellness for early detection and support.",
-        },
-        {
-            title: "LittleHugs Corporate Partnership Program",
-            description:
-                "Promote self-awareness, emotional intelligence, and social well-being; identify SEL strengths and growth areas; support self-regulation, empathy, and decision-making.",
-        },
-    ];
-    const [showPopup, setShowPopup] = useState(false);
-    const [titleData, setTitleData] = useState("");
+    // const cards = [...]; // hidden with program cards section
+    // const [showPopup, setShowPopup] = useState(false); // hidden with program cards
+    // const [titleData, setTitleData] = useState(""); // hidden with program cards
 
     const { title, description } = routesConfig.personalLanding;
 

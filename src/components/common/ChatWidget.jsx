@@ -48,7 +48,7 @@ export default function ChatWidget() {
   const [teaserClosed, setTeaserClosed] = useState(false);
 
   // Lead-magnetic offer
-  const [userMsgCount, setUserMsgCount] = useState(0);
+  const userMsgCountRef = useRef(0);
   const [showOffer, setShowOffer] = useState(false);
   const [offerDismissed, setOfferDismissed] = useState(false);
   const [offerEmail, setOfferEmail] = useState("");
@@ -107,7 +107,9 @@ export default function ChatWidget() {
   useEffect(() => {
     if (isOpen) {
       setShowTeaser(false);
-      markSeen();
+      try {
+        sessionStorage.setItem("lh_lily_seen", "1");
+      } catch {}
     }
   }, [isOpen]);
 
@@ -123,11 +125,9 @@ export default function ChatWidget() {
       setInput("");
       setIsLoading(true);
 
-      setUserMsgCount((c) => {
-        const next = c + 1;
-        if (next >= OFFER_AFTER_USER_MSGS && !offerDismissed) setShowOffer(true);
-        return next;
-      });
+      userMsgCountRef.current += 1;
+      if (userMsgCountRef.current >= OFFER_AFTER_USER_MSGS && !offerDismissed)
+        setShowOffer(true);
 
       try {
         const res = await fetch(WORKER_URL, {

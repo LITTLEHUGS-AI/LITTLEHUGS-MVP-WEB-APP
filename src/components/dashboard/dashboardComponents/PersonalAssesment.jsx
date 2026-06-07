@@ -288,7 +288,7 @@ const PersonalAssessment = () => {
             </div>}
 
             {/* Children's Assessment Card */}
-            {type === 'child' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
+            {false && type === 'child' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
                 LittleHugs 360° Children's Wellness Program
               </h2>
@@ -307,7 +307,7 @@ const PersonalAssessment = () => {
             </div>}
 
             {/* SEL Assessment Card */}
-            {type === 'men' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
+            {false && type === 'men' && <div className="bg-amber-50 rounded-lg p-6 flex-1 flex flex-col">
               <h2 className="text-xl font-medium text-gray-700 text-center mb-6">
                   LittleHugs 360° Men’s Wellness Program
               </h2>

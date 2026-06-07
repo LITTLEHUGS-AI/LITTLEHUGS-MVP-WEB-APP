@@ -383,7 +383,7 @@ const WomenWellnessFlow = ({ onClose }) => {
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between z-10 rounded-t-2xl">
           <div className="flex items-center gap-2">
-            <span className="text-lg">💗</span>
+            <img src="/images/logo.svg" alt="LittleHugs" className="h-5 w-auto" />
             <span className="font-semibold text-[#1E2C2B] text-sm">Women's Wellness Check-in</span>
           </div>
           <button

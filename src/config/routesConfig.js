@@ -50,6 +50,16 @@ const routesConfig = {
         title: 'Child Wellness Check-ins for Schools',
         description: 'Help students thrive with social-emotional wellness check-ins designed for schools and educators.'
     },
+    blogs: {
+        path: '/blogs',
+        title: 'The LittleHugs Journal – Everyday Wellness for Women',
+        description: 'Gentle, practical writing for women who hold everything together — the mental load, boundaries, reflection and small ways to feel steadier.'
+    },
+    blogPost: {
+        path: '/blogs/:slug',
+        title: 'LittleHugs Journal',
+        description: 'Everyday wellness writing for women — from LittleHugs.'
+    },
     signIn: {
         path: '/signin',
         title: 'Sign In - LittleHugs',

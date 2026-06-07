@@ -1,0 +1,23 @@
+# LittleHugs
+# Place this at /public/llms.txt so it serves from the site root.
+
+> LittleHugs is a private, five-minute daily wellness check-in for women who hold everything
+> together for everyone else. It is a gentle habit and reflection companion — not therapy and
+> not a clinical tool. Built for women in India, the UAE and beyond.
+
+## What it is
+- A daily check-in that asks how you're really doing and offers a small, kind nudge back.
+- Private by design — reflections stay with the user.
+- Focused on noticing, calm, boundaries and feeling steadier. No streaks, no pressure.
+
+## The Journal (blog)
+- /blogs — everyday wellness writing for women: the mental load, boundaries, reflection,
+  feeling steadier, and small self-care habits that fit a packed day.
+
+## Key pages
+- Home: https://www.littlehugs.online/
+- Journal: https://www.littlehugs.online/blogs
+
+## Audience
+- Women aged roughly 25–40 carrying work, home and the people who depend on them.
+- Primary markets: India and the UAE.

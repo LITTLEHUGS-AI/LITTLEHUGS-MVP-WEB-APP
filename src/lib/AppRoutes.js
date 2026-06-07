@@ -32,6 +32,8 @@ import MobileAccDelete from "../components/misc/mobileAccDelete";
 import CorporateLandingPage from "../components/landingpage/Corporate";
 import SchoolPartnerPage from "../components/landingpage/SchoolPartnerLandingPage";
 import TherapyCenter from "../components/landingpage/TherapyCenter";
+import BlogList from "../components/blog/BlogList";
+import BlogPost from "../components/blog/BlogPost";
 
 
 
@@ -81,6 +83,10 @@ function AppRoutes() {
             />
 
             <Route path={routesConfig.corporateLanding.path} element={<OpenRoute><CorporateLandingPage /></OpenRoute>} />
+
+            {/* Blog / Journal */}
+            <Route path={routesConfig.blogs.path} element={<OpenRoute><BlogList /></OpenRoute>} />
+            <Route path={routesConfig.blogPost.path} element={<OpenRoute><BlogPost /></OpenRoute>} />
 
             <Route path={routesConfig.signIn.path} element={<OpenRoute><SignIn /></OpenRoute>} />
             <Route path={routesConfig.signUp.path} element={<OpenRoute><Signup /></OpenRoute>} />

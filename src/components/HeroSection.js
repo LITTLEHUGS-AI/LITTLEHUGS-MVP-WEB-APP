@@ -30,12 +30,6 @@ const HeroSection = () => {
               >
                 Start My Reflection
               </button>
-              <button
-                onClick={() => window.dispatchEvent(new Event("lily:open"))}
-                className="w-full sm:w-auto px-6 py-2 rounded-full border border-[#263238] text-[#4A4B4F] hover:bg-gray-100 transition"
-              >
-                Talk to Lily
-              </button>
             </div>
 
             <p className="text-sm text-[#6b6c70] mb-6 text-center lg:text-left">

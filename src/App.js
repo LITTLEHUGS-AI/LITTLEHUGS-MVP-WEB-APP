@@ -8,7 +8,6 @@ import { ToastProvider } from "./lib/useToastContext";
 import { WaitlistProvider } from "./lib/WaitlistContext";
 import { WellnessProvider, useWellness } from "./lib/WellnessContext";
 import WaitlistModal from "./components/common/WaitlistModal";
-import ChatWidget from "./components/common/ChatWidget";
 import WomenWellnessFlow from "./components/landingpage/WomenWellnessFlow";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -49,7 +48,6 @@ const App = () => {
               <WaitlistModal />
               <WellnessFlowMount />
               <AppRoutes />
-              <ChatWidget />
             </WellnessProvider>
           </WaitlistProvider>
         </AuthProvider>

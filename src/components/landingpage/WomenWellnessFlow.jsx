@@ -26,12 +26,26 @@ const STEPS = [
     max: 80,
   },
   {
+    id: 'country',
+    category: 'profile',
+    type: 'select',
+    question: 'Which country are you in?',
+    key: 'country',
+    options: ['United Arab Emirates', 'India', 'Other'],
+  },
+  {
     id: 'city',
     category: 'profile',
     type: 'select',
     question: 'Which city are you based in?',
     key: 'city',
-    options: ['Abu Dhabi', 'Dubai', 'Sharjah', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain', 'Al Ain', 'Other'],
+    // City list adapts to the chosen country; 'Other' reveals a free-text field
+    optionsByCountry: {
+      'United Arab Emirates': ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain', 'Ras Al Khaimah', 'Fujairah', 'Umm Al Quwain', 'Other'],
+      'India': ['Mumbai', 'Delhi', 'Bengaluru', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Pune', 'Jaipur', 'Surat', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Patna', 'Vadodara', 'Ghaziabad', 'Other'],
+      'Other': ['Other'],
+    },
+    options: ['Other'],
   },
   {
     id: 'mother_tongue',
@@ -39,7 +53,7 @@ const STEPS = [
     type: 'select',
     question: 'What is your mother tongue?',
     key: 'mother_tongue',
-    options: ['English', 'Arabic', 'Hindi', 'Urdu', 'Tagalog', 'Malayalam', 'Tamil', 'French', 'Other'],
+    options: ['English', 'Hindi', 'Arabic', 'Urdu', 'Malayalam', 'Tamil', 'Telugu', 'Tagalog', 'Bengali', 'Marathi', 'Other'],
   },
   {
     id: 'occupation',
@@ -244,6 +258,10 @@ const WomenWellnessFlow = ({ onClose }) => {
     if (step.type === 'multi') return Array.isArray(val) && val.length > 0;
     if (step.type === 'text') return typeof val === 'string' && val.trim().length > 0;
     if (step.type === 'number') return val !== '' && val !== undefined && Number(val) > 0;
+    if (step.type === 'select' && val === 'Other') {
+      const o = answers[step.id + '_other'];
+      return typeof o === 'string' && o.trim().length > 0;
+    }
     return !!val;
   };
 
@@ -256,6 +274,22 @@ const WomenWellnessFlow = ({ onClose }) => {
     setAnswers(prev => ({ ...prev, [step.id]: mapped }));
     // Auto-advance; if last step, submit instead
     setTimeout(() => advance(), 300);
+  };
+
+  // Options for a select can depend on a prior answer (e.g. city depends on country)
+  const getStepOptions = (step) => {
+    if (step.optionsByCountry) return step.optionsByCountry[answers.country] || step.options || [];
+    return step.options || [];
+  };
+
+  // Select change: auto-advance on a normal choice; if 'Other', stay and reveal a text field
+  const handleSelectChange = (step, value) => {
+    setAnswers(prev => {
+      const next = { ...prev, [step.id]: value };
+      if (step.id === 'country') { next.city = ''; next.city_other = ''; } // reset city when country changes
+      return next;
+    });
+    if (value && value !== 'Other') setTimeout(() => advance(), 300);
   };
 
   const handleMultiToggle = (step, option) => {
@@ -287,8 +321,13 @@ const WomenWellnessFlow = ({ onClose }) => {
     let goals = [];
 
     STEPS.forEach(step => {
-      const val = answers[step.id];
+      let val = answers[step.id];
       if (!val) return;
+      // For selects answered with 'Other', use the typed free-text value
+      if (step.type === 'select' && val === 'Other') {
+        const typed = (answers[step.id + '_other'] || '').trim();
+        val = typed || 'Other';
+      }
       if (step.category === 'profile') {
         profile[step.key] = step.id === 'age' ? Number(val) : val;
       } else if (step.category === 'goals') {
@@ -305,6 +344,7 @@ const WomenWellnessFlow = ({ onClose }) => {
       user_profile: {
         name: profile.name || 'Anonymous',
         age: profile.age || 25,
+        country: profile.country || 'United Arab Emirates',
         city: profile.city || 'Dubai',
         mother_tongue: profile.mother_tongue || 'English',
         occupation: profile.occupation || 'Not specified',
@@ -445,15 +485,23 @@ const WomenWellnessFlow = ({ onClose }) => {
                   <div className="mt-4">
                     <select
                       value={val || ''}
-                      onChange={e => {
-                        handleTextChange(step, e.target.value);
-                        if (e.target.value) setTimeout(() => advance(), 300);
-                      }}
+                      onChange={e => handleSelectChange(step, e.target.value)}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E2C2B] bg-white"
                     >
                       <option value="">Choose one…</option>
-                      {step.options.map(o => <option key={o} value={o}>{o}</option>)}
+                      {getStepOptions(step).map(o => <option key={o} value={o}>{o}</option>)}
                     </select>
+                    {val === 'Other' && (
+                      <input
+                        type="text"
+                        autoFocus
+                        placeholder={step.id === 'mother_tongue' ? 'Type your language' : step.id === 'country' ? 'Type your country' : 'Type your city'}
+                        value={answers[step.id + '_other'] || ''}
+                        onChange={e => setAnswers(prev => ({ ...prev, [step.id + '_other']: e.target.value }))}
+                        onKeyDown={e => e.key === 'Enter' && isAnswered(step) && advance()}
+                        className="w-full mt-3 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E2C2B]"
+                      />
+                    )}
                   </div>
                 )}
 
@@ -682,6 +730,8 @@ const WomenWellnessFlow = ({ onClose }) => {
                               body: JSON.stringify({
                                 name: profileName || 'Friend',
                                 email: captureEmail,
+                                country: (answers.country === 'Other' ? (answers.country_other || 'Other') : answers.country) || '',
+                                city: (answers.city === 'Other' ? (answers.city_other || 'Other') : answers.city) || '',
                                 score,
                                 label,
                                 domains: topDomains,

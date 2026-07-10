@@ -9,6 +9,7 @@ import { WaitlistProvider } from "./lib/WaitlistContext";
 import { WellnessProvider, useWellness } from "./lib/WellnessContext";
 import WaitlistModal from "./components/common/WaitlistModal";
 import WomenWellnessFlow from "./components/landingpage/WomenWellnessFlow";
+import { Analytics } from "@vercel/analytics/react";
 import "react-toastify/dist/ReactToastify.css";
 
 // Mounts the wellness flow modal — must be inside WellnessProvider
@@ -51,6 +52,7 @@ const App = () => {
             </WellnessProvider>
           </WaitlistProvider>
         </AuthProvider>
+        <Analytics />
       </ToastProvider>
     </QueryClientProvider>
   );
